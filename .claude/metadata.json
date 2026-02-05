@@ -28,18 +28,17 @@
     "skills/debugging/**",
     "skills/frontend-design-pro/**"
   ],
-  "version": "2.10.1-beta.2",
+  "version": "2.10.1-beta.3",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-02-05T03:36:26.602Z",
-])
+  "buildDate": "2026-02-05T03:44:28.335Z",
   "repository": {
-  "type": "git",
-  "url": "https://github.com/claudekit/claudekit-engineer.git"
-},
-"download": {
-  "lastDownloadedAt": null,
-  "downloadedBy": null,
-  "installCount": 0
-}
+    "type": "git",
+    "url": "https://github.com/claudekit/claudekit-engineer.git"
+  },
+  "download": {
+    "lastDownloadedAt": null,
+    "downloadedBy": null,
+    "installCount": 0
+  }
 }
