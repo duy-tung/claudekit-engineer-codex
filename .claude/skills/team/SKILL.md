@@ -16,11 +16,11 @@ Coordinate multiple independent Claude Code sessions. Each teammate has own cont
 /team <template> <context> [flags]
 ```
 
-**Templates:** `research`, `implement`, `review`, `debug`
+**Templates:** `research`, `cook`, `review`, `debug`
 
 **Flags:**
 - `--devs N` | `--researchers N` | `--reviewers N` | `--debuggers N` — team size
-- `--plan-approval` / `--no-plan-approval` — plan gate (default: on for implement)
+- `--plan-approval` / `--no-plan-approval` — plan gate (default: on for cook)
 - `--delegate` — lead only coordinates, never touches code
 
 ## Execution Protocol
@@ -94,7 +94,7 @@ IMMEDIATELY execute in order:
 
 ---
 
-## ON `/team implement <plan-path-or-description>` [--devs N]:
+## ON `/team cook <plan-path-or-description>` [--devs N]:
 
 *Wraps /cook skill — plan, code, test, review, finalize.*
 
@@ -121,7 +121,7 @@ IMMEDIATELY execute in order:
    - `Task(subagent_type: "tester", model: "haiku", name: "tester")`
    - Tester runs full test suite, reports pass/fail
 
-6. **DOCS SYNC EVAL** (MANDATORY for implement — from /cook finalize):
+6. **DOCS SYNC EVAL** (MANDATORY for cook — from /cook finalize):
    ```
    Docs impact: [none|minor|major]
    Action: [no update needed — <reason>] | [updated <page>] | [needs separate PR]
@@ -129,7 +129,7 @@ IMMEDIATELY execute in order:
 
 7. **SHUTDOWN** all teammates + **CLEANUP** team
 
-8. **REPORT**: Tell user what was implemented, test results, docs impact.
+8. **REPORT**: Tell user what was cooked, test results, docs impact.
 
 ---
 
@@ -219,7 +219,7 @@ IMMEDIATELY execute in order:
 | Template | Estimated Tokens | Model Strategy |
 |----------|-----------------|----------------|
 | Research (3) | ~150K-300K | haiku for all |
-| Implement (4) | ~400K-800K | sonnet for devs, haiku for tester |
+| Cook (4) | ~400K-800K | sonnet for devs, haiku for tester |
 | Review (3) | ~100K-200K | haiku for all |
 | Debug (3) | ~200K-400K | sonnet for all |
 

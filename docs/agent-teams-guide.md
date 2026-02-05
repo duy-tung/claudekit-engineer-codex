@@ -75,7 +75,7 @@ It automatically integrates with the CK workflow stack:
 | Template | Wraps Workflow | Auto-Injected |
 |----------|---------------|---------------|
 | `/team research` | `/research` | Report naming, output format |
-| `/team implement` | `/cook` | Phase sequence, docs sync eval |
+| `/team cook` | `/cook` | Phase sequence, docs sync eval |
 | `/team review` | `/code-review` | Evidence gates, severity ratings |
 | `/team debug` | `/fix` | Root-cause-first, adversarial hypotheses |
 
@@ -264,9 +264,9 @@ Automatically orchestrated. Lead executes the full sequence on activation.
 - Lead synthesizes findings into single report at `{CK_REPORTS_PATH}/`
 - Est. tokens: 150K-300K
 
-### Implementation Team
+### Cook Team
 ```
-/team implement plans/260205-feature/plan.md
+/team cook plans/260205-feature/plan.md
 ```
 - Planner + N developers (sonnet) + tester (haiku). Default N=2.
 - **Plan approval required** per developer
