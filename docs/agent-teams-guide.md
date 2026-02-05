@@ -185,8 +185,8 @@ This ensures teammates receive ClaudeKit context (naming patterns, plan paths, r
 
 | File | Purpose |
 |------|---------|
-| `.claude/skills/agent-teams/SKILL.md` | Skill definition with full templates |
-| `.claude/skills/agent-teams/references/` | Official docs reference |
+| `.claude/skills/team/SKILL.md` | Skill definition with full templates |
+| `.claude/skills/team/references/` | Official docs reference |
 | `.claude/rules/orchestration-protocol.md` | Decision matrix, file ownership rules |
 | `.claude/hooks/session-init.cjs` | Team detection and env injection |
 

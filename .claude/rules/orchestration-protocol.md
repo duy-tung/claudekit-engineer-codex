@@ -75,4 +75,4 @@ Task: "Implement API endpoints"
 File ownership: src/api/*, src/models/*
 ```
 
-See `.claude/skills/agent-teams/SKILL.md` for full template details.
+See `.claude/skills/team/SKILL.md` for full template details.
