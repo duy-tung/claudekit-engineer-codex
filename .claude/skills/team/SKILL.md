@@ -25,6 +25,12 @@ Coordinate multiple independent Claude Code sessions. Each teammate has own cont
 
 ## Execution Protocol
 
+**Pre-flight check (MANDATORY before any template):**
+1. Verify `Teammate` tool is available by calling `Teammate(operation: "spawnTeam", ...)` in step 2
+2. If `spawnTeam` fails or `Teammate` tool is not found: **STOP. Tell user:** "Agent Teams requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json. Team mode is not available."
+3. Do NOT fall back to subagents. `/team` MUST use Agent Teams or abort.
+4. All teammate spawns MUST include `team_name` parameter — never spawn Task without it.
+
 When activated, IMMEDIATELY execute the matching template sequence below.
 Do NOT ask for confirmation. Do NOT explain what you're about to do.
 Execute the tool calls in order. Report progress after each major step.
