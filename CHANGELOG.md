@@ -1,3 +1,35 @@
+## [2.11.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0-beta.1) (2026-02-05)
+
+
+### 🚀 Features
+
+* **skill:** convert `/bootstrap` command to skill ([bfd0480](https://github.com/claudekit/claudekit-engineer/commit/bfd0480590f2a8cb8923fc2f15a408a3cd2938f6))
+* **skill:** convert `/plan:*` command to skill ([3d92e31](https://github.com/claudekit/claudekit-engineer/commit/3d92e3154bf46f94c2c8d595953fd6ca343d2e1e))
+* **skills:** add `project-management` skill ([b492c80](https://github.com/claudekit/claudekit-engineer/commit/b492c8083b1be5db8574953ee849bb1afee078a9))
+
+
+### 🐞 Bug Fixes
+
+* **agents:** added skills to subagents ([158cd09](https://github.com/claudekit/claudekit-engineer/commit/158cd09251ca734aa02cde0f304fb48922ff2ec0))
+* **preview:** add contextual path resolution for natural references ([04b60c2](https://github.com/claudekit/claudekit-engineer/commit/04b60c2192c9ff16e28b49bb5e110d46b5841923))
+* **preview:** add contextual path resolution for natural references ([51aa751](https://github.com/claudekit/claudekit-engineer/commit/51aa751cede4deaa9bae7f6297e73262ea470eaf))
+* **preview:** mermaid collapse button and code block scroll ([20abcac](https://github.com/claudekit/claudekit-engineer/commit/20abcac698db6f8b611618302f6bbc23ed13596f)), closes [#444](https://github.com/claudekit/claudekit-engineer/issues/444)
+* **preview:** mermaid collapse button and code block scroll ([0c421ae](https://github.com/claudekit/claudekit-engineer/commit/0c421ae504a3e6e074d190be6360de5ae03e0bff)), closes [#444](https://github.com/claudekit/claudekit-engineer/issues/444)
+
+
+### ⚡ Performance Improvements
+
+* **skill:** add `workflow-steps` to `cook` skill ([ee73b5e](https://github.com/claudekit/claudekit-engineer/commit/ee73b5e535c12d5a383c6e2014c40d2ca31525b9))
+* **skill:** enhance `code-review` skill with task management ([f1d6a14](https://github.com/claudekit/claudekit-engineer/commit/f1d6a14680aa064a9fca43dcd79f037bbd110c63))
+* **skill:** enhance `copywriting` skill with CRO content ([b47c756](https://github.com/claudekit/claudekit-engineer/commit/b47c756c3334ceb1700242f3da1ffd5d4b36277f))
+* **skill:** enhance `debug` skill with task management ([0fb220f](https://github.com/claudekit/claudekit-engineer/commit/0fb220fb5177481088ca9a666115033bb778c42b))
+* **skills:** enhance `scout` skill with task management ([18a61f6](https://github.com/claudekit/claudekit-engineer/commit/18a61f6749d5badf32a5c6e587d60cca055abdb0))
+
+
+### ✅ Tests
+
+* **skills:** adjust some tests ([9e85afa](https://github.com/claudekit/claudekit-engineer/commit/9e85afad55720c16d775359ebd73532e38107b54))
+
 ## [2.10.1-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1-beta.2...v2.10.1-beta.3) (2026-02-05)
 
 
