@@ -1,3 +1,10 @@
+## [2.11.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.1...v2.11.0-beta.2) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **metadata:** add missing deletions for deprecated plan commands ([cb15d31](https://github.com/claudekit/claudekit-engineer/commit/cb15d31d4cf62d6f54205805d4e124dbc1cb60bd)), closes [#451](https://github.com/claudekit/claudekit-engineer/issues/451)
+
 ## [2.11.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0-beta.1) (2026-02-05)
 
 
