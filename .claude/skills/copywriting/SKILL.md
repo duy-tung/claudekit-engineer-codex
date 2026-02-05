@@ -62,7 +62,7 @@ CTAs: "Start [verb]ing" • "Get [benefit]" • "Yes, I want [benefit]"
 
 | Workflow | Purpose | Use When |
 |----------|---------|----------|
-| `references/workflow-cro.md` | CRO optimization (25 principles) | Conversion optimization requests |
+| `references/workflow-cro.md` | CRO optimization (25 principles) + plan creation workflow | Conversion optimization & CRO plan requests |
 | `references/workflow-enhance.md` | Copy enhancement | Improving existing copy |
 | `references/workflow-fast.md` | Quick copy generation | Simple, time-sensitive requests |
 | `references/workflow-good.md` | Quality copy with research | High-stakes content |
