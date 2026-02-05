@@ -489,6 +489,57 @@
     });
   }
 
+  // Initialize code block expand toggle buttons (for wide ASCII art)
+  function initCodeExpand() {
+    // Find all pre elements that are not mermaid and not already wrapped
+    const codeBlocks = document.querySelectorAll('pre:not(.mermaid)');
+
+    codeBlocks.forEach(pre => {
+      // Skip if already wrapped or inside mermaid error
+      if (pre.parentElement?.classList.contains('code-wrapper') ||
+          pre.parentElement?.classList.contains('mermaid-error')) {
+        return;
+      }
+
+      // Only add expand button if content is wider than container
+      // Check if scrollWidth > clientWidth (has horizontal overflow)
+      if (pre.scrollWidth <= pre.clientWidth + 10) {
+        return; // No overflow, no need for expand button
+      }
+
+      // Create wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-wrapper';
+
+      // Create expand button
+      const btn = document.createElement('button');
+      btn.className = 'code-expand-btn';
+      btn.setAttribute('aria-label', 'Expand code block to full width');
+      btn.innerHTML = `
+        <span class="icon-expand">⤢</span>
+        <span class="icon-collapse">⤡</span>
+      `;
+
+      // Toggle handler
+      btn.addEventListener('click', () => {
+        const isExpanded = wrapper.classList.toggle('expanded');
+        btn.setAttribute('aria-label', isExpanded
+          ? 'Collapse code block'
+          : 'Expand code block to full width'
+        );
+      });
+
+      // Insert wrapper before pre
+      pre.parentNode.insertBefore(wrapper, pre);
+
+      // Move pre into wrapper
+      wrapper.appendChild(pre);
+
+      // Add button to wrapper
+      wrapper.appendChild(btn);
+    });
+  }
+
   // Initialize
 
   // Initialize accordion
@@ -690,6 +741,8 @@
       // Initialize expand buttons after mermaid renders
       setTimeout(() => initMermaidExpand(), 100);
     });
+    // Initialize code block expand buttons (for wide ASCII art)
+    initCodeExpand();
 
     // Event listeners
     themeToggle?.addEventListener('click', toggleTheme);
