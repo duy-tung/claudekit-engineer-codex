@@ -6,7 +6,7 @@ Scans .claude/commands/ directory to build catalog at runtime.
 Usage:
     python ck-help.py                    # Overview with quick start
     python ck-help.py fix                # Category guide with workflow
-    python ck-help.py plan:fast          # Command details
+    python ck-help.py plan --fast        # Command details
     python ck-help.py debug login error  # Task recommendations
     python ck-help.py auth               # Search (unknown word)
 """
@@ -158,8 +158,8 @@ CATEGORY_GUIDES = {
     "plan": {
         "title": "Planning",
         "workflow": [
-            ("Quick plan", "`/plan:fast` \"your task\""),
-            ("Deep research", "`/plan:hard` \"complex task\""),
+            ("Quick plan", "`/plan --fast` \"your task\""),
+            ("Deep research", "`/plan --hard` \"complex task\""),
             ("Validate", "`/plan:validate` (interview to confirm decisions)"),
             ("Execute plan", "`/cook` (runs the plan)"),
         ],

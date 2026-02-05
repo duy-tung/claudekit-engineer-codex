@@ -209,11 +209,11 @@ Systematic debugging framework ensuring root cause investigation before fixes. I
 
 **Location**: `.claude/skills/debugging/SKILL.md`
 
-### 📚 `planning`
+### 📚 `plan`
 
 Use when you need to plan technical solutions that are scalable, secure, and maintainable.
 
-**Location**: `.claude/skills/planning/SKILL.md`
+**Location**: `.claude/skills/plan/SKILL.md`
 
 ### 📚 `problem-solving`
 

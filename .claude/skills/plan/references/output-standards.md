@@ -2,10 +2,6 @@
 
 ## Plan File Format
 
-**Important:**
-- DO NOT create plans or reports in USER directory.
-- ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
-
 ### YAML Frontmatter (Required for plan.md)
 
 All `plan.md` files MUST include YAML frontmatter at the top:
@@ -44,6 +40,18 @@ Use these predefined tags for consistency:
 - **Domain**: `frontend`, `backend`, `database`, `api`, `auth`
 - **Scope**: `critical`, `tech-debt`, `experimental`
 
+### Task Naming Conventions
+
+**subject** (imperative): Action verb + deliverable, <60 chars
+  Examples: "Setup database migrations", "Implement OAuth2 flow"
+
+**activeForm** (continuous): Present participle of subject
+  Examples: "Setting up database", "Implementing OAuth2"
+
+**description**: 1-2 sentences, concrete deliverables, reference phase file
+
+See `task-management.md` for full TaskCreate patterns and metadata.
+
 ## Task Breakdown
 
 - Transform complex requirements into manageable, actionable tasks
@@ -54,10 +62,6 @@ Use these predefined tags for consistency:
 - Provide clear acceptance criteria per task
 
 ### File Management
-
-**Important:**
-- DO NOT create plans or reports in USER directory.
-- ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
 
 List affected files with:
 - Full paths (not relative)
@@ -76,10 +80,6 @@ List affected files with:
 6. **Review & Refine** → Ensure completeness, clarity, actionability
 
 ## Output Requirements
-
-**Important:**
-- DO NOT create plans or reports in USER directory.
-- ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
 
 ### What Planners Do
 - Create plans ONLY (no implementation)

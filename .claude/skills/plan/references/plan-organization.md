@@ -4,10 +4,6 @@
 
 ### Plan Location
 
-**Important:**
-- DO NOT create plans or reports in USER directory.
-- ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
-
 Use `Plan dir:` from `## Naming` section injected by hooks. This is the full computed path.
 
 **Example:** `plans/251101-1505-authentication/` or `ai_docs/feature/MRR-1453/`
@@ -34,34 +30,21 @@ IN CURRENT WORKING PROJECT DIRECTORY:
 └── phase-07-write-tests.md                    # Tests
 ```
 
+### Task Hydration
+
+After creating plan.md and phase files, hydrate tasks (unless `--no-tasks`):
+1. TaskCreate per phase with `addBlockedBy` dependency chain
+2. Add critical step tasks for high-risk items
+3. See `task-management.md` for patterns and cook handoff protocol
+
 ### Active Plan State Tracking
 
-Check the `## Plan Context` section injected by hooks:
-- **"Plan: {path}"** = Active plan - use for reports
-- **"Suggested: {path}"** = Branch-matched, hint only - do NOT auto-use
-- **"Plan: none"** = No active plan
-
-**Pre-Creation Check:**
-1. If "Plan:" shows a path → ask "Continue with existing plan? [Y/n]"
-2. If "Suggested:" shows a path → inform user (hint only, do NOT auto-use)
-3. If "Plan: none" → create new plan using naming from `## Naming` section
-
-**After Creating Plan:**
-```bash
-# Update session state so subagents get the new plan context:
-node .claude/scripts/set-active-plan.cjs {plan-dir}
-```
-
-**Report Output Rules:**
-1. Use `Report:` and `Plan dir:` from `## Naming` section
-2. Active plans use plan-specific reports path
-3. Suggested plans use default reports path to prevent old plan pollution
+See SKILL.md "Active Plan State" section for full rules. Key points:
+- Check `## Plan Context` injected by hooks for active/suggested/none state
+- After creating plan: `node .claude/scripts/set-active-plan.cjs {plan-dir}`
+- Active plans use plan-specific reports path; suggested plans use default path
 
 ## File Structure
-
-**Important:**
-- DO NOT create plans or reports in USER directory.
-- ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
 
 ### Overview Plan (plan.md)
 

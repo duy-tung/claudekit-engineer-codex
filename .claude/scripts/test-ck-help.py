@@ -108,7 +108,7 @@ def main():
     tests.append(test_case(
         "plan category",
         ["plan"],
-        ["Planning", "/plan:fast", "/plan:hard", "/plan:validate", "Commands:"]
+        ["Planning", "/plan --fast", "/plan --hard", "/plan --parallel", "/plan:validate", "Commands:"]
     ))
 
     tests.append(test_case(
