@@ -1,9 +1,9 @@
-## [2.10.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.0...v2.10.1) (2026-02-05)
+## [2.10.1-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1-beta.1...v2.10.1-beta.2) (2026-02-05)
 
 
 ### 🐞 Bug Fixes
 
-* **hooks:** hotfix `descriptive-name` hook ([9cb59dd](https://github.com/claudekit/claudekit-engineer/commit/9cb59dd2c5d7a2cb5d267490e2c1a7de23dd211e))
+* **preview:** mermaid collapse button and code block scroll ([0c421ae](https://github.com/claudekit/claudekit-engineer/commit/0c421ae504a3e6e074d190be6360de5ae03e0bff)), closes [#444](https://github.com/claudekit/claudekit-engineer/issues/444)
 
 ## [2.10.1-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.0...v2.10.1-beta.1) (2026-02-05)
 
