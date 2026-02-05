@@ -1,32 +1,200 @@
 ---
 name: team
-description: "[CK] Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, and review workflows requiring independent teammates."
-version: 1.0.0
+description: "[CK] Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, review, and debug workflows requiring independent teammates."
+version: 2.0.0
 ---
 
-# Agent Teams - Multi-Session Orchestration
+# Agent Teams - CK-Native Orchestration Engine
 
-Coordinate multiple independent Claude Code sessions as a team. Each teammate has its own context window, loads project context (CLAUDE.md, skills, agents), and communicates via shared task list and messaging.
+Coordinate multiple independent Claude Code sessions. Each teammate has own context window, loads project context (CLAUDE.md, skills, agents), communicates via shared task list and messaging.
 
 **Requires:** `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json env.
-
-**Principles:** YAGNI, KISS, DRY | Token efficiency | File ownership boundaries
 
 ## Usage
 
 ```
-/team <template> <context>
+/team <template> <context> [flags]
 ```
 
-**Templates:**
-- `/team research <topic>` — 3 researchers investigating different angles
-- `/team implement <plan-path-or-description>` — Planner + developers + tester
-- `/team review <scope>` — Security + performance + test coverage reviewers
+**Templates:** `research`, `implement`, `review`, `debug`
 
 **Flags:**
-- `--plan-approval` — Require teammates to plan before implementing (default for `implement`)
-- `--no-plan-approval` — Skip plan approval (default for `research` and `review`)
-- `--delegate` — Lead only coordinates, never touches code (press Shift+Tab after team creation)
+- `--devs N` | `--researchers N` | `--reviewers N` | `--debuggers N` — team size
+- `--plan-approval` / `--no-plan-approval` — plan gate (default: on for implement)
+- `--delegate` — lead only coordinates, never touches code
+
+## Execution Protocol
+
+When activated, IMMEDIATELY execute the matching template sequence below.
+Do NOT ask for confirmation. Do NOT explain what you're about to do.
+Execute the tool calls in order. Report progress after each major step.
+
+---
+
+## CK Context Block
+
+Every teammate spawn prompt MUST include this context at the end:
+
+```
+CK Context:
+- Work dir: {CK_PROJECT_ROOT or CWD}
+- Reports: {CK_REPORTS_PATH or "plans/reports/"}
+- Plans: {CK_PLANS_PATH or "plans/"}
+- Branch: {CK_GIT_BRANCH or current branch}
+- Naming: {CK_NAME_PATTERN or "YYMMDD-HHMM"}
+- Active plan: {CK_ACTIVE_PLAN or "none"}
+- Commits: conventional (feat:, fix:, docs:, refactor:, test:, chore:)
+- Refer to teammates by NAME, not agent ID
+```
+
+---
+
+## ON `/team research <topic>` [--researchers N]:
+
+*Wraps /research skill — scope, gather, analyze, report.*
+
+IMMEDIATELY execute in order:
+
+1. **Derive N angles** from `<topic>` (default N=3):
+   - Angle 1: Architecture, patterns, proven approaches
+   - Angle 2: Alternatives, competing solutions, trade-offs
+   - Angle 3: Risks, edge cases, failure modes, security
+   - (If N>3, derive additional angles from topic context)
+
+2. **CALL** `Teammate(operation: "spawnTeam", team_name: "<topic-slug>")`
+
+3. **CALL** `TaskCreate` x N — one per angle:
+   - Subject: `Research: <angle-title>`
+   - Description: `Investigate <angle> for topic: <topic>. Save report to: {CK_REPORTS_PATH}/researcher-{N}-{CK_NAME_PATTERN}-{topic-slug}.md. Format: Executive summary, key findings, evidence, recommendations. Mark task completed when done. Send findings summary to lead.`
+
+4. **CALL** `Task` x N to spawn researcher teammates:
+   - `subagent_type: "researcher"`, `team_name: "<topic-slug>"`, `model: "haiku"`
+   - `name: "researcher-{N}"`
+   - Prompt: task description + CK Context Block
+
+5. **WAIT** for all tasks: status `completed`
+   (Check TaskList every 30s. If stuck >5 min, message teammate.)
+
+6. **READ** all researcher reports from `{CK_REPORTS_PATH}/`
+
+7. **SYNTHESIZE** into: `{CK_REPORTS_PATH}/research-summary-{CK_NAME_PATTERN}-{topic-slug}.md`
+   Format: exec summary, key findings, comparative analysis, recommendations, unresolved questions.
+
+8. **SHUTDOWN**: `SendMessage(type: "shutdown_request")` to each teammate
+
+9. **CLEANUP**: `Teammate(operation: "cleanup")`
+
+10. **REPORT**: Tell user `Research complete. Summary: {path}. N reports generated.`
+
+---
+
+## ON `/team implement <plan-path-or-description>` [--devs N]:
+
+*Wraps /cook skill — plan, code, test, review, finalize.*
+
+IMMEDIATELY execute in order:
+
+1. **READ** plan (if path provided) OR create via planner teammate:
+   - If description only: spawn `Task(subagent_type: "planner")` to create plan first
+   - Parse plan into N independent task groups with file ownership boundaries
+
+2. **CALL** `Teammate(operation: "spawnTeam", team_name: "<feature-slug>")`
+
+3. **CALL** `TaskCreate` x (N + 1) — N dev tasks + 1 tester task:
+   - Dev tasks: include `File ownership: <glob patterns>` — NO overlap between devs
+   - Tester task: `addBlockedBy` all dev task IDs
+   - Each task description includes: implementation scope, file ownership, acceptance criteria
+
+4. **CALL** `Task` x N to spawn developer teammates:
+   - `subagent_type: "fullstack-developer"`, `mode: "plan"`
+   - `model: "sonnet"`, `name: "dev-{N}"`
+   - Prompt: task description + CK Context Block
+   - REVIEW and APPROVE each developer's plan via `plan_approval_response`
+
+5. **MONITOR** dev completion. When all devs done, spawn tester:
+   - `Task(subagent_type: "tester", model: "haiku", name: "tester")`
+   - Tester runs full test suite, reports pass/fail
+
+6. **DOCS SYNC EVAL** (MANDATORY for implement — from /cook finalize):
+   ```
+   Docs impact: [none|minor|major]
+   Action: [no update needed — <reason>] | [updated <page>] | [needs separate PR]
+   ```
+
+7. **SHUTDOWN** all teammates + **CLEANUP** team
+
+8. **REPORT**: Tell user what was implemented, test results, docs impact.
+
+---
+
+## ON `/team review <scope>` [--reviewers N]:
+
+*Wraps /code-review skill — scout, review, synthesize with evidence gates.*
+
+IMMEDIATELY execute in order:
+
+1. **DERIVE** N review focuses from `<scope>` (default N=3):
+   - Focus 1: Security — vulnerabilities, auth, input validation, OWASP
+   - Focus 2: Performance — bottlenecks, memory, complexity, scaling
+   - Focus 3: Test coverage — gaps, edge cases, error paths
+   - (If N>3, derive from scope: architecture, DX, accessibility, etc.)
+
+2. **CALL** `Teammate(operation: "spawnTeam", team_name: "review-<scope-slug>")`
+
+3. **CALL** `TaskCreate` x N — one per focus:
+   - Subject: `Review: <focus-title>`
+   - Description: `Review <scope> for <focus>. Output severity-rated findings only. Format: [CRITICAL|IMPORTANT|MODERATE] <finding> — <evidence> — <recommendation>. No "seems" or "probably" — concrete evidence only. Save to: {CK_REPORTS_PATH}/reviewer-{N}-{CK_NAME_PATTERN}-{scope-slug}.md. Mark task completed when done.`
+
+4. **CALL** `Task` x N to spawn reviewers:
+   - `subagent_type: "code-reviewer"`, `model: "haiku"`, `name: "reviewer-{N}"`
+   - Prompt: task description + CK Context Block
+
+5. **WAIT** for all tasks: status `completed`
+
+6. **SYNTHESIZE** into: `{CK_REPORTS_PATH}/review-{scope-slug}.md`
+   - Deduplicate findings across reviewers
+   - Prioritize by severity: CRITICAL > IMPORTANT > MODERATE
+   - Create action items list with owners
+
+7. **SHUTDOWN** + **CLEANUP**
+
+8. **REPORT**: Tell user `Review complete. {X} findings ({Y} critical). Report: {path}.`
+
+---
+
+## ON `/team debug <issue>` [--debuggers N]:
+
+*Wraps /fix skill — root-cause-first, adversarial hypotheses, disprove to converge.*
+
+IMMEDIATELY execute in order:
+
+1. **GENERATE** N competing hypotheses from `<issue>` (default N=3):
+   - Each hypothesis must be independently testable
+   - Each must predict different observable symptoms
+   - Frame as: "If <cause>, then we should see <evidence>"
+
+2. **CALL** `Teammate(operation: "spawnTeam", team_name: "debug-<issue-slug>")`
+
+3. **CALL** `TaskCreate` x N — one per hypothesis:
+   - Subject: `Debug: Test hypothesis — <theory>`
+   - Description: `Investigate hypothesis: <theory>. For issue: <issue>. ADVERSARIAL: actively try to disprove other theories. Message other debuggers to challenge findings. Report evidence FOR and AGAINST your theory. Save findings to: {CK_REPORTS_PATH}/debugger-{N}-{CK_NAME_PATTERN}-{issue-slug}.md. Mark task completed when done.`
+
+4. **CALL** `Task` x N to spawn debugger teammates:
+   - `subagent_type: "debugger"`, `model: "sonnet"`, `name: "debugger-{N}"`
+   - Prompt: task description + CK Context Block
+
+5. **WAIT** for all tasks. Debuggers should message each other — let them converge.
+
+6. **READ** all debugger reports. Identify surviving theory as root cause.
+
+7. **WRITE** root cause report: `{CK_REPORTS_PATH}/debug-{issue-slug}.md`
+   Format: Root cause, evidence chain, disproven hypotheses, recommended fix.
+
+8. **SHUTDOWN** + **CLEANUP**
+
+9. **REPORT**: Tell user `Debug complete. Root cause: <summary>. Report: {path}.`
+
+---
 
 ## When to Use Agent Teams vs Subagents
 
@@ -37,223 +205,41 @@ Coordinate multiple independent Claude Code sessions as a team. Each teammate ha
 | 3+ independent parallel workstreams | Maybe | **Yes** |
 | Competing debug hypotheses | No | **Yes** |
 | Cross-layer work (FE + BE + tests) | Maybe | **Yes** |
-| User wants to steer individual workers | No | **Yes** |
-| Token budget is tight | **Yes** | No (high token cost) |
 | Workers need to discuss/challenge findings | No | **Yes** |
+| Token budget is tight | **Yes** | No (high cost) |
 
-**Default:** Subagents remain the default for focused tasks. Use Agent Teams when parallel exploration + inter-agent discussion adds real value.
-
----
-
-## Team Templates
-
-### Research Team
-
-**Activation:** `/team research <topic>`
-
-**Composition:**
-| Role | Agent Type | Model | Purpose |
-|------|-----------|-------|---------|
-| Researcher A | researcher | haiku | Investigate approach/architecture angle |
-| Researcher B | researcher | haiku | Investigate alternatives/competitors |
-| Researcher C | researcher | haiku | Investigate risks/edge cases |
-| Lead (you) | — | — | Synthesize findings into report |
-
-**Plan approval:** No
-**File ownership:** Researchers are read-only (research only, no code changes)
-
-**Lead instructions:**
-1. Create team: `Teammate(operation: "spawnTeam", team_name: "<topic-slug>")`
-2. Create 3 tasks via `TaskCreate` — one per research angle
-3. Spawn 3 researcher teammates via `Task(subagent_type: "researcher", team_name: "<topic-slug>")`
-4. Each researcher claims a task, investigates, reports findings
-5. Wait for all researchers to complete
-6. Synthesize findings into a single report
-7. Shut down teammates and clean up team
-
-**Spawn prompt template for researchers:**
-```
-Research <specific-angle> for the topic: <topic>.
-Focus on: <angle-specific-focus>.
-Report findings concisely. Challenge assumptions.
-When done, mark your task as completed and send findings to the lead.
-```
-
----
-
-### Implementation Team
-
-**Activation:** `/team implement <plan-path-or-description>`
-
-**Composition:**
-| Role | Agent Type | Model | Plan Approval |
-|------|-----------|-------|---------------|
-| Planner | planner | sonnet | No (plans are the output) |
-| Developer A | fullstack-developer | sonnet | **Yes** |
-| Developer B | fullstack-developer | sonnet | **Yes** |
-| Tester | tester | haiku | No |
-| Lead (you) | — | — | Review plans, orchestrate, merge |
-
-**Plan approval:** **Required** — each developer must plan before coding. Lead reviews and approves/rejects.
-**File ownership:** **CRITICAL** — each developer owns distinct files. No two teammates edit the same file.
-
-**Lead instructions:**
-1. Read the plan (if plan-path provided) or create one via planner teammate
-2. Create team: `Teammate(operation: "spawnTeam", team_name: "<feature-slug>")`
-3. Break plan into tasks with file ownership boundaries:
-   - Task A: "Implement backend API — owns: src/api/*, src/models/*"
-   - Task B: "Implement frontend UI — owns: src/components/*, src/pages/*"
-   - Task C: "Write tests — blocked by A and B — owns: tests/*"
-4. Set task dependencies: tester blocked by developers
-5. Spawn teammates with `mode: "plan"` for developers
-6. Review each developer's plan when submitted → approve or reject with feedback
-7. After developers complete, unblock tester
-8. Synthesize results, verify integration
-9. Shut down teammates and clean up team
-
-**File ownership rules:**
-- Define explicit file boundaries in each task description
-- If two tasks need the same file, restructure tasks or have lead handle the shared file
-- Tester owns test files only; reads (but never edits) implementation files
-
-**Spawn prompt template for developers:**
-```
-Implement <task-description>.
-File ownership: You own <file-list>. Do NOT edit files outside your ownership.
-Plan your approach first — your plan requires lead approval before implementation.
-After completing, mark task as completed and notify the lead.
-```
-
----
-
-### Review Team
-
-**Activation:** `/team review <scope>`
-
-**Composition:**
-| Role | Agent Type | Model | Focus |
-|------|-----------|-------|-------|
-| Security Reviewer | code-reviewer | haiku | Vulnerabilities, auth, injection, OWASP |
-| Performance Reviewer | code-reviewer | haiku | Bottlenecks, memory, complexity, caching |
-| Test Coverage Reviewer | tester | haiku | Coverage gaps, edge cases, flaky tests |
-| Lead (you) | — | — | Synthesize, prioritize, create action items |
-
-**Plan approval:** No
-**File ownership:** All reviewers are read-only (review only, no code changes)
-
-**Lead instructions:**
-1. Create team: `Teammate(operation: "spawnTeam", team_name: "review-<scope-slug>")`
-2. Create 3 tasks — one per review focus
-3. Spawn reviewers with specific focus in their prompts
-4. Each reviewer reports findings independently
-5. Lead synthesizes: deduplicate, prioritize by severity, create action items
-6. Shut down teammates and clean up team
-
-**Spawn prompt template for reviewers:**
-```
-Review <scope> focusing exclusively on <focus-area>.
-Examine: <specific-files-or-directories>.
-Rate each finding: critical / high / medium / low.
-Report findings concisely. Do NOT make code changes.
-When done, mark your task as completed and send findings to the lead.
-```
-
----
-
-## Coordination Patterns
-
-### Task Dependencies
-
-```
-TaskCreate(subject: "Implement API endpoints")     → task #1
-TaskCreate(subject: "Implement UI components")      → task #2
-TaskCreate(subject: "Write integration tests")      → task #3
-TaskUpdate(taskId: "3", addBlockedBy: ["1", "2"])   → #3 blocked until #1 and #2 done
-```
-
-### Teammate Lifecycle
-
-```
-1. Teammate(operation: "spawnTeam")    → create team
-2. Task(team_name: ..., name: ...)     → spawn teammates
-3. TaskCreate / TaskUpdate             → assign work
-4. SendMessage(type: "message")        → direct communication
-5. SendMessage(type: "shutdown_request") → graceful shutdown
-6. Teammate(operation: "cleanup")      → remove team resources
-```
-
-### Token Budget Guidance
+## Token Budget
 
 | Template | Estimated Tokens | Model Strategy |
 |----------|-----------------|----------------|
-| Research (3 teammates) | ~150K-300K | haiku for all researchers |
-| Implement (4 teammates) | ~400K-800K | sonnet for devs, haiku for tester |
-| Review (3 teammates) | ~100K-200K | haiku for all reviewers |
-
-**Warning:** Agent Teams use significantly more tokens than subagents. Use only when parallel exploration + discussion adds clear value.
-
----
+| Research (3) | ~150K-300K | haiku for all |
+| Implement (4) | ~400K-800K | sonnet for devs, haiku for tester |
+| Review (3) | ~100K-200K | haiku for all |
+| Debug (3) | ~200K-400K | sonnet for all |
 
 ## Error Recovery
 
-When a teammate crashes, goes unresponsive, or produces wrong output:
+1. **Check status**: `Shift+Up/Down` (in-process) or click pane (split)
+2. **Redirect**: Send direct message with corrective instructions
+3. **Replace**: Shut down failed teammate, spawn replacement for same task
+4. **Reassign**: `TaskUpdate` stuck task to unblock dependents
 
-1. **Check status**: Use `Shift+Up/Down` (in-process) or click pane (split) to inspect
-2. **Redirect**: Send a direct message with corrective instructions
-3. **Replace**: If unrecoverable, shut down the failed teammate and spawn a replacement:
-   ```
-   Ask <teammate-name> to shut down.
-   Spawn a new <role> teammate to continue task #N.
-   ```
-4. **Reassign**: Update the stuck task via `TaskUpdate` to unblock dependent work
+## Abort Team
 
-## Abort / Cancel Team
-
-To terminate a team mid-flight:
 ```
 Shut down all teammates. Then clean up the team.
 ```
 
-The lead will send shutdown requests to each teammate, wait for confirmations, then run `Teammate(operation: "cleanup")`.
-
-**If teammates are unresponsive**, close the terminal or kill the session. Orphaned team configs at `~/.claude/teams/` can be cleaned up manually.
-
-## Model Fallback
-
-Templates recommend specific models (haiku for researchers/reviewers, sonnet for developers). If a model is unavailable on your plan:
-- Claude will automatically fall back to the default model
-- You can override: "Use haiku for all teammates" or "Use sonnet for everyone"
-- Token cost scales with model capability — haiku is most cost-effective for read-only tasks
-
-## When to Use `/team` vs `/cook --parallel`
-
-| | `/team <template>` | `/cook --parallel` |
-|---|---|---|
-| **Architecture** | Independent sessions (Agent Teams) | Subagents within one session |
-| **Communication** | Teammates message each other | Subagents report to lead only |
-| **Token cost** | Higher (N context windows) | Lower (shared context) |
-| **User steering** | Can message teammates directly | Cannot interact with subagents |
-| **Best for** | Research, cross-layer work, debates | Sequential implementation with parallel phases |
-
-**Rule of thumb:** Use `/cook --parallel` for straightforward implementation. Use `/team implement` when you need teammates to discuss, challenge, or coordinate across boundaries.
-
----
+If unresponsive: close terminal or kill session. Clean orphaned configs at `~/.claude/teams/` manually.
 
 ## Display Modes
 
-- **in-process** (default): All teammates in one terminal. `Shift+Up/Down` to navigate. `Ctrl+T` for task list.
-- **split panes**: Requires tmux or iTerm2. Each teammate gets own pane.
+- **auto** (default): split panes if in tmux, otherwise in-process
+- **in-process**: all in one terminal. `Shift+Up/Down` navigate. `Ctrl+T` task list.
+- **tmux/split**: each teammate own pane. Requires tmux or iTerm2.
 
-Set in settings.json:
-```json
-{ "teammateMode": "in-process" }
-```
+## Rules Reference
 
-## Limitations (Experimental)
+See `.claude/rules/team-coordination-rules.md` for teammate behavior rules.
 
-- No session resumption for in-process teammates
-- Task status can lag — check manually if stuck
-- One team per session
-- No nested teams (teammates can't spawn teams)
-- Lead is fixed for team lifetime
-- Permissions set at spawn (inherited from lead)
+> v2.0.0: Imperative execution engine. Templates auto-execute on activation.
