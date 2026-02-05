@@ -24,6 +24,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/subagent-init.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/team-context-inject.cjs"
           }
         ]
       }
