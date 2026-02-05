@@ -1,6 +1,7 @@
 # Agent Teams — Orchestration Guide
 
 > Feature added in ClaudeKit Engineer v2.11.x | Claude Code v2.1.32+ | Status: Experimental
+> Source: https://code.claude.com/docs/en/agent-teams | Last synced: Feb 5, 2026
 
 ## Overview
 
@@ -22,172 +23,348 @@ Enable in `settings.json`:
 ## Architecture
 
 ```
-Lead Session (you)
-  ├── Teammate A (own context, own session)
-  ├── Teammate B (own context, own session)
-  └── Teammate C (own context, own session)
-      │
-      └── Shared: Task List + Mailbox
+┌───────────────────────────────────────────────────────────────┐
+│                     YOUR TERMINAL                             │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                    TEAM LEAD                            │  │
+│  │            (your main Claude session)                   │  │
+│  │                                                         │  │
+│  │  - Create team (spawnTeam)                              │  │
+│  │  - Create & assign tasks (TaskCreate/TaskUpdate)        │  │
+│  │  - Spawn teammates (Task tool + team_name)              │  │
+│  │  - Message teammates (SendMessage)                      │  │
+│  │  - Synthesize results                                   │  │
+│  │  - Shut down teammates & cleanup                        │  │
+│  └──────────┬──────────────┬──────────────┬────────────────┘  │
+│             │              │              │                   │
+│    ┌────────▼──────┐ ┌────▼────────┐ ┌───▼─────────┐         │
+│    │  Teammate A   │ │ Teammate B  │ │ Teammate C  │          │
+│    │  (own context)│ │ (own context)│ │ (own context)│        │
+│    │               │ │              │ │              │        │
+│    │ Can message:  │ │ Can message: │ │ Can message: │        │
+│    │ - Lead        │ │ - Lead       │ │ - Lead       │        │
+│    │ - B, C        │ │ - A, C       │ │ - A, B       │        │
+│    └───────────────┘ └──────────────┘ └──────────────┘        │
+│                                                               │
+│  ┌──────────────────────────────────────────────────────────┐ │
+│  │  SHARED INFRASTRUCTURE                                   │ │
+│  │  ~/.claude/teams/{name}/config.json   <- Team roster     │ │
+│  │  ~/.claude/tasks/{name}/              <- Task list       | │
+│  │  Mailbox system                       <- Message delivery│ │
+│  └──────────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Team config | `~/.claude/teams/{name}/config.json` | Team membership |
-| Task list | `~/.claude/tasks/{name}/` | Shared work items |
+| Team config | `~/.claude/teams/{name}/config.json` | Team membership (name, agentId, agentType) |
+| Task list | `~/.claude/tasks/{name}/` | Shared work items with dependencies |
 | Lead | Main Claude Code session | Coordinates, assigns, synthesizes |
-| Teammates | Separate sessions | Independent workers |
+| Teammates | Separate sessions | Independent workers with full tool access |
+| Mailbox | Internal messaging system | Auto-delivery of messages between agents |
 
-**Context inheritance:** Each teammate loads CLAUDE.md, skills, agents, hooks, MCP servers — same as any fresh session. They do NOT inherit the lead's conversation history.
+**Context inheritance:** Each teammate loads CLAUDE.md, skills, agents, hooks, MCP servers — same as any fresh session. They do **NOT** inherit the lead's conversation history. Include task-specific context in the spawn prompt.
+
+## CK-Native Behavior
+
+The `/team` skill (v2.0.0) is an **imperative execution engine** — templates auto-execute on activation, not a manual playbook.
+
+It automatically integrates with the CK workflow stack:
+
+| Template | Wraps Workflow | Auto-Injected |
+|----------|---------------|---------------|
+| `/team research` | `/research` | Report naming, output format |
+| `/team implement` | `/cook` | Phase sequence, docs sync eval |
+| `/team review` | `/code-review` | Evidence gates, severity ratings |
+| `/team debug` | `/fix` | Root-cause-first, adversarial hypotheses |
+
+Teammates automatically receive CK context (reports path, naming pattern, branch, commit conventions) via the SubagentStart hook (`team-context-inject.cjs`).
+
+## Subagents vs Agent Teams
+
+```
+SUBAGENTS (Task tool)                  AGENT TEAMS (Teammate tool)
+═════════════════════                  ═════════════════════════════
+
+  ┌─────────┐                            ┌─────────┐
+  │  LEAD   │                            │  LEAD   │
+  └────┬────┘                            └────┬────┘
+       │                                      │
+  ┌────▼────┐  <- reports back           ┌────▼────┐
+  │ Worker  │──────────────┐             │ Worker A│<──────────┐
+  └─────────┘              │             └────┬────┘           │
+                           │                  │          ┌─────┴────┐
+  One-way:                 v             ┌────▼────┐     │ Worker C │
+  worker -> lead only    Result          │ Worker B│<--->└──────────┘
+                                         └─────────┘
+  No worker<->worker                     Multi-way:
+  communication                          everyone <-> everyone
+```
+
+| Dimension | Subagents | Agent Teams |
+|-----------|-----------|-------------|
+| Communication | Worker -> Lead only | Any -> Any (peer-to-peer) |
+| Context | Own window; results return to caller | Own window; fully independent |
+| Coordination | Lead manages all work | Shared task list + self-coordination |
+| Token cost | Lower (results summarized back) | Higher (N separate Claude instances) |
+| Best for | Quick focused tasks, sequential chains | Complex parallel + discussion |
+| User control | Cannot interact with subagents | Can message teammates directly |
+
+**Default rule:** Subagents for focused tasks. Teams for collaborative parallel work requiring discussion.
+
+## Message Flow
+
+```
+SendMessage types:
+═══════════════════════════════════════════════════════════════
+
+1. "message"  --- Direct 1:1 message
+   Lead ────────────> Teammate A
+   Teammate A ──────> Teammate B
+
+2. "broadcast" --- Fan-out to ALL (expensive! N = N API calls)
+   Lead ────────────> Teammate A
+        ────────────> Teammate B
+        ────────────> Teammate C
+
+3. "shutdown_request" / "shutdown_response"
+   Lead ── shutdown_request ────> Teammate
+   Lead <── shutdown_response ── Teammate
+                                 (approve=true -> exits gracefully)
+                                 (approve=false -> stays, sends reason)
+
+4. "plan_approval_response" (for teammates in plan mode)
+   Teammate ── ExitPlanMode ──> Lead (sends plan_approval_request)
+   Lead ── plan_approval_response ──> Teammate
+           (approve=true -> exits plan mode, begins implementation)
+           (approve=false + feedback -> revises plan, resubmits)
+```
+
+**Key:** Messages auto-deliver to recipients. Lead does not poll. Idle notifications sent automatically when teammate's turn ends.
+
+## Task Lifecycle
+
+```
+                    TaskCreate
+                        │
+                        v
+              ┌─────────────────┐
+              │     PENDING     │ <- created, unassigned
+              │  (owner: none)  │
+              └────────┬────────┘
+                       │
+            TaskUpdate │ (owner + status: in_progress)
+                       │
+              ┌────────▼────────┐
+              │   IN_PROGRESS   │ <- teammate working
+              │  (owner: "dev1")│
+              └────────┬────────┘
+                       │
+            TaskUpdate │ (status: completed)
+                       │
+              ┌────────▼────────┐
+              │    COMPLETED    │ <- done, unblocks dependents
+              └─────────────────┘
+
+Dependencies:
+  Task 2 ──blockedBy──> Task 1
+  (Task 2 cannot start until Task 1 completes)
+  Task 1 completes -> Task 2 auto-unblocks -> teammate self-claims
+
+Claiming: File locking prevents race conditions when multiple
+          teammates try to claim the same task simultaneously.
+```
+
+## Team Lifecycle
+
+```
+Phase 1: SETUP
+══════════════
+  User prompt -> Lead calls Teammate(spawnTeam)
+                 -> Team config at ~/.claude/teams/{name}/config.json
+
+Phase 2: POPULATE
+═════════════════
+  Lead calls Task(team_name="{name}") x N
+              |               |               |
+          Teammate A      Teammate B      Teammate C
+          (spawned)       (spawned)       (spawned)
+
+Phase 3: WORK
+═════════════
+  Lead: TaskCreate x M tasks
+  Lead: TaskUpdate (assign owner or teammates self-claim)
+  Teammates: work -> message lead/peers -> complete tasks
+  Lead: monitor, steer, synthesize
+
+Phase 4: SHUTDOWN
+═════════════════
+  Lead -> SendMessage(shutdown_request) -> each teammate
+  Teammate -> SendMessage(shutdown_response, approve=true)
+  Teammate process exits
+
+Phase 5: CLEANUP
+════════════════
+  Lead -> Teammate(cleanup)
+  ~/.claude/teams/{name}/  -> deleted
+  ~/.claude/tasks/{name}/  -> deleted
+  (MUST shut down all teammates first or cleanup fails)
+```
+
+## Display Modes
+
+```
+IN-PROCESS (default)                SPLIT PANES (tmux/iTerm2)
+════════════════════                ═════════════════════════
+
+┌──────────────────────┐           ┌──────────┬───────────┐
+│                      │           │ Lead     │ Teammate A│
+│  Single terminal     │           │          │           │
+│                      │           │ (your    │ (visible  │
+│  Shift+Up/Down:      │           │  main    │  output)  │
+│    cycle teammates   │           │  session)│           │
+│                      │           ├──────────┼───────────┤
+│  Enter: view session │           │Teammate B│ Teammate C│
+│  Escape: interrupt   │           │          │           │
+│  Ctrl+T: task list   │           │ (click   │ (click    │
+│  Shift+Tab: delegate │           │  to talk)│  to talk) │
+│    mode (coord only) │           │          │           │
+└──────────────────────┘           └──────────┴───────────┘
+```
+
+| Mode | Terminal | Setup | Config |
+|------|----------|-------|--------|
+| `"auto"` (default) | Split if in tmux, else in-process | None | `"teammateMode": "auto"` |
+| `"in-process"` | All in one terminal | None | `"teammateMode": "in-process"` |
+| `"tmux"` | Each teammate gets own pane | tmux or iTerm2 (`it2` CLI) | `"teammateMode": "tmux"` |
+
+CLI override: `claude --teammate-mode in-process`
+
+### Keyboard Controls (In-Process Mode)
+
+| Key | Action |
+|-----|--------|
+| `Shift+Up/Down` | Cycle through teammates |
+| `Enter` | View selected teammate's session |
+| `Escape` | Interrupt teammate's current turn |
+| `Ctrl+T` | Toggle task list |
+| `Shift+Tab` | Toggle delegate mode (lead = coordination-only) |
 
 ## Team Templates
 
-Activate via `/team` skill:
+Automatically orchestrated. Lead executes the full sequence on activation.
 
 ### Research Team
 ```
 /team research "best caching strategies for our API"
 ```
-- 3 researcher teammates investigating different angles
-- No plan approval — researchers are read-only
-- Lead synthesizes findings into single report
-- Model: haiku (cost-effective for research)
+- N researcher teammates (haiku, cost-effective). Default N=3.
+- No plan approval — read-only work
+- Lead synthesizes findings into single report at `{CK_REPORTS_PATH}/`
+- Est. tokens: 150K-300K
 
 ### Implementation Team
 ```
 /team implement plans/260205-feature/plan.md
 ```
-- Planner + 2-3 developers + tester
-- **Plan approval required** — each dev plans before coding
-- File ownership boundaries enforced (prevents overwrites)
-- Task dependencies: planner → devs → tester
-- Model: sonnet for devs, haiku for tester
+- Planner + N developers (sonnet) + tester (haiku). Default N=2.
+- **Plan approval required** per developer
+- File ownership boundaries enforced
+- Task dependencies: planner -> devs -> tester
+- Docs sync eval mandatory at end
+- Est. tokens: 400K-800K
 
 ### Review Team
 ```
 /team review src/auth/
 ```
-- Security + Performance + Test Coverage reviewers
-- Each reviews independently with specific focus
-- Lead synthesizes, deduplicates, prioritizes
-- Model: haiku for all reviewers
+- N reviewers (haiku) with specific focus areas. Default N=3.
+- Security + Performance + Test Coverage
+- Evidence-based only — no "seems" or "probably"
+- Lead deduplicates and prioritizes findings
+- Est. tokens: 100K-200K
 
-## Teams vs Subagents — When to Use Which
+### Debug Team
+```
+/team debug "API returns 500 on concurrent requests"
+```
+- N debuggers (sonnet) investigating competing hypotheses. Default N=3.
+- Adversarial: debuggers challenge each other's theories
+- Root cause report with evidence chain
+- Est. tokens: 200K-400K
 
-| Scenario | Subagents | Agent Teams |
-|----------|-----------|-------------|
-| Quick focused task (test, lint) | **Use this** | Overkill |
-| Sequential chain (plan → code → test) | **Use this** | No |
-| 3+ parallel workstreams | Maybe | **Use this** |
-| Competing debug hypotheses | No | **Use this** |
-| Cross-layer (FE + BE + tests) | Maybe | **Use this** |
-| User steers individual workers | No | **Use this** |
-| Token budget tight | **Use this** | No |
-
-**Default rule:** Subagents for focused tasks. Teams for collaborative parallel work.
-
-## Teams vs `/cook --parallel`
-
-| | `/team implement` | `/cook --parallel` |
-|---|---|---|
-| Architecture | Independent sessions | Subagents in one session |
-| Communication | Peer-to-peer messaging | Report to lead only |
-| Token cost | Higher (N context windows) | Lower |
-| User control | Can message teammates directly | Cannot interact with subagents |
-| Best for | Research, debates, cross-layer | Sequential implementation |
-
-## Key Tools (Used by Lead)
+## Key Tools
 
 | Tool | Purpose |
 |------|---------|
 | `Teammate(operation: "spawnTeam")` | Create team |
 | `Task(team_name, name, subagent_type)` | Spawn teammate |
-| `TaskCreate / TaskUpdate / TaskList` | Manage shared tasks |
+| `TaskCreate / TaskUpdate / TaskList / TaskGet` | Manage shared tasks |
 | `SendMessage(type: "message")` | DM a teammate |
 | `SendMessage(type: "broadcast")` | Message all (use sparingly) |
-| `SendMessage(type: "shutdown_request")` | Graceful shutdown |
+| `SendMessage(type: "shutdown_request")` | Request graceful shutdown |
+| `SendMessage(type: "plan_approval_response")` | Approve/reject teammate plans |
 | `Teammate(operation: "cleanup")` | Remove team resources |
 
-## File Ownership (Critical for Implementation Teams)
+## File Ownership (Critical)
 
-Each teammate **MUST** own distinct files. Two teammates editing the same file = silent overwrites.
-
-```
-Task A: "Implement API" — owns: src/api/*, src/models/*
-Task B: "Implement UI" — owns: src/components/*, src/pages/*
-Task C: "Write tests" — owns: tests/* (blocked by A and B)
-```
-
-If two tasks need the same file → restructure tasks or have lead handle the shared file.
-
-## Task Dependencies
+Each teammate **MUST** own distinct files. Two teammates editing same file = silent overwrites.
 
 ```
-TaskCreate(subject: "Implement API")        → #1
-TaskCreate(subject: "Implement UI")         → #2
-TaskCreate(subject: "Write tests")          → #3
-TaskUpdate(taskId: "3", addBlockedBy: ["1", "2"])
+Task A: "Implement API" -- owns: src/api/*, src/models/*
+Task B: "Implement UI"  -- owns: src/components/*, src/pages/*
+Task C: "Write tests"   -- owns: tests/* (blocked by A and B)
 ```
 
-Task #3 auto-unblocks when #1 and #2 complete.
+If two tasks need the same file -> restructure tasks or have lead handle the shared file.
+
+## Permissions
+
+All teammates inherit the lead's permission settings at spawn. If lead has `--dangerously-skip-permissions`, all teammates do too. Can change individual teammate modes after spawning, but not at spawn time.
 
 ## Error Recovery
 
 | Situation | Action |
 |-----------|--------|
 | Teammate unresponsive | Check via Shift+Up/Down, send direct message |
-| Teammate producing wrong output | Redirect with corrective message |
+| Teammate wrong output | Redirect with corrective message |
 | Teammate crashed | Shut down, spawn replacement, reassign task |
-| Need to abort entire team | "Shut down all teammates. Clean up the team." |
+| Lead implementing instead of delegating | Enable delegate mode (Shift+Tab) or tell it to wait |
+| Task appears stuck | Check if work done, update status manually |
+| Abort entire team | "Shut down all teammates. Clean up the team." |
+| After /resume or /rewind | In-process teammates lost. Spawn new ones. |
 
-## Display Modes
+## Limitations
 
-| Mode | Terminal | Setup |
-|------|----------|-------|
-| in-process (default) | All in one terminal | None |
-| split panes | Each teammate gets own pane | tmux or iTerm2 |
-
-Navigate in-process: `Shift+Up/Down` (select teammate), `Ctrl+T` (task list).
-
-Configure in settings.json:
-```json
-{ "teammateMode": "in-process" }
-```
+- No session resumption for in-process teammates (`/resume`, `/rewind` don't restore them)
+- One team per session (cleanup current before starting new)
+- No nested teams (teammates cannot spawn their own teams)
+- Lead is fixed for team lifetime (no promotion/transfer)
+- Permissions set at spawn (change individually after)
+- Task status can lag — check manually if stuck
+- Shutdown can be slow (teammates finish current tool call first)
+- Split panes not supported in VS Code terminal, Windows Terminal, or Ghostty
 
 ## Hook Integration
 
-The `session-init.cjs` hook detects active teams and injects:
+The `team-context-inject.cjs` SubagentStart hook detects team membership and injects:
+- **Team context:** peer list, task summary
+- **CK context:** reports path, plans path, naming pattern, branch, commit conventions
+
+The `session-init.cjs` hook detects active teams and sets:
 - `CK_AGENT_TEAM` — active team name
 - `CK_AGENT_TEAM_MEMBERS` — member count
-
-This ensures teammates receive ClaudeKit context (naming patterns, plan paths, reports directory) via the standard SessionStart hook flow.
-
-## Token Budget
-
-| Template | Est. Tokens | Strategy |
-|----------|-------------|----------|
-| Research (3 teammates) | 150K-300K | haiku for all |
-| Implement (4 teammates) | 400K-800K | sonnet devs, haiku tester |
-| Review (3 teammates) | 100K-200K | haiku for all |
-
-**Warning:** Teams use significantly more tokens than subagents. Use only when parallel discussion adds clear value.
-
-## Limitations (Experimental)
-
-- No session resumption for in-process teammates
-- One team per session
-- No nested teams (teammates can't spawn their own teams)
-- Lead is fixed for team lifetime
-- Permissions inherited from lead at spawn
-- Task status can lag — check manually if stuck
-- Split panes not supported in VS Code terminal, Windows Terminal, or Ghostty
 
 ## Related Files
 
 | File | Purpose |
 |------|---------|
-| `.claude/skills/team/SKILL.md` | Skill definition with full templates |
+| `.claude/skills/team/SKILL.md` | Skill definition with imperative templates (v2.0.0) |
 | `.claude/skills/team/references/` | Official docs reference |
+| `.claude/rules/team-coordination-rules.md` | Teammate behavior rules + CK conventions |
 | `.claude/rules/orchestration-protocol.md` | Decision matrix, file ownership rules |
+| `.claude/hooks/team-context-inject.cjs` | Team + CK context injection for teammates |
 | `.claude/hooks/session-init.cjs` | Team detection and env injection |
 
 ## Quick Start
@@ -197,3 +374,5 @@ This ensures teammates receive ClaudeKit context (naming patterns, plan paths, r
 3. Watch 3 researchers investigate in parallel
 4. Lead synthesizes findings into actionable report
 5. Team auto-cleans up when done
+
+> v2.0.0: Imperative execution engine. Templates auto-execute on activation.

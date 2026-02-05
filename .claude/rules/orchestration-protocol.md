@@ -37,42 +37,7 @@ Spawn multiple subagents simultaneously for independent tasks:
 
 ---
 
-## Agent Teams (Experimental)
+## Agent Teams (Optional)
 
-Agent Teams coordinate multiple **independent Claude Code sessions** with shared task lists and inter-agent messaging. Unlike subagents, teammates have their own context windows, can message each other directly, and self-coordinate.
-
-**Requires:** `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json env.
-
-### When to Use Agent Teams vs Subagents
-
-| Scenario | Subagents (Task) | Agent Teams |
-|----------|-----------------|-------------|
-| Focused task (test, lint, single review) | **Yes** | Overkill |
-| Sequential chain (plan → code → test) | **Yes** | No |
-| 3+ independent parallel workstreams | Maybe | **Yes** |
-| Competing debug hypotheses | No | **Yes** |
-| Cross-layer work (FE + BE + tests) | Maybe | **Yes** |
-| User wants to steer individual workers | No | **Yes** |
-| Token budget is tight | **Yes** | No |
-| Workers need to discuss/challenge findings | No | **Yes** |
-
-**Default:** Subagents remain the primary delegation method. Agent Teams are for complex parallel work where inter-agent discussion adds value.
-
-### Predefined Team Templates
-
-Activate via `/team` skill:
-- `/team research <topic>` — 3 researchers, different angles, lead synthesizes
-- `/team implement <plan>` — Planner + devs + tester, plan approval required
-- `/team review <scope>` — Security + performance + test coverage reviewers
-
-### File Ownership (CRITICAL)
-
-When using Agent Teams for implementation, each teammate **MUST** own distinct files. No two teammates edit the same file — this prevents overwrites.
-
-Define ownership in task descriptions:
-```
-Task: "Implement API endpoints"
-File ownership: src/api/*, src/models/*
-```
-
-See `.claude/skills/team/SKILL.md` for full template details.
+For multi-session parallel collaboration, activate the `/team` skill.
+Not part of the default orchestration workflow. See `.claude/skills/team/SKILL.md` for templates, decision criteria, and spawn instructions.

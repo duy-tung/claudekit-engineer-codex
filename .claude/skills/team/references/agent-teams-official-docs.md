@@ -1,7 +1,7 @@
 # Agent Teams — Overview & Architecture
 
 > **Canonical source:** https://code.claude.com/docs/en/agent-teams
-> **Version captured:** Claude Code 2.1.32 (Feb 2026)
+> **Version captured:** Claude Code (Feb 2026)
 > **Update policy:** Re-fetch canonical URL when Claude Code releases new Agent Teams features.
 
 This is a **self-contained knowledge base** — AI agents should NOT need to re-fetch the URL.
@@ -35,9 +35,21 @@ Best for tasks where parallel exploration adds real value:
 
 ## Enable
 
+Still experimental — requires opt-in:
+
 ```json
 { "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
 ```
+
+Set in shell environment or settings.json.
+
+## How Teams Start
+
+Two paths:
+1. **You request**: describe task + ask for agent team. Claude creates based on instructions.
+2. **Claude proposes**: suggests team if task benefits from parallel work.
+
+Both require your confirmation. Claude won't create a team without approval.
 
 ## Architecture
 
@@ -52,28 +64,54 @@ Storage:
 - **Team config**: `~/.claude/teams/{team-name}/config.json` (members array with name, agent ID, type)
 - **Task list**: `~/.claude/tasks/{team-name}/`
 
-## How Teams Start
+Task dependencies managed automatically — completing a blocking task unblocks dependents without manual intervention.
 
-1. **You request**: describe task + ask for agent team
-2. **Claude proposes**: suggests team if task benefits from parallel work
+## Tools API Surface
 
-Both require your confirmation.
+### TeammateTool
+
+| Operation | Purpose |
+|-----------|---------|
+| `spawnTeam` | Create team + task list. Params: `team_name`, `description` |
+| `cleanup` | Remove team/task dirs. Fails if active teammates exist |
+
+### SendMessage Types
+
+| Type | Purpose |
+|------|---------|
+| `message` | DM to one teammate (requires `recipient`) |
+| `broadcast` | Send to ALL teammates (use sparingly — costs scale with N) |
+| `shutdown_request` | Ask teammate to gracefully exit |
+| `shutdown_response` | Teammate approves/rejects shutdown (requires `request_id`) |
+| `plan_approval_response` | Lead approves/rejects teammate plan (requires `request_id`) |
+
+### Task System Fields
+
+| Field | Values/Purpose |
+|-------|---------------|
+| `status` | `pending` → `in_progress` → `completed` (or `deleted`) |
+| `owner` | Agent name assigned to task |
+| `blocks` | Task IDs this task blocks (read via TaskGet) |
+| `blockedBy` | Task IDs that must complete first (read via TaskGet) |
+| `addBlocks` | Set blocking relations (write via TaskUpdate) |
+| `addBlockedBy` | Set dependency relations (write via TaskUpdate) |
+| `metadata` | Arbitrary key-value pairs |
+| `subject` | Brief imperative title |
+| `description` | Full requirements and context |
+
+Task claiming uses file locking to prevent race conditions.
 
 ## Context & Communication
 
 Each teammate loads: CLAUDE.md, MCP servers, skills, agents. Receives spawn prompt from lead. Lead's conversation history does NOT carry over.
 
 - **Automatic message delivery** — no polling needed
-- **Idle notifications** — teammates notify lead when finished
+- **Idle notifications** — teammates notify lead when turn ends
 - **Shared task list** — all agents see status and claim work
-
-Messaging types:
-- `message` — send to one teammate
-- `broadcast` — send to all (use sparingly, costs scale)
 
 ## Permissions
 
-Teammates inherit lead's permission settings at spawn. Can change individually after spawning but not at spawn time.
+Teammates inherit lead's permission settings at spawn. If lead uses `--dangerously-skip-permissions`, all teammates do too. Can change individually after spawning but not at spawn time.
 
 ## Token Usage
 
