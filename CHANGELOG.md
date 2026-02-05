@@ -1,3 +1,11 @@
+## [2.11.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.9...v2.11.0-beta.10) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **team:** rename /team implement to /team cook for CK consistency ([c6dc19e](https://github.com/claudekit/claudekit-engineer/commit/c6dc19e0bf2b0b3b93be8ef51eb2cf8b469ce3c9))
+* **team:** reword pre-flight to prevent model self-check rejection ([953e437](https://github.com/claudekit/claudekit-engineer/commit/953e437a3e4224ecdd2f60948c8de3451a24c890))
+
 ## [2.11.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.8...v2.11.0-beta.9) (2026-02-05)
 
 
