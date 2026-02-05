@@ -35,11 +35,11 @@ All modes share core steps with mode-specific variations.
 - Create `plan.md` + `phase-XX-*.md` files
 
 **Fast:**
-- Use `/plan:fast` with scout results only
+- Use `/plan --fast` with scout results only
 - Minimal planning, focus on action
 
 **Parallel:**
-- Use `/plan:parallel` for dependency graph + file ownership matrix
+- Use `/plan --parallel` for dependency graph + file ownership matrix
 
 **Code:**
 - Skip - plan already exists
@@ -59,9 +59,10 @@ All modes share core steps with mode-specific variations.
 ## Step 3: Implementation
 
 **IMPORTANT:**
-- Read plan overview and all phases, use `TaskCreate` to create Claude Tasks for each unchecked item.
-- Tasks must be broken down and defined their priority order.
-- Tasks can be blocked by other tasks.
+1. `TaskList` first — check for existing tasks (hydrated by planning skill in same session)
+2. If tasks exist → pick them up, skip re-creation
+3. If no tasks → read plan phases, `TaskCreate` for each unchecked `[ ]` item with priority order
+4. Tasks can be blocked by other tasks via `addBlockedBy`
 
 **All modes:**
 - Use `TaskUpdate` to mark tasks as `in_progress` immediately.
