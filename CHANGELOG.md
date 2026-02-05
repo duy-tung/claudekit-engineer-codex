@@ -1,3 +1,10 @@
+## [2.11.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.6...v2.11.0-beta.7) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** rename agent-teams skill folder to team for command parity ([cd14c91](https://github.com/claudekit/claudekit-engineer/commit/cd14c91c4b902c3def654c3eafbbc105bcd865df))
+
 ## [2.11.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.5...v2.11.0-beta.6) (2026-02-05)
 
 
