@@ -1,3 +1,10 @@
+## [2.11.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.2...v2.11.0-beta.3) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** add [CK] prefix to skill descriptions for native command distinction ([1f5244e](https://github.com/claudekit/claudekit-engineer/commit/1f5244e20af9f041eae5dbcdd9ce8c1e88298edd)), closes [#453](https://github.com/claudekit/claudekit-engineer/issues/453)
+
 ## [2.11.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.1...v2.11.0-beta.2) (2026-02-05)
 
 
