@@ -1,10 +1,3 @@
-## [2.10.1-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1-beta.2...v2.10.1-beta.3) (2026-02-05)
-
-
-### 🐞 Bug Fixes
-
-* **preview:** add contextual path resolution for natural references ([51aa751](https://github.com/claudekit/claudekit-engineer/commit/51aa751cede4deaa9bae7f6297e73262ea470eaf))
-
 ## [2.10.1-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1-beta.1...v2.10.1-beta.2) (2026-02-05)
 
 
