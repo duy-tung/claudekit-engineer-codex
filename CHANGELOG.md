@@ -1,3 +1,10 @@
+## [2.11.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.4...v2.11.0-beta.5) (2026-02-05)
+
+
+### 🚀 Features
+
+* **skills:** add Agent Teams orchestration skill ([#458](https://github.com/claudekit/claudekit-engineer/issues/458)) ([3542566](https://github.com/claudekit/claudekit-engineer/commit/35425666f1397f71dbf7c1df931c8836aeba5d28)), closes [#457](https://github.com/claudekit/claudekit-engineer/issues/457)
+
 ## [2.11.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.3...v2.11.0-beta.4) (2026-02-05)
 
 
