@@ -13,6 +13,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const {
   loadConfig,
   writeEnv,
@@ -103,6 +104,36 @@ function cleanupOrphanedShadowedSkills() {
   } catch (err) {
     process.stderr.write(`[session-init] Shadowed cleanup error: ${err.message}\n`);
     return { restored, skipped, kept };
+  }
+}
+
+/**
+ * Detect if this session is running inside an Agent Team.
+ * Scans ~/.claude/teams/ for active team configs and checks membership.
+ * Note: Returns first team found — Claude Code supports one team per session.
+ * Note: Team lifecycle (creation/cleanup) is managed by Claude Code, not this hook.
+ * @returns {{ teamName: string, memberCount: number } | null}
+ */
+function detectAgentTeam() {
+  try {
+    const teamsDir = path.join(os.homedir(), '.claude', 'teams');
+    if (!fs.existsSync(teamsDir)) return null;
+
+    const teams = fs.readdirSync(teamsDir, { withFileTypes: true });
+    for (const entry of teams) {
+      if (!entry.isDirectory()) continue;
+      const configPath = path.join(teamsDir, entry.name, 'config.json');
+      if (!fs.existsSync(configPath)) continue;
+      try {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        if (config.members && config.members.length > 0) {
+          return { teamName: entry.name, memberCount: config.members.length };
+        }
+      } catch { /* skip malformed configs */ }
+    }
+    return null;
+  } catch {
+    return null;
   }
 }
 
@@ -238,6 +269,14 @@ async function main() {
       const codingLevel = config.codingLevel ?? 5;
       writeEnv(envFile, 'CK_CODING_LEVEL', codingLevel);
       writeEnv(envFile, 'CK_CODING_LEVEL_STYLE', getCodingLevelStyleName(codingLevel));
+
+    }
+
+    // Agent Teams detection — detect once, used for env vars and console output
+    const teamInfo = detectAgentTeam();
+    if (envFile && teamInfo) {
+      writeEnv(envFile, 'CK_AGENT_TEAM', teamInfo.teamName);
+      writeEnv(envFile, 'CK_AGENT_TEAM_MEMBERS', teamInfo.memberCount);
     }
 
     console.log(`Session ${source}. ${buildContextOutput(config, detections, resolved, staticEnv.gitRoot)}`);
@@ -257,6 +296,13 @@ async function main() {
         console.log(`[!] Kept ${shadowedCleanup.kept.length} skill(s) for manual review (content differs): ${shadowedCleanup.kept.join(', ')}`);
         console.log(`    Review .claude/skills/.shadowed/ and merge changes manually.`);
       }
+    }
+
+    // Agent Teams: Show team context if running inside a team (uses cached result)
+    if (teamInfo) {
+      console.log(`[i] Agent Team detected: "${teamInfo.teamName}" (${teamInfo.memberCount} members)`);
+      console.log(`    Team config: ~/.claude/teams/${teamInfo.teamName}/config.json`);
+      console.log(`    Use /team skill for orchestration templates.`);
     }
 
     // Info: Show git root when running from subdirectory (Issue #327: now supported)
