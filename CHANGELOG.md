@@ -1,3 +1,26 @@
+## [2.11.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.8...v2.11.0-beta.9) (2026-02-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **team:** /team templates now auto-execute instead of providing
+instructions for manual orchestration.
+
+### 🚀 Features
+
+* **agents:** update agent definitions and references for agent teams support ([cfa9950](https://github.com/claudekit/claudekit-engineer/commit/cfa99507b0c1714bff01567d2b4d790a56662ba8))
+* **team:** rewrite /team skill as CK-native imperative execution engine v2.0.0 ([5239d7a](https://github.com/claudekit/claudekit-engineer/commit/5239d7a94d9e6cb3a90a17efcf08fd0e666ac3f7))
+
+
+### 🐞 Bug Fixes
+
+* **team:** add pre-flight check to prevent subagent fallback ([e7ff1d7](https://github.com/claudekit/claudekit-engineer/commit/e7ff1d718b4be1224cace6ec2a48618e1071cb73))
+
+
+### ♻️ Code Refactoring
+
+* **rules:** decouple team mode from default orchestration workflow ([ecb01ed](https://github.com/claudekit/claudekit-engineer/commit/ecb01ed9800d1c5dc5a21057eca2e1e3d9cb23b7))
+
 ## [2.11.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.7...v2.11.0-beta.8) (2026-02-05)
 
 
