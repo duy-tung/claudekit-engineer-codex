@@ -41,8 +41,11 @@ When processing arguments, follow this priority order:
 
 1. **`--stop`** → Stop server (exit)
 2. **Generation flags** (`--explain`, `--slides`, `--diagram`, `--ascii`) → Generation mode
-3. **Path exists on filesystem** → View mode
-4. **Neither flag nor valid path** → Error: suggest `/preview --help`
+3. **Resolve path from argument:**
+   - If argument is an explicit path → use directly
+   - If argument is a contextual reference (e.g., "that file", "the report", "this") → resolve from recent conversation context (look for file paths, URLs, or recently mentioned files)
+4. **Resolved path exists on filesystem** → View mode
+5. **Path doesn't exist or can't resolve** → Ask user to clarify which file they meant
 
 **Topic-to-slug conversion:**
 - Lowercase the topic
@@ -274,7 +277,7 @@ Report:
 | Topic becomes empty after sanitization | Ask user to provide topic with alphanumeric characters |
 | File write failure | Report error, suggest checking permissions |
 | Server startup failure | Check if port in use, try `/preview --stop` first |
-| No generation flag + invalid path | Suggest `/preview --help` or correct syntax |
+| No generation flag + unresolvable reference | Ask user to clarify which file they meant |
 | Existing file at output path | Overwrite with new content (no prompt) |
 | Server already running | Reuse existing server instance, just open new URL |
 | Parent `plans/` dir missing | Create directories recursively before write |
