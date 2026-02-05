@@ -1,3 +1,10 @@
+## [2.11.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.7...v2.11.0-beta.8) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **metadata:** add agent-teams to deletions for clean migration to team/ ([a64d5ac](https://github.com/claudekit/claudekit-engineer/commit/a64d5ace72569c78001c2eeb908555d888b84319))
+
 ## [2.11.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.6...v2.11.0-beta.7) (2026-02-05)
 
 
