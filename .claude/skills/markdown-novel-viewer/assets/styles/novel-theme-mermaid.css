@@ -100,10 +100,23 @@ pre.mermaid[data-processed="true"],
   opacity: 1;
 }
 
+/* Always show button when expanded so user can collapse */
+.mermaid-wrapper.expanded .mermaid-expand-btn {
+  opacity: 1;
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
 .mermaid-expand-btn:hover {
   background: var(--bg-secondary);
   color: var(--text-primary);
   border-color: var(--accent);
+}
+
+.mermaid-wrapper.expanded .mermaid-expand-btn:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 /* Expanded state */
