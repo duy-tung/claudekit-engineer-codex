@@ -1,3 +1,10 @@
+## [2.11.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.5...v2.11.0-beta.6) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** expand agent-teams references into comprehensive knowledge base ([a66bd77](https://github.com/claudekit/claudekit-engineer/commit/a66bd775001f99fd4b80b5c09b1dd6072b43e081))
+
 ## [2.11.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.4...v2.11.0-beta.5) (2026-02-05)
 
 
