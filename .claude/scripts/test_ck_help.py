@@ -117,7 +117,7 @@ def main():
 
     test(
         "2.3 Single word with colon → command",
-        "plan:fast",
+        "plan --fast",
         expect_type="command-details"
     )
 
