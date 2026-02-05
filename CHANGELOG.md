@@ -1,3 +1,15 @@
+## [2.11.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.3...v2.11.0-beta.4) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** reduce session-init command failures ([0b631f2](https://github.com/claudekit/claudekit-engineer/commit/0b631f207f31e20b2bf1c36c87856f37f5a08119)), closes [#455](https://github.com/claudekit/claudekit-engineer/issues/455)
+
+
+### ✅ Tests
+
+* **hooks:** add comprehensive test suite for project-detector ([5c3a982](https://github.com/claudekit/claudekit-engineer/commit/5c3a982c5005bc5f4941f77af250075c2a122581)), closes [#455](https://github.com/claudekit/claudekit-engineer/issues/455) [#455](https://github.com/claudekit/claudekit-engineer/issues/455)
+
 ## [2.11.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.2...v2.11.0-beta.3) (2026-02-05)
 
 
