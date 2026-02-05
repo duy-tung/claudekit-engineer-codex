@@ -1,5 +1,8 @@
 # Team Coordination Rules
 
+> These rules only apply when operating as a teammate within an Agent Team.
+> They have no effect on standard sessions or subagent workflows.
+
 Rules for agents operating as teammates within an Agent Team.
 
 ## File Ownership (CRITICAL)

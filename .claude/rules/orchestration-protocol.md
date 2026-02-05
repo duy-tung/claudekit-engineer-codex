@@ -37,57 +37,7 @@ Spawn multiple subagents simultaneously for independent tasks:
 
 ---
 
-## Agent Teams
+## Agent Teams (Optional)
 
-Agent Teams coordinate multiple **independent Claude Code sessions** with shared task lists and inter-agent messaging. Unlike subagents, teammates have their own context windows, can message each other directly, and self-coordinate.
-
-**Requires:** `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json env.
-
-### When to Use Agent Teams vs Subagents
-
-| Scenario | Subagents (Task) | Agent Teams |
-|----------|-----------------|-------------|
-| Focused task (test, lint, single review) | **Yes** | Overkill |
-| Sequential chain (plan → code → test) | **Yes** | No |
-| 3+ independent parallel workstreams | Maybe | **Yes** |
-| Competing debug hypotheses | No | **Yes** |
-| Cross-layer work (FE + BE + tests) | Maybe | **Yes** |
-| User wants to steer individual workers | No | **Yes** |
-| Token budget is tight | **Yes** | No |
-| Workers need to discuss/challenge findings | No | **Yes** |
-
-**Default:** Subagents remain the primary delegation method. Agent Teams are for complex parallel work where inter-agent discussion adds value.
-
-### Team Templates
-
-Activate via `/team` skill:
-- `/team research <topic>` — N researchers, different angles, lead synthesizes
-- `/team implement <plan>` — Planner + N devs + tester, plan approval required
-- `/team review <scope>` — N reviewers (security + performance + test coverage)
-- `/team debug <issue>` — N debuggers investigating competing hypotheses
-
-All templates support `--devs N`, `--researchers N`, `--reviewers N`, `--debuggers N` flags.
-
-### File Ownership (CRITICAL)
-
-When using Agent Teams for implementation, each teammate **MUST** own distinct files. No two teammates edit the same file — this prevents overwrites.
-
-Define ownership in task descriptions:
-```
-Task: "Implement API endpoints"
-File ownership: src/api/*, src/models/*
-```
-
-**Git worktree pattern:** For implementation teams, create worktree per developer to eliminate git conflicts. See best practices in `/team` skill references.
-
-### Coordination Rules
-
-See `.claude/rules/team-coordination-rules.md` for detailed teammate behavior rules covering:
-- File ownership enforcement
-- Communication protocol (message vs broadcast)
-- Task claiming order
-- Plan approval flow
-- Conflict resolution
-- Shutdown protocol
-
-See `.claude/skills/team/SKILL.md` for full template details and spawn instructions.
+For multi-session parallel collaboration, activate the `/team` skill.
+Not part of the default orchestration workflow. See `.claude/skills/team/SKILL.md` for templates, decision criteria, and spawn instructions.
