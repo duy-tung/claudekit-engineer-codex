@@ -1,11 +1,41 @@
-# Agent Teams — Official Documentation Reference
+# Agent Teams — Overview & Architecture
 
-Source: https://code.claude.com/docs/en/agent-teams (Claude Code 2.1.32)
+> **Canonical source:** https://code.claude.com/docs/en/agent-teams
+> **Version captured:** Claude Code 2.1.32 (Feb 2026)
+> **Update policy:** Re-fetch canonical URL when Claude Code releases new Agent Teams features.
 
-## Enabling
+This is a **self-contained knowledge base** — AI agents should NOT need to re-fetch the URL.
+
+## Overview
+
+Agent Teams coordinate multiple Claude Code instances working together. One session acts as the team lead, coordinating work, assigning tasks, and synthesizing results. Teammates work independently, each in its own context window, and communicate directly with each other.
+
+Unlike subagents (run within a single session, report back only), teammates are full independent sessions you can interact with directly.
+
+## When to Use
+
+Best for tasks where parallel exploration adds real value:
+
+- **Research and review**: multiple teammates investigate different aspects, share and challenge findings
+- **New modules or features**: teammates each own a separate piece without conflicts
+- **Debugging with competing hypotheses**: test different theories in parallel
+- **Cross-layer coordination**: changes spanning frontend, backend, tests — each owned by different teammate
+
+**Not suitable for:** sequential tasks, same-file edits, work with many dependencies.
+
+### Subagents vs Agent Teams
+
+| | Subagents | Agent Teams |
+|---|---|---|
+| **Context** | Own window; results return to caller | Own window; fully independent |
+| **Communication** | Report back to main agent only | Message each other directly |
+| **Coordination** | Main agent manages all work | Shared task list, self-coordination |
+| **Best for** | Focused tasks, result-only | Complex work requiring discussion |
+| **Token cost** | Lower | Higher (each teammate = separate instance) |
+
+## Enable
 
 ```json
-// settings.json
 { "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
 ```
 
@@ -13,51 +43,38 @@ Source: https://code.claude.com/docs/en/agent-teams (Claude Code 2.1.32)
 
 | Component | Role |
 |-----------|------|
-| Team lead | Main session that creates team, spawns teammates, coordinates |
-| Teammates | Separate Claude Code instances with own context windows |
-| Task list | Shared work items at `~/.claude/tasks/{team-name}/` |
-| Mailbox | Messaging system for inter-agent communication |
-| Team config | `~/.claude/teams/{team-name}/config.json` |
+| **Team lead** | Main session — creates team, spawns teammates, coordinates |
+| **Teammates** | Separate Claude Code instances with own context windows |
+| **Task list** | Shared work items at `~/.claude/tasks/{team-name}/` |
+| **Mailbox** | Messaging system for inter-agent communication |
 
-## Key Tools
+Storage:
+- **Team config**: `~/.claude/teams/{team-name}/config.json` (members array with name, agent ID, type)
+- **Task list**: `~/.claude/tasks/{team-name}/`
 
-| Tool | Purpose |
-|------|---------|
-| `Teammate(operation: "spawnTeam")` | Create a team |
-| `Task(team_name: ..., name: ...)` | Spawn a teammate into the team |
-| `TaskCreate` | Create shared tasks |
-| `TaskUpdate` | Update task status, set dependencies |
-| `TaskList` | View all tasks |
-| `SendMessage(type: "message")` | DM a specific teammate |
-| `SendMessage(type: "broadcast")` | Message all teammates (use sparingly) |
-| `SendMessage(type: "shutdown_request")` | Ask teammate to shut down |
-| `Teammate(operation: "cleanup")` | Remove team resources |
+## How Teams Start
+
+1. **You request**: describe task + ask for agent team
+2. **Claude proposes**: suggests team if task benefits from parallel work
+
+Both require your confirmation.
 
 ## Context & Communication
 
-- Each teammate loads: CLAUDE.md, MCP servers, skills, agents
-- Teammates do NOT inherit lead's conversation history
-- Messages delivered automatically (no polling needed)
-- Idle notifications sent when teammates finish turns
-- Shared task list visible to all agents
+Each teammate loads: CLAUDE.md, MCP servers, skills, agents. Receives spawn prompt from lead. Lead's conversation history does NOT carry over.
 
-## Plan Approval Mode
+- **Automatic message delivery** — no polling needed
+- **Idle notifications** — teammates notify lead when finished
+- **Shared task list** — all agents see status and claim work
 
-Teammates can be spawned with `mode: "plan"` to require plan approval:
-1. Teammate works in read-only plan mode
-2. Sends plan approval request to lead
-3. Lead approves → teammate exits plan mode and implements
-4. Lead rejects with feedback → teammate revises plan
+Messaging types:
+- `message` — send to one teammate
+- `broadcast` — send to all (use sparingly, costs scale)
 
-## Display Modes
+## Permissions
 
-- `"in-process"` — all in one terminal (default)
-- `"tmux"` / `"auto"` — split panes (requires tmux or iTerm2)
+Teammates inherit lead's permission settings at spawn. Can change individually after spawning but not at spawn time.
 
-## Limitations
+## Token Usage
 
-- No session resumption for in-process teammates
-- One team per session
-- No nested teams
-- Lead is fixed for lifetime
-- Permissions inherited from lead at spawn
+Scales with active teammates. Worth it for research/review/features. Single session more cost-effective for routine tasks.
