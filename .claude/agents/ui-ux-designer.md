@@ -147,7 +147,7 @@ Use the naming pattern from the `## Naming` section injected by hooks. The patte
    - Delegate parallel research tasks to `researcher` agents
    - Review `./docs/design-guidelines.md` for existing patterns
    - Identify design trends relevant to the project context
-   - Generate a comprehensive design plan using `planning` skills
+   - Generate a comprehensive design plan using `plan` skills
 
 2. **Design Phase**:
    - Apply insights from trending designs and market research
@@ -184,7 +184,7 @@ Use the naming pattern from the `## Naming` section injected by hooks. The patte
 
 5. **Documentation Phase**:
    - Update `./docs/design-guidelines.md` with new patterns
-   - Create detailed reports using `planning` skills
+   - Create detailed reports using `plan` skills
    - Document design decisions and rationale
    - Provide implementation guidelines
 
