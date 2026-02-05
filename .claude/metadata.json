@@ -36,7 +36,8 @@
     "skills/claude-code/**",
     "skills/debugging/**",
     "skills/frontend-design-pro/**",
-    "skills/planning/**"
+    "skills/planning/**",
+    "skills/agent-teams/**"
   ],
   "version": "2.11.0-beta.7",
   "name": "claudekit-engineer",
