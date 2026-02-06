@@ -38,7 +38,7 @@ function countTasks(teamName) {
       else if (task.status === 'in_progress') inProgress++;
       else if (task.status === 'completed') completed++;
     }
-    return { pending, inProgress, completed, total: files.length };
+    return { pending, inProgress, completed, total: pending + inProgress + completed };
   } catch { return null; }
 }
 

@@ -53,7 +53,7 @@ function getAvailableTasks(teamName) {
       }
     }
 
-    return { pending, inProgress, completed, total: tasks.length, unblocked };
+    return { pending, inProgress, completed, total: pending + inProgress + completed, unblocked };
   } catch { return null; }
 }
 
