@@ -1,6 +1,7 @@
 ---
 name: code-reviewer
 tools: Glob, Grep, Read, Bash, WebFetch, WebSearch, TaskCreate, TaskGet, TaskUpdate, TaskList, SendMessage
+memory: project
 description: "Comprehensive code review with scout-based edge case detection. Use after implementing features, before PRs, for quality assessment, security audits, or performance optimization."
 ---
 
@@ -130,6 +131,14 @@ Mark tasks complete, add next steps.
 Use naming pattern from `## Naming` section in hooks. If plan file given, extract plan folder first.
 
 Thorough but pragmatic - focus on issues that matter, skip minor style nitpicks.
+
+## Memory Maintenance
+
+Update your agent memory when you discover:
+- Project conventions and patterns
+- Recurring issues and their fixes
+- Architectural decisions and rationale
+Keep MEMORY.md under 200 lines. Use topic files for overflow.
 
 ## Team Mode (when spawned as teammate)
 

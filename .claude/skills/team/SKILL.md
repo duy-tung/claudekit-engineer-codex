@@ -1,14 +1,14 @@
 ---
 name: team
 description: "[CK] Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, review, and debug workflows requiring independent teammates."
-version: 2.0.0
+version: 2.1.0
 ---
 
 # Agent Teams - CK-Native Orchestration Engine
 
 Coordinate multiple independent Claude Code sessions. Each teammate has own context window, loads project context (CLAUDE.md, skills, agents), communicates via shared task list and messaging.
 
-**Requires:** `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json env.
+**Requires:** Agent Teams enabled. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json env if using Claude Code < 2.1.33. May be GA in 2.1.33+.
 
 ## Usage
 
@@ -79,8 +79,10 @@ IMMEDIATELY execute in order:
    - `name: "researcher-{N}"`
    - Prompt: task description + CK Context Block
 
-5. **WAIT** for all tasks: status `completed`
-   (Check TaskList every 30s. If stuck >5 min, message teammate.)
+5. **MONITOR** via TaskCompleted hook events + TaskList fallback:
+   - TaskCompleted events auto-notify when researchers finish
+   - Fallback: Check TaskList if no event received in 60s
+   - If stuck >5 min, message teammate directly
 
 6. **READ** all researcher reports from `{CK_REPORTS_PATH}/`
 
@@ -118,7 +120,11 @@ IMMEDIATELY execute in order:
    - Prompt: task description + CK Context Block
    - REVIEW and APPROVE each developer's plan via `plan_approval_response`
 
-5. **MONITOR** dev completion. When all devs done, spawn tester:
+5. **MONITOR** dev completion via TaskCompleted events:
+   - TaskCompleted hook notifies when each dev task finishes
+   - When all N dev tasks show completed, spawn tester immediately
+   - TeammateIdle events confirm devs are available for shutdown
+   - Fallback: Check TaskList if no events received in 60s
    - `Task(subagent_type: "tester", model: "haiku", name: "tester")`
    - Tester runs full test suite, reports pass/fail
 
@@ -156,7 +162,9 @@ IMMEDIATELY execute in order:
    - `subagent_type: "code-reviewer"`, `model: "haiku"`, `name: "reviewer-{N}"`
    - Prompt: task description + CK Context Block
 
-5. **WAIT** for all tasks: status `completed`
+5. **MONITOR** via TaskCompleted hook events + TaskList fallback:
+   - TaskCompleted events auto-notify when reviewers finish
+   - Fallback: Check TaskList if no event received in 60s
 
 6. **SYNTHESIZE** into: `{CK_REPORTS_PATH}/review-{scope-slug}.md`
    - Deduplicate findings across reviewers
@@ -190,7 +198,10 @@ IMMEDIATELY execute in order:
    - `subagent_type: "debugger"`, `model: "sonnet"`, `name: "debugger-{N}"`
    - Prompt: task description + CK Context Block
 
-5. **WAIT** for all tasks. Debuggers should message each other — let them converge.
+5. **MONITOR** via TaskCompleted events. Debuggers should message each other — let them converge.
+   - TaskCompleted events notify as each hypothesis is tested
+   - TeammateIdle events indicate debugger awaiting peer input
+   - Fallback: Check TaskList if no events in 60s
 
 6. **READ** all debugger reports. Identify surviving theory as root cause.
 
@@ -200,6 +211,15 @@ IMMEDIATELY execute in order:
 8. **SHUTDOWN** + **CLEANUP**
 
 9. **REPORT**: Tell user `Debug complete. Root cause: <summary>. Report: {path}.`
+
+---
+
+## Agent Memory
+
+Agents with `memory: project` retain learnings across team sessions. Memory persists in `.claude/agent-memory/<name>/` (gitignored). Useful for:
+- Code reviewer remembering project conventions
+- Debugger recalling past failure patterns
+- Tester tracking flaky tests and coverage gaps
 
 ---
 
@@ -249,4 +269,4 @@ If unresponsive: close terminal or kill session. Clean orphaned configs at `~/.c
 
 See `.claude/rules/team-coordination-rules.md` for teammate behavior rules.
 
-> v2.0.0: Imperative execution engine. Templates auto-execute on activation.
+> v2.1.0: Event-driven orchestration via TaskCompleted/TeammateIdle hooks. Agent memory + Task restrictions.

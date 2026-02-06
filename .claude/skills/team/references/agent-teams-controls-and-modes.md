@@ -84,3 +84,24 @@ Teammate can approve (exit) or reject with explanation. Teammates finish current
 Ask lead to clean up after all teammates shut down. Fails if active teammates still exist.
 
 Removes shared team resources (`~/.claude/teams/` and `~/.claude/tasks/` entries).
+
+## Hook-Based Orchestration (2.1.33+)
+
+### Event-Driven Monitoring
+
+Instead of polling TaskList, lead receives automatic context injection:
+
+- **TaskCompleted** — fires when any teammate completes a task. Lead gets progress counts.
+- **TeammateIdle** — fires when teammate turn ends. Lead gets available task info.
+
+CK hooks (`task-completed-handler.cjs`, `teammate-idle-handler.cjs`) process these events and inject summary into lead's context.
+
+### Recommended Pattern
+
+1. Lead creates tasks and spawns teammates
+2. TaskCompleted hook notifies lead as tasks finish (progress: N/M)
+3. TeammateIdle hook suggests reassignment or shutdown
+4. Lead acts on suggestions (spawn tester, shut down, reassign)
+5. Fallback: Check TaskList manually if no events received in 60s
+
+This replaces the "poll TaskList every 30s" pattern with reactive orchestration.
