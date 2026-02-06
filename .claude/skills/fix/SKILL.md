@@ -1,6 +1,6 @@
 ---
 name: fix
-description: ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem.
+description: "[CK] ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem."
 version: 1.1.1
 ---
 

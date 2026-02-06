@@ -19,6 +19,15 @@
     "commands/scout/**",
     "commands/scout.md",
     "commands/skill/**",
+    "commands/plan.md",
+    "commands/plan/ci.md",
+    "commands/plan/cro.md",
+    "commands/plan/fast.md",
+    "commands/plan/hard.md",
+    "commands/plan/parallel.md",
+    "commands/plan/two.md",
+    "commands/bootstrap/**",
+    "commands-archived/**",
     "skills/.shadowed/**",
     "skills/_archive/**",
     "skills/aesthetic/**",
@@ -26,12 +35,14 @@
     "skills/brainstorming/**",
     "skills/claude-code/**",
     "skills/debugging/**",
-    "skills/frontend-design-pro/**"
+    "skills/frontend-design-pro/**",
+    "skills/planning/**",
+    "skills/agent-teams/**"
   ],
-  "version": "2.11.0-beta.1",
+  "version": "2.11.0-beta.11",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-02-05T15:40:27.756Z",
+  "buildDate": "2026-02-06T01:07:21.942Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"

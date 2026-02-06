@@ -1,3 +1,95 @@
+## [2.11.0-beta.11](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.10...v2.11.0-beta.11) (2026-02-06)
+
+
+### 🐞 Bug Fixes
+
+* **ck-help:** update stale command syntax after command-to-skill migration ([4975fa0](https://github.com/claudekit/claudekit-engineer/commit/4975fa06e2ebd74ef44195aeb8cbbe3a504dc651))
+
+## [2.11.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.9...v2.11.0-beta.10) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **team:** rename /team implement to /team cook for CK consistency ([c6dc19e](https://github.com/claudekit/claudekit-engineer/commit/c6dc19e0bf2b0b3b93be8ef51eb2cf8b469ce3c9))
+* **team:** reword pre-flight to prevent model self-check rejection ([953e437](https://github.com/claudekit/claudekit-engineer/commit/953e437a3e4224ecdd2f60948c8de3451a24c890))
+
+## [2.11.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.8...v2.11.0-beta.9) (2026-02-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **team:** /team templates now auto-execute instead of providing
+instructions for manual orchestration.
+
+### 🚀 Features
+
+* **agents:** update agent definitions and references for agent teams support ([cfa9950](https://github.com/claudekit/claudekit-engineer/commit/cfa99507b0c1714bff01567d2b4d790a56662ba8))
+* **team:** rewrite /team skill as CK-native imperative execution engine v2.0.0 ([5239d7a](https://github.com/claudekit/claudekit-engineer/commit/5239d7a94d9e6cb3a90a17efcf08fd0e666ac3f7))
+
+
+### 🐞 Bug Fixes
+
+* **team:** add pre-flight check to prevent subagent fallback ([e7ff1d7](https://github.com/claudekit/claudekit-engineer/commit/e7ff1d718b4be1224cace6ec2a48618e1071cb73))
+
+
+### ♻️ Code Refactoring
+
+* **rules:** decouple team mode from default orchestration workflow ([ecb01ed](https://github.com/claudekit/claudekit-engineer/commit/ecb01ed9800d1c5dc5a21057eca2e1e3d9cb23b7))
+
+## [2.11.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.7...v2.11.0-beta.8) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **metadata:** add agent-teams to deletions for clean migration to team/ ([a64d5ac](https://github.com/claudekit/claudekit-engineer/commit/a64d5ace72569c78001c2eeb908555d888b84319))
+
+## [2.11.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.6...v2.11.0-beta.7) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** rename agent-teams skill folder to team for command parity ([cd14c91](https://github.com/claudekit/claudekit-engineer/commit/cd14c91c4b902c3def654c3eafbbc105bcd865df))
+
+## [2.11.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.5...v2.11.0-beta.6) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** expand agent-teams references into comprehensive knowledge base ([a66bd77](https://github.com/claudekit/claudekit-engineer/commit/a66bd775001f99fd4b80b5c09b1dd6072b43e081))
+
+## [2.11.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.4...v2.11.0-beta.5) (2026-02-05)
+
+
+### 🚀 Features
+
+* **skills:** add Agent Teams orchestration skill ([#458](https://github.com/claudekit/claudekit-engineer/issues/458)) ([3542566](https://github.com/claudekit/claudekit-engineer/commit/35425666f1397f71dbf7c1df931c8836aeba5d28)), closes [#457](https://github.com/claudekit/claudekit-engineer/issues/457)
+
+## [2.11.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.3...v2.11.0-beta.4) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** reduce session-init command failures ([0b631f2](https://github.com/claudekit/claudekit-engineer/commit/0b631f207f31e20b2bf1c36c87856f37f5a08119)), closes [#455](https://github.com/claudekit/claudekit-engineer/issues/455)
+
+
+### ✅ Tests
+
+* **hooks:** add comprehensive test suite for project-detector ([5c3a982](https://github.com/claudekit/claudekit-engineer/commit/5c3a982c5005bc5f4941f77af250075c2a122581)), closes [#455](https://github.com/claudekit/claudekit-engineer/issues/455) [#455](https://github.com/claudekit/claudekit-engineer/issues/455)
+
+## [2.11.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.2...v2.11.0-beta.3) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** add [CK] prefix to skill descriptions for native command distinction ([1f5244e](https://github.com/claudekit/claudekit-engineer/commit/1f5244e20af9f041eae5dbcdd9ce8c1e88298edd)), closes [#453](https://github.com/claudekit/claudekit-engineer/issues/453)
+
+## [2.11.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.1...v2.11.0-beta.2) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **metadata:** add missing deletions for deprecated plan commands ([cb15d31](https://github.com/claudekit/claudekit-engineer/commit/cb15d31d4cf62d6f54205805d4e124dbc1cb60bd)), closes [#451](https://github.com/claudekit/claudekit-engineer/issues/451)
+
 ## [2.11.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0-beta.1) (2026-02-05)
 
 
