@@ -1,3 +1,10 @@
+## [2.11.0-beta.14](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.13...v2.11.0-beta.14) (2026-02-06)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** remove invalid TaskCompleted/TeammateIdle hook events ([d0545b5](https://github.com/claudekit/claudekit-engineer/commit/d0545b5f1c92280e1549f1b7f99de604770b9fae))
+
 ## [2.11.0-beta.13](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.12...v2.11.0-beta.13) (2026-02-06)
 
 
