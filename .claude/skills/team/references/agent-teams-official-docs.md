@@ -101,6 +101,62 @@ Task dependencies managed automatically — completing a blocking task unblocks 
 
 Task claiming uses file locking to prevent race conditions.
 
+## Hook Events (2.1.33+)
+
+### TaskCompleted
+
+Fires when teammate calls `TaskUpdate` with `status: "completed"`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `task_id` | string | Completed task ID |
+| `task_subject` | string | Task title |
+| `task_description` | string | Full task description |
+| `teammate_name` | string | Who completed it |
+| `team_name` | string | Team name |
+
+Note: Does NOT include `permission_mode`.
+
+### TeammateIdle
+
+Fires after `SubagentStop` for team members.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `teammate_name` | string | Idle teammate name |
+| `team_name` | string | Team name |
+
+Note: Includes `permission_mode`. Always pairs with SubagentStop.
+
+### Event Lifecycle
+
+```
+SubagentStart(worker) → TaskCompleted(task) → SubagentStop(worker) → TeammateIdle(worker)
+```
+
+TaskCompleted fires BEFORE SubagentStop/TeammateIdle.
+
+## Agent Memory
+
+Agents can declare `memory` in frontmatter for persistent cross-session learning.
+
+| Scope | Location | Persists across |
+|-------|----------|-----------------|
+| `user` | `~/.claude/agent-memory/<name>/` | All projects |
+| `project` | `.claude/agent-memory/<name>/` | Sessions in same project |
+
+First 200 lines of `MEMORY.md` auto-injected into system prompt.
+
+## Task(agent_type) Restrictions
+
+Limit which sub-agents an agent can spawn:
+
+```yaml
+tools: Read, Grep, Bash, Task(Explore)
+```
+
+This agent can only spawn `Explore` sub-agents. Restricts recursive spawning and cost escalation.
+
 ## Context & Communication
 
 Each teammate loads: CLAUDE.md, MCP servers, skills, agents. Receives spawn prompt from lead. Lead's conversation history does NOT carry over.

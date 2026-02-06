@@ -1,7 +1,8 @@
 # Agent Teams — Orchestration Guide
 
-> Feature added in ClaudeKit Engineer v2.11.x | Claude Code v2.1.32+ | Status: Experimental
+> Feature added in ClaudeKit Engineer v2.11.x | Claude Code v2.1.33+ | Status: Experimental
 > Source: https://code.claude.com/docs/en/agent-teams | Last synced: Feb 5, 2026
+> Skill version: v2.1.0 — event-driven hooks, agent memory, Task restrictions
 
 ## Overview
 
@@ -11,7 +12,7 @@ Agent Teams enable multiple **independent Claude Code sessions** working in para
 
 ## Prerequisites
 
-Enable in `settings.json`:
+Enable in `settings.json` (may be GA in Claude Code 2.1.33+):
 ```json
 {
   "env": {
@@ -68,7 +69,7 @@ Enable in `settings.json`:
 
 ## CK-Native Behavior
 
-The `/team` skill (v2.0.0) is an **imperative execution engine** — templates auto-execute on activation, not a manual playbook.
+The `/team` skill (v2.1.0) is an **imperative execution engine** — templates auto-execute on activation, not a manual playbook.
 
 It automatically integrates with the CK workflow stack:
 
@@ -294,6 +295,133 @@ Automatically orchestrated. Lead executes the full sequence on activation.
 - Root cause report with evidence chain
 - Est. tokens: 200K-400K
 
+## Event-Driven Monitoring (v2.1.0)
+
+In v2.0.0, the lead polled `TaskList` every 30s to detect progress — wasting tokens and missing events between polls. v2.1.0 replaces polling with two Claude Code 2.1.33 hook events.
+
+```
+BEFORE (v2.0.0): Polling                    AFTER (v2.1.0): Event-Driven
+================================             ================================
+
+Lead           Teammates                     Lead        HOOKS       Teammates
+┌────────┐    ┌──────────┐                   ┌────────┐ ┌─────────┐ ┌──────────┐
+│        │--->│ worker-1 │                   │        │<│TaskCompl│<│ worker-1 │
+│        │--->│ worker-2 │                   │        │ │  HOOK   │ └──────────┘
+│  LEAD  │    └──────────┘                   │  LEAD  │ ├─────────┤ ┌──────────┐
+│        │         │                         │        │<│Teammate │<│ worker-2 │
+│        │<--poll--┘ every 30s               │        │ │Idle HOOK│ └──────────┘
+│        │<--poll--  (wastes tokens)         └────────┘ └─────────┘
+│        │<--poll--  (misses events)              │
+└────────┘                                        │ Hook injects context:
+                                                  │ "Task #2 done. 3/5 complete."
+[X] Burns tokens polling                          │ "worker-2 idle. #4 available."
+[X] 30s blind spot                                │
+[X] No shutdown detection                         └──> Lead REACTS instantly
+                                                  [OK] Zero-cost monitoring
+                                                  [OK] Instant reaction
+                                                  [OK] Auto shutdown hints
+```
+
+### TaskCompleted Hook
+
+Fires when any teammate calls `TaskUpdate(status: "completed")`.
+
+```
+Teammate completes task
+    │
+    v
+TaskCompleted event fires → task-completed-handler.cjs
+    │
+    ├── Injects progress: "2/5 done. 2 pending, 1 in progress."
+    ├── Logs to {CK_REPORTS_PATH}/team-{name}-completions.md
+    └── Hints "All tasks completed" when remaining = 0
+```
+
+**Payload:** `{ task_id, task_subject, task_description, teammate_name, team_name }`
+
+### TeammateIdle Hook
+
+Fires after a teammate's session turn ends (after SubagentStop).
+
+```
+Teammate turn ends
+    │
+    v
+TeammateIdle event fires → teammate-idle-handler.cjs
+    │
+    ├── Lists unblocked, unassigned tasks
+    ├── Suggests assignment or shutdown
+    └── Detects "all blocked" deadlock state
+```
+
+**Payload:** `{ teammate_name, team_name, permission_mode }`
+
+**Fallback:** Templates include 60s `TaskList` polling as backup for pre-2.1.33 environments.
+
+## Agent Memory (v2.1.0)
+
+Agents persist knowledge across sessions via `memory` frontmatter in agent definitions.
+
+| Scope | Agents | Storage | Use Case |
+|-------|--------|---------|----------|
+| `project` | code-reviewer, debugger, tester, planner | `.claude/agent-memory/` (gitignored) | Project-specific patterns, test frameworks, architecture |
+| `user` | researcher | `~/.claude/agent-memory/` | Domain knowledge reusable across projects |
+| None | code-simplifier, fullstack-dev, docs-manager, journal-writer, mcp-manager, ui-ux-designer | No persistence | Session-scoped, stateless |
+
+Memory auto-injects into agent context at session start (first 200 lines of `MEMORY.md`). Agents maintain their own memory files with insights, patterns, and lessons learned.
+
+```
+Session 1                              Session 2
+═══════════                            ═══════════
+
+tester learns:                         tester already knows:
+  "vitest not jest"  ──persist──>        vitest framework
+  "coverage > 80%"                       coverage threshold
+
+planner learns:                        planner skips discovery:
+  "monorepo with 4    ──persist──>       goes straight to
+   submodules"                           phase planning
+
+researcher learns:                     researcher reuses:
+  "REST + GraphQL      ──persist──>      API design patterns
+   hybrid API"                           (across ALL projects)
+                     .claude/
+                     agent-memory/
+                     ├── tester/MEMORY.md
+                     ├── planner/MEMORY.md
+                     └── researcher/MEMORY.md  (in ~/.claude/)
+```
+
+## Task(agent_type) Restrictions (v2.1.0)
+
+Controls which sub-agents each agent can spawn via `tools` frontmatter, preventing recursive spawning and token explosion.
+
+```
+BEFORE: No Restrictions                 AFTER: Controlled Access
+═══════════════════════                 ════════════════════════
+
+tester                                  tester
+  └─> spawns planner                      └─> Task(Explore) only
+        └─> spawns researcher
+              └─> spawns researcher     planner
+                    └─> ...               ├─> Task(Explore)
+                                          └─> Task(researcher)
+  = recursive spawning
+  = token explosion                     journal-writer
+  = unpredictable costs                   └─> NO Task access
+
+                                        = controlled costs
+                                        = predictable behavior
+```
+
+| Agent | Allowed Sub-agents | Rationale |
+|-------|-------------------|-----------|
+| planner | `Task(Explore)`, `Task(researcher)` | Research-then-plan workflow |
+| tester, debugger | `Task(Explore)` | Read-only codebase search |
+| code-simplifier, fullstack-dev, docs-manager | `Task(Explore)` | Read-only codebase search |
+| ui-ux-designer | `Task(Explore)`, `Task(researcher)` | Design research needs |
+| journal-writer, mcp-manager | No `Task` access | No sub-agent spawning needed |
+
 ## Key Tools
 
 | Tool | Purpose |
@@ -337,6 +465,7 @@ All teammates inherit the lead's permission settings at spawn. If lead has `--da
 
 ## Limitations
 
+- **Version pairing:** Skill v2.1.0 requires Claude Code v2.1.33+ for hook events (TaskCompleted, TeammateIdle) and agent memory. Falls back to polling on older versions.
 - No session resumption for in-process teammates (`/resume`, `/rewind` don't restore them)
 - One team per session (cleanup current before starting new)
 - No nested teams (teammates cannot spawn their own teams)
@@ -348,23 +477,26 @@ All teammates inherit the lead's permission settings at spawn. If lead has `--da
 
 ## Hook Integration
 
-The `team-context-inject.cjs` SubagentStart hook detects team membership and injects:
-- **Team context:** peer list, task summary
-- **CK context:** reports path, plans path, naming pattern, branch, commit conventions
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `team-context-inject.cjs` | SubagentStart | Injects team context (peers, tasks) + CK context (reports, naming, branch) |
+| `task-completed-handler.cjs` | TaskCompleted | Progress tracking, completion logging, shutdown hints |
+| `teammate-idle-handler.cjs` | TeammateIdle | Available task detection, assignment/shutdown suggestions |
+| `session-init.cjs` | SessionStart | Sets `CK_AGENT_TEAM`, `CK_AGENT_TEAM_MEMBERS` env vars |
 
-The `session-init.cjs` hook detects active teams and sets:
-- `CK_AGENT_TEAM` — active team name
-- `CK_AGENT_TEAM_MEMBERS` — member count
+All hooks follow fail-open design (exit 0 always) and are gated by `isHookEnabled()` in `ck-config-utils.cjs`.
 
 ## Related Files
 
 | File | Purpose |
 |------|---------|
-| `.claude/skills/team/SKILL.md` | Skill definition with imperative templates (v2.0.0) |
-| `.claude/skills/team/references/` | Official docs reference |
+| `.claude/skills/team/SKILL.md` | Skill definition with imperative templates (v2.1.0) |
+| `.claude/skills/team/references/` | Official docs reference (hooks, memory, restrictions) |
 | `.claude/rules/team-coordination-rules.md` | Teammate behavior rules + CK conventions |
 | `.claude/rules/orchestration-protocol.md` | Decision matrix, file ownership rules |
-| `.claude/hooks/team-context-inject.cjs` | Team + CK context injection for teammates |
+| `.claude/hooks/team-context-inject.cjs` | Team + CK context injection (SubagentStart) |
+| `.claude/hooks/task-completed-handler.cjs` | Progress tracking + completion logging (TaskCompleted) |
+| `.claude/hooks/teammate-idle-handler.cjs` | Task availability detection (TeammateIdle) |
 | `.claude/hooks/session-init.cjs` | Team detection and env injection |
 
 ## Quick Start
@@ -375,4 +507,4 @@ The `session-init.cjs` hook detects active teams and sets:
 4. Lead synthesizes findings into actionable report
 5. Team auto-cleans up when done
 
-> v2.0.0: Imperative execution engine. Templates auto-execute on activation.
+> v2.1.0: Event-driven orchestration. Hook-based monitoring replaces polling. Agent memory persists cross-session.
