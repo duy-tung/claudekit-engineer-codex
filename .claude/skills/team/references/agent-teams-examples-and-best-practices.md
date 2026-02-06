@@ -93,6 +93,44 @@ Check progress regularly. Redirect bad approaches. Synthesize findings as they a
 - If two tasks need same file: escalate to lead, restructure, or have lead handle directly
 - Tester owns test files only; reads implementation files but never edits them
 
+### Leverage Event-Driven Hooks (2.1.33+)
+
+With `TaskCompleted` and `TeammateIdle` hooks enabled:
+
+- Lead is automatically notified when tasks complete — no manual polling needed
+- Progress is tracked via hook-injected context: "3/5 tasks done, 2 pending"
+- Idle teammates trigger suggestions: "worker-2 idle, 1 unblocked task available"
+- All tasks done triggers: "Consider shutting down teammates and synthesizing"
+
+**Cook workflow example:**
+```
+1. Lead spawns 3 devs + creates tasks
+2. TaskCompleted(dev-1, task #1) → "1/4 done"
+3. TaskCompleted(dev-2, task #2) → "2/4 done"
+4. TaskCompleted(dev-3, task #3) → "3/4 done"
+5. TaskCompleted(dev-1, task #4) → "4/4 done. All tasks completed."
+6. Lead spawns tester (reactively, no delay)
+```
+
+### Use Agent Memory for Long-Running Projects
+
+For projects with recurring team sessions:
+- Code reviewer learns project conventions, stops flagging known patterns
+- Debugger remembers past failures, faster root-cause identification
+- Tester tracks flaky tests, avoids re-investigating known issues
+- Researcher accumulates domain knowledge across projects (user scope)
+
+Memory persists after team cleanup — it's in `.claude/agent-memory/`, not `~/.claude/teams/`.
+
+### Restrict Sub-Agent Spawning
+
+Use `Task(agent_type)` in agent definitions to prevent:
+- Recursive agent chains (agent spawns agent spawns agent)
+- Cost escalation (haiku agent spawning opus sub-agent)
+- Scope creep (tester spawning developer to "fix" issues)
+
+Recommended: Most agents get `Task(Explore)` only. Planner gets `Task(Explore), Task(researcher)`.
+
 ## Token Budget Guidance
 
 | Template | Estimated Tokens | Model Strategy |
