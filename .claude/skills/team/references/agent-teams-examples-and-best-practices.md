@@ -136,7 +136,7 @@ Recommended: Most agents get `Task(Explore)` only. Planner gets `Task(Explore), 
 | Template | Estimated Tokens | Model Strategy |
 |----------|-----------------|----------------|
 | Research (3 teammates) | ~150K-300K | haiku for all researchers |
-| Implement (4 teammates) | ~400K-800K | sonnet for devs, haiku for tester |
+| Cook (4 teammates) | ~400K-800K | sonnet for devs, haiku for tester |
 | Review (3 teammates) | ~100K-200K | haiku for all reviewers |
 | Debug (3 teammates) | ~200K-400K | sonnet for debuggers |
 
