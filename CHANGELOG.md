@@ -1,3 +1,10 @@
+## [2.11.0-beta.11](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.10...v2.11.0-beta.11) (2026-02-06)
+
+
+### 🐞 Bug Fixes
+
+* **ck-help:** update stale command syntax after command-to-skill migration ([4975fa0](https://github.com/claudekit/claudekit-engineer/commit/4975fa06e2ebd74ef44195aeb8cbbe3a504dc651))
+
 ## [2.11.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.9...v2.11.0-beta.10) (2026-02-05)
 
 
