@@ -1,3 +1,10 @@
+## [2.11.0-beta.13](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.12...v2.11.0-beta.13) (2026-02-06)
+
+
+### 🐞 Bug Fixes
+
+* align skill SKILL.md names with directory names ([bfd9165](https://github.com/claudekit/claudekit-engineer/commit/bfd9165dfcd1190b31209f4801383694f87001d7))
+
 ## [2.11.0-beta.12](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.11...v2.11.0-beta.12) (2026-02-06)
 
 
