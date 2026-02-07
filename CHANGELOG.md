@@ -1,3 +1,10 @@
+## [2.11.0-beta.16](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.15...v2.11.0-beta.16) (2026-02-07)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** align TaskCompleted/TeammateIdle handlers with official CC docs ([#466](https://github.com/claudekit/claudekit-engineer/issues/466)) ([5542a93](https://github.com/claudekit/claudekit-engineer/commit/5542a93955a3d9e7b88297f0361b10da3f9df9bd)), closes [#464](https://github.com/claudekit/claudekit-engineer/issues/464)
+
 ## [2.11.0-beta.15](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.14...v2.11.0-beta.15) (2026-02-07)
 
 
