@@ -26,7 +26,7 @@ Coordinate multiple independent Claude Code sessions. Each teammate has own cont
 ## Execution Protocol
 
 **Pre-flight (MANDATORY — merged into step 2 of every template):**
-1. Step 2 of every template calls `Teammate(operation: "spawnTeam", ...)`. Do NOT check whether the tool exists first — just call it.
+1. Step 2 of every template calls `TeamCreate(team_name: "...", ...)`. Do NOT check whether the tool exists first — just call it.
 2. If the call SUCCEEDS: continue with the template.
 3. If the call returns an ERROR or is unrecognized: **STOP. Tell user:** "Agent Teams requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json. Team mode is not available."
 4. Do NOT fall back to subagents. `/team` MUST use Agent Teams or abort.
@@ -68,7 +68,7 @@ IMMEDIATELY execute in order:
    - Angle 3: Risks, edge cases, failure modes, security
    - (If N>3, derive additional angles from topic context)
 
-2. **CALL** `Teammate(operation: "spawnTeam", team_name: "<topic-slug>")`
+2. **CALL** `TeamCreate(team_name: "<topic-slug>")`
 
 3. **CALL** `TaskCreate` x N — one per angle:
    - Subject: `Research: <angle-title>`
@@ -91,7 +91,7 @@ IMMEDIATELY execute in order:
 
 8. **SHUTDOWN**: `SendMessage(type: "shutdown_request")` to each teammate
 
-9. **CLEANUP**: `Teammate(operation: "cleanup")`
+9. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
 10. **REPORT**: Tell user `Research complete. Summary: {path}. N reports generated.`
 
@@ -107,7 +107,7 @@ IMMEDIATELY execute in order:
    - If description only: spawn `Task(subagent_type: "planner")` to create plan first
    - Parse plan into N independent task groups with file ownership boundaries
 
-2. **CALL** `Teammate(operation: "spawnTeam", team_name: "<feature-slug>")`
+2. **CALL** `TeamCreate(team_name: "<feature-slug>")`
 
 3. **CALL** `TaskCreate` x (N + 1) — N dev tasks + 1 tester task:
    - Dev tasks: include `File ownership: <glob patterns>` — NO overlap between devs
@@ -134,9 +134,10 @@ IMMEDIATELY execute in order:
    Action: [no update needed — <reason>] | [updated <page>] | [needs separate PR]
    ```
 
-7. **SHUTDOWN** all teammates + **CLEANUP** team
+7. **SHUTDOWN** all teammates via `SendMessage(type: "shutdown_request")`
+8. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
-8. **REPORT**: Tell user what was cooked, test results, docs impact.
+9. **REPORT**: Tell user what was cooked, test results, docs impact.
 
 ---
 
@@ -152,7 +153,7 @@ IMMEDIATELY execute in order:
    - Focus 3: Test coverage — gaps, edge cases, error paths
    - (If N>3, derive from scope: architecture, DX, accessibility, etc.)
 
-2. **CALL** `Teammate(operation: "spawnTeam", team_name: "review-<scope-slug>")`
+2. **CALL** `TeamCreate(team_name: "review-<scope-slug>")`
 
 3. **CALL** `TaskCreate` x N — one per focus:
    - Subject: `Review: <focus-title>`
@@ -171,9 +172,10 @@ IMMEDIATELY execute in order:
    - Prioritize by severity: CRITICAL > IMPORTANT > MODERATE
    - Create action items list with owners
 
-7. **SHUTDOWN** + **CLEANUP**
+7. **SHUTDOWN** all teammates via `SendMessage(type: "shutdown_request")`
+8. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
-8. **REPORT**: Tell user `Review complete. {X} findings ({Y} critical). Report: {path}.`
+9. **REPORT**: Tell user `Review complete. {X} findings ({Y} critical). Report: {path}.`
 
 ---
 
@@ -188,7 +190,7 @@ IMMEDIATELY execute in order:
    - Each must predict different observable symptoms
    - Frame as: "If <cause>, then we should see <evidence>"
 
-2. **CALL** `Teammate(operation: "spawnTeam", team_name: "debug-<issue-slug>")`
+2. **CALL** `TeamCreate(team_name: "debug-<issue-slug>")`
 
 3. **CALL** `TaskCreate` x N — one per hypothesis:
    - Subject: `Debug: Test hypothesis — <theory>`
@@ -208,9 +210,10 @@ IMMEDIATELY execute in order:
 7. **WRITE** root cause report: `{CK_REPORTS_PATH}/debug-{issue-slug}.md`
    Format: Root cause, evidence chain, disproven hypotheses, recommended fix.
 
-8. **SHUTDOWN** + **CLEANUP**
+8. **SHUTDOWN** all teammates via `SendMessage(type: "shutdown_request")`
+9. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
-9. **REPORT**: Tell user `Debug complete. Root cause: <summary>. Report: {path}.`
+10. **REPORT**: Tell user `Debug complete. Root cause: <summary>. Report: {path}.`
 
 ---
 
@@ -254,7 +257,7 @@ Agents with `memory: project` retain learnings across team sessions. Memory pers
 ## Abort Team
 
 ```
-Shut down all teammates. Then clean up the team.
+Shut down all teammates. Then call TeamDelete (no parameters).
 ```
 
 If unresponsive: close terminal or kill session. Clean orphaned configs at `~/.claude/teams/` manually.

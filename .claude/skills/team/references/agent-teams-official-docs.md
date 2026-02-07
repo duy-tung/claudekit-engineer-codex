@@ -68,12 +68,13 @@ Task dependencies managed automatically — completing a blocking task unblocks 
 
 ## Tools API Surface
 
-### TeammateTool
+### TeamCreate
 
-| Operation | Purpose |
-|-----------|---------|
-| `spawnTeam` | Create team + task list. Params: `team_name`, `description` |
-| `cleanup` | Remove team/task dirs. Fails if active teammates exist |
+Create team + task list. Params: `team_name`, `description`.
+
+### TeamDelete
+
+Remove team/task dirs. **Takes NO parameters** — just call `TeamDelete` with empty params. Fails if active teammates still exist.
 
 ### SendMessage Types
 
