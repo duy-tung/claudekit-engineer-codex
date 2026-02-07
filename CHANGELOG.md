@@ -1,3 +1,10 @@
+## [2.11.0-beta.15](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.14...v2.11.0-beta.15) (2026-02-07)
+
+
+### 🐞 Bug Fixes
+
+* **team:** align cleanup docs with actual TeamCreate/TeamDelete API ([cd47905](https://github.com/claudekit/claudekit-engineer/commit/cd47905da9c4ab567dd75b90b47b1482295e9cdf))
+
 ## [2.11.0-beta.14](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.13...v2.11.0-beta.14) (2026-02-06)
 
 
