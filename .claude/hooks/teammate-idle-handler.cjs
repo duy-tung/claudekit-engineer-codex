@@ -2,7 +2,10 @@
 /**
  * TeammateIdle Hook - Injects available task context when teammate goes idle
  *
- * Fires: After SubagentStop for team members
+ * Fires: When an agent team teammate is about to go idle after finishing its turn.
+ * Official docs: https://code.claude.com/docs/en/hooks#teammateidle
+ * Decision control: Exit code only (exit 2 prevents idle, stderr fed as feedback)
+ * Note: additionalContext output is informational — may be ignored by CC for this event.
  * Input: { teammate_name, team_name, permission_mode, ... }
  * Output: additionalContext summarizing available tasks for lead
  * Design: Non-blocking, fail-open (exit 0 always), no external deps

@@ -2,7 +2,11 @@
 /**
  * TaskCompleted Hook - Logs task completions and injects progress context
  *
- * Fires: When teammate calls TaskUpdate with status: completed
+ * Fires: When any agent marks a task as completed (TaskUpdate with status: completed),
+ *        or when a teammate finishes its turn with in-progress tasks.
+ * Official docs: https://code.claude.com/docs/en/hooks#taskcompleted
+ * Decision control: Exit code only (exit 2 blocks completion, stderr fed as feedback)
+ * Note: additionalContext output is informational — may be ignored by CC for this event.
  * Input: { task_id, task_subject, task_description, teammate_name, team_name, ... }
  * Output: additionalContext with progress summary for lead
  * Design: Non-blocking, fail-open (exit 0 always), no external deps
