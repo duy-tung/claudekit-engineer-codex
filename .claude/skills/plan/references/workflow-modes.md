@@ -90,7 +90,10 @@ Adversarial review that spawns hostile reviewers to find flaws before validation
 
 **Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
 
-**Process:** Execute `/plan:red-team {plan-path}` — see command definition for full workflow.
+**Invocation:** Use the `Skill` tool to invoke `plan:red-team` with the plan directory path as argument:
+```
+Skill(skill: "plan:red-team", args: "{plan-directory-path}")
+```
 
 **Sequence:** Red team runs BEFORE validation because:
 1. Red team may change the plan (added risks, removed sections, new constraints)
@@ -104,8 +107,13 @@ Check `## Plan Context` → `Validation: mode=X, questions=MIN-MAX`:
 | Mode | Behavior |
 |------|----------|
 | `prompt` | Ask: "Validate this plan with interview?" → Yes (Recommended) / No |
-| `auto` | Auto-execute `/plan:validate {plan-path}` |
+| `auto` | Use the `Skill` tool: `Skill(skill: "plan:validate", args: "{plan-directory-path}")` |
 | `off` | Skip validation |
+
+**Invocation (when prompt mode, user says yes):** Use the `Skill` tool to invoke `plan:validate`:
+```
+Skill(skill: "plan:validate", args: "{plan-directory-path}")
+```
 
 **Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
 
