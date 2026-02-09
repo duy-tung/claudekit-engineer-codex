@@ -1,3 +1,10 @@
+## [2.11.0-beta.18](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.17...v2.11.0-beta.18) (2026-02-09)
+
+
+### 🐞 Bug Fixes
+
+* reduce Windows terminal freeze from excessive process spawning ([#471](https://github.com/claudekit/claudekit-engineer/issues/471)) ([faab212](https://github.com/claudekit/claudekit-engineer/commit/faab212d32d4edfefa1d767da4af7587f958390f))
+
 ## [2.11.0-beta.17](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.16...v2.11.0-beta.17) (2026-02-09)
 
 
