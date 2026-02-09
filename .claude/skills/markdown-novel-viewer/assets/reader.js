@@ -469,13 +469,25 @@
         <span class="icon-collapse">⤡</span>
       `;
 
-      // Toggle handler
-      btn.addEventListener('click', () => {
+      // Toggle handler — re-render diagram at new container width
+      btn.addEventListener('click', async () => {
         const isExpanded = wrapper.classList.toggle('expanded');
         btn.setAttribute('aria-label', isExpanded
           ? 'Collapse diagram'
           : 'Expand diagram to full width'
         );
+
+        // Re-render mermaid at the new container width for crisp output
+        const source = diagram.dataset.mermaidSource;
+        if (source && window.mermaidModule) {
+          diagram.textContent = source;
+          diagram.removeAttribute('data-processed');
+          try {
+            await window.mermaidModule.run({ nodes: [diagram], suppressErrors: false });
+          } catch (e) {
+            console.error('Mermaid re-render on expand failed:', e);
+          }
+        }
       });
 
       // Insert wrapper before diagram
