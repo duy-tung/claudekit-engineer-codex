@@ -1,3 +1,17 @@
+## [2.11.0-beta.19](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.18...v2.11.0-beta.19) (2026-02-09)
+
+
+### 🚀 Features
+
+* **commands:** add /plan:red-team adversarial plan review ([0c187cc](https://github.com/claudekit/claudekit-engineer/commit/0c187ccccf704ef8ca1cb687304da01871862404)), closes [#469](https://github.com/claudekit/claudekit-engineer/issues/469)
+* **plan:** integrate red-team review into plan workflow ([2ab6fa5](https://github.com/claudekit/claudekit-engineer/commit/2ab6fa5c7f2b923cd1fe75b0573a67c1cf3550a0))
+
+
+### 🐞 Bug Fixes
+
+* **plan:** apply red-team review findings from prompt architecture audit ([9ddecd3](https://github.com/claudekit/claudekit-engineer/commit/9ddecd3ff3366eae8c8fa40bb8e4ef6d2e675d26))
+* **plan:** use explicit Skill tool invocation for red-team and validate ([5150974](https://github.com/claudekit/claudekit-engineer/commit/5150974e6ab42004aaf38652eff8062dc035587a))
+
 ## [2.11.0-beta.18](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.17...v2.11.0-beta.18) (2026-02-09)
 
 
