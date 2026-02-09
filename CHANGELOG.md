@@ -1,3 +1,10 @@
+## [2.11.0-beta.17](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.16...v2.11.0-beta.17) (2026-02-09)
+
+
+### 🐞 Bug Fixes
+
+* **viewer:** make mermaid diagrams scale responsively on expand ([#467](https://github.com/claudekit/claudekit-engineer/issues/467)) ([#468](https://github.com/claudekit/claudekit-engineer/issues/468)) ([5946ab4](https://github.com/claudekit/claudekit-engineer/commit/5946ab4b82142f9cd87058b4384f10b8f4109db3))
+
 ## [2.11.0-beta.16](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.15...v2.11.0-beta.16) (2026-02-07)
 
 
