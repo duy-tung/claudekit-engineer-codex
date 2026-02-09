@@ -14,7 +14,7 @@ Default: `--auto` (analyze task complexity and auto-pick mode).
 
 | Flag | Mode | Research | Red Team | Validation | Cook Flag |
 |------|------|----------|----------|------------|-----------|
-| `--auto` | Auto-detect | Varies | Varies | Varies | Varies |
+| `--auto` | Auto-detect | Follows mode | Follows mode | Follows mode | Follows mode |
 | `--fast` | Fast | Skip | Skip | Skip | `--auto` |
 | `--hard` | Hard | 2 researchers | Yes | Optional | (none) |
 | `--parallel` | Parallel | 2 researchers | Yes | Optional | `--parallel` |

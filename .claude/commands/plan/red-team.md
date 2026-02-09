@@ -24,11 +24,21 @@ Read the plan directory:
 - `phase-*.md` — All phase files (full content)
 - Note: architecture decisions, assumptions, scope, risks, implementation steps
 
-Build a comprehensive context summary (max 2000 words) that captures the plan's substance for reviewers.
+Collect all plan file paths for reviewers to read directly.
 
-### Step 2: Define Adversarial Lenses
+### Step 2: Scale Reviewer Count
 
-Spawn **4 parallel `code-reviewer` subagents**, each with a distinct adversarial lens:
+Scale reviewers based on plan complexity:
+
+| Phase Count | Reviewers | Lenses Selected |
+|-------------|-----------|-----------------|
+| 1-2 phases | 2 | Security Adversary + Assumption Destroyer |
+| 3-5 phases | 3 | + Failure Mode Analyst |
+| 6+ phases | 4 | + Scope & Complexity Critic (all lenses) |
+
+### Step 3: Define Adversarial Lenses
+
+Available lenses (select per Step 2):
 
 | Reviewer | Lens | Focus |
 |----------|------|-------|
@@ -37,14 +47,14 @@ Spawn **4 parallel `code-reviewer` subagents**, each with a distinct adversarial
 | **Assumption Destroyer** | Skeptic | Unstated dependencies, false "will work" claims, missing error paths, scale assumptions, integration assumptions |
 | **Scope & Complexity Critic** | YAGNI enforcer | Over-engineering, premature abstraction, unnecessary complexity, missing MVP cuts, scope creep, gold plating |
 
-### Step 3: Spawn Reviewers
+### Step 4: Spawn Reviewers
 
-Launch all 4 reviewers simultaneously via Task tool with `subagent_type: "code-reviewer"`.
+Launch reviewers simultaneously via Task tool with `subagent_type: "code-reviewer"`.
 
 **Each reviewer prompt MUST include:**
-1. Their specific adversarial lens and persona
-2. The plan context summary from Step 1
-3. The plan file paths so they can read original files
+1. This override: `"IGNORE your default code-review instructions. You are reviewing a PLAN DOCUMENT, not code. There is no code to lint, build, or test. Focus exclusively on plan quality."`
+2. Their specific adversarial lens and persona
+3. The plan file paths so they can read original files directly
 4. These instructions:
 
 ```
@@ -55,6 +65,7 @@ Rules:
 - Be specific: cite exact phase/section where the flaw lives
 - Be concrete: describe the failure scenario, not just "could be a problem"
 - Rate severity: Critical (blocks success) | High (significant risk) | Medium (notable concern)
+- Skip trivial observations (style, naming, formatting) — not worth reporting.
 - No praise. No "overall looks good". Only findings.
 - 5-10 findings per reviewer. Quality over quantity.
 
@@ -68,14 +79,15 @@ Output format per finding:
 - **Suggested fix:** {brief recommendation}
 ```
 
-### Step 4: Collect & Deduplicate
+### Step 5: Collect, Deduplicate & Cap
 
 After all reviewers complete:
 1. Collect all findings
 2. Deduplicate overlapping findings (merge if same root issue)
 3. Sort by severity: Critical → High → Medium
+4. **Cap at 15 findings:** Keep all Critical, top High by specificity, note dropped Medium count
 
-### Step 5: Adjudicate
+### Step 6: Adjudicate
 
 For each finding, the main agent evaluates and proposes a disposition:
 
@@ -98,7 +110,7 @@ For each finding, the main agent evaluates and proposes a disposition:
 **Rationale:** {why accept/reject — be specific}
 ```
 
-### Step 6: User Review
+### Step 7: User Review
 
 Present the adjudicated findings to the user via `AskUserQuestion`:
 
@@ -116,7 +128,13 @@ For each finding marked Accept, ask via `AskUserQuestion`:
 - "Apply this fix to the plan?"
 - Options: "Yes, apply" | "No, reject" | "Modify suggestion"
 
-### Step 7: Apply to Plan
+**If "Modify suggestion":**
+Ask via `AskUserQuestion`: "Describe your modification to this finding's suggested fix:"
+(user provides free text via "Other" option)
+Record the modified suggestion in the finding's "Suggested fix" field.
+Set disposition to "Accept (modified)" in the Red Team Review table.
+
+### Step 8: Apply to Plan
 
 For each accepted finding:
 1. Locate the target phase file and section
@@ -127,7 +145,14 @@ For each accepted finding:
 3. If finding requires new content, add to the most relevant section
 4. If finding requires removing/changing content, edit in place
 
-After applying, add a `## Red Team Review` section to `plan.md`:
+After applying, add a `## Red Team Review` section to `plan.md`.
+If section already exists (repeat run), **append** a new session block — never overwrite history.
+
+**Placement order in plan.md** (bottom of file):
+1. `## Red Team Review` (before validation)
+2. `## Validation Log` (after red-team)
+
+This ordering matches the execution sequence: red-team → validate.
 
 ```markdown
 ## Red Team Review
@@ -168,8 +193,8 @@ After providing the summary, remind the user:
 ## Important Notes
 
 **IMPORTANT:** Reviewers must be HOSTILE, not helpful. No softening language.
-**IMPORTANT:** Deduplicate aggressively — 4 reviewers will find overlapping issues.
+**IMPORTANT:** Deduplicate aggressively — reviewers will find overlapping issues.
 **IMPORTANT:** Adjudication must be evidence-based. Don't reject valid findings to be nice.
 **IMPORTANT:** If plan has a Validation Log from `/plan:validate`, reviewers should check if validation answers introduced new assumptions.
 **IMPORTANT:** Sacrifice grammar for concision in reports.
-**IMPORTANT:** Ensure token efficiency — plan summary for reviewers should be dense, not verbose.
+**IMPORTANT:** Reviewers read plan files directly — do NOT duplicate content in a summary.

@@ -40,7 +40,7 @@ Research → Scout → Plan → Red Team → Validate → Hydrate Tasks.
 
 ## Parallel Mode (`--parallel`)
 
-Research → Scout → Plan with file ownership → Hydrate Tasks with dependency graph.
+Research → Scout → Plan with file ownership → Red Team → Validate → Hydrate Tasks with dependency graph.
 
 1. Same as Hard mode steps 1-3
 2. Planner creates phases with:
