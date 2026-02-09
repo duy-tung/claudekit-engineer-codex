@@ -12,13 +12,13 @@ Create detailed technical implementation plans through research, codebase analys
 
 Default: `--auto` (analyze task complexity and auto-pick mode).
 
-| Flag | Mode | Research | Validation | Cook Flag |
-|------|------|----------|------------|-----------|
-| `--auto` | Auto-detect | Varies | Varies | Varies |
-| `--fast` | Fast | Skip | Skip | `--auto` |
-| `--hard` | Hard | 2 researchers | Optional | (none) |
-| `--parallel` | Parallel | 2 researchers | Optional | `--parallel` |
-| `--two` | Two approaches | 2+ researchers | After selection | (none) |
+| Flag | Mode | Research | Red Team | Validation | Cook Flag |
+|------|------|----------|----------|------------|-----------|
+| `--auto` | Auto-detect | Varies | Varies | Varies | Varies |
+| `--fast` | Fast | Skip | Skip | Skip | `--auto` |
+| `--hard` | Hard | 2 researchers | Yes | Optional | (none) |
+| `--parallel` | Parallel | 2 researchers | Yes | Optional | `--parallel` |
+| `--two` | Two approaches | 2+ researchers | After selection | After selection | (none) |
 
 Add `--no-tasks` to skip task hydration in any mode.
 
@@ -61,9 +61,10 @@ Load: `references/output-standards.md`
 3. **Research Phase** → Spawn researchers (skip in fast mode)
 4. **Codebase Analysis** → Read docs, scout if needed
 5. **Plan Documentation** → Write comprehensive plan via planner subagent
-6. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
+6. **Red Team Review** → Adversarial review via `/plan:red-team` (hard/parallel/two modes)
 7. **Post-Plan Validation** → Interview to confirm decisions (hard/parallel/two modes)
-8. **Context Reminder** → Output cook command with absolute path (MANDATORY)
+8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
+9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
 
 ## Output Requirements
 

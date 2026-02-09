@@ -26,14 +26,15 @@ No research. Analyze → Plan → Hydrate Tasks.
 
 ## Hard Mode (`--hard`)
 
-Research → Scout → Plan → Validate → Hydrate Tasks.
+Research → Scout → Plan → Red Team → Validate → Hydrate Tasks.
 
 1. Spawn max 2 `researcher` agents in parallel (different aspects, max 5 calls each)
 2. Read codebase docs; if stale/missing: run `/scout` to search codebase
 3. Gather research + scout report filepaths → pass to `planner` subagent
-4. Post-plan validation (see Validation section below)
-5. Hydrate tasks (unless `--no-tasks`)
-6. **Context reminder:** `/cook {absolute-plan-path}/plan.md`
+4. Post-plan red team review (see Red Team Review section below)
+5. Post-plan validation (see Validation section below)
+6. Hydrate tasks (unless `--no-tasks`)
+7. **Context reminder:** `/cook {absolute-plan-path}/plan.md`
 
 **Why no cook flag?** Thorough planning needs interactive review gates.
 
@@ -48,8 +49,9 @@ Research → Scout → Plan with file ownership → Hydrate Tasks with dependenc
    - **Conflict prevention** strategy
 3. plan.md includes: dependency graph, execution strategy, file ownership matrix
 4. Hydrate tasks: `addBlockedBy` for sequential deps, no blockers for parallel groups
-5. Post-plan validation
-6. **Context reminder:** `/cook --parallel {absolute-plan-path}/plan.md`
+5. Post-plan red team review
+6. Post-plan validation
+7. **Context reminder:** `/cook --parallel {absolute-plan-path}/plan.md`
 
 ### Parallel Phase Requirements
 - Each phase self-contained, no runtime deps on other phases
@@ -66,8 +68,10 @@ Research → Scout → Plan 2 approaches → Compare → Hydrate Tasks.
    - Clear trade-offs (pros/cons each)
    - Recommended approach with rationale
 3. User selects approach
-4. Hydrate tasks for selected approach (unless `--no-tasks`)
-5. **Context reminder:** `/cook {absolute-plan-path}/plan.md`
+4. Post-plan red team review on selected approach
+5. Post-plan validation
+6. Hydrate tasks for selected approach (unless `--no-tasks`)
+7. **Context reminder:** `/cook {absolute-plan-path}/plan.md`
 
 ## Task Hydration Per Mode
 
@@ -79,6 +83,19 @@ Research → Scout → Plan 2 approaches → Compare → Hydrate Tasks.
 | two | After user selects approach | Sequential chain |
 
 All modes: See `task-management.md` for TaskCreate patterns and metadata.
+
+## Post-Plan Red Team Review
+
+Adversarial review that spawns hostile reviewers to find flaws before validation.
+
+**Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
+
+**Process:** Execute `/plan:red-team {plan-path}` — see command definition for full workflow.
+
+**Sequence:** Red team runs BEFORE validation because:
+1. Red team may change the plan (added risks, removed sections, new constraints)
+2. Validation should confirm the FINAL plan, not a pre-review draft
+3. Validating first then red-teaming would invalidate validation answers
 
 ## Post-Plan Validation
 
