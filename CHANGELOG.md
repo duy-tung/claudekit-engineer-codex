@@ -1,3 +1,10 @@
+## [2.11.0-beta.21](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.20...v2.11.0-beta.21) (2026-02-10)
+
+
+### 🐞 Bug Fixes
+
+* use absolute paths in buildRulesSection to prevent wrong plans/ directory creation ([#476](https://github.com/claudekit/claudekit-engineer/issues/476)) ([#477](https://github.com/claudekit/claudekit-engineer/issues/477)) ([ac1317a](https://github.com/claudekit/claudekit-engineer/commit/ac1317ab5f48ffc3f68203be1f9fd72a582e615d))
+
 ## [2.11.0-beta.20](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.19...v2.11.0-beta.20) (2026-02-10)
 
 
