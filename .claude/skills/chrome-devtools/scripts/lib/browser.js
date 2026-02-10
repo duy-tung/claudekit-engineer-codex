@@ -254,7 +254,7 @@ export async function getBrowser(options = {}) {
   }
 
   // Destructure known properties — only pass Puppeteer-valid options to launch()
-  const { headless, args: extraArgs, viewport, useDefaultProfile, profile, browserUrl, wsEndpoint: _ws, ...restOptions } = options;
+  const { headless, args: extraArgs, viewport, useDefaultProfile, profile, browserUrl, wsEndpoint: _ws, userDataDir: _udd, ...restOptions } = options;
 
   // Launch new browser
   const launchOptions = {

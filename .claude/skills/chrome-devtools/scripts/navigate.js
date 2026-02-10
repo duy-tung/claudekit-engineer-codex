@@ -60,9 +60,16 @@ async function navigate() {
       const pattern = args['wait-for-login'];
       const loginTimeout = parseInt(args['login-timeout'] || '300000');
 
+      // Validate timeout value
+      if (!Number.isFinite(loginTimeout) || loginTimeout <= 0) {
+        outputError(new Error('--login-timeout must be a positive integer (ms)'));
+        return;
+      }
+
       // Validate regex pattern before use
+      let regex;
       try {
-        new RegExp(pattern);
+        regex = new RegExp(pattern);
       } catch (e) {
         outputError(new Error(`Invalid regex pattern for --wait-for-login: ${e.message}`));
         return;
@@ -72,31 +79,43 @@ async function navigate() {
       process.stderr.write(`[i] Browser opened for manual login. Complete the login flow.\n`);
       process.stderr.write(`[i] Waiting for URL to match: ${pattern} (timeout: ${loginTimeout / 1000}s)\n`);
 
-      try {
-        await page.waitForFunction(
-          (urlPattern) => new RegExp(urlPattern).test(window.location.href),
-          { timeout: loginTimeout, polling: 500 },
-          pattern
-        );
+      // Poll URL from Node side — survives page navigations during OAuth redirects
+      const deadline = Date.now() + loginTimeout;
+      let loginDetected = false;
 
+      while (Date.now() < deadline) {
+        try {
+          const currentUrl = page.url();
+          if (regex.test(currentUrl)) {
+            loginDetected = true;
+            break;
+          }
+        } catch {
+          // Page may be mid-navigation, retry
+        }
+        await new Promise(r => setTimeout(r, 500));
+      }
+
+      if (loginDetected) {
         // Save session cookies after successful login
         const cookies = await page.cookies();
-        saveAuthSession({ cookies });
+        if (cookies.length > 0) {
+          saveAuthSession({ cookies });
+          result.cookiesSaved = cookies.length;
+        } else {
+          process.stderr.write('[!] No cookies captured. Previous session preserved.\n');
+          result.cookiesSaved = 0;
+        }
 
         result.loginCompleted = true;
-        result.cookiesSaved = cookies.length;
         result.url = page.url();
         result.title = await page.title();
 
-        process.stderr.write(`[OK] Login detected. ${cookies.length} cookies saved for session reuse.\n`);
-      } catch (e) {
-        if (e.name === 'TimeoutError' || e.message?.includes('timeout')) {
-          result.loginCompleted = false;
-          result.loginError = `Login timeout after ${loginTimeout / 1000}s. URL did not match: ${pattern}`;
-          process.stderr.write(`[X] Login timeout. URL never matched: ${pattern}\n`);
-        } else {
-          throw e;
-        }
+        process.stderr.write(`[OK] Login detected. ${result.cookiesSaved} cookies saved for session reuse.\n`);
+      } else {
+        result.loginCompleted = false;
+        result.loginError = `Login timeout after ${loginTimeout / 1000}s. URL did not match: ${pattern}`;
+        process.stderr.write(`[X] Login timeout. URL never matched: ${pattern}\n`);
       }
     }
 
