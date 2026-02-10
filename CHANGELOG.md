@@ -1,3 +1,11 @@
+## [2.11.0-beta.20](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.19...v2.11.0-beta.20) (2026-02-10)
+
+
+### 🐞 Bug Fixes
+
+* **chrome-devtools:** add OS-based headless detection and interactive OAuth login ([76a03b0](https://github.com/claudekit/claudekit-engineer/commit/76a03b0190c3eccd3abe1eaf609ed70565179618)), closes [#473](https://github.com/claudekit/claudekit-engineer/issues/473)
+* **chrome-devtools:** address code review edge cases ([710a98f](https://github.com/claudekit/claudekit-engineer/commit/710a98fcb38441e5e11281cca5daf718f9c77fef))
+
 ## [2.11.0-beta.19](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.18...v2.11.0-beta.19) (2026-02-09)
 
 
