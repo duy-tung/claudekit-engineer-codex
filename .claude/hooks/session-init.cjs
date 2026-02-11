@@ -11,39 +11,41 @@
  * Core detection logic extracted to lib/project-detector.cjs for OpenCode plugin reuse.
  */
 
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const {
-  loadConfig,
-  writeEnv,
-  writeSessionState,
-  resolvePlanPath,
-  getReportsPath,
-  resolveNamingPattern,
-  extractTaskListId,
-  isHookEnabled
-} = require('./lib/ck-config-utils.cjs');
+// Crash wrapper
+try {
+  const fs = require('fs');
+  const path = require('path');
+  const os = require('os');
+  const {
+    loadConfig,
+    writeEnv,
+    writeSessionState,
+    resolvePlanPath,
+    getReportsPath,
+    resolveNamingPattern,
+    extractTaskListId,
+    isHookEnabled
+  } = require('./lib/ck-config-utils.cjs');
 
-// Early exit if hook disabled in config
-if (!isHookEnabled('session-init')) {
-  process.exit(0);
-}
+  // Early exit if hook disabled in config
+  if (!isHookEnabled('session-init')) {
+    process.exit(0);
+  }
 
-// Import shared project detection logic
-const {
-  detectProjectType,
-  detectPackageManager,
-  detectFramework,
-  getPythonVersion,
-  getGitRemoteUrl,
-  getGitBranch,
-  getGitRoot,
-  getCodingLevelStyleName,
-  getCodingLevelGuidelines,
-  buildContextOutput,
-  execSafe
-} = require('./lib/project-detector.cjs');
+  // Import shared project detection logic
+  const {
+    detectProjectType,
+    detectPackageManager,
+    detectFramework,
+    getPythonVersion,
+    getGitRemoteUrl,
+    getGitBranch,
+    getGitRoot,
+    getCodingLevelStyleName,
+    getCodingLevelGuidelines,
+    buildContextOutput,
+    execSafe
+  } = require('./lib/project-detector.cjs');
 
 /**
  * One-time cleanup for orphaned .shadowed/ directories from skill-dedup hook (Issue #422)
@@ -341,6 +343,18 @@ async function main() {
     console.error(`SessionStart hook error: ${error.message}`);
     process.exit(0);
   }
-}
+  }
 
-main();
+  main();
+} catch (e) {
+  // Minimal crash logging (zero deps — only Node builtins)
+  try {
+    const fs = require('fs');
+    const p = require('path');
+    const logDir = p.join(__dirname, '.logs');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
+      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+  } catch (_) {}
+  process.exit(0); // fail-open
+}

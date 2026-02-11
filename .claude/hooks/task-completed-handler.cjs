@@ -12,14 +12,16 @@
  * Design: Non-blocking, fail-open (exit 0 always), no external deps
  */
 
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
+// Crash wrapper
+try {
+  const fs = require('fs');
+  const path = require('path');
+  const os = require('os');
+  const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
 
-if (!isHookEnabled('task-completed-handler')) {
-  process.exit(0);
-}
+  if (!isHookEnabled('task-completed-handler')) {
+    process.exit(0);
+  }
 
 const TASKS_DIR = path.join(os.homedir(), '.claude', 'tasks');
 
@@ -99,6 +101,18 @@ function main() {
     }
     process.exit(0);
   }
-}
+  }
 
-main();
+  main();
+} catch (e) {
+  // Minimal crash logging (zero deps — only Node builtins)
+  try {
+    const fs = require('fs');
+    const p = require('path');
+    const logDir = p.join(__dirname, '.logs');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
+      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+  } catch (_) {}
+  process.exit(0); // fail-open
+}
