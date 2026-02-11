@@ -11,8 +11,11 @@
  * Core detection logic extracted to lib/project-detector.cjs for OpenCode plugin reuse.
  */
 
+// Crash wrapper — catches require() failures and logs them
+try {
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const {
   loadConfig,
   writeEnv,
@@ -24,10 +27,10 @@ const {
   isHookEnabled
 } = require('./lib/ck-config-utils.cjs');
 
-// Early exit if hook disabled in config
-if (!isHookEnabled('session-init')) {
-  process.exit(0);
-}
+  // Early exit if hook disabled in config
+  if (!isHookEnabled('session-init')) {
+    process.exit(0);
+  }
 
 // Import shared project detection logic
 const {
@@ -294,6 +297,18 @@ async function main() {
     console.error(`SessionStart hook error: ${error.message}`);
     process.exit(0);
   }
-}
+  }
 
-main();
+  main();
+} catch (e) {
+  // Minimal crash logging (zero deps — only Node builtins)
+  try {
+    const fs = require('fs');
+    const p = require('path');
+    const logDir = p.join(__dirname, '.logs');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
+      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+  } catch (_) {}
+  process.exit(0); // fail-open
+}
