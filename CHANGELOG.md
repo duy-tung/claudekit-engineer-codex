@@ -1,3 +1,34 @@
+## [2.11.0-beta.14](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.13...v2.11.0-beta.14) (2026-02-06)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** remove invalid TaskCompleted/TeammateIdle hook events ([d0545b5](https://github.com/claudekit/claudekit-engineer/commit/d0545b5f1c92280e1549f1b7f99de604770b9fae))
+
+## [2.11.0-beta.13](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.12...v2.11.0-beta.13) (2026-02-06)
+
+
+### 🐞 Bug Fixes
+
+* align skill SKILL.md names with directory names ([bfd9165](https://github.com/claudekit/claudekit-engineer/commit/bfd9165dfcd1190b31209f4801383694f87001d7))
+
+## [2.11.0-beta.12](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.11...v2.11.0-beta.12) (2026-02-06)
+
+
+### 🚀 Features
+
+* **team:** upgrade /team skill to v2.1.0 with event-driven hooks and agent memory ([0d7e3d1](https://github.com/claudekit/claudekit-engineer/commit/0d7e3d1eebfa231cd74f96df57646aaed542fb2f))
+
+
+### 🐞 Bug Fixes
+
+* **team:** correct total task count and naming mismatch in hook handlers ([cbd4fe7](https://github.com/claudekit/claudekit-engineer/commit/cbd4fe7211204757bbefaeef6b4049e4dc2b4a29))
+
+
+### 📚 Documentation
+
+* **team:** update agent-teams-guide for v2.1.0 with ASCII visualizations ([5a8aa32](https://github.com/claudekit/claudekit-engineer/commit/5a8aa328351e16742c5943c22302752abab0b08c))
+
 ## [2.11.0-beta.11](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.10...v2.11.0-beta.11) (2026-02-06)
 
 
