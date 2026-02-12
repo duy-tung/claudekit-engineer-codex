@@ -226,6 +226,15 @@ Agents with `memory: project` retain learnings across team sessions. Memory pers
 
 ---
 
+## Agent Memory
+
+Agents with `memory: project` retain learnings across team sessions. Memory persists in `.claude/agent-memory/<name>/` (gitignored). Useful for:
+- Code reviewer remembering project conventions
+- Debugger recalling past failure patterns
+- Tester tracking flaky tests and coverage gaps
+
+---
+
 ## When to Use Agent Teams vs Subagents
 
 | Scenario | Subagents (Task tool) | Agent Teams |

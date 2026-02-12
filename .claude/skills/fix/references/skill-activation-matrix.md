@@ -1,12 +1,23 @@
 # Skill Activation Matrix
 
-When to activate each skill during fixing workflows.
+When to activate each skill and tool during fixing workflows.
 
 ## Always Activate
 
-| Skill | Reason |
-|-------|--------|
+| Skill/Tool | Reason |
+|------------|--------|
 | `debug` | Core to all fix workflows - find root cause first |
+
+## Task Orchestration (Moderate+ Only)
+
+| Tool | Activate When |
+|------|---------------|
+| `TaskCreate` | After complexity assessment, create all phase tasks upfront |
+| `TaskUpdate` | At start/completion of each phase |
+| `TaskList` | Check available unblocked work, coordinate parallel agents |
+| `TaskGet` | Retrieve full task details before starting work |
+
+Skip Tasks for Quick workflow (< 3 steps). See `references/task-orchestration.md`.
 
 ## Conditional Activation
 
@@ -32,6 +43,7 @@ When to activate each skill during fixing workflows.
 | `git-manager` | After approval, commit changes |
 | `docs-manager` | API/behavior changes need doc updates |
 | `project-manager` | Major fix impacts roadmap/plan status |
+| `fullstack-developer` | Parallel independent issues (each gets own agent) |
 
 ## Parallel Patterns
 
@@ -43,15 +55,16 @@ See `references/parallel-exploration.md` for detailed patterns.
 | Multi-module fix | `Explore` each module in parallel |
 | After implementation | `Bash` agents: typecheck + lint + build |
 | Before commit | `Bash` agents: test + build + lint |
+| 2+ independent issues | Task trees + `fullstack-developer` agents per issue |
 
 ## Workflow → Skills Map
 
 | Workflow | Skills Activated |
 |----------|------------------|
 | Quick | `debug`, `code-reviewer`, parallel `Bash` verification |
-| Standard | Above + `problem-solving`, `sequential-thinking`, `tester`, parallel `Explore` |
+| Standard | Above + Tasks, `problem-solving`, `sequential-thinking`, `tester`, parallel `Explore` |
 | Deep | All above + `brainstorming`, `context-engineering`, `researcher`, `planner` |
-| Parallel | Per-issue workflow + coordination via parallel agents |
+| Parallel | Per-issue Task trees + `fullstack-developer` agents + coordination via `TaskList` |
 
 ## Detection Triggers
 
