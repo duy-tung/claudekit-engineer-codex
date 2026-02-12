@@ -77,6 +77,12 @@ Track investigation pipelines via Claude Native Tasks (TaskCreate, TaskUpdate, T
 
 **Load when:** Multi-component investigation (3+ steps), parallel log collection, coordinating debugger subagents
 
+### 10. Frontend Verification (`references/frontend-verification.md`)
+
+Visual verification of frontend implementations via Chrome MCP (Claude Chrome Extension) or `chrome-devtools` skill fallback. Detect if frontend-related → check Chrome MCP availability → screenshot + console error check → report. Skip if not frontend.
+
+**Load when:** Implementation touches frontend files (tsx/jsx/vue/svelte/html/css), UI bugs, visual regressions
+
 ## Quick Reference
 
 ```
@@ -89,6 +95,8 @@ System issue   → investigation-methodology.md (5 steps)
   CI/CD failure  → log-and-ci-analysis.md
   Slow system    → performance-diagnostics.md
   Need report    → reporting-standards.md
+
+Frontend fix   → frontend-verification.md (Chrome/devtools)
 ```
 
 ## Tools Integration
@@ -97,6 +105,7 @@ System issue   → investigation-methodology.md (5 steps)
 - **CI/CD:** `gh` CLI for GitHub Actions logs and pipeline debugging
 - **Codebase:** `docs-seeker` skill for package/plugin docs; `repomix` for codebase summary
 - **Scouting:** `/scout` or `/scout:ext` for finding relevant files
+- **Frontend:** Chrome browser or `chrome-devtools` skill for visual verification (screenshots, console, network)
 - **Skills:** Activate `problem-solving` skill when stuck on complex issues
 
 ## Red Flags
