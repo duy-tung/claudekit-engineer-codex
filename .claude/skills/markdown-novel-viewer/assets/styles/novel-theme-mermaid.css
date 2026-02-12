@@ -25,6 +25,12 @@ pre.mermaid[data-processed="true"],
   padding: 0;
 }
 
+/* Ensure rendered SVGs scale within their container */
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .mermaid-error-container {
   background: #fff5f5;
   border-color: #f5c6cb;
@@ -131,6 +137,12 @@ pre.mermaid[data-processed="true"],
 
 .mermaid-wrapper.expanded .mermaid {
   max-width: none;
+}
+
+/* Override Mermaid's inline max-width so SVG fills expanded container */
+.mermaid-wrapper.expanded .mermaid svg {
+  max-width: 100% !important;
+  width: 100%;
 }
 
 /* Icon visibility toggle */

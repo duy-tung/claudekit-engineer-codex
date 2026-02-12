@@ -2,20 +2,25 @@
 /**
  * TeammateIdle Hook - Injects available task context when teammate goes idle
  *
- * Fires: After SubagentStop for team members
+ * Fires: When an agent team teammate is about to go idle after finishing its turn.
+ * Official docs: https://code.claude.com/docs/en/hooks#teammateidle
+ * Decision control: Exit code only (exit 2 prevents idle, stderr fed as feedback)
+ * Note: additionalContext output is informational — may be ignored by CC for this event.
  * Input: { teammate_name, team_name, permission_mode, ... }
  * Output: additionalContext summarizing available tasks for lead
  * Design: Non-blocking, fail-open (exit 0 always), no external deps
  */
 
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
+// Crash wrapper
+try {
+  const fs = require('fs');
+  const path = require('path');
+  const os = require('os');
+  const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
 
-if (!isHookEnabled('teammate-idle-handler')) {
-  process.exit(0);
-}
+  if (!isHookEnabled('teammate-idle-handler')) {
+    process.exit(0);
+  }
 
 const TASKS_DIR = path.join(os.homedir(), '.claude', 'tasks');
 
@@ -99,6 +104,18 @@ function main() {
     }
     process.exit(0);
   }
-}
+  }
 
-main();
+  main();
+} catch (e) {
+  // Minimal crash logging (zero deps — only Node builtins)
+  try {
+    const fs = require('fs');
+    const p = require('path');
+    const logDir = p.join(__dirname, '.logs');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
+      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+  } catch (_) {}
+  process.exit(0); // fail-open
+}

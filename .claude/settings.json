@@ -93,11 +93,12 @@
         ]
       },
       {
-        "matcher": "*",
+        "matcher": "Bash|Edit|Write|MultiEdit|NotebookEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/usage-context-awareness.cjs"
+            "command": "node .claude/hooks/usage-context-awareness.cjs",
+            "timeout": 10
           }
         ]
       }

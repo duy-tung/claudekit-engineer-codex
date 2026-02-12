@@ -81,7 +81,7 @@ Teammate can approve (exit) or reject with explanation. Teammates finish current
 
 ## Cleanup
 
-Ask lead to clean up after all teammates shut down. Fails if active teammates still exist.
+After all teammates shut down, call `TeamDelete` (no parameters). Fails if active teammates still exist.
 
 Removes shared team resources (`~/.claude/teams/` and `~/.claude/tasks/` entries).
 

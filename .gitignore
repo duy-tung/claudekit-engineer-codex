@@ -73,6 +73,9 @@ ck.md
 # Agent memory (project scope)
 .claude/agent-memory/
 
+# Hook diagnostics logs
+.claude/hooks/.logs/
+
 # Gemini CLI settings (symlink to .claude/.mcp.json)
 .gemini/settings.json
 .claude/settings.bak.json

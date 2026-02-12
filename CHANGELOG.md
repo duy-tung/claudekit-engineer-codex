@@ -1,3 +1,67 @@
+## [2.11.0-beta.22](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.21...v2.11.0-beta.22) (2026-02-11)
+
+
+### 🚀 Features
+
+* **hooks:** add always-on diagnostics logging with crash wrappers ([#481](https://github.com/claudekit/claudekit-engineer/issues/481)) ([8b97ee0](https://github.com/claudekit/claudekit-engineer/commit/8b97ee06d2c79948b52ae582fd380a3b8d84c574)), closes [#478](https://github.com/claudekit/claudekit-engineer/issues/478)
+
+## [2.11.0-beta.21](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.20...v2.11.0-beta.21) (2026-02-10)
+
+
+### 🐞 Bug Fixes
+
+* use absolute paths in buildRulesSection to prevent wrong plans/ directory creation ([#476](https://github.com/claudekit/claudekit-engineer/issues/476)) ([#477](https://github.com/claudekit/claudekit-engineer/issues/477)) ([ac1317a](https://github.com/claudekit/claudekit-engineer/commit/ac1317ab5f48ffc3f68203be1f9fd72a582e615d))
+
+## [2.11.0-beta.20](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.19...v2.11.0-beta.20) (2026-02-10)
+
+
+### 🐞 Bug Fixes
+
+* **chrome-devtools:** add OS-based headless detection and interactive OAuth login ([76a03b0](https://github.com/claudekit/claudekit-engineer/commit/76a03b0190c3eccd3abe1eaf609ed70565179618)), closes [#473](https://github.com/claudekit/claudekit-engineer/issues/473)
+* **chrome-devtools:** address code review edge cases ([710a98f](https://github.com/claudekit/claudekit-engineer/commit/710a98fcb38441e5e11281cca5daf718f9c77fef))
+
+## [2.11.0-beta.19](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.18...v2.11.0-beta.19) (2026-02-09)
+
+
+### 🚀 Features
+
+* **commands:** add /plan:red-team adversarial plan review ([0c187cc](https://github.com/claudekit/claudekit-engineer/commit/0c187ccccf704ef8ca1cb687304da01871862404)), closes [#469](https://github.com/claudekit/claudekit-engineer/issues/469)
+* **plan:** integrate red-team review into plan workflow ([2ab6fa5](https://github.com/claudekit/claudekit-engineer/commit/2ab6fa5c7f2b923cd1fe75b0573a67c1cf3550a0))
+
+
+### 🐞 Bug Fixes
+
+* **plan:** apply red-team review findings from prompt architecture audit ([9ddecd3](https://github.com/claudekit/claudekit-engineer/commit/9ddecd3ff3366eae8c8fa40bb8e4ef6d2e675d26))
+* **plan:** use explicit Skill tool invocation for red-team and validate ([5150974](https://github.com/claudekit/claudekit-engineer/commit/5150974e6ab42004aaf38652eff8062dc035587a))
+
+## [2.11.0-beta.18](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.17...v2.11.0-beta.18) (2026-02-09)
+
+
+### 🐞 Bug Fixes
+
+* reduce Windows terminal freeze from excessive process spawning ([#471](https://github.com/claudekit/claudekit-engineer/issues/471)) ([faab212](https://github.com/claudekit/claudekit-engineer/commit/faab212d32d4edfefa1d767da4af7587f958390f))
+
+## [2.11.0-beta.17](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.16...v2.11.0-beta.17) (2026-02-09)
+
+
+### 🐞 Bug Fixes
+
+* **viewer:** make mermaid diagrams scale responsively on expand ([#467](https://github.com/claudekit/claudekit-engineer/issues/467)) ([#468](https://github.com/claudekit/claudekit-engineer/issues/468)) ([5946ab4](https://github.com/claudekit/claudekit-engineer/commit/5946ab4b82142f9cd87058b4384f10b8f4109db3))
+
+## [2.11.0-beta.16](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.15...v2.11.0-beta.16) (2026-02-07)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** align TaskCompleted/TeammateIdle handlers with official CC docs ([#466](https://github.com/claudekit/claudekit-engineer/issues/466)) ([5542a93](https://github.com/claudekit/claudekit-engineer/commit/5542a93955a3d9e7b88297f0361b10da3f9df9bd)), closes [#464](https://github.com/claudekit/claudekit-engineer/issues/464)
+
+## [2.11.0-beta.15](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.14...v2.11.0-beta.15) (2026-02-07)
+
+
+### 🐞 Bug Fixes
+
+* **team:** align cleanup docs with actual TeamCreate/TeamDelete API ([cd47905](https://github.com/claudekit/claudekit-engineer/commit/cd47905da9c4ab567dd75b90b47b1482295e9cdf))
+
 ## [2.11.0-beta.14](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.13...v2.11.0-beta.14) (2026-02-06)
 
 
