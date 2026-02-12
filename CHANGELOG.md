@@ -1,3 +1,10 @@
+## [2.11.0-beta.24](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.23...v2.11.0-beta.24) (2026-02-12)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** add uv venv fallback for uv-managed Python installations ([fa26676](https://github.com/claudekit/claudekit-engineer/commit/fa2667643db0387bd746a84e74749bd75db5336b)), closes [#483](https://github.com/claudekit/claudekit-engineer/issues/483)
+
 ## [2.11.0-beta.23](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.22...v2.11.0-beta.23) (2026-02-12)
 
 

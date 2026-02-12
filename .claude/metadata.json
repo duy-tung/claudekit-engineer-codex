@@ -39,10 +39,10 @@
     "skills/planning/**",
     "skills/agent-teams/**"
   ],
-  "version": "2.11.0-beta.23",
+  "version": "2.11.0-beta.24",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-02-12T05:00:31.793Z",
+  "buildDate": "2026-02-12T20:23:07.394Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"
