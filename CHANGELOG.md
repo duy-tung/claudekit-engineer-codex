@@ -1,3 +1,31 @@
+## [2.11.0-beta.23](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.22...v2.11.0-beta.23) (2026-02-12)
+
+
+### 🚀 Features
+
+* **team:** upgrade /team skill to v2.1.0 with event-driven hooks and agent memory ([5d3c9f6](https://github.com/claudekit/claudekit-engineer/commit/5d3c9f6483610367407abf5677aebd453d967b81))
+
+
+### 🐞 Bug Fixes
+
+* align skill SKILL.md names with directory names ([e354c07](https://github.com/claudekit/claudekit-engineer/commit/e354c076d24d86e461b8ae9db58232fa8d87a850))
+* **hooks:** remove invalid TaskCompleted/TeammateIdle hook events ([6012d42](https://github.com/claudekit/claudekit-engineer/commit/6012d42bf887a8b4cc72edca4f95b7794ae402c3))
+* **skills:** enhance `skill-creator` skill with `skillmark` ([8cdf309](https://github.com/claudekit/claudekit-engineer/commit/8cdf3093c3cf2828b9dcaaea7ec48480b6e886f1))
+* **team:** correct total task count and naming mismatch in hook handlers ([8b8ba3a](https://github.com/claudekit/claudekit-engineer/commit/8b8ba3af7af275c27f411f017256451e9cb99856))
+
+
+### 📚 Documentation
+
+* add skill-native-task documentation ([a2a2be1](https://github.com/claudekit/claudekit-engineer/commit/a2a2be10abbea06831b51a050722c12a402792b2))
+* **team:** update agent-teams-guide for v2.1.0 with ASCII visualizations ([32c00ce](https://github.com/claudekit/claudekit-engineer/commit/32c00ce9e2105561d1de58d601e448a51ff746d1))
+
+
+### ⚡ Performance Improvements
+
+* **skill:** enhance `/fix` skill with native task orchestration ([9b98f48](https://github.com/claudekit/claudekit-engineer/commit/9b98f489ae3e91ee7155390d7129ec8711f0f0f7))
+* **skills:** enhance `skill-creator` skill with `complete-guide-to-building-skills` ([794b881](https://github.com/claudekit/claudekit-engineer/commit/794b881b38d7947ceca2c5cadfc18f5bb1b518f9))
+* **skills:** utilize claude chrome extension in `debug` and `test` skills ([ad3681a](https://github.com/claudekit/claudekit-engineer/commit/ad3681af516b954f807cd6480b1e5fbdb8675268))
+
 ## [2.11.0-beta.22](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.21...v2.11.0-beta.22) (2026-02-11)
 
 
