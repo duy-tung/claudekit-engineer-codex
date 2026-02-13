@@ -1,3 +1,10 @@
+## [2.11.0-beta.25](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.24...v2.11.0-beta.25) (2026-02-13)
+
+
+### 🐞 Bug Fixes
+
+* quote YAML frontmatter values containing colons and brackets ([71df90e](https://github.com/claudekit/claudekit-engineer/commit/71df90e6ca87a798c14e19130439657a13c31fea))
+
 ## [2.11.0-beta.24](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.23...v2.11.0-beta.24) (2026-02-12)
 
 
