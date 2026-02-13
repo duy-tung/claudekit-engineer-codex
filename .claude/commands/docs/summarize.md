@@ -1,6 +1,6 @@
 ---
-description: ⚡ Analyze the codebase and update documentation
-argument-hint: [focused-topics] [should-scan-codebase]
+description: '⚡ Analyze the codebase and update documentation'
+argument-hint: '[focused-topics] [should-scan-codebase]'
 ---
 
 Activate `scout` skill to analyze the codebase and update `docs/codebase-summary.md` and respond with a summary report.
