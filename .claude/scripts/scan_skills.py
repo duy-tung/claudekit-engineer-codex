@@ -177,10 +177,15 @@ def main():
             refs = '📚' if skill['has_references'] else '  '
             print(f"  {scripts}{refs} {skill['name']:30} {skill['description'][:80]}")
 
-    # Output YAML for processing (generate_catalogs.py reads YAML)
-    output_path = Path('.claude/scripts/skills_data.yaml')
+    # Output YAML to ck-help scripts directory
+    output_path = Path('.claude/skills/ck-help/scripts/skills_data.yaml')
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(yaml.dump(skills, allow_unicode=True, default_flow_style=False))
     print(f"\n✓ Saved metadata to {output_path}")
+
+    # Also keep a copy in scripts/ for backward compat
+    legacy_path = Path('.claude/scripts/skills_data.yaml')
+    legacy_path.write_text(yaml.dump(skills, allow_unicode=True, default_flow_style=False))
 
 if __name__ == '__main__':
     main()

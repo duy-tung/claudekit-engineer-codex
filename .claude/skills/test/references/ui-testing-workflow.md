@@ -1,119 +1,65 @@
 # UI Testing Workflow
 
-Browser-based visual testing using `chrome-devtools` skill. Requires skill to be installed.
+Activate the chrome-devtools skill.
 
-## Prerequisites
+## Purpose
+Run comprehensive UI tests on a website and generate a detailed report.
 
-```bash
-SKILL_DIR="$HOME/.claude/skills/chrome-devtools/scripts"
-# Install deps if first time
-npm install --prefix "$SKILL_DIR" 2>/dev/null
-```
+## Arguments
+- $1: URL - The URL of the website to test
+- $2: OPTIONS - Optional test configuration (e.g., --headless, --mobile, --auth)
 
-## Step 1: Discovery
+## Testing Protected Routes (Authentication)
 
-Browse target URL, discover pages, components, endpoints:
+### Step 1: User Manual Login
+Instruct the user to:
+1. Open the target site in their browser
+2. Log in manually with their credentials
+3. Open browser DevTools (F12) → Application tab → Cookies/Storage
 
-```bash
-node "$SKILL_DIR/navigate.js" --url http://localhost:3000
-node "$SKILL_DIR/aria-snapshot.js" --url http://localhost:3000
-node "$SKILL_DIR/snapshot.js" --url http://localhost:3000
-```
+### Step 2: Extract Auth Credentials
+Ask the user to provide one of:
+- **Cookies**: Copy cookie values (name, value, domain)
+- **Access Token**: Copy JWT/Bearer token from localStorage or cookies
+- **Session Storage**: Copy relevant session keys
 
-## Step 2: Visual Capture
-
-```bash
-# Full page screenshot
-node "$SKILL_DIR/screenshot.js" --url http://localhost:3000 --output ./screenshots/home.png --full-page true
-
-# Specific component
-node "$SKILL_DIR/screenshot.js" --url http://localhost:3000 --selector ".main-content" --output ./screenshots/main.png
-```
-
-## Step 3: Console Error Check
+### Step 3: Inject Authentication
+Use the `inject-auth.js` script:
 
 ```bash
-# Capture JS errors for 5 seconds
-node "$SKILL_DIR/console.js" --url http://localhost:3000 --types error,pageerror --duration 5000
-```
+cd $SKILL_DIR  # .claude/skills/chrome-devtools/scripts
 
-Zero errors = pass. Any errors = investigate before proceeding.
-
-## Step 4: Network Validation
-
-```bash
-# Check for failed API calls
-node "$SKILL_DIR/network.js" --url http://localhost:3000 | jq '.requests[] | select(.response.status >= 400)'
-```
-
-## Step 5: Responsive Testing
-
-Capture at key breakpoints:
-```bash
-# Desktop (default), Tablet, Mobile
-for viewport in "1920x1080" "768x1024" "375x812"; do
-  W=$(echo $viewport | cut -d'x' -f1)
-  H=$(echo $viewport | cut -d'x' -f2)
-  node "$SKILL_DIR/evaluate.js" --url http://localhost:3000 --script "
-    Object.defineProperty(window, 'innerWidth', {value: $W, writable: true});
-    Object.defineProperty(window, 'innerHeight', {value: $H, writable: true});
-    window.dispatchEvent(new Event('resize'));
-  "
-  node "$SKILL_DIR/screenshot.js" --output "./screenshots/responsive-${W}x${H}.png"
-done
-```
-
-## Step 6: Form & Interaction Testing
-
-```bash
-node "$SKILL_DIR/fill.js" --selector "#email" --value "test@example.com"
-node "$SKILL_DIR/fill.js" --selector "#password" --value "Test123!"
-node "$SKILL_DIR/click.js" --selector "button[type=submit]"
-node "$SKILL_DIR/screenshot.js" --output ./screenshots/form-submitted.png
-```
-
-## Step 7: Performance Metrics
-
-```bash
-node "$SKILL_DIR/performance.js" --url http://localhost:3000 | jq '.vitals'
-```
-
-## Authentication for Protected Routes
-
-For testing pages behind auth, inject credentials first:
-
-```bash
 # Option A: Inject cookies
-node "$SKILL_DIR/inject-auth.js" --url https://site.com \
-  --cookies '[{"name":"session","value":"abc123","domain":".site.com"}]'
+node inject-auth.js --url https://example.com --cookies '[{"name":"session","value":"abc123","domain":".example.com"}]'
 
-# Option B: Bearer token
-node "$SKILL_DIR/inject-auth.js" --url https://site.com \
-  --token "Bearer eyJhbG..." --header Authorization
+# Option B: Inject Bearer token
+node inject-auth.js --url https://example.com --token "Bearer eyJhbGciOi..." --header Authorization --token-key access_token
 
-# Option C: localStorage
-node "$SKILL_DIR/inject-auth.js" --url https://site.com \
-  --local-storage '{"auth_token":"xyz"}'
+# Option C: Inject localStorage
+node inject-auth.js --url https://example.com --local-storage '{"auth_token":"xyz","user_id":"123"}'
 ```
 
-After injection, browser session persists. Run tests normally until `--close true`.
-
-## Screenshot Analysis
-
-Use `ai-multimodal` skill to analyze captured screenshots for:
-- Layout correctness
-- Visual regressions
-- Missing elements
-- Broken styling
-- Accessibility issues (contrast, text size)
-
-## Parallel Execution
-
-Spawn multiple `tester` subagents in parallel for independent pages/flows to speed up UI testing.
-
-## Cleanup
-
+### Step 4: Run Tests
+After auth injection, run tests normally:
 ```bash
-# Close browser session when done
-node "$SKILL_DIR/navigate.js" --url about:blank --close true
+node navigate.js --url https://example.com/dashboard
+node screenshot.js --url https://example.com/profile --output profile.png
 ```
+
+## Workflow
+- Use `plan` skill to organize the test plan & report
+- All screenshots saved in the same report directory
+- Browse URL, discover all pages, components, endpoints
+- Create test plan based on discovered structure
+- Use multiple `tester` subagents in parallel for: pages, forms, navigation, user flows, accessibility, responsive layouts, performance, security, seo
+- Use `ai-multimodal` to analyze all screenshots
+- Generate comprehensive Markdown report
+- Ask user if they want to preview with `/preview`
+
+## Output Requirements
+- Clear, structured Markdown with headers, lists, code blocks
+- Include test results summary, key findings, screenshot references
+- Ensure token efficiency while maintaining high quality
+- Sacrifice grammar for concision
+
+**Do not** start implementing fixes.

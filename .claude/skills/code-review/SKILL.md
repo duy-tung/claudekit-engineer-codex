@@ -117,6 +117,13 @@ TaskCreate: "Verify fixes pass"        → pending, blockedBy: [fix]
 - **Task Pipeline:** Create review tasks with dependencies → auto-unblock through chain
 - **Cook Handoff:** Cook completes phase → review pipeline tasks → all complete → cook proceeds
 
+## Codebase Analysis Subcommands
+
+| Subcommand | Reference | Purpose |
+|------------|-----------|---------|
+| `/review codebase` | `references/codebase-scan-workflow.md` | Scan & analyze the codebase |
+| `/review codebase parallel` | `references/parallel-review-workflow.md` | Ultrathink edge cases, then parallel verify |
+
 ## Bottom Line
 
 1. Technical rigor over social performance
