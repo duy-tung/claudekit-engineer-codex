@@ -31,9 +31,10 @@ Present as options via `AskUserQuestion` with header "Documentation Operation", 
 ## Routing
 
 Parse `$ARGUMENTS` first word:
-- `init` or empty → Load `references/init-workflow.md`
+- `init` → Load `references/init-workflow.md`
 - `update` → Load `references/update-workflow.md`
 - `summarize` → Load `references/summarize-workflow.md`
+- empty/unclear → AskUserQuestion (do not auto-run `init`)
 
 ## Shared Context
 

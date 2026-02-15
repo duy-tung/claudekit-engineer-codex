@@ -134,8 +134,8 @@ TaskCreate: "Verify fixes pass"        → pending, blockedBy: [fix]
 
 | Subcommand | Reference | Purpose |
 |------------|-----------|---------|
-| `/review codebase` | `references/codebase-scan-workflow.md` | Scan & analyze the codebase |
-| `/review codebase parallel` | `references/parallel-review-workflow.md` | Ultrathink edge cases, then parallel verify |
+| `/code-review codebase` | `references/codebase-scan-workflow.md` | Scan & analyze the codebase |
+| `/code-review codebase parallel` | `references/parallel-review-workflow.md` | Ultrathink edge cases, then parallel verify |
 
 ## Bottom Line
 
