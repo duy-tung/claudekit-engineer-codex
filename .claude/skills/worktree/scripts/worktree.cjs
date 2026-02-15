@@ -18,9 +18,31 @@
  *   --dry-run              Show what would be done without executing
  */
 
-const { execSync, spawnSync } = require('child_process');
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+function sanitizeBranchPrefix(value) {
+  const raw = String(value || '').trim().toLowerCase();
+  if (!raw) return 'feat';
+  const safe = raw
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 20);
+  return safe || 'feat';
+}
+
+function isSafeEnvFileName(fileName) {
+  if (!fileName || typeof fileName !== 'string') return false;
+  if (fileName.includes('\0')) return false;
+  if (path.isAbsolute(fileName)) return false;
+  const normalized = path.normalize(fileName.trim());
+  if (normalized.startsWith('..') || normalized.includes(`..${path.sep}`)) return false;
+  if (normalized.includes(path.sep)) return false;
+  return /^\.env[\w.-]*$/.test(normalized);
+}
 
 // Minimum Node.js version check
 const MIN_NODE_VERSION = 18;
@@ -38,15 +60,20 @@ if (jsonIndex > -1) args.splice(jsonIndex, 1);
 
 const prefixIndex = args.indexOf('--prefix');
 let branchPrefix = 'feat';
+let branchPrefixWarning = null;
 if (prefixIndex > -1) {
-  branchPrefix = args[prefixIndex + 1] || 'feat';
+  const rawPrefix = args[prefixIndex + 1] || 'feat';
+  branchPrefix = sanitizeBranchPrefix(rawPrefix);
+  if (branchPrefix !== rawPrefix.toLowerCase()) {
+    branchPrefixWarning = `Branch prefix sanitized: "${rawPrefix}" → "${branchPrefix}"`;
+  }
   args.splice(prefixIndex, 2);
 }
 
 const envIndex = args.indexOf('--env');
 let envFilesToCopy = [];
 if (envIndex > -1) {
-  envFilesToCopy = (args[envIndex + 1] || '').split(',').filter(Boolean);
+  envFilesToCopy = (args[envIndex + 1] || '').split(',').map(v => v.trim()).filter(Boolean);
   args.splice(envIndex, 2);
 }
 
@@ -218,6 +245,12 @@ function findTopmostSuperproject(gitRoot) {
 
 // Validate that a path can be used as worktree root (exists or can be created)
 function validateWorktreeRoot(rootPath) {
+  if (typeof rootPath !== 'string' || rootPath.trim().length === 0) {
+    return { valid: false, error: 'Worktree root path is empty' };
+  }
+  if (/[\0\r\n]/.test(rootPath)) {
+    return { valid: false, error: 'Worktree root contains invalid control characters' };
+  }
   const resolved = path.resolve(rootPath);
 
   // Check if path exists and is a directory
@@ -269,7 +302,13 @@ function getWorktreeRoot(gitRoot, isMonorepo, explicitRoot = null) {
   // Priority 1: Environment variable override
   const envRoot = process.env.WORKTREE_ROOT;
   if (envRoot) {
-    return { dir: path.resolve(envRoot), source: 'WORKTREE_ROOT env' };
+    const validation = validateWorktreeRoot(envRoot);
+    if (!validation.valid) {
+      outputError('INVALID_WORKTREE_ROOT', validation.error, {
+        suggestion: 'Fix WORKTREE_ROOT env var or unset it'
+      });
+    }
+    return { dir: validation.path, source: 'WORKTREE_ROOT env' };
   }
 
   // Priority 2: Check for superproject (we might be in a submodule)
@@ -408,12 +447,28 @@ function branchExists(branchName, cwd) {
 
 // Sanitize feature name to valid branch name
 function sanitizeFeatureName(name) {
-  return name
+  const raw = String(name || '').trim();
+  if (!raw) return '';
+
+  // Keep ASCII branch names; drop diacritics first for better readability.
+  const ascii = raw
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 50); // Limit length
+
+  if (ascii) return ascii;
+
+  // If input had alphanumeric Unicode but collapsed to empty, keep deterministic fallback.
+  if (/[\p{L}\p{N}]/u.test(raw)) {
+    const hash = crypto.createHash('sha1').update(raw).digest('hex').slice(0, 8);
+    return `feature-${hash}`;
+  }
+
+  return '';
 }
 
 // COMMANDS
@@ -497,6 +552,19 @@ function cmdCreate() {
   const projects = parseGitModules(gitRoot);
   const isMonorepo = projects.length > 0;
   const warnings = [];
+  if (branchPrefixWarning) warnings.push(branchPrefixWarning);
+  const safeEnvFilesToCopy = [];
+  if (envFilesToCopy.length > 0) {
+    envFilesToCopy.forEach(envFile => {
+      if (!isSafeEnvFileName(envFile)) {
+        warnings.push(`Skipped unsafe env file entry: ${envFile}`);
+        return;
+      }
+      if (!safeEnvFilesToCopy.includes(envFile)) {
+        safeEnvFilesToCopy.push(envFile);
+      }
+    });
+  }
 
   // Parse arguments based on repo type
   // Monorepo: create <project> <feature>
@@ -561,6 +629,11 @@ function cmdCreate() {
 
   // Sanitize feature name
   const sanitizedFeature = sanitizeFeatureName(feature);
+  if (!sanitizedFeature) {
+    outputError('INVALID_FEATURE_NAME', 'Feature name became empty after sanitization', {
+      suggestion: 'Use letters/numbers in feature name (example: "login-validation")'
+    });
+  }
   if (sanitizedFeature !== feature.toLowerCase().replace(/\s+/g, '-')) {
     warnings.push(`Feature name sanitized: "${feature}" → "${sanitizedFeature}"`);
   }
@@ -614,7 +687,7 @@ function cmdCreate() {
         baseBranch,
         branchExists: !!branchStatus,
         project: isMonorepo ? projectName : null,
-        envFilesToCopy: envFilesToCopy.length > 0 ? envFilesToCopy : undefined
+        envFilesToCopy: safeEnvFilesToCopy.length > 0 ? safeEnvFilesToCopy : undefined
       },
       warnings: warnings.length > 0 ? warnings : undefined
     });
@@ -662,8 +735,8 @@ function cmdCreate() {
 
   // Also copy explicitly specified env files (legacy --env flag support)
   const envFilesCopied = envResult.copied.map(c => c.to);
-  if (envFilesToCopy.length > 0) {
-    envFilesToCopy.forEach(envFile => {
+  if (safeEnvFilesToCopy.length > 0) {
+    safeEnvFilesToCopy.forEach(envFile => {
       const sourcePath = path.join(sourceDir, envFile);
       const destPath = path.join(worktreePath, envFile);
       if (fs.existsSync(sourcePath)) {
@@ -726,20 +799,38 @@ function cmdRemove() {
 
   // Find matching worktree
   const searchTerm = arg1.toLowerCase();
-  const matches = worktrees.filter(w => {
+  const removable = worktrees.filter(w => !w.path.includes('.git/'));
+  const exactMatches = removable.filter(w => {
     const name = path.basename(w.path).toLowerCase();
     const fullPath = w.path.toLowerCase();
-    return name.includes(searchTerm) || fullPath.includes(searchTerm) ||
-           (w.branch && w.branch.toLowerCase().includes(searchTerm));
+    const branch = (w.branch || '').toLowerCase();
+    return name === searchTerm || fullPath === searchTerm || branch === searchTerm;
+  });
+  const prefixMatches = removable.filter(w => {
+    const name = path.basename(w.path).toLowerCase();
+    const fullPath = w.path.toLowerCase();
+    const branch = (w.branch || '').toLowerCase();
+    return name.startsWith(searchTerm) || fullPath.startsWith(searchTerm) || branch.startsWith(searchTerm);
+  });
+  const containsMatches = removable.filter(w => {
+    const name = path.basename(w.path).toLowerCase();
+    const fullPath = w.path.toLowerCase();
+    const branch = (w.branch || '').toLowerCase();
+    return name.includes(searchTerm) || fullPath.includes(searchTerm) || branch.includes(searchTerm);
   });
 
-  // Exclude main worktree (bare .git or the primary checkout)
-  const removableMatches = matches.filter(w => !w.path.includes('.git/'));
+  let removableMatches = exactMatches;
+  if (removableMatches.length === 0) {
+    removableMatches = prefixMatches;
+  }
+  if (removableMatches.length === 0 && searchTerm.length >= 4) {
+    removableMatches = containsMatches;
+  }
 
   if (removableMatches.length === 0) {
     outputError('WORKTREE_NOT_FOUND', `No worktree matching "${arg1}" found`, {
       suggestion: 'Use "node worktree.cjs list" to see available worktrees',
-      availableWorktrees: worktrees.filter(w => !w.path.includes('.git/')).map(w => path.basename(w.path))
+      availableWorktrees: removable.map(w => path.basename(w.path))
     });
   }
 
@@ -780,14 +871,13 @@ function cmdRemove() {
 
   // Delete branch if it exists
   let branchDeleted = false;
+  let branchDeleteWarning = null;
   if (branchName) {
     const deleteResult = git(`branch -d "${branchName}"`, { silent: true });
     if (deleteResult.success) {
       branchDeleted = true;
     } else {
-      // Try force delete if normal delete fails
-      const forceDeleteResult = git(`branch -D "${branchName}"`, { silent: true });
-      branchDeleted = forceDeleteResult.success;
+      branchDeleteWarning = `Branch kept: ${branchName} (${deleteResult.stderr || 'not fully merged'})`;
     }
   }
 
@@ -796,7 +886,8 @@ function cmdRemove() {
     message: 'Worktree removed successfully!',
     removedPath: worktreePath,
     branchDeleted: branchDeleted ? branchName : null,
-    branchKept: !branchDeleted && branchName ? branchName : null
+    branchKept: !branchDeleted && branchName ? branchName : null,
+    warnings: branchDeleteWarning ? [branchDeleteWarning] : undefined
   });
 }
 

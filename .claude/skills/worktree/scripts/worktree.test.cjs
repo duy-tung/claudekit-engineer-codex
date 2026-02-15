@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Test suite for worktree.cjs
- * Run: node .claude/scripts/worktree.test.cjs
+ * Run: node .claude/skills/worktree/scripts/worktree.test.cjs
  */
 
 const { execSync } = require('child_process');
@@ -297,6 +297,14 @@ test('create dry-run succeeds', () => {
   assert(json.dryRun === true, 'Should have dryRun: true');
 });
 
+test('create ignores unsafe --env traversal entries', () => {
+  const result = run('create env-guard --prefix feat --dry-run --json --env "../.env,secrets/.env,.env.local"');
+  assert(result.success, 'Dry-run should succeed');
+  const json = assertJSON(result.output);
+  assert(Array.isArray(json.warnings), 'Should include warnings');
+  assert(json.warnings.some(w => w.includes('unsafe env file')), 'Should warn for unsafe env entries');
+});
+
 // ============================================
 // WORKTREE ROOT DETECTION TESTS
 // ============================================
@@ -358,6 +366,21 @@ test('WORKTREE_ROOT env var overrides detection', () => {
     assert(json.wouldCreate.worktreeRootSource === 'WORKTREE_ROOT env', 'Source should be env');
   } catch (error) {
     // May fail if script path issue - skip
+  }
+});
+
+test('invalid WORKTREE_ROOT env var fails safely', () => {
+  const invalidRoot = '/etc/passwd';
+  try {
+    execSync(`WORKTREE_ROOT="${invalidRoot}" node "${SCRIPT_PATH}" info --json`, {
+      encoding: 'utf-8',
+      cwd: STANDALONE_DIR,
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+    assert(false, 'Should fail with invalid WORKTREE_ROOT');
+  } catch (error) {
+    const json = assertJSON(error.stdout.toString());
+    assert(json.error.code === 'INVALID_WORKTREE_ROOT', 'Should have INVALID_WORKTREE_ROOT');
   }
 });
 
@@ -451,10 +474,9 @@ test('create handles leading/trailing dashes', () => {
 
 test('create handles only special characters', () => {
   const result = run('create "@#$%^&*()" --dry-run --json');
-  assert(result.success, 'Should succeed');
+  assert(!result.success, 'Should fail when sanitized feature is empty');
   const json = assertJSON(result.output);
-  // All special chars become dashes, then cleaned
-  assert(json.wouldCreate.branch.includes('feat/'), 'Should have prefix');
+  assert(json.error.code === 'INVALID_FEATURE_NAME', 'Should report invalid feature name');
 });
 
 test('create handles numbers only', () => {
@@ -523,7 +545,7 @@ test('create uses default prefix when --prefix missing value', () => {
 });
 
 test('create handles invalid prefix gracefully', () => {
-  // Script doesn't validate prefix - it uses whatever is given
+  // Prefix is sanitized before use.
   const result = run('create test-custom-prefix --prefix custom --dry-run --json');
   assert(result.success, 'Should succeed');
   const json = assertJSON(result.output);
