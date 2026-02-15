@@ -55,7 +55,7 @@ Full documentation (config, schema, setup guides).
 
 ### `@CK_OUTPUT_TYPE:category-guide`
 
-Workflow guides for command categories.
+Workflow guides for skill categories.
 
 **Presentation:**
 1. Show the complete workflow and command list
@@ -64,12 +64,12 @@ Workflow guides for command categories.
 
 ### `@CK_OUTPUT_TYPE:command-details`
 
-Single command documentation.
+Single skill/subcommand documentation.
 
 **Presentation:**
-1. Show full command info from script
-2. **ADD**: concrete usage example, when this command shines vs alternatives, common flags
-3. Offer to run the command for them
+1. Show full skill info from script
+2. **ADD**: concrete usage example, when this skill shines vs alternatives, common flags
+3. Offer to run the skill flow for them
 
 ### `@CK_OUTPUT_TYPE:search-results`
 
@@ -82,11 +82,11 @@ Search matches for a keyword.
 
 ### `@CK_OUTPUT_TYPE:task-recommendations`
 
-Task-based command suggestions.
+Task-based skill suggestions.
 
 **Presentation:**
-1. Show recommended commands from script
-2. **EXPLAIN** the reasoning: why these commands fit, suggested order, what each step accomplishes
+1. Show recommended skills from script
+2. **EXPLAIN** the reasoning: why these skills fit, suggested order, what each step accomplishes
 3. Offer to start with the first recommended command
 
 ## Key Principle
@@ -97,6 +97,6 @@ Never replace or summarize the script output. Always show it fully, then enhance
 
 ## Important: Correct Workflows
 
-- **`/plan` → `/cook`**: Plan first, then execute the plan
-- **`/cook`**: Standalone - plans internally, no separate `/plan` needed
-- **NEVER** suggest `/plan` → `/cook` (cook has its own planning)
+- **`/plan` → `/cook`**: Best for high-risk or complex changes
+- **`/cook`**: Standalone for straightforward implementation
+- **NEVER** claim `/plan` is mandatory before `/cook`

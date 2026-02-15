@@ -6,7 +6,7 @@ Scans .claude/skills/ directory to build catalog at runtime.
 Usage:
     python ck-help.py                    # Overview with quick start
     python ck-help.py fix                # Category guide with workflow
-    python ck-help.py plan archive       # Skill details
+    python ck-help.py plan validate      # Subcommand details
     python ck-help.py debug login error  # Task recommendations
     python ck-help.py auth               # Search (unknown word)
 """
@@ -154,6 +154,109 @@ TASK_MAPPINGS = {
     "watzup": ["watzup", "status", "summary", "wrap up", "what's up", "recent", "changes"],
     "notifications": ["notification", "notifications", "notify", "discord", "telegram", "slack", "alert", "webhook", "stop hook", "session end", "setup notification", "setup notifications", "configure discord", "configure telegram", "configure slack", "discord webhook", "telegram bot", "slack webhook"],
 }
+
+# Known subcommands and aliases.
+# Keep normalized keys in sync with skill docs.
+SUBCOMMAND_DETAILS = {
+    "plan archive": {
+        "name": "/plan archive",
+        "description": "Archive plans and optionally journal completed work.",
+        "category": "plan",
+        "usage": "/plan archive [plan-dir-or-plan.md]",
+    },
+    "plan red-team": {
+        "name": "/plan red-team",
+        "description": "Run adversarial review against an implementation plan.",
+        "category": "plan",
+        "usage": "/plan red-team [plan-dir-or-plan.md]",
+    },
+    "plan validate": {
+        "name": "/plan validate",
+        "description": "Interview-based plan validation before implementation.",
+        "category": "plan",
+        "usage": "/plan validate [plan-dir-or-plan.md]",
+    },
+    "docs init": {
+        "name": "/docs init",
+        "description": "Create initial project docs from codebase analysis.",
+        "category": "docs",
+        "usage": "/docs init",
+    },
+    "docs update": {
+        "name": "/docs update",
+        "description": "Update existing docs based on recent project changes.",
+        "category": "docs",
+        "usage": "/docs update [focus]",
+    },
+    "docs summarize": {
+        "name": "/docs summarize",
+        "description": "Generate a concise codebase summary update.",
+        "category": "docs",
+        "usage": "/docs summarize [focus]",
+    },
+    "code-review codebase": {
+        "name": "/code-review codebase",
+        "description": "Run full codebase scan and review.",
+        "category": "review",
+        "usage": "/code-review codebase",
+    },
+    "code-review codebase parallel": {
+        "name": "/code-review codebase parallel",
+        "description": "Parallel codebase review with edge-case verification workflow.",
+        "category": "review",
+        "usage": "/code-review codebase parallel",
+    },
+    "test ui": {
+        "name": "/test ui",
+        "description": "Run UI/browser-focused testing workflow.",
+        "category": "test",
+        "usage": "/test ui [url]",
+    },
+}
+
+SUBCOMMAND_ALIASES = {
+    "plan:archive": "plan archive",
+    "plan:red-team": "plan red-team",
+    "plan:validate": "plan validate",
+    "docs:init": "docs init",
+    "docs:update": "docs update",
+    "docs:summarize": "docs summarize",
+    "review codebase": "code-review codebase",
+    "review codebase parallel": "code-review codebase parallel",
+    "review:codebase": "code-review codebase",
+    "review:codebase:parallel": "code-review codebase parallel",
+}
+
+
+def normalize_command_query(query: str) -> str:
+    """Normalize user command/subcommand query into comparable token form."""
+    normalized = query.lower().replace("/", " ").strip()
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized
+
+
+def resolve_subcommand(query: str):
+    """Resolve a query into canonical subcommand details, if any."""
+    normalized = normalize_command_query(query)
+    alias = SUBCOMMAND_ALIASES.get(normalized, normalized)
+    return SUBCOMMAND_DETAILS.get(alias)
+
+
+def extract_fallback_description(file_path: Path) -> str:
+    """Extract first meaningful non-heading line as fallback description."""
+    try:
+        content = file_path.read_text(encoding="utf-8")
+    except Exception:
+        return ""
+
+    body = re.sub(r"^---\s*\n.*?\n---\s*\n", "", content, flags=re.DOTALL)
+    for line in body.splitlines():
+        text = line.strip()
+        if not text or text.startswith("#") or text.startswith("```"):
+            continue
+        return text[:200]
+    return ""
+
 
 # Category workflows and tips
 CATEGORY_GUIDES = {
@@ -439,9 +542,11 @@ def discover_skills(skills_dir: Path) -> dict:
         fm = parse_frontmatter(skill_md)
         description = fm.get('description', '')
 
-        # Skip if no description
+        # Fallback if description is missing from frontmatter
         if not description:
-            continue
+            description = extract_fallback_description(skill_md)
+        if not description:
+            description = "No description provided."
 
         # Clean description (remove [CK] prefix, emoji indicators)
         clean_desc = re.sub(r'^\[CK\]\s*', '', description).strip()
@@ -487,6 +592,8 @@ def detect_intent(input_str: str, categories: list) -> str:
         # Exception: if it looks like a command (has colon), treat as command
         if ':' in input_str:
             return "command"
+        if resolve_subcommand(input_str):
+            return "command"
         return "task"
 
     # Single word: check if it's a known category from discovered commands
@@ -513,6 +620,10 @@ def detect_intent(input_str: str, categories: list) -> str:
     if ':' in input_str:
         return "command"
 
+    # Single-token alias that maps to known subcommand (e.g., review:codebase)
+    if resolve_subcommand(input_str):
+        return "command"
+
     return "search"
 
 
@@ -536,7 +647,7 @@ def show_overview(data: dict, prefix: str) -> None:
     print()
     print("**Common Workflows:**")
     print(f"- New feature: `/{prefix}plan` → `/{prefix}cook` → `/{prefix}test`")
-    print(f"- Review: `/{prefix}review` → `/{prefix}watzup`")
+    print(f"- Review: `/{prefix}code-review` → `/{prefix}watzup`")
     print()
     print("**Categories:**")
     # Merge discovered command categories with skill-only categories from CATEGORY_GUIDES
@@ -625,18 +736,28 @@ def show_category_guide(data: dict, category: str, prefix: str) -> None:
 
 def show_command(data: dict, command: str, prefix: str) -> None:
     """Display skill details."""
-    emit_output_type("command-details")
-
     commands = data["commands"]
 
+    subcommand = resolve_subcommand(command)
+    if subcommand:
+        emit_output_type("command-details")
+        print(f"# `{subcommand['name']}`")
+        print()
+        print(subcommand["description"])
+        print()
+        print(f"**Category:** {subcommand['category']}")
+        print()
+        print(f"**Usage:** `{subcommand['usage']}`")
+        return
+
     # Normalize search term
-    search = command.lower().replace("/", "").replace(":", "").replace("-", "")
+    search = normalize_command_query(command).replace(":", "").replace("-", "").replace(" ", "")
 
     found = None
     for cmds in commands.values():
         for cmd in cmds:
             # Normalize skill name for comparison
-            name = cmd["name"].lower().replace("/", "").replace("-", "")
+            name = normalize_command_query(cmd["name"]).replace("-", "").replace(" ", "")
             if name == search:
                 found = cmd
                 break
@@ -644,11 +765,15 @@ def show_command(data: dict, command: str, prefix: str) -> None:
             break
 
     if not found:
-        print(f"Skill '{command}' not found.")
-        print()
-        do_search(data, command.replace(":", " "), prefix)
+        if ":" in command:
+            suggested = normalize_command_query(command.replace(":", " "))
+            if suggested in SUBCOMMAND_DETAILS:
+                print(f"Legacy ':' syntax detected. Try: `{suggested}`")
+                print()
+        do_search(data, command.replace(":", " "), prefix, emit_marker=True)
         return
 
+    emit_output_type("command-details")
     print(f"# `{found['name']}`")
     print()
     print(found['description'])
@@ -667,9 +792,10 @@ def show_command(data: dict, command: str, prefix: str) -> None:
             print(f"**Related:** {related_names}")
 
 
-def do_search(data: dict, term: str, prefix: str) -> None:
+def do_search(data: dict, term: str, prefix: str, emit_marker: bool = True) -> None:
     """Search commands by keyword."""
-    emit_output_type("search-results")
+    if emit_marker:
+        emit_output_type("search-results")
 
     commands = data["commands"]
     term_lower = term.lower()
@@ -695,8 +821,6 @@ def do_search(data: dict, term: str, prefix: str) -> None:
 
 def format_disambiguation(task: str, candidates: list) -> None:
     """Output disambiguation prompt for close-scoring categories."""
-    emit_output_type("task-recommendations")
-
     print(f"# Clarify: {task}")
     print()
     print("Your query matches multiple categories. Which did you mean?")
