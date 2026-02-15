@@ -14,7 +14,8 @@ ClaudeKit Engineer is a comprehensive boilerplate template for building professi
 claudekit-engineer/
 ├── .claude/               # Claude Code configuration
 │   ├── agents/           # Specialized agent definitions (14 agents)
-│   ├── commands/         # Slash command implementations (50+ commands)
+│   ├── command-archive/  # Archived legacy command definitions
+│   ├── commands/         # Reserved compatibility directory (empty/minimal)
 │   ├── hooks/            # Git hooks and scripts
 │   ├── skills/           # Specialized skills library (20+ skills)
 │   └── workflows/        # Development workflow definitions
@@ -70,7 +71,7 @@ claudekit-engineer/
 - `mcp-manager.md` - MCP server management
 - `code-simplifier.md` - Code optimization and simplification
 
-### 2. Slash Commands System (Command Directories)
+### 2. Slash Commands System (Skill-Backed)
 
 **Core Development Commands**:
 - `/plan` - Research and planning
@@ -82,12 +83,12 @@ claudekit-engineer/
 - `/debug` - Issue debugging
 - `/fix` - Bug fixes
 
-**Command Directories** (`.claude/commands/`):
+**Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
-- `docs/` - Documentation commands
+- `docs/` - Documentation workflows
 - `plan/` - Planning variants
-- `review/` - Code review workflows
-- `test/` - Testing commands
+- `code-review/` - Code review workflows
+- `test/` - Testing workflows
 
 ### 3. Skills Library (38 Skills)
 
