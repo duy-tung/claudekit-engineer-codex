@@ -1,12 +1,24 @@
 ---
 name: docs
 description: "[CK] Analyze codebase and manage project documentation — init, update, summarize."
-argument-hint: "[init|update|summarize] [options]"
+argument-hint: "init|update|summarize"
 ---
 
 # Documentation Management
 
 Analyze codebase and manage project documentation through scouting, analysis, and structured doc generation.
+
+## Default (No Arguments)
+
+If invoked without arguments, use `AskUserQuestion` to present available documentation operations:
+
+| Operation | Description |
+|-----------|-------------|
+| `init` | Analyze codebase & create initial docs |
+| `update` | Analyze changes & update docs |
+| `summarize` | Quick codebase summary |
+
+Present as options via `AskUserQuestion` with header "Documentation Operation", question "What would you like to do?".
 
 ## Subcommands
 

@@ -1,11 +1,24 @@
 ---
 name: code-review
 description: "[CK] Review code quality, receive feedback with technical rigor, verify completion claims. Use before PRs, after implementing features, when claiming task completion. Includes scout-based edge case detection and native Task pipeline orchestration."
+argument-hint: "[context] OR codebase [parallel]"
 ---
 
 # Code Review
 
 Guide proper code review practices emphasizing technical rigor, evidence-based claims, and verification over performative responses.
+
+## Default (No Arguments)
+
+If invoked with context (recent changes/PR), proceed with review. If invoked WITHOUT arguments, use `AskUserQuestion` to present available review operations:
+
+| Operation | Description |
+|-----------|-------------|
+| `(default)` | Review recent changes/PR |
+| `codebase` | Full codebase scan & analysis |
+| `codebase parallel` | Parallel multi-reviewer audit |
+
+Present as options via `AskUserQuestion` with header "Review Operation", question "What would you like to do?".
 
 ## Core Principle
 

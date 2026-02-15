@@ -1,12 +1,27 @@
 ---
 name: preview
 description: "[CK] View files/directories OR generate visual explanations, slides, diagrams."
-argument-hint: "[path|--explain|--slides|--diagram|--ascii] [topic]"
+argument-hint: "[path] OR --explain|--slides|--diagram|--ascii [topic]"
 ---
 
 # Preview
 
 Universal viewer + visual generator. View existing content OR generate new visual explanations.
+
+## Default (No Arguments)
+
+If invoked without arguments, use `AskUserQuestion` to present available preview operations:
+
+| Operation | Description |
+|-----------|-------------|
+| `(view)` | View a file or directory |
+| `--explain` | Generate visual explanation |
+| `--slides` | Generate presentation slides |
+| `--diagram` | Generate architecture diagram |
+| `--ascii` | Terminal-friendly diagram |
+| `--stop` | Stop preview server |
+
+Present as options via `AskUserQuestion` with header "Preview Operation", question "What would you like to do?".
 
 ## Usage
 

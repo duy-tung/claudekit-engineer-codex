@@ -1,12 +1,26 @@
 ---
 name: plan
 description: "[CK] Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
+argument-hint: "[task] OR archive|red-team|validate"
 license: MIT
 ---
 
 # Planning
 
 Create detailed technical implementation plans through research, codebase analysis, solution design, and comprehensive documentation.
+
+## Default (No Arguments)
+
+If invoked with a task description, proceed with planning workflow. If invoked WITHOUT arguments or with unclear intent, use `AskUserQuestion` to present available operations:
+
+| Operation | Description |
+|-----------|-------------|
+| `(default)` | Create implementation plan for a task |
+| `archive` | Write journal entry & archive plans |
+| `red-team` | Adversarial plan review |
+| `validate` | Critical questions interview |
+
+Present as options via `AskUserQuestion` with header "Planning Operation", question "What would you like to do?".
 
 ## Workflow Modes
 
