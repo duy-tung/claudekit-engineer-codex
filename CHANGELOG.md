@@ -1,3 +1,18 @@
+## [2.11.0-beta.26](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.25...v2.11.0-beta.26) (2026-02-19)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** context-aware path extraction with heredoc detection ([c8b1e4b](https://github.com/claudekit/claudekit-engineer/commit/c8b1e4bb8b6678a7d4638809a688b986470e7288))
+* **hooks:** detect **/*.ext broad glob patterns ([599eaff](https://github.com/claudekit/claudekit-engineer/commit/599eaff8b9b457d54b1df3c6051ae0ab2edf04c8))
+* **hooks:** normalize absolute and relative paths in scout-block matcher ([41f8df1](https://github.com/claudekit/claudekit-engineer/commit/41f8df1c435231f1e6ba3bc28dbf90a813585798))
+* **hooks:** resolve compound command and allowlist edge cases ([6db7d7b](https://github.com/claudekit/claudekit-engineer/commit/6db7d7b766e377b34cfc00d49d232b5c336f3707))
+
+
+### ✅ Tests
+
+* **hooks:** add exhaustive scout-block test suite (308 tests) ([0eb539f](https://github.com/claudekit/claudekit-engineer/commit/0eb539f8bf27ed8d43de578290cfa2dfe4c06dbd))
+
 ## [2.11.0-beta.25](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0-beta.24...v2.11.0-beta.25) (2026-02-13)
 
 
