@@ -15,8 +15,6 @@ Skills can exist in **project-scope** or **user-scope**. Priority: project-scope
 SKILL_DIR=""
 if [ -d "${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts" ]; then
   SKILL_DIR="${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts"
-elif [ -d "${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts" ]; then
-  SKILL_DIR="${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts"
 fi
 cd "$SKILL_DIR"
 ```

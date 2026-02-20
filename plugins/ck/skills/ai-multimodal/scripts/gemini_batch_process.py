@@ -80,8 +80,8 @@ def find_api_key() -> Optional[str]:
 
     Priority order (highest to lowest):
     1. process.env (runtime environment variables)
-    2. PROJECT/${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal/.env (skill-specific)
-    3. PROJECT/${CLAUDE_PLUGIN_ROOT}/skills/.env (shared skills)
+    2. ${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal/.env (skill-specific)
+    3. ${CLAUDE_PLUGIN_ROOT}/skills/.env (shared skills)
     4. PROJECT/.claude/.env (project global)
     5. ${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal/.env (user skill-specific)
     6. ${CLAUDE_PLUGIN_ROOT}/skills/.env (user shared)
