@@ -161,7 +161,7 @@ Returns structured JSON: `{"server":"puppeteer","tool":"screenshot","success":tr
 
 **Method 2: Scripts**
 ```bash
-cd .claude/skills/mcp-management/scripts && npm install
+cd ${CLAUDE_PLUGIN_ROOT}/skills/mcp-management/scripts && npm install
 npx tsx cli.ts list-tools  # Saves to assets/tools.json
 npx tsx cli.ts call-tool memory create_entities '{"entities":[...]}'
 ```

@@ -92,6 +92,6 @@ cat llms.txt | node scripts/analyze-llms-txt.js -  # → {totalUrls, distributio
 
 ## Environment
 
-Scripts load `.env`: `process.env` > `.claude/skills/docs-seeker/.env` > `.claude/skills/.env` > `.claude/.env`
+Scripts load `.env`: `process.env` > `${CLAUDE_PLUGIN_ROOT}/skills/docs-seeker/.env` > `${CLAUDE_PLUGIN_ROOT}/skills/.env` > `.claude/.env`
 
 See `.env.example` for configuration options.

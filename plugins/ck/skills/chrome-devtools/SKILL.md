@@ -16,10 +16,10 @@ Skills can exist in **project-scope** or **user-scope**. Priority: project-scope
 ```bash
 # Detect skill location (no cd needed - scripts use __dirname for paths)
 SKILL_DIR=""
-if [ -d ".claude/skills/chrome-devtools/scripts" ]; then
-  SKILL_DIR=".claude/skills/chrome-devtools/scripts"
-elif [ -d "$HOME/.claude/skills/chrome-devtools/scripts" ]; then
-  SKILL_DIR="$HOME/.claude/skills/chrome-devtools/scripts"
+if [ -d "${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts" ]; then
+  SKILL_DIR="${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts"
+elif [ -d "${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts" ]; then
+  SKILL_DIR="${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts"
 fi
 # Run scripts with full path: node "$SKILL_DIR/script.js" --args
 ```
@@ -211,7 +211,7 @@ node "$SKILL_DIR/navigate.js" --url about:blank --close true
 ## Available Scripts
 
 Skills can exist in **project-scope** or **user-scope**. Priority: project-scope > user-scope.
-All in `.claude/skills/chrome-devtools/scripts/`:
+All in `${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts/`:
 
 | Script | Purpose |
 |--------|---------|
@@ -386,7 +386,7 @@ If script fails:
 
 ```bash
 # 1. Capture current state (without navigating to preserve state)
-node "$SKILL_DIR/screenshot.js" --output ./.claude/skills/chrome-devtools/screenshots/debug.png
+node "$SKILL_DIR/screenshot.js" --output ./${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/screenshots/debug.png
 
 # 2. Get console errors
 node "$SKILL_DIR/console.js" --url about:blank --types error --duration 1000

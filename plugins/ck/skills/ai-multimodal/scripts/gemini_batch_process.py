@@ -80,11 +80,11 @@ def find_api_key() -> Optional[str]:
 
     Priority order (highest to lowest):
     1. process.env (runtime environment variables)
-    2. PROJECT/.claude/skills/ai-multimodal/.env (skill-specific)
-    3. PROJECT/.claude/skills/.env (shared skills)
+    2. PROJECT/${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal/.env (skill-specific)
+    3. PROJECT/${CLAUDE_PLUGIN_ROOT}/skills/.env (shared skills)
     4. PROJECT/.claude/.env (project global)
-    5. ~/.claude/skills/ai-multimodal/.env (user skill-specific)
-    6. ~/.claude/skills/.env (user shared)
+    5. ${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal/.env (user skill-specific)
+    6. ${CLAUDE_PLUGIN_ROOT}/skills/.env (user shared)
     7. ~/.claude/.env (user global)
     """
     if CENTRALIZED_RESOLVER_AVAILABLE:
@@ -738,7 +738,7 @@ def batch_process(
         print("1. Run setup checker: python scripts/check_setup.py")
         print("2. Show hierarchy: python ~/.claude/scripts/resolve_env.py --show-hierarchy --skill ai-multimodal")
         print("3. Quick setup: export GEMINI_API_KEY='your-key'")
-        print("4. Create .env: cd ~/.claude/skills/ai-multimodal && cp .env.example .env")
+        print("4. Create .env: cd ${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal && cp .env.example .env")
         print("\nFor key rotation, add multiple keys:")
         print("   GEMINI_API_KEY=key1")
         print("   GEMINI_API_KEY_2=key2")

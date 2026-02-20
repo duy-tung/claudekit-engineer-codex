@@ -68,14 +68,14 @@ Example: `/ck:preview --explain --slides topic` → `--explain` mode, topic = "-
 
 **IMPORTANT:** Run server as Claude Code background task using `run_in_background: true` with the Bash tool. This makes the server visible in `/tasks` and manageable via `KillShell`.
 
-The skill is located at `.claude/skills/markdown-novel-viewer/`.
+The skill is located at `${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/`.
 
 ### Stop Server
 
 If `--stop` flag is provided:
 
 ```bash
-node .claude/skills/markdown-novel-viewer/scripts/server.cjs --stop
+node ${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/scripts/server.cjs --stop
 ```
 
 ### Start Server
@@ -87,14 +87,14 @@ Otherwise, run the `markdown-novel-viewer` server as CC background task with `--
 INPUT_PATH="{{path}}"
 if [[ -d "$INPUT_PATH" ]]; then
   # Directory mode - browse
-  node .claude/skills/markdown-novel-viewer/scripts/server.cjs \
+  node ${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/scripts/server.cjs \
     --dir "$INPUT_PATH" \
     --host 0.0.0.0 \
     --open \
     --foreground
 else
   # File mode - view markdown
-  node .claude/skills/markdown-novel-viewer/scripts/server.cjs \
+  node ${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/scripts/server.cjs \
     --file "$INPUT_PATH" \
     --host 0.0.0.0 \
     --open \
@@ -110,7 +110,7 @@ fi
 Example Bash tool call:
 ```json
 {
-  "command": "node .claude/skills/markdown-novel-viewer/scripts/server.cjs --dir \"path\" --host 0.0.0.0 --open --foreground",
+  "command": "node ${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/scripts/server.cjs --dir \"path\" --host 0.0.0.0 --open --foreground",
   "run_in_background": true,
   "timeout": 300000,
   "description": "Start preview server in background"
@@ -255,7 +255,7 @@ flowchart TB
 1. Write generated content to determined path
 2. Start preview server with the generated file:
 ```bash
-node .claude/skills/markdown-novel-viewer/scripts/server.cjs \
+node ${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/scripts/server.cjs \
   --file "<generated-file-path>" \
   --host 0.0.0.0 \
   --open \

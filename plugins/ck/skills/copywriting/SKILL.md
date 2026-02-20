@@ -20,8 +20,8 @@ Load: `references/writing-styles.md` | Full catalog: `assets/writing-styles/defa
 
 **Extract styles from multi-format files:**
 ```bash
-python .claude/skills/copywriting/scripts/extract-writing-styles.py --list        # List files
-python .claude/skills/copywriting/scripts/extract-writing-styles.py --style <name> # Extract style
+python ${CLAUDE_PLUGIN_ROOT}/skills/copywriting/scripts/extract-writing-styles.py --list        # List files
+python ${CLAUDE_PLUGIN_ROOT}/skills/copywriting/scripts/extract-writing-styles.py --style <name> # Extract style
 ```
 
 **Formats:** `.md` `.txt` `.pdf` `.docx` `.xlsx` `.pptx` `.jpg` `.png` `.mp4` (docs/media need `GEMINI_API_KEY`)

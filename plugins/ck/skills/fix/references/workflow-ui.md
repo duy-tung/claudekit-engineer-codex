@@ -9,9 +9,9 @@ For fixing visual/UI issues. Requires design skills. Uses native Claude Tasks fo
 
 ## Pre-fix Research
 ```bash
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<product-type>" --domain product
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<style>" --domain style
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "accessibility" --domain ux
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "<product-type>" --domain product
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "<style>" --domain style
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "accessibility" --domain ux
 ```
 
 ## Task Setup (Before Starting)

@@ -30,8 +30,8 @@ def load_env_files():
 
     Priority order (highest to lowest):
     1. process.env (runtime environment variables)
-    2. .claude/skills/ai-multimodal/.env (skill-specific config)
-    3. .claude/skills/.env (shared skills config)
+    2. ${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal/.env (skill-specific config)
+    3. ${CLAUDE_PLUGIN_ROOT}/skills/.env (shared skills config)
     4. .claude/.env (Claude global config)
     """
     if not load_dotenv:
@@ -39,7 +39,7 @@ def load_env_files():
 
     # Determine base paths
     script_dir = Path(__file__).parent
-    skill_dir = script_dir.parent  # .claude/skills/ai-multimodal
+    skill_dir = script_dir.parent  # ${CLAUDE_PLUGIN_ROOT}/skills/ai-multimodal
     skills_dir = skill_dir.parent   # .claude/skills
     claude_dir = skills_dir.parent  # .claude
 

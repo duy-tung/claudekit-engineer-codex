@@ -5,7 +5,7 @@ Browser-based visual testing using `chrome-devtools` skill. Requires skill to be
 ## Prerequisites
 
 ```bash
-SKILL_DIR="$HOME/.claude/skills/chrome-devtools/scripts"
+SKILL_DIR="${CLAUDE_PLUGIN_ROOT}/skills/chrome-devtools/scripts"
 # Install deps if first time
 npm install --prefix "$SKILL_DIR" 2>/dev/null
 ```

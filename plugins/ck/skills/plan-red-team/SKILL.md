@@ -183,7 +183,7 @@ After providing the summary, remind the user:
 
 > **Plan updated with red-team findings.** Consider running:
 > ```
-> /plan:validate {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> /ck:plan-validate {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
 > to re-validate decisions after changes, then:
 > ```
@@ -196,6 +196,6 @@ After providing the summary, remind the user:
 **IMPORTANT:** Reviewers must be HOSTILE, not helpful. No softening language.
 **IMPORTANT:** Deduplicate aggressively — reviewers will find overlapping issues.
 **IMPORTANT:** Adjudication must be evidence-based. Don't reject valid findings to be nice.
-**IMPORTANT:** If plan has a Validation Log from `/plan:validate`, reviewers should check if validation answers introduced new assumptions.
+**IMPORTANT:** If plan has a Validation Log from `/ck:plan-validate`, reviewers should check if validation answers introduced new assumptions.
 **IMPORTANT:** Sacrifice grammar for concision in reports.
 **IMPORTANT:** Reviewers read plan files directly — do NOT duplicate content in a summary.

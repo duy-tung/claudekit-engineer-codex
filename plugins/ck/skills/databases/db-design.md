@@ -173,7 +173,7 @@ Before delivering final DDL:
 ## File Structure
 
 ```
-.claude/skills/databases/
+${CLAUDE_PLUGIN_ROOT}/skills/databases/
 ├── SKILL.md                  # Skill description (entry + execution process + checklist)
 ├── db-design.md              # This file 
 ├── transactional.md          # OLTP design rules

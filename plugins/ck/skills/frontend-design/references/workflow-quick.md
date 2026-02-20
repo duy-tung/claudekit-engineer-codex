@@ -8,10 +8,10 @@ Rapid design creation with minimal planning overhead.
 ## Initial Research
 Run `ui-ux-pro-max` searches:
 ```bash
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<product-type>" --domain product
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<style-keywords>" --domain style
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<mood>" --domain typography
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<industry>" --domain color
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "<product-type>" --domain product
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "<style-keywords>" --domain style
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "<mood>" --domain typography
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py "<industry>" --domain color
 ```
 
 ## Workflow Steps

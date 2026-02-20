@@ -19,7 +19,7 @@ This skill enables Claude to discover, analyze, and execute MCP server capabilit
 ### 1. Install Dependencies
 
 ```bash
-cd .claude/skills/mcp-management/scripts
+cd ${CLAUDE_PLUGIN_ROOT}/skills/mcp-management/scripts
 npm install
 ```
 
@@ -47,7 +47,7 @@ See `.claude/.mcp.json.example` for more examples.
 ### 3. Test Connection
 
 ```bash
-cd .claude/skills/mcp-management/scripts
+cd ${CLAUDE_PLUGIN_ROOT}/skills/mcp-management/scripts
 npx ts-node cli.ts list-tools
 ```
 
@@ -145,8 +145,8 @@ Command-line interface:
 Scripts check for variables in this order:
 
 1. `process.env` (runtime)
-2. `.claude/skills/mcp-management/.env`
-3. `.claude/skills/.env`
+2. `${CLAUDE_PLUGIN_ROOT}/skills/mcp-management/.env`
+3. `${CLAUDE_PLUGIN_ROOT}/skills/.env`
 4. `.claude/.env`
 
 ### MCP Config Format
