@@ -1,23 +1,33 @@
 # Codebase Summary
 
-**Last Updated**: 2026-01-28
-**Version**: 2.9.0-beta.2
+**Last Updated**: 2026-02-20
+**Version**: 3.0.0-beta.1 (Plugin namespace migration)
 **Repository**: [claudekit/claudekit-engineer](https://github.com/claudekit/claudekit-engineer)
 
 ## Overview
 
 ClaudeKit Engineer is a comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code). It provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
 
+**Plugin Migration (v3.0.0-beta.1)**: Skills are now available through the CC Plugin system via `/ck:cook`, `/ck:debug`, etc. Fallback `.claude/skills/` directory preserved for backward compatibility. Plugin namespace at `plugins/ck/` is primary distribution location.
+
 ## Project Structure
 
 ```
 claudekit-engineer/
-├── .claude/               # Claude Code configuration
+├── .claude/               # Claude Code configuration (fallback)
 │   ├── agents/           # Specialized agent definitions (14 agents)
-│   ├── commands/         # Slash command implementations (50+ commands)
+│   ├── commands/         # Slash command implementations (legacy)
 │   ├── hooks/            # Git hooks and scripts
-│   ├── skills/           # Specialized skills library (20+ skills)
+│   ├── skills/           # Specialized skills library (fallback)
+│   ├── metadata.json     # Migration metadata with deletions
 │   └── workflows/        # Development workflow definitions
+├── .claude-plugin/       # Plugin marketplace configuration
+│   └── marketplace.json  # Plugin registry pointing to ./plugins/ck
+├── plugins/              # CC Plugin system namespace
+│   └── ck/               # ClaudeKit plugin
+│       ├── .claude-plugin/
+│       │   └── plugin.json      # Plugin metadata
+│       └── skills/              # Plugin namespace skills (primary)
 ├── .github/             # GitHub Actions workflows
 │   └── workflows/       # CI/CD automation
 ├── docs/                # Project documentation

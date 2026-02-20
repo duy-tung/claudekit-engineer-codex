@@ -1,7 +1,7 @@
 # Code Standards & Codebase Structure
 
-**Last Updated**: 2025-12-28
-**Version**: 2.2.0-beta.4
+**Last Updated**: 2026-02-20
+**Version**: 2.3.0-beta.1 (Plugin namespace migration)
 **Applies To**: All code within ClaudeKit Engineer project
 
 ## Overview
@@ -650,6 +650,11 @@ Using planner agent to research and create comprehensive plan for: $1
 
 ### Skill Definition Files
 
+**Location Conventions** (v3.0.0-beta.1):
+- **Primary**: `plugins/ck/skills/[skill-name]/`
+- **Fallback**: `.claude/skills/[skill-name]/` (legacy support)
+- Both directories supported; plugin namespace takes precedence
+
 **Structure**:
 ```markdown
 # Skill Name
@@ -686,6 +691,16 @@ Mistakes to avoid
 - Official docs
 - Tutorials
 - References
+```
+
+**Skill Metadata** (plugin namespace only):
+```json
+{
+  "name": "skill-name",
+  "version": "1.0.0",
+  "description": "Brief skill description",
+  "keywords": ["tag1", "tag2"]
+}
 ```
 
 ## Hook Implementation Standards

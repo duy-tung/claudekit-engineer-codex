@@ -1,7 +1,7 @@
 # System Architecture
 
-**Last Updated**: 2026-01-28
-**Version**: 2.9.0-beta.2
+**Last Updated**: 2026-02-20
+**Version**: 3.0.0-beta.1 (Plugin namespace migration)
 **Project**: ClaudeKit Engineer
 
 ## Overview
@@ -245,22 +245,42 @@ Explore different approaches simultaneously
 6. Docs Manager: Validate naming conventions
 7. Docs Manager: Create update report
 
-### 5. Skills Layer
+### 5. Skills & Plugin Layer
 
 #### 5.1 Skill Architecture
 
 **Purpose**: Reusable knowledge modules for specific technologies
 
-**Structure**:
+**Dual Structure** (v3.0.0-beta.1):
 ```
-.claude/skills/
+.claude/skills/              # Fallback distribution (legacy support)
 └── [skill-name]/
     ├── SKILL.md           # Main skill definition
     ├── references/        # Supporting documentation
     │   ├── api-ref.md
     │   └── examples.md
     └── scripts/           # Utility scripts (if applicable)
+
+plugins/ck/skills/          # Plugin namespace (primary distribution)
+└── [skill-name]/
+    ├── SKILL.md           # Main skill definition
+    ├── metadata.json      # Skill metadata
+    ├── references/        # Supporting documentation
+    │   ├── api-ref.md
+    │   └── examples.md
+    └── scripts/           # Utility scripts (if applicable)
 ```
+
+**Plugin Configuration**:
+```
+.claude-plugin/marketplace.json    # Marketplace registry
+plugins/ck/.claude-plugin/plugin.json   # Plugin metadata
+```
+
+**Access Patterns**:
+- **Plugin namespace** (when installed): `/ck:cook`, `/ck:debug`, etc.
+- **Fallback direct** (if plugin not available): `/cook`, `/debug`, etc.
+- Both patterns supported; plugin namespace takes precedence
 
 **Skill Categories**:
 - **Authentication**: better-auth
@@ -280,18 +300,36 @@ Explore different approaches simultaneously
 
 #### 5.2 Skill Invocation
 
-**Invocation**: `Skill` tool in CLI
-**Usage**: Agents invoke skills to access specialized knowledge
-**Example**:
+**Invocation Patterns**:
+
+**Plugin Namespace** (preferred):
 ```
-Planner needs Next.js expertise
+Invokes "/ck:cook" (via CC plugin system)
   ↓
-Invokes "nextjs" skill
+Plugin system routes to plugins/ck/skills/cook/
   ↓
 Skill provides implementation guidance
   ↓
-Planner incorporates into plan
+Agent incorporates into workflow
 ```
+
+**Fallback Direct** (backward compatible):
+```
+Invokes "/cook" or Skill tool
+  ↓
+Claude Code loads from .claude/skills/cook/ or plugins/ck/skills/cook/
+  ↓
+Skill provides implementation guidance
+  ↓
+Agent incorporates into workflow
+```
+
+**Plugin Resolution Order**:
+1. Check CC plugin namespace (`/ck:*`)
+2. Check `plugins/ck/skills/` directory
+3. Fallback to `.claude/skills/` directory
+
+**Usage**: Agents invoke skills to access specialized knowledge via either pattern
 
 ### 6. Integration Layer
 

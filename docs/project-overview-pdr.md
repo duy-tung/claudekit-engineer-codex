@@ -1,8 +1,8 @@
 # Project Overview & Product Development Requirements (PDR)
 
 **Project Name**: ClaudeKit Engineer
-**Version**: 2.9.0-beta.2
-**Last Updated**: 2026-01-28
+**Version**: 3.0.0-beta.1 (Plugin namespace migration)
+**Last Updated**: 2026-02-20
 **Status**: Active Development
 **Repository**: https://github.com/claudekit/claudekit-engineer
 
@@ -100,7 +100,12 @@ Commands are organized into modular directories:
 
 ### 3. Extensive Skills Library (47+ Skills)
 
-**Organized by Domain** (`.claude/skills/`):
+**Distribution** (v3.0.0-beta.1):
+- **Plugin Namespace**: `plugins/ck/skills/` + `/ck:skill-name` invocation (primary)
+- **Fallback**: `.claude/skills/` for backward compatibility
+- Skills available as both plugin-namespaced (`/ck:cook`) and direct (`/cook`)
+
+**Organized by Domain** (`.claude/skills/` or `plugins/ck/skills/`):
 
 **AI & Vision**: ai-artist, ai-multimodal, agent-browser
 **Authentication**: better-auth
