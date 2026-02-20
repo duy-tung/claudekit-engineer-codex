@@ -1,0 +1,16 @@
+{
+  "name": "claudekit",
+  "description": "ClaudeKit Engineer skill collection — private marketplace",
+  "owner": {
+    "name": "ClaudeKit",
+    "url": "https://github.com/claudekit"
+  },
+  "plugins": [
+    {
+      "name": "ck",
+      "source": "./plugins/ck",
+      "description": "ClaudeKit skills — AI-powered development workflows",
+      "version": "1.0.0"
+    }
+  ]
+}
