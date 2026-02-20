@@ -823,6 +823,29 @@ def main():
                 skill_count += 1
         print(f"  Copied {skill_count} skills")
 
+    # Also copy plugin skills from plugins/ck/skills/ (skills not in .claude/skills/)
+    plugin_skills_dir = project_root / "plugins" / "ck" / "skills"
+    if plugin_skills_dir.exists():
+        plugin_skill_count = 0
+        for skill_dir in plugin_skills_dir.iterdir():
+            if skill_dir.is_dir() and (skill_dir / "SKILL.md").exists():
+                skill_name = skill_dir.name
+                target_dir = opencode_skills_dir / skill_name
+
+                if target_dir.exists():
+                    continue  # Already copied from .claude/skills/
+
+                if args.dry_run:
+                    print(f"  [DRY-RUN] Would copy plugin skill: {skill_name}")
+                else:
+                    shutil.copytree(skill_dir, target_dir)
+                    replace_claude_paths_in_dir(target_dir)
+                    if args.verbose:
+                        print(f"  Copied (plugin): {skill_name}")
+                plugin_skill_count += 1
+        if plugin_skill_count > 0:
+            print(f"  Copied {plugin_skill_count} plugin-only skills")
+
     # Copy workflows from .claude/workflows/ to .opencode/workflow/
     claude_workflows_dir = claude_dir / "workflows"
     opencode_workflows_dir = opencode_dir / "workflows"
