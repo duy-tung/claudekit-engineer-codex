@@ -1,3 +1,10 @@
+## [2.11.0](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0) (2026-02-20)
+
+
+### 🚀 Features
+
+* **hooks:** add always-on diagnostics logging with crash wrappers ([#481](https://github.com/claudekit/claudekit-engineer/issues/481)) ([ca73800](https://github.com/claudekit/claudekit-engineer/commit/ca738003e0a94f293b7e4a97631f8abd095beb0e)), closes [#478](https://github.com/claudekit/claudekit-engineer/issues/478)
+
 ## [2.10.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.0...v2.10.1) (2026-02-05)
 
 
