@@ -159,6 +159,8 @@ function main() {
 
       // Strip .claude/ prefix for files inside .claude directory
       // CLI tracks files relative to .claude/, not project root
+      // Note: .claude-plugin/ and plugins/ paths are NOT stripped —
+      // they're read from extractDir by plugin-installer.ts, not tracked by CLI sync.
       if (relativePath.startsWith('.claude/')) {
         relativePath = relativePath.slice('.claude/'.length);
       }
