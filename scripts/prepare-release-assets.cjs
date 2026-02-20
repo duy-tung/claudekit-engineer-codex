@@ -123,7 +123,9 @@ const { execSync } = require('child_process');
 
     const archiveTargets = [
       '.claude',
+      '.claude-plugin',
       '.opencode',
+      'plugins',
       'plans/templates',
       '.gitignore',
       '.repomixignore',
