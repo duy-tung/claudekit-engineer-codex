@@ -12,15 +12,17 @@
  * - Resets counter when simplifier is mentioned in conversation
  */
 
+// Crash wrapper — catches require() failures and logs them
+try {
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
 
-// Early exit if hook disabled in config
-if (!isHookEnabled('post-edit-simplify-reminder')) {
-  process.exit(0);
-}
+  // Early exit if hook disabled in config
+  if (!isHookEnabled('post-edit-simplify-reminder')) {
+    process.exit(0);
+  }
 
 // Session tracking file
 const SESSION_TRACK_FILE = path.join(os.tmpdir(), 'ck-simplify-session.json');
@@ -133,6 +135,18 @@ function main() {
     // On error, allow the operation to continue
     console.log(JSON.stringify({ continue: true }));
   }
-}
+  }
 
-main();
+  main();
+} catch (e) {
+  // Minimal crash logging (zero deps — only Node builtins)
+  try {
+    const fs = require('fs');
+    const p = require('path');
+    const logDir = p.join(__dirname, '.logs');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
+      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+  } catch (_) {}
+  process.exit(0); // fail-open
+}
