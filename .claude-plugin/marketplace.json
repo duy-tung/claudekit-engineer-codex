@@ -10,7 +10,7 @@
       "name": "ck",
       "source": "./plugins/ck",
       "description": "ClaudeKit skills — AI-powered development workflows",
-      "version": "1.0.0"
+      "version": "3.0.0-beta.1"
     }
   ]
 }
