@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0...v2.11.1) (2026-02-21)
+
+
+### 🐞 Bug Fixes
+
+* **release:** add hotfix commit type for distinct release note visibility ([b9d1de2](https://github.com/claudekit/claudekit-engineer/commit/b9d1de259e52bd707cb83ea2ea0bb55261ac22a0))
+
 ## [2.11.0](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0) (2026-02-20)
 
 
