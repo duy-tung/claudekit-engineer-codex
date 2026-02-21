@@ -1,3 +1,10 @@
+## [2.12.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.5...v2.12.0-beta.6) (2026-02-21)
+
+
+### 🚀 Features
+
+* add portable-manifest.json with Codex AGENTS.md to TOML path migration ([2e7b29a](https://github.com/claudekit/claudekit-engineer/commit/2e7b29a337fe165bf980ce969dab5e0783d2c8f5)), closes [mrgoonie/claudekit-cli#433](https://github.com/mrgoonie/claudekit-cli/issues/433) [#494](https://github.com/claudekit/claudekit-engineer/issues/494) [#498](https://github.com/claudekit/claudekit-engineer/issues/498)
+
 ## [2.12.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.4...v2.12.0-beta.5) (2026-02-21)
 
 
