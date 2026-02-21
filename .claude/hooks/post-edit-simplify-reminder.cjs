@@ -18,6 +18,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
+const { invalidateCache } = require('./lib/git-info-cache.cjs');
 
   // Early exit if hook disabled in config
   if (!isHookEnabled('post-edit-simplify-reminder')) {
@@ -90,10 +91,13 @@ function main() {
     // Only track edit operations
     const editTools = ['Edit', 'Write', 'MultiEdit'];
     if (!editTools.includes(toolName)) {
-      // Pass through without modification
       console.log(JSON.stringify({ continue: true }));
       return;
     }
+
+    // Invalidate git cache so statusline shows fresh state after file changes
+    // Use hookData.cwd (not process.cwd()) to handle subagent CWD mismatch
+    invalidateCache(hookData.cwd || process.cwd());
 
     // Load session data
     const session = loadSessionData();
