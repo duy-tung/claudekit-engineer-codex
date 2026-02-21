@@ -1,3 +1,10 @@
+## [2.12.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.4...v2.12.0-beta.5) (2026-02-21)
+
+
+### 🐞 Bug Fixes
+
+* restore ClaudeKit bot name in Discord notifications ([9c6fafc](https://github.com/claudekit/claudekit-engineer/commit/9c6fafc7263fe4dc12dca34b0c751cb3872f4031))
+
 ## [2.12.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.3...v2.12.0-beta.4) (2026-02-21)
 
 
