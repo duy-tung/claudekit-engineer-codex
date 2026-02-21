@@ -36,6 +36,7 @@ const betaConfig = {
         releaseRules: [
           { type: 'feat', release: 'minor' },
           { type: 'fix', release: 'patch' },
+          { type: 'hotfix', release: 'patch' },
           { type: 'perf', release: 'patch' },
           { type: 'docs', scope: 'README', release: 'patch' },
           { type: 'refactor', release: 'patch' },
@@ -50,6 +51,7 @@ const betaConfig = {
         presetConfig: {
           types: [
             { type: 'feat', section: '🚀 Features' },
+            { type: 'hotfix', section: '🔥 Hotfixes' },
             { type: 'fix', section: '🐞 Bug Fixes' },
             { type: 'docs', section: '📚 Documentation' },
             { type: 'style', section: '💄 Styles' },
@@ -111,6 +113,7 @@ const productionConfig = {
         releaseRules: [
           { type: 'feat', release: 'minor' },
           { type: 'fix', release: 'patch' },
+          { type: 'hotfix', release: 'patch' },
           { type: 'perf', release: 'patch' },
           { type: 'docs', scope: 'README', release: 'patch' },
           { type: 'refactor', release: 'patch' },
@@ -125,6 +128,7 @@ const productionConfig = {
         presetConfig: {
           types: [
             { type: 'feat', section: '🚀 Features' },
+            { type: 'hotfix', section: '🔥 Hotfixes' },
             { type: 'fix', section: '🐞 Bug Fixes' },
             { type: 'docs', section: '📚 Documentation' },
             { type: 'style', section: '💄 Styles' },
