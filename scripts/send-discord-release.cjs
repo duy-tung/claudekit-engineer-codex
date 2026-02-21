@@ -87,9 +87,10 @@ function createEmbed(release) {
   const title = isBeta ? `🧪 Beta Release ${release.version}` : `🚀 Release ${release.version}`;
   const url = `https://github.com/claudekit/claudekit-engineer/releases/tag/v${release.version}`;
 
-  // Map section names to emojis
+  // Fallback emoji map for section names WITHOUT embedded emojis
   const sectionEmojis = {
     'Features': '🚀',
+    'Hotfixes': '🔥',
     'Bug Fixes': '🐞',
     'Documentation': '📚',
     'Styles': '💄',
@@ -101,23 +102,35 @@ function createEmbed(release) {
     'Chores': '🔧'
   };
 
+  // Detect if string starts with an emoji (Unicode emoji range)
+  const startsWithEmoji = /^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/u;
+
   const fields = [];
 
   // Add sections as embed fields
   for (const [sectionName, items] of Object.entries(release.sections)) {
     if (items.length === 0) continue;
 
-    const emoji = sectionEmojis[sectionName] || '📌';
+    // If section name already has an emoji prefix (from .releaserc presetConfig),
+    // use it as-is. Otherwise, look up in fallback emoji map.
+    let fieldName;
+    if (startsWithEmoji.test(sectionName)) {
+      fieldName = sectionName;
+    } else {
+      const emoji = sectionEmojis[sectionName] || '📌';
+      fieldName = `${emoji} ${sectionName}`;
+    }
+
     let fieldValue = items.map(item => `• ${item}`).join('\n');
 
     // Discord field value max is 1024 characters
     if (fieldValue.length > 1024) {
       const truncateAt = fieldValue.lastIndexOf('\n', 1000);
-      fieldValue = fieldValue.substring(0, truncateAt) + '\n... *(truncated)*';
+      fieldValue = fieldValue.substring(0, truncateAt > 0 ? truncateAt : 1000) + '\n... *(truncated)*';
     }
 
     fields.push({
-      name: `${emoji} ${sectionName}`,
+      name: fieldName,
       value: fieldValue,
       inline: false
     });
