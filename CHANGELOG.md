@@ -1,3 +1,14 @@
+## [2.11.3](https://github.com/claudekit/claudekit-engineer/compare/v2.11.2...v2.11.3) (2026-02-21)
+
+
+### 🔥 Hotfixes
+
+* add Discord 25-field embed limit guard ([3f5e629](https://github.com/claudekit/claudekit-engineer/commit/3f5e629de10656c05ff3dbcfd44ab673e9cba472))
+* add empty-changelog guard and fix console output ([106a542](https://github.com/claudekit/claudekit-engineer/commit/106a542252cfcc1f14930e4e7c6673c0977c507c))
+* align Discord script with CLI fixes ([b915abe](https://github.com/claudekit/claudekit-engineer/commit/b915abef6512cb85776fb873ad50f0347a5ebecc))
+* fix double-emoji in Discord release notification section headers ([35fb3f8](https://github.com/claudekit/claudekit-engineer/commit/35fb3f87cfaa76b9314d4be1c85e461f4c89f331))
+* prevent double error log on timeout ([41ab992](https://github.com/claudekit/claudekit-engineer/commit/41ab992649de257d7791ddc8d0884ff8f4f70188))
+
 ## [2.11.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.1...v2.11.2) (2026-02-21)
 
 
