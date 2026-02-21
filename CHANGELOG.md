@@ -1,3 +1,10 @@
+## [2.12.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.1...v2.12.0-beta.2) (2026-02-21)
+
+
+### 🐞 Bug Fixes
+
+* **release:** add hotfix commit type for distinct release note visibility ([ff29d6f](https://github.com/claudekit/claudekit-engineer/commit/ff29d6f39a71e36b6f14891aa60eca074529a420))
+
 ## [2.12.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0...v2.12.0-beta.1) (2026-02-20)
 
 
