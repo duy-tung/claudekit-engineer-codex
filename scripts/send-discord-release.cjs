@@ -136,15 +136,6 @@ function createEmbed(release) {
     });
   }
 
-  // If no sections found, add a simple message
-  if (fields.length === 0) {
-    fields.push({
-      name: '📋 Release Notes',
-      value: 'Release completed successfully. See full changelog on GitHub.',
-      inline: false
-    });
-  }
-
   const embed = {
     title,
     url,
@@ -186,9 +177,9 @@ function sendToDiscord(embed) {
 
     res.on('end', () => {
       if (res.statusCode >= 200 && res.statusCode < 300) {
-        console.log('✅ Discord notification sent successfully');
+        console.log('[OK] Discord notification sent successfully');
       } else {
-        console.error(`❌ Discord webhook failed with status ${res.statusCode}`);
+        console.error(`[X] Discord webhook failed with status ${res.statusCode}`);
         console.error(data);
         process.exit(1);
       }
@@ -196,7 +187,7 @@ function sendToDiscord(embed) {
   });
 
   req.on('error', (error) => {
-    console.error('❌ Error sending Discord notification:', error);
+    console.error('[X] Error sending Discord notification:', error);
     process.exit(1);
   });
 
@@ -207,11 +198,17 @@ function sendToDiscord(embed) {
 // Main execution
 try {
   const release = extractLatestRelease();
-  console.log(`📦 Preparing ${releaseType} release notification for v${release.version}`);
+  console.log(`[i] Preparing ${releaseType} release notification for v${release.version}`);
+
+  const sectionCount = Object.values(release.sections).flat().length;
+  if (sectionCount === 0) {
+    console.log('[i] No changelog items found — skipping Discord notification');
+    process.exit(0);
+  }
 
   const embed = createEmbed(release);
   sendToDiscord(embed);
 } catch (error) {
-  console.error('❌ Error:', error);
+  console.error('[X] Error:', error);
   process.exit(1);
 }
