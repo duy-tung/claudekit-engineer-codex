@@ -1,5 +1,35 @@
 ## [2.12.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.1...v2.12.0-beta.2) (2026-02-21)
 
+## [2.11.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.1...v2.11.2) (2026-02-21)
+
+
+### 🔥 Hotfixes
+
+* **ci:** allow hotfix branches to PR directly to main ([3f51659](https://github.com/claudekit/claudekit-engineer/commit/3f516593c01165b7199ed348d4e392126d4a807c))
+* **hooks:** context-aware path extraction with heredoc detection ([08a1976](https://github.com/claudekit/claudekit-engineer/commit/08a197647a046d7f7c808941b9c81769c9b45e06))
+* **hooks:** detect **/*.ext broad glob patterns ([5af5b5c](https://github.com/claudekit/claudekit-engineer/commit/5af5b5ced5d760ed7cb16bdf7e3c9f1c18d36224))
+* **hooks:** normalize absolute and relative paths in scout-block matcher ([a6d25af](https://github.com/claudekit/claudekit-engineer/commit/a6d25af6e888e09b009a84b4a3e99e556c563d89))
+* **hooks:** reduce session-init command failures ([5bd3287](https://github.com/claudekit/claudekit-engineer/commit/5bd32872da4e6decdc5f698e25bad1b5c81157a1))
+* **hooks:** reduce Windows terminal freeze from excessive process spawning ([44e38b6](https://github.com/claudekit/claudekit-engineer/commit/44e38b65287c02f082d18f0be815479eded41294))
+* **hooks:** resolve compound command and allowlist edge cases ([257f2c2](https://github.com/claudekit/claudekit-engineer/commit/257f2c217367c120b506954b44ec2d0ab22d1262))
+* **hooks:** use absolute paths in buildRulesSection to prevent wrong plans/ directory ([88ef61a](https://github.com/claudekit/claudekit-engineer/commit/88ef61a31b9f5c98c87d75b44189d6762b6acbf6))
+
+## [2.11.1](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0...v2.11.1) (2026-02-21)
+
+
+### 🐞 Bug Fixes
+
+* **release:** add hotfix commit type for distinct release note visibility ([b9d1de2](https://github.com/claudekit/claudekit-engineer/commit/b9d1de259e52bd707cb83ea2ea0bb55261ac22a0))
+
+## [2.11.0](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0) (2026-02-20)
+
+
+### 🚀 Features
+
+* **hooks:** add always-on diagnostics logging with crash wrappers ([#481](https://github.com/claudekit/claudekit-engineer/issues/481)) ([ca73800](https://github.com/claudekit/claudekit-engineer/commit/ca738003e0a94f293b7e4a97631f8abd095beb0e)), closes [#478](https://github.com/claudekit/claudekit-engineer/issues/478)
+
+## [2.10.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.0...v2.10.1) (2026-02-05)
+
 
 ### 🐞 Bug Fixes
 
