@@ -2,36 +2,43 @@
  * Send Release Notification to Discord using Embeds
  *
  * Usage:
- *   node send-discord-release.cjs <type> <webhook-url>
+ *   node send-discord-release.cjs <type>
  *
  * Args:
  *   type: 'production' or 'beta'
- *   webhook-url: Discord webhook URL
+ *
+ * Env:
+ *   DISCORD_WEBHOOK_URL: Discord webhook URL (read from env, not CLI args)
+ *
+ * NOTE: Version gate relies on @semantic-release/npm updating package.json.
+ * If the release config changes to skip that step, the workflow gate will
+ * silently fail to detect new releases.
  */
 
 const fs = require('fs');
+const path = require('path');
 const https = require('https');
 const { URL } = require('url');
 
-// Parse command line arguments
-const releaseType = process.argv[2]; // 'production' or 'beta'
-const webhookUrl = process.argv[3];
+const releaseType = process.argv[2];
+const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
 
-if (!releaseType || !webhookUrl) {
-  console.error('Usage: node send-discord-release.cjs <type> <webhook-url>');
+if (!['production', 'beta'].includes(releaseType)) {
+  console.error(`[X] Invalid release type: "${releaseType}". Must be 'production' or 'beta'`);
+  process.exit(1);
+}
+
+if (!webhookUrl) {
+  console.error('[X] DISCORD_WEBHOOK_URL env var not set');
   process.exit(1);
 }
 
 // Read CHANGELOG.md and extract the latest release notes
 function extractLatestRelease() {
-  const changelogPath = 'CHANGELOG.md';
+  const changelogPath = path.resolve(__dirname, '../CHANGELOG.md');
 
   if (!fs.existsSync(changelogPath)) {
-    return {
-      version: 'Unknown',
-      date: new Date().toISOString().split('T')[0],
-      sections: {}
-    };
+    return { version: 'Unknown', date: new Date().toISOString().split('T')[0], sections: {} };
   }
 
   const content = fs.readFileSync(changelogPath, 'utf8');
@@ -52,15 +59,12 @@ function extractLatestRelease() {
         date = versionMatch[2];
         collecting = true;
         continue;
-      } else {
-        // Found next version, stop collecting
-        break;
       }
+      break;
     }
 
     if (!collecting) continue;
 
-    // Match section headers (### Features, ### Bug Fixes, etc.)
     const sectionMatch = line.match(/^### (.+)/);
     if (sectionMatch) {
       currentSection = sectionMatch[1];
@@ -68,7 +72,6 @@ function extractLatestRelease() {
       continue;
     }
 
-    // Collect bullet points
     if (currentSection && line.trim().startsWith('*')) {
       const item = line.trim().substring(1).trim();
       if (item) {
@@ -80,14 +83,17 @@ function extractLatestRelease() {
   return { version, date, sections };
 }
 
-// Create Discord embed
+/**
+ * Create Discord embed from parsed release data.
+ * Section names from CHANGELOG may already include emojis (e.g., "🚀 Features")
+ * from .releaserc presetConfig — detect and avoid double-prepending.
+ */
 function createEmbed(release) {
   const isBeta = releaseType === 'beta';
-  const color = isBeta ? 0xF59E0B : 0x10B981; // Orange for beta, Green for production
+  const color = isBeta ? 0xF59E0B : 0x10B981;
   const title = isBeta ? `🧪 Beta Release ${release.version}` : `🚀 Release ${release.version}`;
   const url = `https://github.com/claudekit/claudekit-engineer/releases/tag/v${release.version}`;
 
-  // Fallback emoji map for section names WITHOUT embedded emojis
   const sectionEmojis = {
     'Features': '🚀',
     'Hotfixes': '🔥',
@@ -102,17 +108,14 @@ function createEmbed(release) {
     'Chores': '🔧'
   };
 
-  // Detect if string starts with an emoji (Unicode emoji range)
-  const startsWithEmoji = /^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/u;
+  // Simplified emoji detection — covers all emojis used in .releaserc presetConfig
+  const startsWithEmoji = /^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u;
 
   const fields = [];
 
-  // Add sections as embed fields
   for (const [sectionName, items] of Object.entries(release.sections)) {
     if (items.length === 0) continue;
 
-    // If section name already has an emoji prefix (from .releaserc presetConfig),
-    // use it as-is. Otherwise, look up in fallback emoji map.
     let fieldName;
     if (startsWithEmoji.test(sectionName)) {
       fieldName = sectionName;
@@ -126,34 +129,26 @@ function createEmbed(release) {
     // Discord field value max is 1024 characters
     if (fieldValue.length > 1024) {
       const truncateAt = fieldValue.lastIndexOf('\n', 1000);
-      fieldValue = fieldValue.substring(0, truncateAt > 0 ? truncateAt : 1000) + '\n... *(truncated)*';
+      fieldValue = `${fieldValue.substring(0, truncateAt > 0 ? truncateAt : 1000)}\n... *(truncated)*`;
     }
 
-    fields.push({
-      name: fieldName,
-      value: fieldValue,
-      inline: false
-    });
+    fields.push({ name: fieldName, value: fieldValue, inline: false });
   }
 
-  const embed = {
+  return {
     title,
     url,
     color,
     timestamp: new Date().toISOString(),
-    footer: {
-      text: isBeta ? 'Beta Release • Pre-release' : 'Production Release • Latest'
-    },
+    footer: { text: isBeta ? 'Beta Release • Pre-release' : 'Production Release • Latest' },
     fields
   };
-
-  return embed;
 }
 
 // Send to Discord
 function sendToDiscord(embed) {
   const payload = {
-    username: releaseType === 'beta' ? 'Beta Release Bot' : 'Release Bot',
+    username: releaseType === 'beta' ? 'CK Beta Release Bot' : 'CK Release Bot',
     avatar_url: 'https://github.com/claudekit.png',
     embeds: [embed]
   };
@@ -163,18 +158,12 @@ function sendToDiscord(embed) {
     hostname: url.hostname,
     path: url.pathname + url.search,
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: { 'Content-Type': 'application/json' }
   };
 
   const req = https.request(options, (res) => {
     let data = '';
-
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-
+    res.on('data', (chunk) => { data += chunk; });
     res.on('end', () => {
       if (res.statusCode >= 200 && res.statusCode < 300) {
         console.log('[OK] Discord notification sent successfully');
@@ -184,6 +173,12 @@ function sendToDiscord(embed) {
         process.exit(1);
       }
     });
+  });
+
+  req.setTimeout(10000, () => {
+    console.error('[X] Discord webhook request timed out');
+    req.destroy();
+    process.exit(1);
   });
 
   req.on('error', (error) => {
