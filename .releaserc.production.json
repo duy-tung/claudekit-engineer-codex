@@ -33,6 +33,10 @@
           {
             "type": "style",
             "release": "patch"
+          },
+          {
+            "type": "hotfix",
+            "release": "patch"
           }
         ]
       }
@@ -46,6 +50,10 @@
             {
               "type": "feat",
               "section": "🚀 Features"
+            },
+            {
+              "type": "hotfix",
+              "section": "🔥 Hotfixes"
             },
             {
               "type": "fix",
