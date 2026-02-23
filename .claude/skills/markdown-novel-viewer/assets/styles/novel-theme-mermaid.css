@@ -125,10 +125,12 @@ pre.mermaid[data-processed="true"],
   border-color: var(--accent-hover);
 }
 
-/* Expanded state — .content max-width removed via :has() in novel-theme-content.css */
+/* Expanded state — width and offset set dynamically by JS (initMermaidExpand)
+   to fill .main-content without affecting sibling content or using viewport units */
 .mermaid-wrapper.expanded {
   max-width: none;
-  padding: 1rem 0;
+  position: relative;
+  padding: 1rem 2rem;
   background: var(--bg-secondary);
   border-radius: 8px;
 }

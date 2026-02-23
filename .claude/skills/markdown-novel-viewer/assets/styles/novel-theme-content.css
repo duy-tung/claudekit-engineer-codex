@@ -44,12 +44,6 @@ body:not(.has-plan) .main-content {
   padding-bottom: 4rem;
 }
 
-/* Remove max-width constraint when content has an expanded diagram or code block.
-   This lets the expanded element fill .main-content naturally without viewport calcs. */
-.content:has(.mermaid-wrapper.expanded),
-.content:has(.code-wrapper.expanded) {
-  max-width: none;
-}
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
