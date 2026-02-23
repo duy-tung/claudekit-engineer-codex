@@ -125,12 +125,10 @@ pre.mermaid[data-processed="true"],
   border-color: var(--accent-hover);
 }
 
-/* Expanded state */
+/* Expanded state — .content max-width removed via :has() in novel-theme-content.css */
 .mermaid-wrapper.expanded {
   max-width: none;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  padding: 1rem 2rem;
+  padding: 1rem 0;
   background: var(--bg-secondary);
   border-radius: 8px;
 }

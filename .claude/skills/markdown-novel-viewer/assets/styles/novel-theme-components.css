@@ -159,12 +159,10 @@ hr {
   border-color: var(--accent-hover);
 }
 
-/* Expanded state for code blocks */
+/* Expanded state for code blocks — .content max-width removed via :has() in novel-theme-content.css */
 .code-wrapper.expanded {
   max-width: none;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  padding: 0 2rem;
+  padding: 0;
 }
 
 .code-wrapper.expanded pre {
