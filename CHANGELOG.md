@@ -1,3 +1,11 @@
+## [2.12.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.6...v2.12.0-beta.7) (2026-02-23)
+
+
+### 🐞 Bug Fixes
+
+* replace viewport-based expand with :has() selector for mermaid/code blocks ([4330861](https://github.com/claudekit/claudekit-engineer/commit/4330861ddc87fc9eba99cbe061ea276b8b9ca2e9)), closes [#504](https://github.com/claudekit/claudekit-engineer/issues/504)
+* use JS-computed layout for expand instead of :has() selector ([ac9c99c](https://github.com/claudekit/claudekit-engineer/commit/ac9c99ceb9eac137bd83e9c99a92d380bca80948))
+
 ## [2.12.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.5...v2.12.0-beta.6) (2026-02-21)
 
 
