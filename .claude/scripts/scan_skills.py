@@ -34,6 +34,8 @@ EXACT_CATEGORY_MAP = {
     "scout": "dev-tools",
     "use-mcp": "dev-tools",
     "worktree": "dev-tools",
+    "preview": "utilities",
+    "project-management": "utilities",
 }
 
 def extract_frontmatter(content: str) -> Dict:

@@ -48,6 +48,15 @@ Present via `AskUserQuestion`:
 - "Let me review each one"
 - "Reject all, plan is fine"
 
+**If "Let me review each one":**
+For each finding marked Accept, ask via `AskUserQuestion`:
+- Options: "Yes, apply" | "No, reject" | "Modify suggestion"
+
+**If "Modify suggestion":**
+Ask via `AskUserQuestion`: "Describe your modification to this finding's suggested fix:"
+(user provides free text via "Other" option)
+Record the modified suggestion. Set disposition to "Accept (modified)" in the Red Team Review table.
+
 ### Step 8: Apply to Plan
 For accepted findings, edit target phase files inline with marker.
 Add `## Red Team Review` section to `plan.md`.

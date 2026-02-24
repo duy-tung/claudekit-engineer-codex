@@ -23,7 +23,7 @@
   has_scripts: true
   name: ai-multimodal
   path: ai-multimodal/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Answer technical and architectural questions with expert consultation.'
   has_references: false
   has_scripts: false
@@ -69,7 +69,7 @@
   has_scripts: true
   name: chrome-devtools
   path: chrome-devtools/SKILL.md
-- category: other
+- category: dev-tools
   description: '[CK] ClaudeKit usage guide — discover commands, skills, workflows
     naturally.'
   has_references: false
@@ -85,7 +85,7 @@
   has_scripts: false
   name: code-review
   path: code-review/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Set coding experience level for tailored explanations and output
     format.'
   has_references: false
@@ -142,7 +142,7 @@
   has_scripts: true
   name: devops
   path: devops/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Analyze codebase and manage project documentation — init, update,
     summarize.'
   has_references: true
@@ -188,7 +188,7 @@
   has_scripts: false
   name: document-skills/xlsx
   path: document-skills/xlsx/SKILL.md
-- category: other
+- category: dev-tools
   description: Helps users discover and install agent skills when they ask questions
     like "how do I do X", "find a skill for X", "is there a skill that can...", or
     express interest in extending capabilities. This skill should be used when the
@@ -220,7 +220,7 @@
   has_scripts: false
   name: frontend-development
   path: frontend-development/SKILL.md
-- category: other
+- category: dev-tools
   description: '[CK] Git operations with conventional commits. Use for staging, committing,
     pushing, PRs, merges. Auto-splits commits by type/scope. Security scans for secrets.'
   has_references: true
@@ -243,13 +243,13 @@
   has_scripts: false
   name: google-adk-python
   path: google-adk-python/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Write journal entries analyzing recent changes and session reflections.'
   has_references: false
   has_scripts: false
   name: journal
   path: journal/SKILL.md
-- category: other
+- category: dev-tools
   description: '[CK] AI agent orchestration board for task visualization and team
     coordination.'
   has_references: false
@@ -324,7 +324,7 @@
   has_scripts: true
   name: payment-integration
   path: payment-integration/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Plan implementations, design architectures, create technical
     roadmaps with detailed phases. Use for feature planning, system design, solution
     architecture, implementation strategy, phase documentation.'
@@ -332,7 +332,7 @@
   has_scripts: false
   name: plan
   path: plan/SKILL.md
-- category: other
+- category: dev-tools
   description: View plans dashboard with progress tracking and timeline visualization.
     Use for kanban boards, plan status overview, phase progress, milestone tracking,
     project visibility.
@@ -340,7 +340,7 @@
   has_scripts: true
   name: plans-kanban
   path: plans-kanban/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] View files/directories OR generate visual explanations, slides,
     diagrams.'
   has_references: true
@@ -355,10 +355,10 @@
   has_scripts: false
   name: problem-solving
   path: problem-solving/SKILL.md
-- category: other
-  description: Track progress, update plan statuses, manage Claude Tasks, generate
+- category: utilities
+  description: '[CK] Track progress, update plan statuses, manage Claude Tasks, generate
     reports, coordinate docs updates. Use for project oversight, status checks, plan
-    completion, task hydration, cross-session continuity.
+    completion, task hydration, cross-session continuity.'
   has_references: true
   has_scripts: false
   name: project-management
@@ -395,7 +395,7 @@
   has_scripts: false
   name: research
   path: research/SKILL.md
-- category: other
+- category: dev-tools
   description: '[CK] Fast codebase scouting using parallel agents. Use for file discovery,
     task context gathering, quick searches across directories. Supports internal (Explore)
     and external (Gemini/OpenCode) agents.'
@@ -437,6 +437,14 @@
   name: skill-creator
   path: skill-creator/SKILL.md
 - category: other
+  description: Build with TanStack Start (full-stack React framework), TanStack Form
+    (headless form management), and TanStack AI (AI streaming/chat). Use when creating
+    TanStack projects, routes, server functions, forms, validation, or AI chat features.
+  has_references: true
+  has_scripts: false
+  name: tanstack
+  path: tanstack/SKILL.md
+- category: other
   description: '[CK] Orchestrate Agent Teams for parallel multi-session collaboration.
     Use for research, implementation, review, and debug workflows requiring independent
     teammates.'
@@ -444,7 +452,7 @@
   has_scripts: false
   name: team
   path: team/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Run unit, integration, e2e, and UI tests. Use for test execution,
     coverage analysis, build verification, visual regression, and QA reports.'
   has_references: true
@@ -491,7 +499,7 @@
   has_scripts: false
   name: use-mcp
   path: use-mcp/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Review recent changes and wrap up the current work session.'
   has_references: false
   has_scripts: false
@@ -521,7 +529,7 @@
   has_scripts: true
   name: web-testing
   path: web-testing/SKILL.md
-- category: other
+- category: dev-tools
   description: '[CK] Create isolated git worktree for parallel development in monorepos.'
   has_references: false
   has_scripts: true

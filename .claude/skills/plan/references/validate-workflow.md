@@ -50,7 +50,14 @@ Add marker: `<!-- Updated: Validation Session N - {change} -->`
 
 ## Next Steps (MANDATORY)
 Remind user with absolute path:
-> `/cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md`
+> **Best Practice:** Run `/clear` before implementing to start with fresh context.
+> Then run:
+> ```
+> /cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> ```
+> **Why `--auto`?** Plan was already validated — safe to skip review gates.
+> **Why absolute path?** After `/clear`, the new session loses context.
+> Fresh context helps Claude focus solely on implementation without planning context pollution.
 
 ## Important Notes
 - Only ask about genuine decision points
