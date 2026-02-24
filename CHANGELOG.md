@@ -69,6 +69,7 @@
 
 ## [2.12.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.1...v2.12.0-beta.2) (2026-02-21)
 
+
 ## [2.11.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.1...v2.11.2) (2026-02-21)
 
 
