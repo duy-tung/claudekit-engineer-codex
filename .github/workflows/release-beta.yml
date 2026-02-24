@@ -60,4 +60,4 @@ jobs:
         if: success()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: node scripts/send-discord-release.cjs beta "$DISCORD_WEBHOOK_URL"
+        run: node scripts/send-discord-release.cjs beta

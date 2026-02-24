@@ -445,6 +445,31 @@
     setTimeout(() => initMermaidExpand(), 100);
   }
 
+  // Compute width and left offset for an expanded wrapper to fill .main-content
+  // without using viewport units (immune to sidebar state changes)
+  function applyExpandLayout(wrapper, isExpanded) {
+    if (!isExpanded) {
+      wrapper.style.width = '';
+      wrapper.style.left = '';
+      return;
+    }
+    const mainContent = document.querySelector('.main-content');
+    if (!mainContent) return;
+    const mainRect = mainContent.getBoundingClientRect();
+    const mainPadding = parseFloat(getComputedStyle(mainContent).paddingLeft) || 0;
+    const availableWidth = mainRect.width - mainPadding * 2;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const offset = mainRect.left + mainPadding - wrapperRect.left;
+    wrapper.style.width = availableWidth + 'px';
+    wrapper.style.left = offset + 'px';
+  }
+
+  // Recalculate expanded wrappers on resize or sidebar toggle
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.mermaid-wrapper.expanded, .code-wrapper.expanded')
+      .forEach(w => applyExpandLayout(w, true));
+  });
+
   // Initialize Mermaid expand toggle buttons
   function initMermaidExpand() {
     // Find all rendered mermaid diagrams not already wrapped
@@ -469,13 +494,14 @@
         <span class="icon-collapse">⤡</span>
       `;
 
-      // Toggle handler — re-render diagram at new container width
+      // Toggle handler — expand to fill .main-content, re-render at new width
       btn.addEventListener('click', async () => {
         const isExpanded = wrapper.classList.toggle('expanded');
         btn.setAttribute('aria-label', isExpanded
           ? 'Collapse diagram'
           : 'Expand diagram to full width'
         );
+        applyExpandLayout(wrapper, isExpanded);
 
         // Re-render mermaid at the new container width for crisp output
         const source = diagram.dataset.mermaidSource;
@@ -532,13 +558,14 @@
         <span class="icon-collapse">⤡</span>
       `;
 
-      // Toggle handler
+      // Toggle handler — expand to fill .main-content
       btn.addEventListener('click', () => {
         const isExpanded = wrapper.classList.toggle('expanded');
         btn.setAttribute('aria-label', isExpanded
           ? 'Collapse code block'
           : 'Expand code block to full width'
         );
+        applyExpandLayout(wrapper, isExpanded);
       });
 
       // Insert wrapper before pre
