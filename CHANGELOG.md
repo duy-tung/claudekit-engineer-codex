@@ -1,3 +1,10 @@
+## [2.13.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.1...v2.13.0-beta.2) (2026-02-24)
+
+
+### 🐞 Bug Fixes
+
+* **workflows:** enforce full-plan phase sync-back on finalize ([a95ab81](https://github.com/claudekit/claudekit-engineer/commit/a95ab8183538d1e769e52861ae520f940e3d8bbb))
+
 ## [2.13.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0...v2.13.0-beta.1) (2026-02-24)
 
 
