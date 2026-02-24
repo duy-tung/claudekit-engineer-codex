@@ -159,11 +159,11 @@ hr {
   border-color: var(--accent-hover);
 }
 
-/* Expanded state for code blocks */
+/* Expanded state for code blocks — width and offset set dynamically by JS (initCodeExpand)
+   to fill .main-content without affecting sibling content or using viewport units */
 .code-wrapper.expanded {
   max-width: none;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
+  position: relative;
   padding: 0 2rem;
 }
 
