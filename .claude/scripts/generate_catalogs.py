@@ -35,10 +35,12 @@ def load_yaml(filename):
     primary = SCRIPT_DIR / filename
 
     # skills_data canonical source moved under ck-help skill.
+    # SCRIPT_DIR is .claude/scripts/, parent is .claude/
     if filename == 'skills_data.yaml':
-        canonical = SCRIPT_DIR.parent / '.claude' / 'skills' / 'ck-help' / 'scripts' / 'skills_data.yaml'
+        canonical = SCRIPT_DIR.parent / 'skills' / 'ck-help' / 'scripts' / 'skills_data.yaml'
         if canonical.exists():
-            return yaml.safe_load(canonical.read_text(encoding='utf-8'))
+            loaded = yaml.safe_load(canonical.read_text(encoding='utf-8'))
+            return loaded if loaded is not None else []
 
     if not primary.exists():
         print(f"Error: {primary} not found", file=sys.stderr)
@@ -144,8 +146,8 @@ def generate_skills_yaml():
             'other': 'Other'
         },
         'legend': {
-            'has_scripts': '📦 Has executable scripts',
-            'has_references': '📚 Has reference documentation'
+            'has_scripts': 'Has executable scripts',
+            'has_references': 'Has reference documentation'
         },
         'skills': categories
     }
@@ -159,7 +161,7 @@ def write_output(content, output_path=None, label=None):
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding='utf-8')
-        print(f"✓ Generated {output_path}", file=sys.stderr)
+        print(f"Generated {output_path}", file=sys.stderr)
     else:
         print(content)
 
