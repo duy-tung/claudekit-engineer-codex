@@ -14,7 +14,8 @@ ClaudeKit Engineer is a comprehensive boilerplate template for building professi
 claudekit-engineer/
 ├── .claude/               # Claude Code configuration
 │   ├── agents/           # Specialized agent definitions (14 agents)
-│   ├── commands/         # Slash command implementations (50+ commands)
+│   ├── command-archive/  # Archived legacy command definitions
+│   ├── commands/         # Reserved compatibility directory (empty/minimal)
 │   ├── hooks/            # Git hooks and scripts
 │   ├── skills/           # Specialized skills library (20+ skills)
 │   └── workflows/        # Development workflow definitions
@@ -70,7 +71,7 @@ claudekit-engineer/
 - `mcp-manager.md` - MCP server management
 - `code-simplifier.md` - Code optimization and simplification
 
-### 2. Slash Commands System (Command Directories)
+### 2. Slash Commands System (Skill-Backed)
 
 **Core Development Commands**:
 - `/plan` - Research and planning
@@ -82,12 +83,12 @@ claudekit-engineer/
 - `/debug` - Issue debugging
 - `/fix` - Bug fixes
 
-**Command Directories** (`.claude/commands/`):
+**Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
-- `docs/` - Documentation commands
+- `docs/` - Documentation workflows
 - `plan/` - Planning variants
-- `review/` - Code review workflows
-- `test/` - Testing commands
+- `code-review/` - Code review workflows
+- `test/` - Testing workflows
 
 ### 3. Skills Library (38 Skills)
 
@@ -108,7 +109,7 @@ claudekit-engineer/
 - docs-seeker, document-skills, find-skills, frontend-design, frontend-development
 - git, gkg, google-adk-python, markdown-novel-viewer, mcp-builder
 - mcp-management, media-processing, mermaidjs-v11, mobile-development, payment-integration
-- planning, plans-kanban, problem-solving, react-best-practices, remotion
+- plan, plans-kanban, problem-solving, react-best-practices, remotion
 - repomix, research, scout, sequential-thinking, shader
 - shopify, skill-creator, template-skill, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
@@ -184,7 +185,7 @@ claudekit-engineer/
 
 ### For Users
 - **README.md**: Project overview and quick start
-- **guide/COMMANDS.md**: Comprehensive command reference (7,073 tokens)
+- **guide/SKILLS.md**: Comprehensive skills reference (7,073 tokens)
 - **CLAUDE.md**: Development instructions and workflows
 
 ### For Developers
@@ -305,7 +306,7 @@ None (template project)
 **Total Characters**: 173,077 chars
 
 **Top 5 Files by Token Count**:
-1. `guide/COMMANDS.md` - 7,073 tokens (18.2%)
+1. `guide/SKILLS.md` - 7,073 tokens (18.2%)
 2. `CHANGELOG.md` - 4,836 tokens (12.4%)
 3. `README.md` - 3,261 tokens (8.4%)
 
@@ -338,7 +339,7 @@ Features: Automated releases, changelog generation
 - `README.md` - Main project docs
 - `CLAUDE.md` - Agent instructions
 - `CHANGELOG.md` - Version history
-- `guide/COMMANDS.md` - Command reference
+- `guide/SKILLS.md` - Skills reference
 
 ### Workflows
 - `.claude/rules/primary-workflow.md`

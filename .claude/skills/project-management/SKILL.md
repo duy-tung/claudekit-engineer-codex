@@ -1,6 +1,6 @@
 ---
 name: project-management
-description: Track progress, update plan statuses, manage Claude Tasks, generate reports, coordinate docs updates. Use for project oversight, status checks, plan completion, task hydration, cross-session continuity.
+description: "[CK] Track progress, update plan statuses, manage Claude Tasks, generate reports, coordinate docs updates. Use for project oversight, status checks, plan completion, task hydration, cross-session continuity."
 ---
 
 # Project Management

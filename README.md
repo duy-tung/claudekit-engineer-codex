@@ -56,7 +56,7 @@ A comprehensive boilerplate template for building professional software projects
 - **[Codebase Summary](./docs/codebase-summary.md)** - High-level overview of project structure, technologies, and components
 - **[Code Standards](./docs/code-standards.md)** - Coding standards, naming conventions, and best practices
 - **[System Architecture](./docs/system-architecture.md)** - Detailed architecture documentation, component interactions, and data flow
-- **[Commands Reference](./guide/COMMANDS.md)** - Complete guide to all available slash commands
+- **[Skills Reference](./guide/SKILLS.md)** - Complete guide to all available skills
 
 ### 📖 Additional Resources
 - **[CLAUDE.md](./CLAUDE.md)** - Development instructions and workflows for AI agents
@@ -111,7 +111,7 @@ A comprehensive boilerplate template for building professional software projects
 ```
 ├── .claude/                 # Claude Code configuration
 │   ├── agents/             # Claude Code agents
-│   ├── commands/           # Claude Code commands
+│   ├── command-archive/    # Archived legacy command definitions
 │   ├── hooks/              # Claude Code hooks
 │   │   └── notifications/  # Multi-provider notification system
 │   ├── skills/             # Claude Code skills
@@ -233,7 +233,7 @@ Use when tasks have dependencies:
 # After implementation:
 /test "validate dashboard functionality"
 # Finally:
-/review "ensure code quality standards"
+/code-review "ensure code quality standards"
 
 # Alternative: Use /cook for standalone implementation (plans internally)
 /cook "implement user dashboard"
@@ -271,7 +271,7 @@ planner agent spawns:
 
 # Quality assurance
 /test
-/review
+/code-review
 
 # Documentation update
 /docs

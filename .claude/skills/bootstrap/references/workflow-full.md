@@ -46,7 +46,7 @@ Spawn multiple `researcher` subagents in parallel:
 
 ## Step 5: Planning
 
-Activate **planning** skill: `/plan --hard <requirements>`
+Activate **plan** skill: `/plan --hard <requirements>`
 - Planner creates directory using `## Naming` pattern
 - Overview at `plan.md` (<80 lines) + `phase-XX-*.md` files
 - Present pros/cons of plan

@@ -15,7 +15,7 @@ All modes share core steps with mode-specific variations.
 
 **Interactive/Auto:**
 - Spawn multiple `researcher` agents in parallel
-- Use `/scout:ext` or `scout` agent for codebase search
+- Use `/scout ext` or `scout` agent for codebase search
 - Keep reports ≤150 lines
 
 **Parallel:**
@@ -50,7 +50,7 @@ All modes share core steps with mode-specific variations.
 ### [Review Gate 2] Post-Plan (skip if auto mode)
 - Present plan overview with phases
 - Use `AskUserQuestion` to ask: "Validate the plan or approve plan to start implementation?" - "Validate" / "Approve" / "Abort" / "Other" ("Request revisions")
-  - "Validate": run `/plan:validate` slash command
+  - "Validate": run `/plan validate` slash command
   - "Approve": continue to implementation
   - "Abort": stop the workflow
   - "Other": revise the plan based on user's feedback

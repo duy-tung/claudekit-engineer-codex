@@ -35,7 +35,7 @@ No user gate — auto-select best option.
 
 ## Step 4: Planning
 
-Activate **planning** skill: `/plan --auto <requirements>`
+Activate **plan** skill: `/plan --auto <requirements>`
 - Planning skill auto-detects complexity and picks appropriate mode
 - Creates plan directory using `## Naming` pattern
 - Overview at `plan.md` (<80 lines) + `phase-XX-*.md` files

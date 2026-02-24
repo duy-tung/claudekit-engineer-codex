@@ -160,12 +160,12 @@ Issues, blockers, or questions
 - `/brainstorm` - Solution ideation
 - `/debug` - Deep analysis
 
-**Command Directories** (`.claude/commands/`):
+**Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
-- `docs/` - Documentation commands
-- `plan/` - Planning command variants
-- `review/` - Code review workflows
-- `test/` - Testing commands
+- `docs/` - Documentation workflows
+- `plan/` - Planning workflow variants
+- `code-review/` - Code review workflows
+- `test/` - Testing workflows
 
 #### 3.2 Command Workflow Pattern
 
@@ -237,7 +237,7 @@ Explore different approaches simultaneously
 8. Git Manager: Commit fix
 
 **Documentation Update Workflow**:
-1. User: `/docs:update`
+1. User: `/docs update`
 2. Docs Manager: Check doc freshness
 3. (If >1 day old): Run `repomix` for codebase summary
 4. Docs Manager: Analyze codebase changes
@@ -943,12 +943,12 @@ User Project
 3. Write agent instructions and workflows
 4. Reference in commands or other agents
 
-### Adding New Commands
+### Adding New Command-Style Skills
 
-1. Create command file: `.claude/commands/my-command.md`
-2. Define YAML frontmatter
-3. Write command workflow with agent invocations
-4. Use `$ARGUMENTS` or `$1, $2` for parameters
+1. Create skill directory: `.claude/skills/my-command/`
+2. Define `SKILL.md` with YAML frontmatter and workflow instructions
+3. Add script/reference files under `scripts/` or `references/` as needed
+4. Register discoverability metadata so `/ck-help` can route users correctly
 
 ### Adding New Skills
 

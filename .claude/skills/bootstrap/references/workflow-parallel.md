@@ -36,7 +36,7 @@ No user gate — proceed automatically.
 
 ## Step 4: Parallel Planning
 
-Activate **planning** skill: `/plan --parallel <requirements>`
+Activate **plan** skill: `/plan --parallel <requirements>`
 - Creates phases with **exclusive file ownership** per phase (no overlap)
 - **Dependency matrix**: which phases run concurrently vs sequentially
 - `plan.md` includes dependency graph, execution strategy, file ownership matrix
