@@ -54,7 +54,7 @@ Task(subagent_type="code-reviewer", prompt="Review changes for [phase]. Check se
 
 ## Project Management
 ```
-Task(subagent_type="project-manager", prompt="Update plan status in [path]. Mark [phase] as DONE. Update roadmap.", description="Update plan")
+Task(subagent_type="project-manager", prompt="Run full sync-back in [plan-path]: reconcile completed tasks with all phase files, backfill stale completed checkboxes across all phases, update plan.md status/progress, and report unresolved mappings.", description="Update plan")
 ```
 
 ## Documentation

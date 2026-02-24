@@ -5,8 +5,9 @@
 1. **Read plans directory:** Glob `./plans/*/plan.md` to discover all plans
 2. **Parse YAML frontmatter:** Extract status, priority, effort, branch, tags
 3. **Scan phase files:** Count `[x]` (done) vs `[ ]` (remaining) in each phase
-4. **Calculate progress:** `completed / total * 100` per plan
-5. **Cross-reference:** Compare plan tasks against actual implementation
+4. **Reconcile completed tasks:** Ensure all completed task metadata is reflected in phase files (backfill stale earlier phases first)
+5. **Calculate progress:** `completed / total * 100` per plan
+6. **Cross-reference:** Compare plan tasks against actual implementation
 
 ## Status Update Protocol
 
@@ -30,6 +31,10 @@ Each `phase-XX-*.md` tracks with checkboxes:
 ### Task-Level Status
 
 Claude Tasks (session-scoped): `pending` → `in_progress` → `completed`
+
+### Reconciliation Rule
+
+If a later phase is marked done while earlier phases still contain stale unchecked completed items, backfill earlier phases in the same sync pass before final status reporting.
 
 ## Verification Checklist
 

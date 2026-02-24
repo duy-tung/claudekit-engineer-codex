@@ -113,9 +113,14 @@ Use `addBlocks` when creating parent first ("X blocks these children").
 
 ### Sync-Back (cook Step 6)
 
-1. `TaskUpdate` marks all session tasks complete
-2. `project-manager` subagent updates plan.md status + phase checkboxes `[ ]` → `[x]`
-3. Git commit captures the state transition for next session
+1. `TaskUpdate` marks all session tasks complete.
+2. `project-manager` subagent runs full-plan sync-back:
+   - Sweep all `phase-XX-*.md` files.
+   - Reconcile completed tasks by metadata (`phase`, `phaseFile`).
+   - Backfill stale completed checkboxes `[ ]` → `[x]` across all phases (not only current phase).
+   - Update `plan.md` status/progress from actual checkbox state.
+3. If any completed task cannot be mapped to a phase file, report unresolved mappings before claiming completion.
+4. Git commit captures the state transition for next session.
 
 ## Quality Checks
 
