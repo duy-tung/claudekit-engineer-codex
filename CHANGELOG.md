@@ -1,3 +1,40 @@
+## [2.12.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.9...v2.12.0-beta.10) (2026-02-24)
+
+
+### 🚀 Features
+
+* **ck-help:** add subcommand-aware query routing ([7794a48](https://github.com/claudekit/claudekit-engineer/commit/7794a484423cadb26b34ff002b0530d915550001))
+* migrate all 19 claudekit-engineer commands to skills ([f5af9aa](https://github.com/claudekit/claudekit-engineer/commit/f5af9aa1ed9430417a6e3ba7eda0435e3a8f253d))
+* **skills:** add argument-hint frontmatter and subcommand browsing to 6 skills ([327ad87](https://github.com/claudekit/claudekit-engineer/commit/327ad87baa25cec8b376627df77e78b5eb3e7da3))
+
+
+### 🐞 Bug Fixes
+
+* **skills:** address review findings from commands-to-skills migration ([9b7dee2](https://github.com/claudekit/claudekit-engineer/commit/9b7dee2e41326744cdfe6fcfbb295bb1d5409a6c))
+* **skills:** address second-pass review findings for commands-to-skills migration ([d366fb9](https://github.com/claudekit/claudekit-engineer/commit/d366fb9b66f885c9be3db4b6bc5dba5497f8b7e0))
+* **skills:** address third-pass review findings ([b19cf5b](https://github.com/claudekit/claudekit-engineer/commit/b19cf5be5c55fada0258c60d9d881fa7b9bced7d))
+* **worktree:** harden sanitization and matching behavior ([8be2a2f](https://github.com/claudekit/claudekit-engineer/commit/8be2a2f60d7f8e5ff784c1405a9bf53fa95e2fb1))
+
+
+### 📚 Documentation
+
+* **architecture:** shift core docs to skills model ([2dca8e7](https://github.com/claudekit/claudekit-engineer/commit/2dca8e72aab5336372ef411bb86c806b3f714938))
+* **readme:** replace stale command references ([8aa3cea](https://github.com/claudekit/claudekit-engineer/commit/8aa3ceae787d5b7acb12b600913a416c38127443))
+* **skills:** fix remaining command-to-skill doc references ([4837489](https://github.com/claudekit/claudekit-engineer/commit/48374897f90840bfdae8024edd68c13e9f1249db))
+* **skills:** normalize review and subcommand syntax ([276e807](https://github.com/claudekit/claudekit-engineer/commit/276e8074b2dd86e6965bb241f3a97cd86dc2a056))
+* **workflow:** align plan syntax references ([6803b63](https://github.com/claudekit/claudekit-engineer/commit/6803b632ec3ea9d1c4884a385d31d406d9576378))
+
+
+### ♻️ Code Refactoring
+
+* **scripts:** wrap legacy ck-help entrypoint ([6e99192](https://github.com/claudekit/claudekit-engineer/commit/6e991926981c8a0208850eb0e0f68da41158259c))
+* **scripts:** wrap legacy worktree entrypoints ([60eb573](https://github.com/claudekit/claudekit-engineer/commit/60eb573d9b39d90421b1a1d8d3caa6dc07127c37))
+
+
+### ✅ Tests
+
+* **ck-help:** refresh canonical help regression suite ([eb435f2](https://github.com/claudekit/claudekit-engineer/commit/eb435f2b9ddbf0a8fc8c5adab4e0e72f96146e16))
+
 ## [2.12.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.8...v2.12.0-beta.9) (2026-02-24)
 
 
