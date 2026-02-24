@@ -171,7 +171,7 @@ After validation completes, provide summary:
 > **Best Practice:** Run `/clear` before implementing to start with fresh context.
 > Then run:
 > ```
-> /cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> /ck:cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
 > *(Replace with actual absolute path, e.g., `/home/user/project/plans/260203-1234-feature/plan.md`)*
 >

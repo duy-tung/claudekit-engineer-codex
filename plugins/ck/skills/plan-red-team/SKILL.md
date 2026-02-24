@@ -187,7 +187,7 @@ After providing the summary, remind the user:
 > ```
 > to re-validate decisions after changes, then:
 > ```
-> /cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> /ck:cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
 > to implement.
 

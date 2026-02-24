@@ -1,7 +1,7 @@
 # Code Standards & Codebase Structure
 
 **Last Updated**: 2026-02-20
-**Version**: 2.3.0-beta.1 (Plugin namespace migration)
+**Version**: 3.0.0-beta.1 (Plugin namespace migration)
 **Applies To**: All code within ClaudeKit Engineer project
 
 ## Overview

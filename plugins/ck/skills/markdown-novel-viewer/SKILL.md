@@ -58,9 +58,9 @@ node ${CLAUDE_PLUGIN_ROOT}/skills/markdown-novel-viewer/scripts/server.cjs --sto
 Use `/ck:preview` for quick access:
 
 ```bash
-/preview plans/my-plan/plan.md    # View markdown file
-/preview plans/                   # Browse directory
-/preview --stop                   # Stop server
+/ck:preview plans/my-plan/plan.md    # View markdown file
+/ck:preview plans/                   # Browse directory
+/ck:preview --stop                   # Stop server
 ```
 
 ## Features

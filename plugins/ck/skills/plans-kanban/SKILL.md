@@ -60,8 +60,8 @@ node ${CLAUDE_PLUGIN_ROOT}/skills/plans-kanban/scripts/server.cjs --stop
 Use `/ck:kanban` for quick access:
 
 ```bash
-/kanban plans/           # View plans dashboard
-/kanban --stop           # Stop kanban server
+/ck:kanban plans/           # View plans dashboard
+/ck:kanban --stop           # Stop kanban server
 ```
 
 ## Features

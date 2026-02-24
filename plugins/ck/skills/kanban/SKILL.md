@@ -12,8 +12,8 @@ Plans dashboard with progress tracking and timeline visualization.
 ## Usage
 
 - `/ck:kanban` - View dashboard for ./plans directory
-- `/kanban plans/` - View dashboard for specific directory
-- `/kanban --stop` - Stop running server
+- `/ck:kanban plans/` - View dashboard for specific directory
+- `/ck:kanban --stop` - Stop running server
 
 ## Features
 

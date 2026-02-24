@@ -26,14 +26,14 @@ Universal viewer + visual generator. View existing content OR generate new visua
 
 ```bash
 # View mode
-/preview plans/my-plan/plan.md     # View markdown file
-/preview plans/                    # Browse plans directory
+/ck:preview plans/my-plan/plan.md     # View markdown file
+/ck:preview plans/                    # Browse plans directory
 
 # Generation mode
-/preview --explain OAuth flow      # Generate OAuth explanation
-/preview --slides API architecture # Generate architecture slides
-/preview --diagram data flow       # Generate data flow diagram
-/preview --ascii auth process      # Generate ASCII-only diagram
+/ck:preview --explain OAuth flow      # Generate OAuth explanation
+/ck:preview --slides API architecture # Generate architecture slides
+/ck:preview --diagram data flow       # Generate data flow diagram
+/ck:preview --ascii auth process      # Generate ASCII-only diagram
 ```
 
 ## Argument Resolution

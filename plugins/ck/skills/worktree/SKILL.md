@@ -89,7 +89,7 @@ Based on project context, run in background:
 ## Example
 
 ```
-User: /worktree fix the login validation bug
+User: /ck:worktree fix the login validation bug
 
 Claude: [Runs: node .claude/scripts/worktree.cjs info --json]
         repoType: standalone

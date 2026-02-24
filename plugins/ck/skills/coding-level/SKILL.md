@@ -7,7 +7,7 @@ Set your coding experience level for tailored explanations and output format.
 
 ## Usage
 
-`/coding-level [0-5]`
+`/ck:coding-level [0-5]`
 
 ## Levels
 
@@ -44,7 +44,7 @@ Next session, Claude will automatically:
 
 ## Optional: Manual Output Styles
 
-For finer control, you can also use `/output-style` with these styles:
+For finer control, you can also use `/ck:output-style` with these styles:
 - `coding-level-0-eli5`
 - `coding-level-1-junior`
 - `coding-level-2-mid`
