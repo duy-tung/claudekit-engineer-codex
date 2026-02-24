@@ -352,7 +352,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Developer
 **Goal**: Create new project from scratch
 **Flow**:
-1. Run `/bootstrap` command
+1. Run `/ck:bootstrap` command
 2. Answer requirement questions
 3. AI researches tech stacks
 4. Review and approve recommendations
@@ -367,7 +367,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Developer
 **Goal**: Add feature with full workflow
 **Flow**:
-1. Run `/cook "add user authentication"`
+1. Run `/ck:cook "add user authentication"`
 2. Planner creates implementation plan
 3. Researcher agents explore auth solutions
 4. Developer reviews and approves plan
@@ -383,7 +383,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Developer
 **Goal**: Identify and fix production bug
 **Flow**:
-1. Run `/debug "API timeout errors"`
+1. Run `/ck:debug "API timeout errors"`
 2. Debugger agent analyzes logs and system
 3. Root cause identified
 4. Fix plan created
@@ -399,8 +399,8 @@ Command behavior is implemented via skill directories:
 **Goal**: Maintain professional git history
 **Flow**:
 1. Developer completes feature implementation
-2. Run tests via `/test` command
-3. Code review via `/cook` workflow
+2. Run tests via `/ck:test` command
+3. Code review via `/ck:cook` workflow
 4. Conventional commit via git-manager agent
 5. Push to feature branch
 6. Create PR via GitHub interface
@@ -411,7 +411,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Project Manager
 **Goal**: Ensure docs are current
 **Flow**:
-1. Run `/docs update`
+1. Run `/ck:docs update`
 2. Docs manager scans codebase
 3. Generates fresh summary with repomix
 4. Identifies outdated sections
