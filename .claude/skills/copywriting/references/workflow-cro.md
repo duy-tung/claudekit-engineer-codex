@@ -52,3 +52,32 @@ Analyze content and optimize for conversion based on user-reported issues.
 3. **URL provided** → Use `web_fetch` tool to fetch and analyze current issues
 4. **Scout codebase** → `/scout:ext` (preferred) or `/scout` to find relevant files
 5. **Implement** → Use `fullstack-developer` agent to write enhanced copy into code files
+
+## CRO Plan Creation Workflow
+
+Use when creating a structured CRO optimization plan (e.g., via `/plan:cro`).
+
+### Steps
+
+1. **Analyze** → Gather issues from screenshots/videos/URLs using steps above
+2. **Activate** `plan` skill for plan structure
+3. **Create plan directory** using naming pattern from `## Naming` section (hook-injected)
+4. **Write `plan.md`** with required YAML frontmatter:
+   ```yaml
+   ---
+   title: "{Brief title}"
+   description: "{One sentence for card preview}"
+   status: pending
+   priority: P2
+   effort: {sum of phases, e.g., 4h}
+   branch: {current git branch}
+   tags: [cro, conversion]
+   created: {YYYY-MM-DD}
+   ---
+   ```
+5. Keep `plan.md` generic, under 80 lines, list each phase with status/progress and links
+6. **Create phase files** (`phase-XX-phase-name.md`) with sections: Context links, Overview (date/priority/statuses), Key Insights, Requirements, Architecture, Related code files, Implementation Steps, Todo list, Success Criteria, Risk Assessment, Security Considerations, Next steps
+7. Keep research markdown reports ≤150 lines with citations
+8. **Wait** for user approval before implementing
+
+Sacrifice grammar for concision. List unresolved questions at end of reports.

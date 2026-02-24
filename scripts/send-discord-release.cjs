@@ -148,7 +148,7 @@ function createEmbed(release) {
 // Send to Discord
 function sendToDiscord(embed) {
   const payload = {
-    username: releaseType === 'beta' ? 'CK Beta Release Bot' : 'CK Release Bot',
+    username: releaseType === 'beta' ? 'ClaudeKit Beta Release Bot' : 'ClaudeKit Release Bot',
     avatar_url: 'https://github.com/claudekit.png',
     embeds: [embed]
   };

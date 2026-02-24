@@ -6,7 +6,7 @@ Scans .claude/commands/ directory to build catalog at runtime.
 Usage:
     python ck-help.py                    # Overview with quick start
     python ck-help.py fix                # Category guide with workflow
-    python ck-help.py plan:fast          # Command details
+    python ck-help.py plan --fast        # Command details
     python ck-help.py debug login error  # Task recommendations
     python ck-help.py auth               # Search (unknown word)
 """
@@ -141,6 +141,7 @@ TASK_MAPPINGS = {
     "bootstrap": ["start", "new", "init", "setup", "project", "scaffold", "generate", "begin"],
     "test": ["test", "check", "verify", "validate", "spec", "unit", "integration", "coverage", "login", "auth", "e2e"],
     "docs": ["document", "readme", "docs", "explain", "comment", "documentation"],
+    "git": ["git", "commit", "push", "pull request", "merge", "branch", "stage", "diff", "stash"],
     "review": ["review", "audit", "inspect", "quality", "refactor", "clean"],
     "config": ["config", "configure", "settings", "ck.json", ".ck.json", "setup", "locale", "language", "paths"],
     "coding-level": ["coding", "level", "eli5", "junior", "senior", "lead", "god", "beginner", "expert", "teach", "learn", "explain"],
@@ -158,8 +159,9 @@ CATEGORY_GUIDES = {
     "plan": {
         "title": "Planning",
         "workflow": [
-            ("Quick plan", "`/plan:fast` \"your task\""),
-            ("Deep research", "`/plan:hard` \"complex task\""),
+            ("Quick plan", "`/plan --fast` \"your task\""),
+            ("Deep research", "`/plan --hard` \"complex task\""),
+            ("Multi-agent", "`/plan --parallel` \"complex task\""),
             ("Validate", "`/plan:validate` (interview to confirm decisions)"),
             ("Execute plan", "`/cook` (runs the plan)"),
         ],
@@ -169,7 +171,7 @@ CATEGORY_GUIDES = {
         "title": "Implementation",
         "workflow": [
             ("Quick impl", "`/cook` \"your feature\""),
-            ("Auto mode", "`/cook:auto` \"trust me bro\""),
+            ("Auto mode", "`/cook --auto` \"trust me bro\""),
             ("Test", "`/test`"),
         ],
         "tip": "Cook is standalone - it plans internally. Use /plan → /cook for explicit planning",
@@ -177,8 +179,9 @@ CATEGORY_GUIDES = {
     "bootstrap": {
         "title": "Project Setup",
         "workflow": [
-            ("Quick start", "`/bootstrap:auto:fast` \"requirements\""),
+            ("Quick start", "`/bootstrap --fast` \"requirements\""),
             ("Full setup", "`/bootstrap` \"detailed requirements\""),
+            ("Auto mode", "`/bootstrap --auto` (default)"),
         ],
         "tip": "Include tech stack preferences in description",
     },
@@ -248,8 +251,36 @@ CATEGORY_GUIDES = {
         ],
         "tip": "Dashboard shows plan phases, progress bars, and agent activity. Future: worktree + agent orchestration",
     },
+    "brainstorm": {
+        "title": "Brainstorming & Ideation",
+        "workflow": [
+            ("Brainstorm", "`/brainstorm` \"your topic\""),
+            ("With context", "`/brainstorm` \"topic\" (respects codingLevel)"),
+            ("Trade-offs", "Analyze solutions with brutal honesty"),
+        ],
+        "tip": "Use before planning to explore approaches and validate feasibility",
+    },
+    "fix": {
+        "title": "Fixing Issues & Debugging",
+        "workflow": [
+            ("Auto fix", "`/fix` \"describe the issue\""),
+            ("Parallel", "`/fix --parallel` (multi-agent debug)"),
+            ("Debug only", "`/debug` (root cause analysis)"),
+        ],
+        "tip": "Activate /fix before fixing any bug, error, test failure, or CI/CD issue",
+    },
+    "git": {
+        "title": "Git Operations",
+        "workflow": [
+            ("Commit", "`/git cm`"),
+            ("Commit & push", "`/git cp`"),
+            ("Pull request", "`/git pr` [to-branch] [from-branch]"),
+            ("Merge", "`/git merge` [to-branch] [from-branch]"),
+        ],
+        "tip": "Uses conventional commits with auto-split by type/scope. Scans for secrets",
+    },
     "preview": {
-        "title": "Content Preview & Visual Generation",
+        "title": "Content Preview & Novel Reader",
         "workflow": [
             ("View markdown", "`/preview plans/plan.md`"),
             ("Browse directory", "`/preview docs/`"),
@@ -454,9 +485,14 @@ def show_overview(data: dict, prefix: str) -> None:
     print(f"- Review: `/{prefix}review` → `/{prefix}watzup`")
     print()
     print("**Categories:**")
-    for cat_key in sorted(categories.keys()):
+    # Merge discovered command categories with skill-only categories from CATEGORY_GUIDES
+    all_cats = set(categories.keys()) | set(CATEGORY_GUIDES.keys())
+    # Exclude internal-only categories from overview
+    skip_cats = {"config", "coding-level", "notifications"}
+    for cat_key in sorted(all_cats - skip_cats):
         count = len(commands.get(cat_key, []))
-        print(f"- `{cat_key}` ({count})")
+        suffix = f" ({count})" if count > 0 else ""
+        print(f"- `{cat_key}`{suffix}")
     print()
     print("**Usage:**")
     print(f"- `{help_cmd} <category>` - Category guide with workflow")
@@ -467,7 +503,7 @@ def show_overview(data: dict, prefix: str) -> None:
     print(f"- Unclear about approach? → `/{prefix}brainstorm` first")
     print(f"- Agent generated report? → `/{prefix}preview` to view")
     print("- Add `ultrathink` for deep analysis (more tokens)")
-    print("- `:parallel` variants (e.g., `/code:parallel`) = faster but more tokens, check quota")
+    print("- `--parallel` flag (e.g., `/plan --parallel`) = multi-agent, faster but more tokens")
 
 
 def show_category_guide(data: dict, category: str, prefix: str) -> None:

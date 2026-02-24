@@ -1,6 +1,6 @@
 ---
-description: ⚡⚡ Run UI tests on a website & generate a detailed report.
-argument-hint: [url] [options]
+description: '⚡⚡ Run UI tests on a website & generate a detailed report.'
+argument-hint: '[url] [options]'
 ---
 
 Activate the chrome-devtools skill.
@@ -70,7 +70,7 @@ node screenshot.js --url https://example.com/settings --output settings.png --cl
 - `--clear true` - Clear saved auth session
 
 ## Workflow
-- Use `planning` skill to organize the test plan & report in the current project directory.
+- Use `plan` skill to organize the test plan & report in the current project directory.
 - All the screenshots should be saved in the same report directory.
 - Browse $URL with the specified $OPTIONS, discover all pages, components, and endpoints.
 - Create a test plan based on the discovered structure

@@ -1,8 +1,8 @@
 ---
-description: AI agent orchestration board (Coming Soon)
+description: 'AI agent orchestration board (Coming Soon)'
 arguments:
   - name: dir
-    description: Plans directory (default: ./plans)
+    description: 'Plans directory (default: ./plans)'
     required: false
 ---
 

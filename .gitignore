@@ -62,7 +62,6 @@ plans/**/*
 !plans/templates/*
 screenshots/*
 docs/screenshots/*
-docs/research/*
 logs.txt
 test-ck
 __pycache__
@@ -71,9 +70,17 @@ __pycache__
 prompt.md
 ck.md
 
+# Agent memory (project scope)
+.claude/agent-memory/
+
 # Hook diagnostics logs
 .claude/hooks/.logs/
 
 # Gemini CLI settings (symlink to .claude/.mcp.json)
 .gemini/settings.json
 .claude/settings.bak.json
+# External repos for study/reference
+external/
+
+# Git worktrees (local development only)
+worktrees/

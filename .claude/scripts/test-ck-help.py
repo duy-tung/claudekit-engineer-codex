@@ -97,6 +97,18 @@ def main():
     ))
 
     tests.append(test_case(
+        "fix category",
+        ["fix"],
+        ["Fixing Issues", "/fix", "/debug"]
+    ))
+
+    tests.append(test_case(
+        "git category",
+        ["git"],
+        ["Git Operations", "/git cm", "/git cp", "/git pr"]
+    ))
+
+    tests.append(test_case(
         "watzup category",
         ["watzup"],
         ["Session Review", "Wrap-up", "/watzup", "summary"]
@@ -108,13 +120,7 @@ def main():
     tests.append(test_case(
         "plan category",
         ["plan"],
-        ["Planning", "/plan:fast", "/plan:hard", "/plan:validate", "Commands:"]
-    ))
-
-    tests.append(test_case(
-        "fix category",
-        ["fix"],
-        ["Fixing Issues", "/fix", "/debug"]
+        ["Planning", "/plan --fast", "/plan --hard", "/plan --parallel", "/plan:validate", "Commands:"]
     ))
 
     tests.append(test_case(
@@ -129,19 +135,19 @@ def main():
     tests.append(test_case(
         "overview shows workflow sequences",
         [],
-        ["Common Workflows:", "/plan", "/code", "/test", "/git:pr", "→"]
+        ["Common Workflows:", "/plan", "/cook", "/test", "→"]
     ))
 
     tests.append(test_case(
         "overview shows tips",
         [],
-        ["Tips:", "/brainstorm", "ultrathink", "tokens", "/preview", ":parallel", "quota"]
+        ["Tips:", "/brainstorm", "ultrathink", "tokens", "/preview", "--parallel"]
     ))
 
     tests.append(test_case(
         "overview shows categories",
         [],
-        ["Categories:", "bootstrap", "cook", "fix", "plan", "test"]
+        ["Categories:", "bootstrap", "cook", "fix", "git", "plan", "test"]
     ))
 
     # ========== Intent Detection Fixes ==========
@@ -166,13 +172,13 @@ def main():
     tests.append(test_case(
         "git matches git commands",
         ["git", "commit"],
-        ["Recommended for:", "/git:cm"]
+        ["Recommended for:", "/git cm"]
     ))
 
     tests.append(test_case(
         "digital marketing - git should NOT match",
         ["digital", "marketing"],
-        ["content", "Recommended for:"],
+        ["Not sure about:"],
         ["/git"]  # git should NOT appear for "digital"
     ))
 
