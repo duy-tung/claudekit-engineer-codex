@@ -36,6 +36,11 @@ EXACT_CATEGORY_MAP = {
     "worktree": "dev-tools",
     "preview": "utilities",
     "project-management": "utilities",
+    "bootstrap": "utilities",
+    "brainstorm": "utilities",
+    "cook": "utilities",
+    "fix": "utilities",
+    "team": "dev-tools",
 }
 
 def extract_frontmatter(content: str) -> Dict:

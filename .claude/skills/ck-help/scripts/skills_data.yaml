@@ -45,7 +45,7 @@
   has_scripts: true
   name: better-auth
   path: better-auth/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Bootstrap new projects with research, tech stack, design, planning,
     and implementation. Modes: full (interactive), auto (default), fast (skip research),
     parallel (multi-agent).'
@@ -53,7 +53,7 @@
   has_scripts: false
   name: bootstrap
   path: bootstrap/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] Brainstorm solutions with trade-off analysis and brutal honesty.
     Use for ideation, architecture decisions, technical debates, feature exploration,
     feasibility assessment, design discussions.'
@@ -101,7 +101,7 @@
   has_scripts: true
   name: context-engineering
   path: context-engineering/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] ALWAYS activate this skill before implementing EVERY feature,
     plan, or fix.'
   has_references: true
@@ -197,7 +197,7 @@
   has_scripts: false
   name: find-skills
   path: find-skills/SKILL.md
-- category: other
+- category: utilities
   description: '[CK] ALWAYS activate this skill before fixing ANY bug, error, test
     failure, CI/CD issue, type error, lint, log error, UI issue, code problem.'
   has_references: true
@@ -444,7 +444,7 @@
   has_scripts: false
   name: tanstack
   path: tanstack/SKILL.md
-- category: other
+- category: dev-tools
   description: '[CK] Orchestrate Agent Teams for parallel multi-session collaboration.
     Use for research, implementation, review, and debug workflows requiring independent
     teammates.'

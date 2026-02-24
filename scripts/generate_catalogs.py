@@ -36,7 +36,7 @@ def load_yaml(filename):
 
     # skills_data canonical source moved under ck-help skill.
     if filename == 'skills_data.yaml':
-        canonical = SCRIPT_DIR.parent / 'skills' / 'ck-help' / 'scripts' / 'skills_data.yaml'
+        canonical = SCRIPT_DIR.parent / '.claude' / 'skills' / 'ck-help' / 'scripts' / 'skills_data.yaml'
         if canonical.exists():
             return yaml.safe_load(canonical.read_text(encoding='utf-8'))
 
