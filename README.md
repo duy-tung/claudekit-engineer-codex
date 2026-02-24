@@ -56,7 +56,7 @@ A comprehensive boilerplate template for building professional software projects
 - **[Codebase Summary](./docs/codebase-summary.md)** - High-level overview of project structure, technologies, and components
 - **[Code Standards](./docs/code-standards.md)** - Coding standards, naming conventions, and best practices
 - **[System Architecture](./docs/system-architecture.md)** - Detailed architecture documentation, component interactions, and data flow
-- **[Commands Reference](./guide/COMMANDS.md)** - Complete guide to all available slash commands
+- **[Skills Reference](./guide/SKILLS.md)** - Complete guide to all available skills
 
 ### 📖 Additional Resources
 - **[CLAUDE.md](./CLAUDE.md)** - Development instructions and workflows for AI agents
