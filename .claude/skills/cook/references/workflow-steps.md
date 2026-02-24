@@ -61,7 +61,7 @@ All modes share core steps with mode-specific variations.
 **IMPORTANT:**
 1. `TaskList` first — check for existing tasks (hydrated by planning skill in same session)
 2. If tasks exist → pick them up, skip re-creation
-3. If no tasks → read plan phases, `TaskCreate` for each unchecked `[ ]` item with priority order
+3. If no tasks → read plan phases, `TaskCreate` for each unchecked `[ ]` item with priority order and metadata (`phase`, `planDir`, `phaseFile`)
 4. Tasks can be blocked by other tasks via `addBlockedBy`
 
 **All modes:**
@@ -125,18 +125,23 @@ All modes share core steps with mode-specific variations.
 
 **All modes - MANDATORY subagents (NON-NEGOTIABLE):**
 1. **MUST** spawn these subagents in parallel:
-   - `Task(subagent_type="project-manager", prompt="Update plan status. Mark phase DONE.", description="Update plan")`
+   - `Task(subagent_type="project-manager", prompt="Run full sync-back for [plan-path]: reconcile all completed Claude Tasks with all phase files, backfill stale completed checkboxes across every phase, then update plan.md frontmatter/table progress. Do NOT only mark current phase.", description="Update plan")`
    - `Task(subagent_type="docs-manager", prompt="Update docs for changes.", description="Update docs")`
-2. Use `TaskUpdate` to mark Claude Tasks complete immediately.
-3. Onboarding check (API keys, env vars)
-4. **MUST** spawn git subagent: `Task(subagent_type="git-manager", prompt="Stage and commit changes", description="Commit")`
+2. Project-manager sync-back MUST include:
+   - Sweep all `phase-XX-*.md` files in the plan directory.
+   - Mark every completed item `[ ] → [x]` based on completed tasks (including earlier phases finished before current phase).
+   - Update `plan.md` status/progress (`pending`/`in-progress`/`completed`) from actual checkbox state.
+   - Return unresolved mappings if any completed task cannot be matched to a phase file.
+3. Use `TaskUpdate` to mark Claude Tasks complete after sync-back confirmation.
+4. Onboarding check (API keys, env vars)
+5. **MUST** spawn git subagent: `Task(subagent_type="git-manager", prompt="Stage and commit changes", description="Commit")`
 
 **CRITICAL:** Step 6 is INCOMPLETE without spawning all 3 subagents. DO NOT skip subagent delegation.
 
 **Auto mode:** Continue to next phase automatically, start from **Step 3**.
 **Others:** Ask user before next phase
 
-**Output:** `✓ Step 6: Finalized - 3 subagents invoked - Status updated - Committed`
+**Output:** `✓ Step 6: Finalized - 3 subagents invoked - Full-plan sync-back completed - Committed`
 
 ## Mode-Specific Flow Summary
 
