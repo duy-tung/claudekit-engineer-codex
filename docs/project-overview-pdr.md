@@ -115,7 +115,7 @@ Command behavior is implemented via skill directories:
 **Media Processing**: media-processing (FFmpeg, ImageMagick)
 **MCP Tools**: mcp-builder, mcp-management
 **Mobile Development**: mobile-development
-**Project Planning**: planning, plans-kanban
+**Project Planning**: plan, plans-kanban
 **Skill Development**: skill-creator, template-skill
 **Testing & QA**: web-testing
 **Visualization**: mermaidjs-v11
@@ -562,7 +562,7 @@ Command behavior is implemented via skill directories:
 - [Codebase Summary](./codebase-summary.md)
 - [Code Standards](./code-standards.md)
 - [System Architecture](./system-architecture.md)
-- [Commands Reference](../guide/COMMANDS.md)
+- [Skills Reference](../guide/SKILLS.md)
 
 ### External Resources
 - [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)

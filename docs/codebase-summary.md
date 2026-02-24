@@ -109,7 +109,7 @@ claudekit-engineer/
 - docs-seeker, document-skills, find-skills, frontend-design, frontend-development
 - git, gkg, google-adk-python, markdown-novel-viewer, mcp-builder
 - mcp-management, media-processing, mermaidjs-v11, mobile-development, payment-integration
-- planning, plans-kanban, problem-solving, react-best-practices, remotion
+- plan, plans-kanban, problem-solving, react-best-practices, remotion
 - repomix, research, scout, sequential-thinking, shader
 - shopify, skill-creator, template-skill, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
@@ -185,7 +185,7 @@ claudekit-engineer/
 
 ### For Users
 - **README.md**: Project overview and quick start
-- **guide/COMMANDS.md**: Comprehensive command reference (7,073 tokens)
+- **guide/SKILLS.md**: Comprehensive skills reference (7,073 tokens)
 - **CLAUDE.md**: Development instructions and workflows
 
 ### For Developers
@@ -306,7 +306,7 @@ None (template project)
 **Total Characters**: 173,077 chars
 
 **Top 5 Files by Token Count**:
-1. `guide/COMMANDS.md` - 7,073 tokens (18.2%)
+1. `guide/SKILLS.md` - 7,073 tokens (18.2%)
 2. `CHANGELOG.md` - 4,836 tokens (12.4%)
 3. `README.md` - 3,261 tokens (8.4%)
 
@@ -339,7 +339,7 @@ Features: Automated releases, changelog generation
 - `README.md` - Main project docs
 - `CLAUDE.md` - Agent instructions
 - `CHANGELOG.md` - Version history
-- `guide/COMMANDS.md` - Command reference
+- `guide/SKILLS.md` - Skills reference
 
 ### Workflows
 - `.claude/rules/primary-workflow.md`
