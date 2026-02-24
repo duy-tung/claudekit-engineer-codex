@@ -1,3 +1,20 @@
+## [2.12.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.7...v2.12.0-beta.8) (2026-02-24)
+
+
+### 🚀 Features
+
+* **skills:** add tanstack skill for TanStack Start, Form, and AI ([f08b3e2](https://github.com/claudekit/claudekit-engineer/commit/f08b3e288cbb8bdf6f729ae45f65122b61101cc2))
+
+
+### 🐞 Bug Fixes
+
+* **command:** journal should follow writing styles if any ([57fccce](https://github.com/claudekit/claudekit-engineer/commit/57fccce6d509e5bb9ec6cb452087eb239998666a))
+
+
+### 📚 Documentation
+
+* **skills:** interconnection map ([f25c77d](https://github.com/claudekit/claudekit-engineer/commit/f25c77de11fb5f6879728889a0fe33a6415ed66e))
+
 ## [2.12.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.6...v2.12.0-beta.7) (2026-02-23)
 
 
