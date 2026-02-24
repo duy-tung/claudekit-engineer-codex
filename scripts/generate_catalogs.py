@@ -7,7 +7,12 @@ Use --output to write to a specific file instead.
 
 import argparse
 import sys
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    raise SystemExit(
+        "PyYAML is required. Install with: python3 -m pip install -r .claude/scripts/requirements.txt"
+    )
 from pathlib import Path
 from datetime import datetime
 
@@ -27,12 +32,23 @@ except ImportError:
 
 def load_yaml(filename):
     """Load YAML file from script directory with helpful error handling."""
-    path = SCRIPT_DIR / filename
-    if not path.exists():
-        print(f"Error: {path} not found", file=sys.stderr)
+    primary = SCRIPT_DIR / filename
+
+    # skills_data canonical source moved under ck-help skill.
+    if filename == 'skills_data.yaml':
+        canonical = SCRIPT_DIR.parent / '.claude' / 'skills' / 'ck-help' / 'scripts' / 'skills_data.yaml'
+        if canonical.exists():
+            return yaml.safe_load(canonical.read_text(encoding='utf-8'))
+
+    if not primary.exists():
+        print(f"Error: {primary} not found", file=sys.stderr)
         print(f"Hint: Run scan_skills.py or scan_commands.py first to generate data files", file=sys.stderr)
         sys.exit(1)
-    return yaml.safe_load(path.read_text(encoding='utf-8'))
+
+    loaded = yaml.safe_load(primary.read_text(encoding='utf-8'))
+    if loaded is None:
+        return []
+    return loaded
 
 
 def generate_commands_yaml():
@@ -114,6 +130,17 @@ def generate_skills_yaml():
             'multimedia': 'Multimedia & Processing',
             'frameworks': 'Frameworks & Platforms',
             'utilities': 'Utilities & Helpers',
+            'core': 'Core Workflow',
+            'plan': 'Planning & Delivery',
+            'review': 'Code Review',
+            'test': 'Testing & QA',
+            'docs': 'Documentation',
+            'tools': 'Tooling',
+            'infra': 'Infrastructure',
+            'kanban': 'Kanban & Planning Board',
+            'worktree': 'Git Worktree',
+            'journal': 'Journaling',
+            'watzup': 'Session Wrap-up',
             'other': 'Other'
         },
         'legend': {

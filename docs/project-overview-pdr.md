@@ -90,13 +90,13 @@ Provide a production-ready template that:
 - `/brainstorm` - Solution ideation and evaluation
 - `/debug` - Deep issue analysis
 
-**Command Organization** (`.claude/commands/`):
-Commands are organized into modular directories:
+**Skill Organization** (`.claude/skills/`):
+Command behavior is implemented via skill directories:
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation generation and updates
-- `plan/` - Planning command variants
-- `review/` - Code review workflows
-- `test/` - Testing and validation commands
+- `plan/` - Planning workflows and validators
+- `code-review/` - Code review workflows
+- `test/` - Testing and validation workflows
 
 ### 3. Extensive Skills Library (47+ Skills)
 
@@ -120,7 +120,7 @@ Commands are organized into modular directories:
 **Media Processing**: media-processing (FFmpeg, ImageMagick)
 **MCP Tools**: mcp-builder, mcp-management
 **Mobile Development**: mobile-development
-**Project Planning**: planning, plans-kanban
+**Project Planning**: plan, plans-kanban
 **Skill Development**: skill-creator, template-skill
 **Testing & QA**: web-testing
 **Visualization**: mermaidjs-v11
@@ -411,7 +411,7 @@ Commands are organized into modular directories:
 **Actor**: Project Manager
 **Goal**: Ensure docs are current
 **Flow**:
-1. Run `/docs:update`
+1. Run `/docs update`
 2. Docs manager scans codebase
 3. Generates fresh summary with repomix
 4. Identifies outdated sections
@@ -567,7 +567,7 @@ Commands are organized into modular directories:
 - [Codebase Summary](./codebase-summary.md)
 - [Code Standards](./code-standards.md)
 - [System Architecture](./system-architecture.md)
-- [Commands Reference](../guide/COMMANDS.md)
+- [Skills Reference](../guide/SKILLS.md)
 
 ### External Resources
 - [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)

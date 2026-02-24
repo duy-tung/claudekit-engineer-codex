@@ -1,12 +1,24 @@
 ---
 name: test
 description: "[CK] Run unit, integration, e2e, and UI tests. Use for test execution, coverage analysis, build verification, visual regression, and QA reports."
+argument-hint: "[context] OR ui [url]"
 version: 1.0.0
 ---
 
 # Testing & Quality Assurance
 
 Comprehensive testing framework covering code-level testing (unit, integration, e2e), UI/visual testing via browser automation, coverage analysis, and structured QA reporting.
+
+## Default (No Arguments)
+
+If invoked with context (test scope), proceed with testing. If invoked WITHOUT arguments, use `AskUserQuestion` to present available test operations:
+
+| Operation | Description |
+|-----------|-------------|
+| `(default)` | Run unit/integration/e2e tests |
+| `ui` | Run UI tests on a website |
+
+Present as options via `AskUserQuestion` with header "Test Operation", question "What would you like to do?".
 
 ## Core Principle
 

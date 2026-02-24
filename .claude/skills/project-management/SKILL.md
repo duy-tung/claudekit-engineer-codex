@@ -1,6 +1,6 @@
 ---
 name: project-management
-description: Track progress, update plan statuses, manage Claude Tasks, generate reports, coordinate docs updates. Use for project oversight, status checks, plan completion, task hydration, cross-session continuity.
+description: "[CK] Track progress, update plan statuses, manage Claude Tasks, generate reports, coordinate docs updates. Use for project oversight, status checks, plan completion, task hydration, cross-session continuity."
 ---
 
 # Project Management
@@ -36,7 +36,7 @@ Load: `references/hydration-workflow.md`
 Tasks are ephemeral. Plan files are persistent. The hydration pattern bridges them:
 - **Hydrate:** Read plan `[ ]` items → `TaskCreate` per unchecked item
 - **Work:** `TaskUpdate` tracks progress in real-time
-- **Sync-back:** Update `[ ]` → `[x]`, update YAML frontmatter status
+- **Sync-back:** Reconcile all completed tasks against all phase files, update `[ ]` → `[x]`, update YAML frontmatter status
 - **Resume:** Next session re-hydrates from remaining `[ ]` items
 
 ### 3. Progress Tracking
@@ -75,9 +75,19 @@ Generate reports: session summaries, plan completion, multi-plan overviews.
 1. `TaskList()` — check existing tasks first
 2. If empty: hydrate from plan files (unchecked items)
 3. During work: `TaskUpdate` as tasks progress
-4. On completion: sync-back to plan files, update YAML frontmatter
+4. On completion: run full-plan sync-back (all phase files, including backfill for earlier phases), then update YAML frontmatter
 5. Generate status report to reports directory
 6. Delegate doc updates if changes warrant
+
+## Mandatory Sync-Back Guard
+
+When updating plan status, NEVER mark only the currently active phase.
+
+1. Sweep all `phase-XX-*.md` files under the target plan directory.
+2. Reconcile every `TaskUpdate(status: "completed")` item to phase metadata (`phase` / `phaseFile`).
+3. Backfill stale checkboxes in earlier phases before marking later phases done.
+4. Update `plan.md` status/progress from real checkbox counts.
+5. If any completed task cannot be mapped to a phase file, report unresolved mappings and do not claim full completion.
 
 ## Plan YAML Frontmatter
 

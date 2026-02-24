@@ -62,7 +62,7 @@ Check if Git initialized. If not:
 After early phases (research, tech stack, design), trigger downstream skills:
 
 ### Planning Phase
-Activate **planning** skill with mode-appropriate flag:
+Activate **plan** skill with mode-appropriate flag:
 - `--full` → `/plan --hard <requirements>` (thorough research + validation)
 - `--auto` → `/plan --auto <requirements>` (auto-detect complexity)
 - `--fast` → `/plan --fast <requirements>` (skip research)

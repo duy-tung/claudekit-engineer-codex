@@ -6,7 +6,42 @@ Scan .claude/skills directory and extract skill metadata.
 import re
 from pathlib import Path
 from typing import Dict, List
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    raise SystemExit(
+        "PyYAML is required. Install with: python3 -m pip install -r .claude/scripts/requirements.txt"
+    )
+
+# Exact mappings for high-signal CK skills to avoid falling into "other".
+EXACT_CATEGORY_MAP = {
+    "ask": "utilities",
+    "code-review": "utilities",
+    "coding-level": "utilities",
+    "debug": "utilities",
+    "docs": "utilities",
+    "journal": "utilities",
+    "plan": "utilities",
+    "research": "utilities",
+    "sequential-thinking": "utilities",
+    "test": "utilities",
+    "watzup": "utilities",
+    "ck-help": "dev-tools",
+    "find-skills": "dev-tools",
+    "git": "dev-tools",
+    "kanban": "dev-tools",
+    "plans-kanban": "dev-tools",
+    "scout": "dev-tools",
+    "use-mcp": "dev-tools",
+    "worktree": "dev-tools",
+    "preview": "utilities",
+    "project-management": "utilities",
+    "bootstrap": "utilities",
+    "brainstorm": "utilities",
+    "cook": "utilities",
+    "fix": "utilities",
+    "team": "dev-tools",
+}
 
 def extract_frontmatter(content: str) -> Dict:
     """Extract YAML frontmatter from markdown content."""
@@ -88,8 +123,8 @@ def scan_skills(base_path: Path) -> List[Dict]:
 def categorize_skill(name: str, description: str, content: str) -> str:
     """Categorize skill based on name and content."""
     lower_name = name.lower()
-    lower_desc = description.lower()
-    lower_content = content[:500].lower()
+    if lower_name in EXACT_CATEGORY_MAP:
+        return EXACT_CATEGORY_MAP[lower_name]
 
     # AI/ML
     if any(x in lower_name for x in ['ai-', 'gemini', 'multimodal', 'adk']):
@@ -177,10 +212,19 @@ def main():
             refs = '📚' if skill['has_references'] else '  '
             print(f"  {scripts}{refs} {skill['name']:30} {skill['description'][:80]}")
 
-    # Output YAML for processing (generate_catalogs.py reads YAML)
-    output_path = Path('.claude/scripts/skills_data.yaml')
+    # Output YAML to ck-help scripts directory
+    output_path = Path('.claude/skills/ck-help/scripts/skills_data.yaml')
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(yaml.dump(skills, allow_unicode=True, default_flow_style=False))
     print(f"\n✓ Saved metadata to {output_path}")
+
+    # Legacy location now points to canonical source to avoid data drift.
+    legacy_path = Path('.claude/scripts/skills_data.yaml')
+    legacy_path.write_text(
+        "# Skills catalog moved to .claude/skills/ck-help/scripts/skills_data.yaml\n"
+        "# Regenerate via: python3 .claude/scripts/scan_skills.py\n",
+        encoding='utf-8',
+    )
 
 if __name__ == '__main__':
     main()

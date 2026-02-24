@@ -1,3 +1,264 @@
+## [2.13.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.1...v2.13.0-beta.2) (2026-02-24)
+
+
+### 🐞 Bug Fixes
+
+* **workflows:** enforce full-plan phase sync-back on finalize ([a95ab81](https://github.com/claudekit/claudekit-engineer/commit/a95ab8183538d1e769e52861ae520f940e3d8bbb))
+
+## [2.13.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0...v2.13.0-beta.1) (2026-02-24)
+
+
+### 🚀 Features
+
+* **ck-help:** add subcommand-aware query routing ([7794a48](https://github.com/claudekit/claudekit-engineer/commit/7794a484423cadb26b34ff002b0530d915550001))
+* migrate all 19 claudekit-engineer commands to skills ([f5af9aa](https://github.com/claudekit/claudekit-engineer/commit/f5af9aa1ed9430417a6e3ba7eda0435e3a8f253d))
+* **skills:** add argument-hint frontmatter and subcommand browsing to 6 skills ([327ad87](https://github.com/claudekit/claudekit-engineer/commit/327ad87baa25cec8b376627df77e78b5eb3e7da3))
+
+
+### 🐞 Bug Fixes
+
+* **skills:** address review findings from commands-to-skills migration ([9b7dee2](https://github.com/claudekit/claudekit-engineer/commit/9b7dee2e41326744cdfe6fcfbb295bb1d5409a6c))
+* **skills:** address second-pass review findings for commands-to-skills migration ([d366fb9](https://github.com/claudekit/claudekit-engineer/commit/d366fb9b66f885c9be3db4b6bc5dba5497f8b7e0))
+* **skills:** address third-pass review findings ([b19cf5b](https://github.com/claudekit/claudekit-engineer/commit/b19cf5be5c55fada0258c60d9d881fa7b9bced7d))
+* **worktree:** harden sanitization and matching behavior ([8be2a2f](https://github.com/claudekit/claudekit-engineer/commit/8be2a2f60d7f8e5ff784c1405a9bf53fa95e2fb1))
+
+
+### 📚 Documentation
+
+* **architecture:** shift core docs to skills model ([2dca8e7](https://github.com/claudekit/claudekit-engineer/commit/2dca8e72aab5336372ef411bb86c806b3f714938))
+* **readme:** replace stale command references ([8aa3cea](https://github.com/claudekit/claudekit-engineer/commit/8aa3ceae787d5b7acb12b600913a416c38127443))
+* **skills:** fix remaining command-to-skill doc references ([4837489](https://github.com/claudekit/claudekit-engineer/commit/48374897f90840bfdae8024edd68c13e9f1249db))
+* **skills:** normalize review and subcommand syntax ([276e807](https://github.com/claudekit/claudekit-engineer/commit/276e8074b2dd86e6965bb241f3a97cd86dc2a056))
+* **workflow:** align plan syntax references ([6803b63](https://github.com/claudekit/claudekit-engineer/commit/6803b632ec3ea9d1c4884a385d31d406d9576378))
+
+
+### ♻️ Code Refactoring
+
+* **scripts:** wrap legacy ck-help entrypoint ([6e99192](https://github.com/claudekit/claudekit-engineer/commit/6e991926981c8a0208850eb0e0f68da41158259c))
+* **scripts:** wrap legacy worktree entrypoints ([60eb573](https://github.com/claudekit/claudekit-engineer/commit/60eb573d9b39d90421b1a1d8d3caa6dc07127c37))
+
+
+### ✅ Tests
+
+* **ck-help:** refresh canonical help regression suite ([eb435f2](https://github.com/claudekit/claudekit-engineer/commit/eb435f2b9ddbf0a8fc8c5adab4e0e72f96146e16))
+
+## [2.12.0](https://github.com/claudekit/claudekit-engineer/compare/v2.11.3...v2.12.0) (2026-02-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **team:** /team templates now auto-execute instead of providing
+instructions for manual orchestration.
+
+### 🚀 Features
+
+* add portable-manifest.json with Codex AGENTS.md to TOML path migration ([2e7b29a](https://github.com/claudekit/claudekit-engineer/commit/2e7b29a337fe165bf980ce969dab5e0783d2c8f5)), closes [mrgoonie/claudekit-cli#433](https://github.com/mrgoonie/claudekit-cli/issues/433) [#494](https://github.com/claudekit/claudekit-engineer/issues/494) [#498](https://github.com/claudekit/claudekit-engineer/issues/498)
+* **agents:** update agent definitions and references for agent teams support ([cfa9950](https://github.com/claudekit/claudekit-engineer/commit/cfa99507b0c1714bff01567d2b4d790a56662ba8))
+* **commands:** add /plan:red-team adversarial plan review ([0c187cc](https://github.com/claudekit/claudekit-engineer/commit/0c187ccccf704ef8ca1cb687304da01871862404)), closes [#469](https://github.com/claudekit/claudekit-engineer/issues/469)
+* **hooks:** add always-on diagnostics logging with crash wrappers ([#481](https://github.com/claudekit/claudekit-engineer/issues/481)) ([8b97ee0](https://github.com/claudekit/claudekit-engineer/commit/8b97ee06d2c79948b52ae582fd380a3b8d84c574)), closes [#478](https://github.com/claudekit/claudekit-engineer/issues/478)
+* **plan:** integrate red-team review into plan workflow ([2ab6fa5](https://github.com/claudekit/claudekit-engineer/commit/2ab6fa5c7f2b923cd1fe75b0573a67c1cf3550a0))
+* **skill:** convert `/bootstrap` command to skill ([bfd0480](https://github.com/claudekit/claudekit-engineer/commit/bfd0480590f2a8cb8923fc2f15a408a3cd2938f6))
+* **skill:** convert `/plan:*` command to skill ([3d92e31](https://github.com/claudekit/claudekit-engineer/commit/3d92e3154bf46f94c2c8d595953fd6ca343d2e1e))
+* **skills:** add `project-management` skill ([b492c80](https://github.com/claudekit/claudekit-engineer/commit/b492c8083b1be5db8574953ee849bb1afee078a9))
+* **skills:** add Agent Teams orchestration skill ([#458](https://github.com/claudekit/claudekit-engineer/issues/458)) ([3542566](https://github.com/claudekit/claudekit-engineer/commit/35425666f1397f71dbf7c1df931c8836aeba5d28)), closes [#457](https://github.com/claudekit/claudekit-engineer/issues/457)
+* **skills:** add tanstack skill for TanStack Start, Form, and AI ([f08b3e2](https://github.com/claudekit/claudekit-engineer/commit/f08b3e288cbb8bdf6f729ae45f65122b61101cc2))
+* **team:** rewrite /team skill as CK-native imperative execution engine v2.0.0 ([5239d7a](https://github.com/claudekit/claudekit-engineer/commit/5239d7a94d9e6cb3a90a17efcf08fd0e666ac3f7))
+* **team:** upgrade /team skill to v2.1.0 with event-driven hooks and agent memory ([5d3c9f6](https://github.com/claudekit/claudekit-engineer/commit/5d3c9f6483610367407abf5677aebd453d967b81))
+* **team:** upgrade /team skill to v2.1.0 with event-driven hooks and agent memory ([0d7e3d1](https://github.com/claudekit/claudekit-engineer/commit/0d7e3d1eebfa231cd74f96df57646aaed542fb2f))
+
+
+### 🐞 Bug Fixes
+
+* **agents:** added skills to subagents ([158cd09](https://github.com/claudekit/claudekit-engineer/commit/158cd09251ca734aa02cde0f304fb48922ff2ec0))
+* align skill SKILL.md names with directory names ([e354c07](https://github.com/claudekit/claudekit-engineer/commit/e354c076d24d86e461b8ae9db58232fa8d87a850))
+* align skill SKILL.md names with directory names ([bfd9165](https://github.com/claudekit/claudekit-engineer/commit/bfd9165dfcd1190b31209f4801383694f87001d7))
+* **chrome-devtools:** add OS-based headless detection and interactive OAuth login ([76a03b0](https://github.com/claudekit/claudekit-engineer/commit/76a03b0190c3eccd3abe1eaf609ed70565179618)), closes [#473](https://github.com/claudekit/claudekit-engineer/issues/473)
+* **chrome-devtools:** address code review edge cases ([710a98f](https://github.com/claudekit/claudekit-engineer/commit/710a98fcb38441e5e11281cca5daf718f9c77fef))
+* **ck-help:** update stale command syntax after command-to-skill migration ([4975fa0](https://github.com/claudekit/claudekit-engineer/commit/4975fa06e2ebd74ef44195aeb8cbbe3a504dc651))
+* **command:** journal should follow writing styles if any ([57fccce](https://github.com/claudekit/claudekit-engineer/commit/57fccce6d509e5bb9ec6cb452087eb239998666a))
+* **hooks:** align TaskCompleted/TeammateIdle handlers with official CC docs ([#466](https://github.com/claudekit/claudekit-engineer/issues/466)) ([5542a93](https://github.com/claudekit/claudekit-engineer/commit/5542a93955a3d9e7b88297f0361b10da3f9df9bd)), closes [#464](https://github.com/claudekit/claudekit-engineer/issues/464)
+* **hooks:** context-aware path extraction with heredoc detection ([c8b1e4b](https://github.com/claudekit/claudekit-engineer/commit/c8b1e4bb8b6678a7d4638809a688b986470e7288))
+* **hooks:** detect **/*.ext broad glob patterns ([599eaff](https://github.com/claudekit/claudekit-engineer/commit/599eaff8b9b457d54b1df3c6051ae0ab2edf04c8))
+* **hooks:** normalize absolute and relative paths in scout-block matcher ([41f8df1](https://github.com/claudekit/claudekit-engineer/commit/41f8df1c435231f1e6ba3bc28dbf90a813585798))
+* **hooks:** reduce session-init command failures ([0b631f2](https://github.com/claudekit/claudekit-engineer/commit/0b631f207f31e20b2bf1c36c87856f37f5a08119)), closes [#455](https://github.com/claudekit/claudekit-engineer/issues/455)
+* **hooks:** remove invalid TaskCompleted/TeammateIdle hook events ([6012d42](https://github.com/claudekit/claudekit-engineer/commit/6012d42bf887a8b4cc72edca4f95b7794ae402c3))
+* **hooks:** remove invalid TaskCompleted/TeammateIdle hook events ([d0545b5](https://github.com/claudekit/claudekit-engineer/commit/d0545b5f1c92280e1549f1b7f99de604770b9fae))
+* **hooks:** resolve compound command and allowlist edge cases ([6db7d7b](https://github.com/claudekit/claudekit-engineer/commit/6db7d7b766e377b34cfc00d49d232b5c336f3707))
+* **metadata:** add agent-teams to deletions for clean migration to team/ ([a64d5ac](https://github.com/claudekit/claudekit-engineer/commit/a64d5ace72569c78001c2eeb908555d888b84319))
+* **metadata:** add missing deletions for deprecated plan commands ([cb15d31](https://github.com/claudekit/claudekit-engineer/commit/cb15d31d4cf62d6f54205805d4e124dbc1cb60bd)), closes [#451](https://github.com/claudekit/claudekit-engineer/issues/451)
+* **plan:** apply red-team review findings from prompt architecture audit ([9ddecd3](https://github.com/claudekit/claudekit-engineer/commit/9ddecd3ff3366eae8c8fa40bb8e4ef6d2e675d26))
+* **plan:** use explicit Skill tool invocation for red-team and validate ([5150974](https://github.com/claudekit/claudekit-engineer/commit/5150974e6ab42004aaf38652eff8062dc035587a))
+* **preview:** add contextual path resolution for natural references ([04b60c2](https://github.com/claudekit/claudekit-engineer/commit/04b60c2192c9ff16e28b49bb5e110d46b5841923))
+* **preview:** add contextual path resolution for natural references ([51aa751](https://github.com/claudekit/claudekit-engineer/commit/51aa751cede4deaa9bae7f6297e73262ea470eaf))
+* **preview:** mermaid collapse button and code block scroll ([20abcac](https://github.com/claudekit/claudekit-engineer/commit/20abcac698db6f8b611618302f6bbc23ed13596f)), closes [#444](https://github.com/claudekit/claudekit-engineer/issues/444)
+* **preview:** mermaid collapse button and code block scroll ([0c421ae](https://github.com/claudekit/claudekit-engineer/commit/0c421ae504a3e6e074d190be6360de5ae03e0bff)), closes [#444](https://github.com/claudekit/claudekit-engineer/issues/444)
+* quote YAML frontmatter values containing colons and brackets ([71df90e](https://github.com/claudekit/claudekit-engineer/commit/71df90e6ca87a798c14e19130439657a13c31fea))
+* reduce Windows terminal freeze from excessive process spawning ([#471](https://github.com/claudekit/claudekit-engineer/issues/471)) ([faab212](https://github.com/claudekit/claudekit-engineer/commit/faab212d32d4edfefa1d767da4af7587f958390f))
+* **release:** add hotfix commit type for distinct release note visibility ([ff29d6f](https://github.com/claudekit/claudekit-engineer/commit/ff29d6f39a71e36b6f14891aa60eca074529a420))
+* replace viewport-based expand with :has() selector for mermaid/code blocks ([4330861](https://github.com/claudekit/claudekit-engineer/commit/4330861ddc87fc9eba99cbe061ea276b8b9ca2e9)), closes [#504](https://github.com/claudekit/claudekit-engineer/issues/504)
+* resolve merge conflicts between dev and main for v2.12.0 release ([bba37a7](https://github.com/claudekit/claudekit-engineer/commit/bba37a7a30740241c8adb72b0164fcdd6270abd5))
+* restore ClaudeKit bot name in Discord notifications ([9c6fafc](https://github.com/claudekit/claudekit-engineer/commit/9c6fafc7263fe4dc12dca34b0c751cb3872f4031))
+* **skills:** add [CK] prefix to skill descriptions for native command distinction ([1f5244e](https://github.com/claudekit/claudekit-engineer/commit/1f5244e20af9f041eae5dbcdd9ce8c1e88298edd)), closes [#453](https://github.com/claudekit/claudekit-engineer/issues/453)
+* **skills:** add uv venv fallback for uv-managed Python installations ([fa26676](https://github.com/claudekit/claudekit-engineer/commit/fa2667643db0387bd746a84e74749bd75db5336b)), closes [#483](https://github.com/claudekit/claudekit-engineer/issues/483)
+* **skills:** enhance `skill-creator` skill with `skillmark` ([8cdf309](https://github.com/claudekit/claudekit-engineer/commit/8cdf3093c3cf2828b9dcaaea7ec48480b6e886f1))
+* **skills:** expand agent-teams references into comprehensive knowledge base ([a66bd77](https://github.com/claudekit/claudekit-engineer/commit/a66bd775001f99fd4b80b5c09b1dd6072b43e081))
+* **skills:** rename agent-teams skill folder to team for command parity ([cd14c91](https://github.com/claudekit/claudekit-engineer/commit/cd14c91c4b902c3def654c3eafbbc105bcd865df))
+* **team:** add pre-flight check to prevent subagent fallback ([e7ff1d7](https://github.com/claudekit/claudekit-engineer/commit/e7ff1d718b4be1224cace6ec2a48618e1071cb73))
+* **team:** align cleanup docs with actual TeamCreate/TeamDelete API ([cd47905](https://github.com/claudekit/claudekit-engineer/commit/cd47905da9c4ab567dd75b90b47b1482295e9cdf))
+* **team:** correct total task count and naming mismatch in hook handlers ([8b8ba3a](https://github.com/claudekit/claudekit-engineer/commit/8b8ba3af7af275c27f411f017256451e9cb99856))
+* **team:** correct total task count and naming mismatch in hook handlers ([cbd4fe7](https://github.com/claudekit/claudekit-engineer/commit/cbd4fe7211204757bbefaeef6b4049e4dc2b4a29))
+* **team:** rename /team implement to /team cook for CK consistency ([c6dc19e](https://github.com/claudekit/claudekit-engineer/commit/c6dc19e0bf2b0b3b93be8ef51eb2cf8b469ce3c9))
+* **team:** reword pre-flight to prevent model self-check rejection ([953e437](https://github.com/claudekit/claudekit-engineer/commit/953e437a3e4224ecdd2f60948c8de3451a24c890))
+* use absolute paths in buildRulesSection to prevent wrong plans/ directory creation ([#476](https://github.com/claudekit/claudekit-engineer/issues/476)) ([#477](https://github.com/claudekit/claudekit-engineer/issues/477)) ([ac1317a](https://github.com/claudekit/claudekit-engineer/commit/ac1317ab5f48ffc3f68203be1f9fd72a582e615d))
+* use JS-computed layout for expand instead of :has() selector ([ac9c99c](https://github.com/claudekit/claudekit-engineer/commit/ac9c99ceb9eac137bd83e9c99a92d380bca80948))
+* **viewer:** make mermaid diagrams scale responsively on expand ([#467](https://github.com/claudekit/claudekit-engineer/issues/467)) ([#468](https://github.com/claudekit/claudekit-engineer/issues/468)) ([5946ab4](https://github.com/claudekit/claudekit-engineer/commit/5946ab4b82142f9cd87058b4384f10b8f4109db3))
+
+
+### 📚 Documentation
+
+* add skill-native-task documentation ([a2a2be1](https://github.com/claudekit/claudekit-engineer/commit/a2a2be10abbea06831b51a050722c12a402792b2))
+* **skills:** interconnection map ([f25c77d](https://github.com/claudekit/claudekit-engineer/commit/f25c77de11fb5f6879728889a0fe33a6415ed66e))
+* **team:** update agent-teams-guide for v2.1.0 with ASCII visualizations ([32c00ce](https://github.com/claudekit/claudekit-engineer/commit/32c00ce9e2105561d1de58d601e448a51ff746d1))
+* **team:** update agent-teams-guide for v2.1.0 with ASCII visualizations ([5a8aa32](https://github.com/claudekit/claudekit-engineer/commit/5a8aa328351e16742c5943c22302752abab0b08c))
+
+
+### ♻️ Code Refactoring
+
+* **rules:** decouple team mode from default orchestration workflow ([ecb01ed](https://github.com/claudekit/claudekit-engineer/commit/ecb01ed9800d1c5dc5a21057eca2e1e3d9cb23b7))
+
+
+### ⚡ Performance Improvements
+
+* **skill:** add `workflow-steps` to `cook` skill ([ee73b5e](https://github.com/claudekit/claudekit-engineer/commit/ee73b5e535c12d5a383c6e2014c40d2ca31525b9))
+* **skill:** enhance `/fix` skill with native task orchestration ([9b98f48](https://github.com/claudekit/claudekit-engineer/commit/9b98f489ae3e91ee7155390d7129ec8711f0f0f7))
+* **skill:** enhance `code-review` skill with task management ([f1d6a14](https://github.com/claudekit/claudekit-engineer/commit/f1d6a14680aa064a9fca43dcd79f037bbd110c63))
+* **skill:** enhance `copywriting` skill with CRO content ([b47c756](https://github.com/claudekit/claudekit-engineer/commit/b47c756c3334ceb1700242f3da1ffd5d4b36277f))
+* **skill:** enhance `debug` skill with task management ([0fb220f](https://github.com/claudekit/claudekit-engineer/commit/0fb220fb5177481088ca9a666115033bb778c42b))
+* **skills:** enhance `scout` skill with task management ([18a61f6](https://github.com/claudekit/claudekit-engineer/commit/18a61f6749d5badf32a5c6e587d60cca055abdb0))
+* **skills:** enhance `skill-creator` skill with `complete-guide-to-building-skills` ([794b881](https://github.com/claudekit/claudekit-engineer/commit/794b881b38d7947ceca2c5cadfc18f5bb1b518f9))
+* **skills:** utilize claude chrome extension in `debug` and `test` skills ([ad3681a](https://github.com/claudekit/claudekit-engineer/commit/ad3681af516b954f807cd6480b1e5fbdb8675268))
+
+
+### ✅ Tests
+
+* **hooks:** add comprehensive test suite for project-detector ([5c3a982](https://github.com/claudekit/claudekit-engineer/commit/5c3a982c5005bc5f4941f77af250075c2a122581)), closes [#455](https://github.com/claudekit/claudekit-engineer/issues/455) [#455](https://github.com/claudekit/claudekit-engineer/issues/455)
+* **hooks:** add exhaustive scout-block test suite (308 tests) ([0eb539f](https://github.com/claudekit/claudekit-engineer/commit/0eb539f8bf27ed8d43de578290cfa2dfe4c06dbd))
+* **skills:** adjust some tests ([9e85afa](https://github.com/claudekit/claudekit-engineer/commit/9e85afad55720c16d775359ebd73532e38107b54))
+
+## [2.12.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.8...v2.12.0-beta.9) (2026-02-24)
+
+
+### 🐞 Bug Fixes
+
+* resolve merge conflicts between dev and main for v2.12.0 release ([bba37a7](https://github.com/claudekit/claudekit-engineer/commit/bba37a7a30740241c8adb72b0164fcdd6270abd5))
+
+## [2.12.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.7...v2.12.0-beta.8) (2026-02-24)
+
+
+### 🚀 Features
+
+* **skills:** add tanstack skill for TanStack Start, Form, and AI ([f08b3e2](https://github.com/claudekit/claudekit-engineer/commit/f08b3e288cbb8bdf6f729ae45f65122b61101cc2))
+
+
+### 🐞 Bug Fixes
+
+* **command:** journal should follow writing styles if any ([57fccce](https://github.com/claudekit/claudekit-engineer/commit/57fccce6d509e5bb9ec6cb452087eb239998666a))
+
+
+### 📚 Documentation
+
+* **skills:** interconnection map ([f25c77d](https://github.com/claudekit/claudekit-engineer/commit/f25c77de11fb5f6879728889a0fe33a6415ed66e))
+
+## [2.12.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.6...v2.12.0-beta.7) (2026-02-23)
+
+
+### 🐞 Bug Fixes
+
+* replace viewport-based expand with :has() selector for mermaid/code blocks ([4330861](https://github.com/claudekit/claudekit-engineer/commit/4330861ddc87fc9eba99cbe061ea276b8b9ca2e9)), closes [#504](https://github.com/claudekit/claudekit-engineer/issues/504)
+* use JS-computed layout for expand instead of :has() selector ([ac9c99c](https://github.com/claudekit/claudekit-engineer/commit/ac9c99ceb9eac137bd83e9c99a92d380bca80948))
+
+## [2.12.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.5...v2.12.0-beta.6) (2026-02-21)
+
+
+### 🚀 Features
+
+* add portable-manifest.json with Codex AGENTS.md to TOML path migration ([2e7b29a](https://github.com/claudekit/claudekit-engineer/commit/2e7b29a337fe165bf980ce969dab5e0783d2c8f5)), closes [mrgoonie/claudekit-cli#433](https://github.com/mrgoonie/claudekit-cli/issues/433) [#494](https://github.com/claudekit/claudekit-engineer/issues/494) [#498](https://github.com/claudekit/claudekit-engineer/issues/498)
+
+## [2.12.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.4...v2.12.0-beta.5) (2026-02-21)
+
+
+### 🐞 Bug Fixes
+
+* restore ClaudeKit bot name in Discord notifications ([9c6fafc](https://github.com/claudekit/claudekit-engineer/commit/9c6fafc7263fe4dc12dca34b0c751cb3872f4031))
+
+## [2.12.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.3...v2.12.0-beta.4) (2026-02-21)
+
+
+### 🔥 Hotfixes
+
+* add Discord 25-field embed limit guard ([3f5e629](https://github.com/claudekit/claudekit-engineer/commit/3f5e629de10656c05ff3dbcfd44ab673e9cba472))
+* add empty-changelog guard and fix console output ([106a542](https://github.com/claudekit/claudekit-engineer/commit/106a542252cfcc1f14930e4e7c6673c0977c507c))
+* align Discord script with CLI fixes ([b915abe](https://github.com/claudekit/claudekit-engineer/commit/b915abef6512cb85776fb873ad50f0347a5ebecc))
+* fix double-emoji in Discord release notification section headers ([35fb3f8](https://github.com/claudekit/claudekit-engineer/commit/35fb3f87cfaa76b9314d4be1c85e461f4c89f331))
+* prevent double error log on timeout ([41ab992](https://github.com/claudekit/claudekit-engineer/commit/41ab992649de257d7791ddc8d0884ff8f4f70188))
+
+## [2.12.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.2...v2.12.0-beta.3) (2026-02-21)
+
+
+### 🔥 Hotfixes
+
+* **ci:** allow hotfix branches to PR directly to main ([3f51659](https://github.com/claudekit/claudekit-engineer/commit/3f516593c01165b7199ed348d4e392126d4a807c))
+* **hooks:** context-aware path extraction with heredoc detection ([08a1976](https://github.com/claudekit/claudekit-engineer/commit/08a197647a046d7f7c808941b9c81769c9b45e06))
+* **hooks:** detect **/*.ext broad glob patterns ([5af5b5c](https://github.com/claudekit/claudekit-engineer/commit/5af5b5ced5d760ed7cb16bdf7e3c9f1c18d36224))
+* **hooks:** normalize absolute and relative paths in scout-block matcher ([a6d25af](https://github.com/claudekit/claudekit-engineer/commit/a6d25af6e888e09b009a84b4a3e99e556c563d89))
+* **hooks:** reduce session-init command failures ([5bd3287](https://github.com/claudekit/claudekit-engineer/commit/5bd32872da4e6decdc5f698e25bad1b5c81157a1))
+* **hooks:** reduce Windows terminal freeze from excessive process spawning ([44e38b6](https://github.com/claudekit/claudekit-engineer/commit/44e38b65287c02f082d18f0be815479eded41294))
+* **hooks:** resolve compound command and allowlist edge cases ([257f2c2](https://github.com/claudekit/claudekit-engineer/commit/257f2c217367c120b506954b44ec2d0ab22d1262))
+* **hooks:** use absolute paths in buildRulesSection to prevent wrong plans/ directory ([88ef61a](https://github.com/claudekit/claudekit-engineer/commit/88ef61a31b9f5c98c87d75b44189d6762b6acbf6))
+
+
+### 🐞 Bug Fixes
+
+* **release:** add hotfix commit type for distinct release note visibility ([b9d1de2](https://github.com/claudekit/claudekit-engineer/commit/b9d1de259e52bd707cb83ea2ea0bb55261ac22a0))
+
+## [2.12.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.1...v2.12.0-beta.2) (2026-02-21)
+
+
+## [2.11.2](https://github.com/claudekit/claudekit-engineer/compare/v2.11.1...v2.11.2) (2026-02-21)
+
+
+### 🔥 Hotfixes
+
+* **ci:** allow hotfix branches to PR directly to main ([3f51659](https://github.com/claudekit/claudekit-engineer/commit/3f516593c01165b7199ed348d4e392126d4a807c))
+* **hooks:** context-aware path extraction with heredoc detection ([08a1976](https://github.com/claudekit/claudekit-engineer/commit/08a197647a046d7f7c808941b9c81769c9b45e06))
+* **hooks:** detect **/*.ext broad glob patterns ([5af5b5c](https://github.com/claudekit/claudekit-engineer/commit/5af5b5ced5d760ed7cb16bdf7e3c9f1c18d36224))
+* **hooks:** normalize absolute and relative paths in scout-block matcher ([a6d25af](https://github.com/claudekit/claudekit-engineer/commit/a6d25af6e888e09b009a84b4a3e99e556c563d89))
+* **hooks:** reduce session-init command failures ([5bd3287](https://github.com/claudekit/claudekit-engineer/commit/5bd32872da4e6decdc5f698e25bad1b5c81157a1))
+* **hooks:** reduce Windows terminal freeze from excessive process spawning ([44e38b6](https://github.com/claudekit/claudekit-engineer/commit/44e38b65287c02f082d18f0be815479eded41294))
+* **hooks:** resolve compound command and allowlist edge cases ([257f2c2](https://github.com/claudekit/claudekit-engineer/commit/257f2c217367c120b506954b44ec2d0ab22d1262))
+* **hooks:** use absolute paths in buildRulesSection to prevent wrong plans/ directory ([88ef61a](https://github.com/claudekit/claudekit-engineer/commit/88ef61a31b9f5c98c87d75b44189d6762b6acbf6))
+
+## [2.11.1](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0...v2.11.1) (2026-02-21)
+
+
+### 🐞 Bug Fixes
+
+* **release:** add hotfix commit type for distinct release note visibility ([b9d1de2](https://github.com/claudekit/claudekit-engineer/commit/b9d1de259e52bd707cb83ea2ea0bb55261ac22a0))
+
+## [2.11.0](https://github.com/claudekit/claudekit-engineer/compare/v2.10.1...v2.11.0) (2026-02-20)
+
+
+### 🚀 Features
+
+* **hooks:** add always-on diagnostics logging with crash wrappers ([#481](https://github.com/claudekit/claudekit-engineer/issues/481)) ([ca73800](https://github.com/claudekit/claudekit-engineer/commit/ca738003e0a94f293b7e4a97631f8abd095beb0e)), closes [#478](https://github.com/claudekit/claudekit-engineer/issues/478)
+
+## [2.10.1](https://github.com/claudekit/claudekit-engineer/compare/v2.10.0...v2.10.1) (2026-02-05)
+
+
+### 🐞 Bug Fixes
+
+* **release:** add hotfix commit type for distinct release note visibility ([ff29d6f](https://github.com/claudekit/claudekit-engineer/commit/ff29d6f39a71e36b6f14891aa60eca074529a420))
+
 ## [2.12.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.11.0...v2.12.0-beta.1) (2026-02-20)
 
 

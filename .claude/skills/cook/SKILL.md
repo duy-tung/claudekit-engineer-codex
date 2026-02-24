@@ -81,9 +81,9 @@ Human review required at these checkpoints (skipped with `--auto`):
 - **Testing:** 100% pass required (unless no-test mode)
 - **Code Review:** User approval OR auto-approve (score≥9.5, 0 critical)
 - **Finalize (MANDATORY - never skip):**
-  1. `project-manager` subagent → update plan/phase status to complete
+  1. `project-manager` subagent → run full plan sync-back (all completed tasks/steps across all `phase-XX-*.md`, not only current phase), then update `plan.md` status/progress
   2. `docs-manager` subagent → update `./docs` if changes warrant
-  3. `TaskUpdate` → mark all Claude Tasks complete
+  3. `TaskUpdate` → mark all Claude Tasks complete after sync-back verification
   4. Ask user if they want to commit via `git-manager` subagent
 
 ## Required Subagents (MANDATORY)

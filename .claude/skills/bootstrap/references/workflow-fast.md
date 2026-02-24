@@ -30,7 +30,7 @@ No user gate — proceed directly.
 
 ## Step 3: Planning
 
-Activate **planning** skill: `/plan --fast <requirements>`
+Activate **plan** skill: `/plan --fast <requirements>`
 - Skip research (already done above)
 - Read codebase docs → create plan directly
 - Plan directory using `## Naming` pattern
