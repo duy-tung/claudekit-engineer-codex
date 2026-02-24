@@ -1,3 +1,10 @@
+## [2.13.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.2...v2.13.0-beta.3) (2026-02-24)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** restore generate_catalogs.py to .claude/scripts/ for user deployment ([757a901](https://github.com/claudekit/claudekit-engineer/commit/757a9011798a32a0b94da54bae80362df9fad1ec)), closes [#325](https://github.com/claudekit/claudekit-engineer/issues/325)
+
 ## [2.13.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.1...v2.13.0-beta.2) (2026-02-24)
 
 
