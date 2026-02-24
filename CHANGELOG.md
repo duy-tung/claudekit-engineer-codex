@@ -1,3 +1,10 @@
+## [2.12.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.8...v2.12.0-beta.9) (2026-02-24)
+
+
+### 🐞 Bug Fixes
+
+* resolve merge conflicts between dev and main for v2.12.0 release ([bba37a7](https://github.com/claudekit/claudekit-engineer/commit/bba37a7a30740241c8adb72b0164fcdd6270abd5))
+
 ## [2.12.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0-beta.7...v2.12.0-beta.8) (2026-02-24)
 
 
