@@ -1,77 +1,36 @@
 # Codebase Summary
 
-**Last Updated**: 2026-02-25
-**Version**: 3.0.0-beta.1 (Plugin namespace migration)
+**Last Updated**: 2026-01-28
+**Version**: 2.9.0-beta.2
 **Repository**: [claudekit/claudekit-engineer](https://github.com/claudekit/claudekit-engineer)
 
 ## Overview
 
 ClaudeKit Engineer is a comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code). It provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
 
-**Plugin Migration (v3.0.0-beta.1)**: Skills are now available through the CC Plugin system via `/ck:cook`, `/ck:debug`, etc. Fallback `.claude/skills/` directory preserved for backward compatibility. Plugin namespace at `plugins/ck/` is primary distribution location.
-
 ## Project Structure
 
 ```
 claudekit-engineer/
-├── .agents/              # Agent context storage (optional, for agent state)
-├── .claude/              # Claude Code configuration (fallback)
-│   ├── agent-memory/     # Agent state and memory storage
+├── .claude/               # Claude Code configuration
 │   ├── agents/           # Specialized agent definitions (14 agents)
 │   ├── command-archive/  # Archived legacy command definitions
-│   ├── hooks/            # Claude hooks (session, subagent, privacy, etc.)
-│   ├── output-styles/    # Output formatting templates
-│   ├── rules/            # Development rules and workflows
-│   ├── schemas/          # JSON schema definitions
-│   ├── scripts/          # Utility scripts and Python tools
-│   ├── skills/           # Specialized skills library (fallback)
-│   ├── .ck.json          # ClaudeKit configuration
-│   ├── .ckignore         # ClaudeKit ignore patterns
-│   ├── .env.example      # Environment variables template
-│   ├── .gitignore        # Git exclusions for .claude
-│   ├── .mcp.json.example # MCP server configuration template
-│   ├── metadata.json     # Migration metadata with deletions
-│   ├── settings.json     # Claude settings
-│   ├── statusline.cjs    # Status line script (Node.js)
-│   ├── statusline.ps1    # Status line script (PowerShell)
-│   └── statusline.sh     # Status line script (Bash)
-├── .claude-archived/     # Archived Claude configuration (backup)
-├── .claude-plugin/       # Plugin marketplace configuration
-│   └── marketplace.json  # Plugin registry pointing to ./plugins/ck
-├── .github/              # GitHub Actions workflows
-│   └── workflows/        # CI/CD automation
-├── .husky/               # Git hooks configuration
-├── plugins/              # CC Plugin system namespace
-│   └── ck/               # ClaudeKit plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json      # Plugin metadata
-│       └── skills/              # Plugin namespace skills (primary)
-├── docs/                 # Project documentation
-│   └── research/         # Research reports directory
-├── guide/                # User guides and references
-├── plans/                # Implementation plans and reports
-│   ├── reports/          # Agent-to-agent communication
-│   └── templates/        # Plan templates
-├── scripts/              # Utility scripts (sync, deploy, etc.)
-├── tests/                # Test files and test utilities
-├── .commitlintrc.json    # Commit lint configuration
-├── .coverage             # Code coverage report data
-├── .env.example          # Environment variables template
-├── .gitignore            # Git exclusions
-├── .releaserc.cjs        # Semantic release configuration (main)
-├── .releaserc.beta-config.json    # Beta release configuration
-├── .releaserc.production.json      # Production release configuration
-├── .repomixignore        # Repomix exclusions
-├── AGENTS.md             # Agent list and documentation
-├── CHANGELOG.md          # Version history and changes
-├── CLAUDE.md             # Project-specific Claude instructions
-├── GEMINI.md             # Gemini AI integration guide
-├── LICENSE               # MIT license
-├── package.json          # Node.js dependencies and scripts
-├── package-lock.json     # Locked dependency versions
-├── portable-manifest.json # Migration manifest for portable operations
-├── README.md             # Project overview and quick start
-└── TEST-MANIFEST.md      # Test manifest and testing guide
+│   ├── commands/         # Reserved compatibility directory (empty/minimal)
+│   ├── hooks/            # Git hooks and scripts
+│   ├── skills/           # Specialized skills library (20+ skills)
+│   └── workflows/        # Development workflow definitions
+├── .github/             # GitHub Actions workflows
+│   └── workflows/       # CI/CD automation
+├── docs/                # Project documentation
+│   └── research/        # Research reports directory
+├── guide/               # User guides and references
+├── plans/               # Implementation plans and reports
+│   ├── reports/         # Agent-to-agent communication
+│   └── templates/       # Plan templates
+├── CLAUDE.md           # Project-specific Claude instructions
+├── README.md           # Project overview
+├── package.json        # Node.js dependencies
+└── repomix-output.xml  # Codebase compaction file
 ```
 
 ## Core Technologies
@@ -308,14 +267,12 @@ Types:
 **Required Docs** (`./docs/`):
 - `project-overview-pdr.md` - Project overview and PDR
 - `code-standards.md` - Coding standards and structure
-- `codebase-summary.md` - This file (project structure reference)
+- `codebase-summary.md` - This file
 - `system-architecture.md` - Architecture documentation
 - `project-roadmap.md` - Development roadmap
-- `development-roadmap.md` - Detailed development phases and progress
 - `project-changelog.md` - Detailed changelog
 - `statusline-windows-support.md` - Windows statusline setup guide
 - `statusline-architecture.md` - Technical statusline implementation
-- `design-guidelines.md` - UI/UX design guidelines
 
 **Documentation Triggers**:
 - Feature implementation completion
@@ -372,37 +329,23 @@ Features: Automated releases, changelog generation
 ## Critical Files
 
 ### Configuration
-- `package.json` - Node.js config and scripts
-- `package-lock.json` - Locked dependency versions
-- `.commitlintrc.json` - Conventional commit linting rules
-- `.releaserc.cjs` - Semantic release configuration (main)
-- `.releaserc.beta-config.json` - Beta release configuration
-- `.releaserc.production.json` - Production release configuration
+- `package.json` - Node.js config
+- `.releaserc.json` - Release config
+- `.commitlintrc.json` - Commit linting
 - `.gitignore` - Git exclusions
 - `.repomixignore` - Repomix exclusions
-- `.coverage` - Code coverage report data
-- `.env.example` - Environment variables template
 
 ### Documentation
-- `README.md` - Main project overview
-- `CLAUDE.md` - Project-specific Claude instructions
-- `AGENTS.md` - Agent list and documentation
-- `CHANGELOG.md` - Version history and changes
-- `GEMINI.md` - Gemini AI integration guide
-- `TEST-MANIFEST.md` - Testing guide and manifest
+- `README.md` - Main project docs
+- `CLAUDE.md` - Agent instructions
+- `CHANGELOG.md` - Version history
 - `guide/SKILLS.md` - Skills reference
-- `LICENSE` - MIT license
 
-### Manifests & Migration
-- `portable-manifest.json` - Portable operations migration manifest
-- `metadata.json` - Skill migration metadata with deletions
-
-### Workflows & Rules
-- `.claude/rules/primary-workflow.md` - Core development cycle
-- `.claude/rules/development-rules.md` - Development standards
-- `.claude/rules/orchestration-protocol.md` - Agent coordination
-- `.claude/rules/documentation-management.md` - Doc maintenance
-- `.claude/rules/team-coordination-rules.md` - Team collaboration
+### Workflows
+- `.claude/rules/primary-workflow.md`
+- `.claude/rules/development-rules.md`
+- `.claude/rules/orchestration-protocol.md`
+- `.claude/rules/documentation-management.md`
 
 ## Related Projects
 

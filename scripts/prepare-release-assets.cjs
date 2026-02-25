@@ -25,7 +25,7 @@ const { execSync } = require('child_process');
   const manifestPath = path.join(projectRoot, 'release-manifest.json');
 
   // Critical files that MUST be present in release
-  const CRITICAL_TARGETS = ['.claude', '.claude-plugin', '.opencode', 'plugins', 'release-manifest.json'];
+  const CRITICAL_TARGETS = ['.claude', '.opencode', 'release-manifest.json'];
 
   try {
     if (!fs.existsSync(packageJsonPath)) {
@@ -86,25 +86,6 @@ const { execSync } = require('child_process');
     fs.writeFileSync(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
     console.log(`✓ Generated metadata.json with version ${metadata.version}`);
 
-    // Sync plugin version from package.json into plugin.json and marketplace.json
-    const pluginJsonPath = path.join(projectRoot, 'plugins', 'ck', '.claude-plugin', 'plugin.json');
-    if (fs.existsSync(pluginJsonPath)) {
-      const pluginJson = JSON.parse(fs.readFileSync(pluginJsonPath, 'utf8'));
-      pluginJson.version = packageJson.version;
-      fs.writeFileSync(pluginJsonPath, `${JSON.stringify(pluginJson, null, 2)}\n`, 'utf8');
-      console.log(`✓ Synced plugin.json version to ${packageJson.version}`);
-    }
-
-    const marketplaceJsonPath = path.join(projectRoot, '.claude-plugin', 'marketplace.json');
-    if (fs.existsSync(marketplaceJsonPath)) {
-      const marketplaceJson = JSON.parse(fs.readFileSync(marketplaceJsonPath, 'utf8'));
-      for (const plugin of marketplaceJson.plugins || []) {
-        plugin.version = packageJson.version;
-      }
-      fs.writeFileSync(marketplaceJsonPath, `${JSON.stringify(marketplaceJson, null, 2)}\n`, 'utf8');
-      console.log(`✓ Synced marketplace.json version to ${packageJson.version}`);
-    }
-
     // Generate OpenCode configuration from Claude Code setup
     console.log('Generating OpenCode configuration...');
     execSync('python scripts/generate-opencode.py --force', { stdio: 'inherit' });
@@ -142,9 +123,7 @@ const { execSync } = require('child_process');
 
     const archiveTargets = [
       '.claude',
-      '.claude-plugin',
       '.opencode',
-      'plugins',
       'plans/templates',
       '.gitignore',
       '.repomixignore',

@@ -100,8 +100,8 @@ A comprehensive boilerplate template for building professional software projects
    # claude --dangerously-skip-permissions
 
    # now you can use these specific commands
-   /ck:plan "implement user authentication"
-   /ck:cook "add database integration"
+   /plan "implement user authentication"
+   /cook "add database integration"
    ```
 
 📖 **Learn more from our docs:** [https://docs.claudekit.cc](https://docs.claudekit.cc)
@@ -116,12 +116,6 @@ A comprehensive boilerplate template for building professional software projects
 │   │   └── notifications/  # Multi-provider notification system
 │   ├── skills/             # Claude Code skills
 │   └── CLAUDE.md           # Global development instructions
-├── .github/                # GitHub Actions workflows
-├── plugins/                # CC Plugin system namespace
-│   └── ck/                 # ClaudeKit plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json      # Plugin metadata
-│       └── skills/              # Plugin namespace skills (primary)
 ├── docs/                   # Project documentation
 │   ├── codebase-summary.md # Auto-generated codebase overview
 │   ├── code-standards.md   # Development standards
@@ -233,16 +227,16 @@ This boilerplate includes 17+ specialized AI agents that work together to delive
 Use when tasks have dependencies:
 ```bash
 # Planning → Implementation → Testing → Review
-/ck:plan "implement user dashboard"
+/plan "implement user dashboard"
 # Wait for plan completion, then:
 /code  # Executes the plan
 # After implementation:
-/ck:test "validate dashboard functionality"
+/test "validate dashboard functionality"
 # Finally:
-/ck:code-review "ensure code quality standards"
+/code-review "ensure code quality standards"
 
-# Alternative: Use /ck:cook for standalone implementation (plans internally)
-/ck:cook "implement user dashboard"
+# Alternative: Use /cook for standalone implementation (plans internally)
+/cook "implement user dashboard"
 ```
 
 ### Parallel Execution
@@ -267,50 +261,50 @@ planner agent spawns:
 ### 1. Feature Development
 ```bash
 # Start with planning
-/ck:plan "add real-time notifications"
+/plan "add real-time notifications"
 
 # Research phase (automatic)
 # Multiple researcher agents investigate approaches
 
 # Implementation
-/ck:cook "implement notification system"
+/cook "implement notification system"
 
 # Quality assurance
-/ck:test
-/ck:code-review
+/test
+/code-review
 
 # Documentation update
-/ck:docs
+/docs
 
 # Project tracking
-/ck:watzup  # Check project status
+/watzup  # Check project status
 ```
 
 ### 2. Bug Fixing
 ```bash
 # Analyze the issue
-/ck:debug "investigate login failures"
+/debug "investigate login failures"
 
 # Create fix plan
-/ck:plan "resolve authentication bug"
+/plan "resolve authentication bug"
 
 # Implement solution
-/ck:fix "authentication issue"
+/fix "authentication issue"
 
 # Validate fix
-/ck:test
+/test
 ```
 
 ### 3. Documentation Management
 ```bash
 # Update documentation
-/ck:docs
+/docs
 
 # Generate codebase summary
 repomix  # Creates ./docs/codebase-summary.md
 
 # Review project status
-/ck:watzup
+/watzup
 ```
 
 ## Configuration Files
@@ -328,6 +322,93 @@ Reusable templates for:
 - Bug fix procedures
 - Refactoring strategies
 - Architecture decisions
+
+## Gemini Skills Configuration
+
+This project includes several Gemini-powered skills that require a Google Gemini API key:
+
+- **gemini-audio** - Audio analysis and speech generation
+- **gemini-video-understanding** - Video analysis and understanding
+- **gemini-document-processing** - PDF document processing
+- **gemini-image-gen** - AI image generation
+- **gemini-vision** - Image analysis and vision capabilities
+
+### API Key Setup
+
+The Gemini skills check for `GEMINI_API_KEY` in the following order (priority from highest to lowest):
+
+1. **Environment Variable** (Recommended for development)
+   ```bash
+   export GEMINI_API_KEY='your-api-key-here'
+   ```
+
+2. **Project Root `.env`** (Recommended for project-specific keys)
+   ```bash
+   # Create .env in project root
+   echo 'GEMINI_API_KEY=your-api-key-here' > .env
+   ```
+
+3. **`.claude/.env`** (For Claude-specific configuration)
+   ```bash
+   # Copy example and edit
+   cp .claude/.env.example .claude/.env
+   # Then edit .claude/.env and set your API key
+   ```
+
+4. **`.claude/skills/.env`** (For shared skills configuration)
+   ```bash
+   # Copy example and edit
+   cp .claude/skills/.env.example .claude/skills/.env
+   # Then edit .claude/skills/.env and set your API key
+   ```
+
+5. **Individual Skill Directory `.env`** (For skill-specific keys)
+   ```bash
+   # Example for gemini-audio skill
+   cp .claude/skills/gemini-audio/.env.example .claude/skills/gemini-audio/.env
+   # Then edit and set your API key
+   ```
+
+### Getting Your API Key
+
+Get your free Gemini API key at: https://aistudio.google.com/apikey
+
+### Vertex AI Support
+
+To use Vertex AI instead of Google AI Studio:
+
+```bash
+# Enable Vertex AI
+export GEMINI_USE_VERTEX=true
+export VERTEX_PROJECT_ID=your-gcp-project-id
+export VERTEX_LOCATION=us-central1  # Optional, defaults to us-central1
+```
+
+Or in `.env` file:
+```
+GEMINI_USE_VERTEX=true
+VERTEX_PROJECT_ID=your-gcp-project-id
+VERTEX_LOCATION=us-central1
+```
+
+### Usage Examples
+
+```bash
+# Audio analysis
+claude "Analyze this audio file and summarize the key points: audio.mp3"
+
+# Video understanding
+claude "Describe what happens in this video: video.mp4"
+
+# Document processing
+claude "Extract all tables from this PDF: document.pdf"
+
+# Image generation
+claude "Generate an image of a serene mountain landscape"
+
+# Image analysis
+claude "What objects are in this image: photo.jpg"
+```
 
 ## Model Context Protocol (MCP)
 

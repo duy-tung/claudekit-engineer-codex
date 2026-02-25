@@ -53,16 +53,9 @@ When a tool call is blocked by the privacy-block hook, the output contains a JSO
 
 ## Python Scripts (Skills)
 
-When running Python scripts from skills, use the venv Python interpreter relative to where the skill is installed:
-
-- **Plugin path (primary, v3.0+):**
-  - Linux/macOS: `plugins/ck/skills/.venv/bin/python3 scripts/xxx.py`
-  - Windows: `plugins\ck\skills\.venv\Scripts\python.exe scripts\xxx.py`
-- **Legacy path (fallback, backward compat):**
-  - Linux/macOS: `.claude/skills/.venv/bin/python3 scripts/xxx.py`
-  - Windows: `.claude\skills\.venv\Scripts\python.exe scripts\xxx.py`
-
-The venv is created relative to the skills directory by `install.sh`. Use the plugin path for new installs; legacy path only if plugin path does not exist.
+When running Python scripts from `.claude/skills/`, use the venv Python interpreter:
+- **Linux/macOS:** `.claude/skills/.venv/bin/python3 scripts/xxx.py`
+- **Windows:** `.claude\skills\.venv\Scripts\python.exe scripts\xxx.py`
 
 This ensures packages installed by `install.sh` (google-genai, pypdf, etc.) are available.
 

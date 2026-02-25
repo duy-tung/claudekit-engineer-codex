@@ -1,7 +1,7 @@
 # System Architecture
 
-**Last Updated**: 2026-02-20
-**Version**: 3.0.0-beta.1 (Plugin namespace migration)
+**Last Updated**: 2026-01-28
+**Version**: 2.9.0-beta.2
 **Project**: ClaudeKit Engineer
 
 ## Overview
@@ -214,7 +214,7 @@ Explore different approaches simultaneously
 #### 4.2 Standard Workflows
 
 **Feature Development Workflow**:
-1. User: `/ck:cook "add user authentication"`
+1. User: `/cook "add user authentication"`
 2. Planner: Create implementation plan
 3. Researchers: Explore auth solutions (parallel)
 4. Planner: Synthesize research, create detailed plan
@@ -227,7 +227,7 @@ Explore different approaches simultaneously
 11. Git Manager: Commit with conventional message
 
 **Bug Fix Workflow**:
-1. User: `/ck:debug "API timeout errors"`
+1. User: `/debug "API timeout errors"`
 2. Debugger: Analyze logs and system
 3. Debugger: Identify root cause
 4. Planner: Create fix plan
@@ -237,7 +237,7 @@ Explore different approaches simultaneously
 8. Git Manager: Commit fix
 
 **Documentation Update Workflow**:
-1. User: `/ck:docs update`
+1. User: `/docs update`
 2. Docs Manager: Check doc freshness
 3. (If >1 day old): Run `repomix` for codebase summary
 4. Docs Manager: Analyze codebase changes
@@ -245,42 +245,22 @@ Explore different approaches simultaneously
 6. Docs Manager: Validate naming conventions
 7. Docs Manager: Create update report
 
-### 5. Skills & Plugin Layer
+### 5. Skills Layer
 
 #### 5.1 Skill Architecture
 
 **Purpose**: Reusable knowledge modules for specific technologies
 
-**Dual Structure** (v3.0.0-beta.1):
+**Structure**:
 ```
-.claude/skills/              # Fallback distribution (legacy support)
+.claude/skills/
 └── [skill-name]/
     ├── SKILL.md           # Main skill definition
     ├── references/        # Supporting documentation
     │   ├── api-ref.md
     │   └── examples.md
     └── scripts/           # Utility scripts (if applicable)
-
-plugins/ck/skills/          # Plugin namespace (primary distribution)
-└── [skill-name]/
-    ├── SKILL.md           # Main skill definition
-    ├── metadata.json      # Skill metadata
-    ├── references/        # Supporting documentation
-    │   ├── api-ref.md
-    │   └── examples.md
-    └── scripts/           # Utility scripts (if applicable)
 ```
-
-**Plugin Configuration**:
-```
-.claude-plugin/marketplace.json    # Marketplace registry
-plugins/ck/.claude-plugin/plugin.json   # Plugin metadata
-```
-
-**Access Patterns**:
-- **Plugin namespace** (when installed): `/ck:cook`, `/ck:debug`, etc.
-- **Fallback direct** (if plugin not available): `/cook`, `/debug`, etc.
-- Both patterns supported; plugin namespace takes precedence
 
 **Skill Categories**:
 - **Authentication**: better-auth
@@ -300,36 +280,18 @@ plugins/ck/.claude-plugin/plugin.json   # Plugin metadata
 
 #### 5.2 Skill Invocation
 
-**Invocation Patterns**:
-
-**Plugin Namespace** (preferred):
+**Invocation**: `Skill` tool in CLI
+**Usage**: Agents invoke skills to access specialized knowledge
+**Example**:
 ```
-Invokes "/ck:cook" (via CC plugin system)
+Planner needs Next.js expertise
   ↓
-Plugin system routes to plugins/ck/skills/cook/
+Invokes "nextjs" skill
   ↓
 Skill provides implementation guidance
   ↓
-Agent incorporates into workflow
+Planner incorporates into plan
 ```
-
-**Fallback Direct** (backward compatible):
-```
-Invokes "/cook" or Skill tool
-  ↓
-Claude Code loads from .claude/skills/cook/ or plugins/ck/skills/cook/
-  ↓
-Skill provides implementation guidance
-  ↓
-Agent incorporates into workflow
-```
-
-**Plugin Resolution Order**:
-1. Check CC plugin namespace (`/ck:*`)
-2. Check `plugins/ck/skills/` directory
-3. Fallback to `.claude/skills/` directory
-
-**Usage**: Agents invoke skills to access specialized knowledge via either pattern
 
 ### 6. Integration Layer
 
