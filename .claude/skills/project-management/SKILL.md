@@ -1,5 +1,5 @@
 ---
-name: project-management
+name: ck:project-management
 description: "[CK] Track progress, update plan statuses, manage Claude Tasks, generate reports, coordinate docs updates. Use for project oversight, status checks, plan completion, task hydration, cross-session continuity."
 ---
 

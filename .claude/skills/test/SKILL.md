@@ -1,5 +1,5 @@
 ---
-name: test
+name: ck:test
 description: "[CK] Run unit, integration, e2e, and UI tests. Use for test execution, coverage analysis, build verification, visual regression, and QA reports."
 argument-hint: "[context] OR ui [url]"
 version: 1.0.0

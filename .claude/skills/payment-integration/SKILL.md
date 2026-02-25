@@ -1,5 +1,5 @@
 ---
-name: payment-integration
+name: ck:payment-integration
 description: Integrate payments with SePay (VietQR), Polar, Stripe, Paddle (MoR subscriptions), Creem.io (licensing). Checkout, webhooks, subscriptions, QR codes, multi-provider orders.
 version: 2.2.0
 license: MIT

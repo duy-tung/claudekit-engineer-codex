@@ -1,5 +1,5 @@
 ---
-name: fix
+name: ck:fix
 description: "[CK] ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem."
 version: 1.2.0
 ---

@@ -1,5 +1,5 @@
 ---
-name: docs
+name: ck:docs
 description: "[CK] Analyze codebase and manage project documentation — init, update, summarize."
 argument-hint: "init|update|summarize"
 ---
