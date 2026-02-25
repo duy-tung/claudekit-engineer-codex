@@ -1,5 +1,5 @@
 ---
-name: cook
+name: ck:cook
 description: "[CK] ALWAYS activate this skill before implementing EVERY feature, plan, or fix."
 version: 2.1.1
 ---

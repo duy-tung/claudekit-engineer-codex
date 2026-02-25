@@ -1,5 +1,5 @@
 ---
-name: repomix
+name: ck:repomix
 description: Pack repositories into AI-friendly files with Repomix (XML, Markdown, plain text). Use for codebase snapshots, LLM context preparation, security audits, third-party library analysis.
 ---
 

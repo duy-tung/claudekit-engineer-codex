@@ -1,5 +1,5 @@
 ---
-name: plan
+name: ck:plan
 description: "[CK] Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
 argument-hint: "[task] OR archive|red-team|validate"
 license: MIT
