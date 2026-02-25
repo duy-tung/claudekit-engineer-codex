@@ -1,3 +1,16 @@
+## [2.13.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.9...v2.13.0-beta.10) (2026-02-25)
+
+
+### 🚀 Features
+
+* add argument-hint to all skills for discoverability ([#520](https://github.com/claudekit/claudekit-engineer/issues/520)) ([7b1417a](https://github.com/claudekit/claudekit-engineer/commit/7b1417a1722062f98401bf8398f9e42baf146f40))
+
+
+### 🐞 Bug Fixes
+
+* address code review findings on argument-hint values ([5453dad](https://github.com/claudekit/claudekit-engineer/commit/5453dad397de671d4e784bf068edb76d84977402))
+* address review round 2 findings ([a36db25](https://github.com/claudekit/claudekit-engineer/commit/a36db257838aa808d9231d1847e00e193279b41c))
+
 ## [2.13.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.8...v2.13.0-beta.9) (2026-02-25)
 
 
