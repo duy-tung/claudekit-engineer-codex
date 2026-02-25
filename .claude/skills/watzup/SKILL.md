@@ -1,7 +1,6 @@
 ---
 name: ck:watzup
 description: "Review recent changes and wrap up the current work session."
-argument-hint: "(reviews current branch changes)"
 ---
 
 # Wrap Up

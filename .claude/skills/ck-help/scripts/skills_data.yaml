@@ -51,7 +51,7 @@
   has_scripts: true
   name: better-auth
   path: better-auth/SKILL.md
-- argument_hint: '[requirements] --full|--auto|--fast|--parallel'
+- argument_hint: '[requirements] [--full|--auto|--fast|--parallel]'
   category: utilities
   description: 'Bootstrap new projects with research, tech stack, design, planning,
     and implementation. Modes: full (interactive), auto (default), fast (skip research),
@@ -112,7 +112,7 @@
   has_scripts: true
   name: context-engineering
   path: context-engineering/SKILL.md
-- argument_hint: '[task|plan-path] --fast|--parallel|--auto|--no-test'
+- argument_hint: '[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test]'
   category: utilities
   description: ALWAYS activate this skill before implementing EVERY feature, plan,
     or fix.
@@ -390,7 +390,7 @@
   has_scripts: false
   name: problem-solving
   path: problem-solving/SKILL.md
-- argument_hint: '[status|hydrate|sync|report]'
+- argument_hint: '[task: status, hydrate, sync, report]'
   category: utilities
   description: Track progress, update plan statuses, manage Claude Tasks, generate
     reports, coordinate docs updates. Use for project oversight, status checks, plan
@@ -417,7 +417,7 @@
   has_scripts: false
   name: remotion
   path: remotion/SKILL.md
-- argument_hint: '[path] [--style xml|markdown|json]'
+- argument_hint: '[path] [--style xml|markdown|plain]'
   category: dev-tools
   description: Pack repositories into AI-friendly files with Repomix (XML, Markdown,
     plain text). Use for codebase snapshots, LLM context preparation, security audits,
@@ -435,7 +435,7 @@
   has_scripts: false
   name: research
   path: research/SKILL.md
-- argument_hint: '[search-target] OR ext'
+- argument_hint: '[search-target] [ext]'
   category: dev-tools
   description: Fast codebase scouting using parallel agents. Use for file discovery,
     task context gathering, quick searches across directories. Supports internal (Explore)
@@ -551,8 +551,7 @@
   has_scripts: false
   name: use-mcp
   path: use-mcp/SKILL.md
-- argument_hint: (reviews current branch changes)
-  category: utilities
+- category: utilities
   description: Review recent changes and wrap up the current work session.
   has_references: false
   has_scripts: false
