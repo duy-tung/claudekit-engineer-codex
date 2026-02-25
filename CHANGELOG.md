@@ -1,3 +1,27 @@
+## [2.13.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.4...v2.13.0-beta.5) (2026-02-25)
+
+
+### 🚀 Features
+
+* migrate skills to CC plugin format for ck: namespace ([5e6da92](https://github.com/claudekit/claudekit-engineer/commit/5e6da922a312a146c41e35b1503ec57fe207e8e0)), closes [#491](https://github.com/claudekit/claudekit-engineer/issues/491)
+* **plugin:** include plugin dirs in release and restore skill deletions ([5a20ea4](https://github.com/claudekit/claudekit-engineer/commit/5a20ea4c596bd994c75d1f89e9c819093d53bd52))
+
+
+### 🐞 Bug Fixes
+
+* comprehensive plugin namespace cleanup after parallel code review ([25bc4b5](https://github.com/claudekit/claudekit-engineer/commit/25bc4b5e74936eb03a30adb44770d0b6a8958d48))
+* **plugin:** migrate script paths to ${CLAUDE_PLUGIN_ROOT} ([6e35bea](https://github.com/claudekit/claudekit-engineer/commit/6e35bea73f262d85490cf2fd462695a131aac42d))
+* **plugin:** OpenCode generation + template-skill deletion ([6da4106](https://github.com/claudekit/claudekit-engineer/commit/6da41061d048bdc31e8fb2232a0187df388e2421))
+* **plugin:** sync version to 3.0.0-beta.1 and fix script permissions ([714b8cd](https://github.com/claudekit/claudekit-engineer/commit/714b8cdd97308422e34084288c4006945de5ba6a))
+* **release:** add plugin validation, version sync, and OpenCode path resolution ([e590e2c](https://github.com/claudekit/claudekit-engineer/commit/e590e2cb4c2d713894c1710745b42f03b2b1e2fc))
+* resolve stale references and inconsistencies after dev merge ([178584d](https://github.com/claudekit/claudekit-engineer/commit/178584da0a81e7ab664cc6959fb11e86a7132946))
+* **skills:** remove dead elif branches and PROJECT/ path remnants ([b001048](https://github.com/claudekit/claudekit-engineer/commit/b0010489b99bce650ce019dc2825732d8007fbc1))
+
+
+### 📚 Documentation
+
+* update docs for plugin namespace migration ([091dfba](https://github.com/claudekit/claudekit-engineer/commit/091dfba271aab6f40e49757fa52dc0fa7c8ec6a9))
+
 ## [2.13.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.3...v2.13.0-beta.4) (2026-02-25)
 
 
