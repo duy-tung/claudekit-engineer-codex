@@ -1,6 +1,6 @@
 ---
 name: ck:kanban
-description: "[CK] AI agent orchestration board for task visualization and team coordination."
+description: "AI agent orchestration board for task visualization and team coordination."
 argument-hint: "[dir]"
 ---
 

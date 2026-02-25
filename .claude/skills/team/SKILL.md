@@ -1,6 +1,6 @@
 ---
 name: ck:team
-description: "[CK] Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, review, and debug workflows requiring independent teammates."
+description: "Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, review, and debug workflows requiring independent teammates."
 version: 2.1.0
 ---
 

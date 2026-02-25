@@ -1,6 +1,6 @@
 ---
 name: ck:brainstorm
-description: "[CK] Brainstorm solutions with trade-off analysis and brutal honesty. Use for ideation, architecture decisions, technical debates, feature exploration, feasibility assessment, design discussions."
+description: "Brainstorm solutions with trade-off analysis and brutal honesty. Use for ideation, architecture decisions, technical debates, feature exploration, feasibility assessment, design discussions."
 license: MIT
 version: 2.0.0
 ---

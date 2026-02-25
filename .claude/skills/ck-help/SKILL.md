@@ -1,6 +1,6 @@
 ---
 name: ck:ck-help
-description: "[CK] ClaudeKit usage guide — discover commands, skills, workflows naturally."
+description: "ClaudeKit usage guide — discover commands, skills, workflows naturally."
 argument-hint: "[category|command|task description]"
 ---
 
