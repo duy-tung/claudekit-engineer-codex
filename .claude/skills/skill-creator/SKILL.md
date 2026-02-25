@@ -41,7 +41,7 @@ Full anatomy & requirements: `references/skill-anatomy-and-requirements.md`
 
 Follow the 7-step process in `references/skill-creation-workflow.md`:
 1. Understand with concrete examples (AskUserQuestion)
-2. Research (activate `/docs-seeker`, `/research` skills)
+2. Research (activate `/ck:docs-seeker`, `/ck:research` skills)
 3. Plan reusable contents (scripts, references, assets)
 4. Initialize (`scripts/init_skill.py <name> --path <dir>`)
 5. Edit (implement resources, write SKILL.md, optimize for benchmarks)

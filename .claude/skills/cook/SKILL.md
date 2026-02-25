@@ -91,7 +91,7 @@ Human review required at these checkpoints (skipped with `--auto`):
 | Phase | Subagent | Requirement |
 |-------|----------|-------------|
 | Research | `researcher` | Optional in fast/code |
-| Scout | `scout` | Optional in code |
+| Scout | `ck:scout` | Optional in code |
 | Plan | `planner` | Optional in code |
 | UI Work | `ui-ux-designer` | If frontend work |
 | Testing | `tester`, `debugger` | **MUST** spawn |

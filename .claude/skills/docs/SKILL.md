@@ -24,9 +24,9 @@ Present as options via `AskUserQuestion` with header "Documentation Operation", 
 
 | Subcommand | Reference | Purpose |
 |------------|-----------|---------|
-| `/docs init` | `references/init-workflow.md` | Analyze codebase and create initial documentation |
-| `/docs update` | `references/update-workflow.md` | Analyze codebase and update existing documentation |
-| `/docs summarize` | `references/summarize-workflow.md` | Quick analysis and update of codebase summary |
+| `/ck:docs init` | `references/init-workflow.md` | Analyze codebase and create initial documentation |
+| `/ck:docs update` | `references/update-workflow.md` | Analyze codebase and update existing documentation |
+| `/ck:docs summarize` | `references/summarize-workflow.md` | Quick analysis and update of codebase summary |
 
 ## Routing
 

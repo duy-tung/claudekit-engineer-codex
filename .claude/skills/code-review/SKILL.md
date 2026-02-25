@@ -81,7 +81,7 @@ SITUATION?
 **When:** After implementation, before requesting code-reviewer
 
 **Process:**
-1. Invoke `/scout` with edge-case-focused prompt
+1. Invoke `/ck:scout` with edge-case-focused prompt
 2. Scout analyzes: affected files, data flows, error paths, boundary conditions
 3. Review scout findings for potential issues
 4. Address critical gaps before code review
@@ -134,8 +134,8 @@ TaskCreate: "Verify fixes pass"        → pending, blockedBy: [fix]
 
 | Subcommand | Reference | Purpose |
 |------------|-----------|---------|
-| `/code-review codebase` | `references/codebase-scan-workflow.md` | Scan & analyze the codebase |
-| `/code-review codebase parallel` | `references/parallel-review-workflow.md` | Ultrathink edge cases, then parallel verify |
+| `/ck:code-review codebase` | `references/codebase-scan-workflow.md` | Scan & analyze the codebase |
+| `/ck:code-review codebase parallel` | `references/parallel-review-workflow.md` | Ultrathink edge cases, then parallel verify |
 
 ## Bottom Line
 

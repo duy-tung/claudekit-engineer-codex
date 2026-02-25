@@ -55,7 +55,7 @@ node .claude/skills/markdown-novel-viewer/scripts/server.cjs --stop
 
 ## Slash Command
 
-Use `/preview` for quick access:
+Use `/ck:preview` for quick access:
 
 ```bash
 /preview plans/my-plan/plan.md    # View markdown file

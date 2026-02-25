@@ -122,9 +122,9 @@ ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
 
 | Subcommand | Reference | Purpose |
 |------------|-----------|---------|
-| `/plan archive` | `references/archive-workflow.md` | Archive plans + write journal entries |
-| `/plan red-team` | `references/red-team-workflow.md` | Adversarial plan review with hostile reviewers |
-| `/plan validate` | `references/validate-workflow.md` | Validate plan with critical questions interview |
+| `/ck:plan archive` | `references/archive-workflow.md` | Archive plans + write journal entries |
+| `/ck:plan red-team` | `references/red-team-workflow.md` | Adversarial plan review with hostile reviewers |
+| `/ck:plan validate` | `references/validate-workflow.md` | Validate plan with critical questions interview |
 
 ## Quality Standards
 

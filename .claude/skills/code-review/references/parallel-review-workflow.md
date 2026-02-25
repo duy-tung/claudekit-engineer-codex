@@ -10,7 +10,7 @@
 
 Main agent deeply analyzes the scope to LIST all potential edge cases FIRST:
 - Read `codebase-summary.md` for context
-- Use `/scout` to find relevant files
+- Use `/ck:scout` to find relevant files
 - **Think exhaustively** about what could go wrong:
   - Null/undefined scenarios
   - Boundary conditions (off-by-one, empty, max values)
@@ -62,7 +62,7 @@ Launch N `code-reviewer` subagents simultaneously:
 ### 5. Auto-Fix Pipeline
 
 **IF** unhandled/partial edge cases found:
-- Ask: "Found N unhandled edge cases. Fix with /fix --parallel? [Y/n]"
+- Ask: "Found N unhandled edge cases. Fix with /ck:fix --parallel? [Y/n]"
 
 ### 6. Final Report
 - Summary of verification
