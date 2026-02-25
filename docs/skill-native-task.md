@@ -61,10 +61,12 @@ pending → in_progress → completed
 
 ### Sync-Back (Session End)
 
-1. `TaskUpdate` marks tasks complete
-2. Update phase files: `[ ]` → `[x]`
-3. Update `plan.md` frontmatter status
-4. Git commit lưu trữ state transition
+1. Thu thập completed tasks (`TaskUpdate(status: "completed")`) + metadata (`phase`, `phaseFile`, `planDir`)
+2. Sweep toàn bộ `phase-XX-*.md` trong plan
+3. Reconcile/backfill: update `[ ]` → `[x]` cho mọi completed item (không chỉ phase hiện tại)
+4. Update `plan.md` frontmatter status + progress table
+5. Nếu có completed task không map được phase file, report unresolved mappings trước khi kết luận done
+6. Git commit lưu trữ state transition
 
 ---
 
@@ -138,8 +140,8 @@ Step 3.4 (addBlockedBy: [P2-id])   ← critical steps share phase dependency
 
 **Step 6 Finalize:**
 1. `TaskUpdate` marks all session tasks complete
-2. Spawn `project-manager` agent để update plan.md
-3. Sync checkboxes `[ ]` → `[x]`
+2. Spawn `project-manager` agent để chạy full-plan sync-back (sweep all phases + backfill stale completed items)
+3. Sync checkboxes `[ ]` → `[x]` across all phase files, rồi update `plan.md`
 
 **Same-Session Handoff:**
 ```

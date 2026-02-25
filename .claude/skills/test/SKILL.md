@@ -1,12 +1,24 @@
 ---
-name: test
-description: "[CK] Run unit, integration, e2e, and UI tests. Use for test execution, coverage analysis, build verification, visual regression, and QA reports."
+name: ck:test
+description: "Run unit, integration, e2e, and UI tests. Use for test execution, coverage analysis, build verification, visual regression, and QA reports."
+argument-hint: "[context] OR ui [url]"
 version: 1.0.0
 ---
 
 # Testing & Quality Assurance
 
 Comprehensive testing framework covering code-level testing (unit, integration, e2e), UI/visual testing via browser automation, coverage analysis, and structured QA reporting.
+
+## Default (No Arguments)
+
+If invoked with context (test scope), proceed with testing. If invoked WITHOUT arguments, use `AskUserQuestion` to present available test operations:
+
+| Operation | Description |
+|-----------|-------------|
+| `(default)` | Run unit/integration/e2e tests |
+| `ui` | Run UI tests on a website |
+
+Present as options via `AskUserQuestion` with header "Test Operation", question "What would you like to do?".
 
 ## Core Principle
 
@@ -30,7 +42,7 @@ Execute test suites, analyze results, generate coverage. Supports JS/TS (Jest/Vi
 
 ### 2. UI Testing (`references/ui-testing-workflow.md`)
 
-Browser-based visual testing via `chrome-devtools` skill. Screenshots, responsive checks, accessibility audits, form automation, console error collection. Includes auth injection for protected routes.
+Browser-based visual testing via `ck:chrome-devtools` skill. Screenshots, responsive checks, accessibility audits, form automation, console error collection. Includes auth injection for protected routes.
 
 **Load when:** Visual regression testing, UI bugs, responsive layout checks, accessibility audits
 
@@ -62,17 +74,17 @@ Reports        → report-format.md
 3. Execute appropriate test suites
 4. Analyze results — focus on failures
 5. Generate coverage reports if applicable
-6. For frontend: run UI tests via `chrome-devtools` skill
+6. For frontend: run UI tests via `ck:chrome-devtools` skill
 7. Produce structured summary report
 
 ## Tools Integration
 
 - **Test runners**: Jest, Vitest, Mocha, pytest, go test, cargo test, flutter test
 - **Coverage**: Istanbul/c8/nyc, pytest-cov, go cover
-- **Browser**: `chrome-devtools` skill for UI testing (screenshots, ARIA, console, network)
-- **Analysis**: `ai-multimodal` skill for screenshot analysis
-- **Debugging**: `debug` skill when tests reveal bugs requiring investigation
-- **Thinking**: `sequential-thinking` skill for complex test failure analysis
+- **Browser**: `ck:chrome-devtools` skill for UI testing (screenshots, ARIA, console, network)
+- **Analysis**: `ck:ai-multimodal` skill for screenshot analysis
+- **Debugging**: `ck:debug` skill when tests reveal bugs requiring investigation
+- **Thinking**: `ck:sequential-thinking` skill for complex test failure analysis
 
 ## Quality Standards
 

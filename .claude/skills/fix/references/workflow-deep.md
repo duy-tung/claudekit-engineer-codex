@@ -21,7 +21,7 @@ T8 = TaskCreate(subject="Finalize & docs",            activeForm="Finalizing",  
 
 ### Step 1: Debug & Parallel Investigation
 `TaskUpdate(T1, status="in_progress")`
-Activate `debug` skill. Launch 2-3 `Explore` subagents in parallel:
+Activate `ck:debug` skill. Launch 2-3 `Explore` subagents in parallel:
 ```
 Task("Explore", "Find error origin", "Trace error")
 Task("Explore", "Find affected components", "Map deps")
@@ -45,7 +45,7 @@ Use `researcher` subagent for external knowledge.
 
 ### Step 3: Brainstorm
 `TaskUpdate(T3, status="in_progress")` — auto-unblocks when T1 + T2 complete.
-Activate `brainstorm` skill.
+Activate `ck:brainstorm` skill.
 
 - Evaluate multiple approaches
 - Consider trade-offs
@@ -67,7 +67,7 @@ Use `planner` subagent to create implementation plan.
 
 ### Step 5: Implement
 `TaskUpdate(T5, status="in_progress")`
-Implement per plan. Use `context-engineering`, `sequential-thinking`, `problem-solving`.
+Implement per plan. Use `ck:context-engineering`, `ck:sequential-thinking`, `ck:problem-solving`.
 
 **Parallel Verification:** Launch `Bash` agents: typecheck + lint + build
 See `references/parallel-exploration.md`
@@ -108,15 +108,15 @@ See `references/review-cycle.md` for mode-specific handling.
 
 | Step | Skills/Subagents |
 |------|------------------|
-| 1 | `debug`, parallel `Explore` subagents for investigation |
+| 1 | `ck:debug`, parallel `Explore` subagents for investigation |
 | 2 | `researcher` (runs parallel with step 1) |
-| 3 | `brainstorm` |
+| 3 | `ck:brainstorm` |
 | 4 | `planner` |
-| 5 | `problem-solving`, `sequential-thinking`, `context-engineering`, parallel `Bash` |
+| 5 | `ck:problem-solving`, `ck:sequential-thinking`, `ck:context-engineering`, parallel `Bash` |
 | 6 | `tester` |
 | 7 | `code-reviewer` |
 | 8 | `project-manager`, `docs-manager`, `Bash` |
 
 **Rules:** Don't skip steps. Validate before proceeding. One phase at a time.
-**Frontend:** Use `chrome`, `chrome-devtools` or any relevant skills/tools to verify.
-**Visual Assets:** Use `ai-multimodal` for visual assets generation, analysis and verification.
+**Frontend:** Use `chrome`, `ck:chrome-devtools` or any relevant skills/tools to verify.
+**Visual Assets:** Use `ck:ai-multimodal` for visual assets generation, analysis and verification.

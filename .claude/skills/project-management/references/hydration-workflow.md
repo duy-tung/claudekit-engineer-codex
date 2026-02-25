@@ -40,15 +40,17 @@ Tasks are **session-scoped** — they disappear when the session ends. Plan file
 
 ## Session End: Sync-Back
 
-1. `TaskUpdate` marks all session tasks as complete
-2. Update phase files: `[ ]` → `[x]` for completed items
-3. Update `plan.md` frontmatter: status field (pending → in-progress → completed)
-4. Update progress percentages in plan overview
-5. Git commit captures state transition for next session
+1. Collect completed tasks (`TaskUpdate(status: "completed")`) with metadata (`phase`, `phaseFile`, `planDir`).
+2. Sweep all `phase-XX-*.md` files in the target plan directory.
+3. Reconcile and backfill: update `[ ]` → `[x]` for all completed items across every phase file (including earlier phases).
+4. Update `plan.md` frontmatter: status field (pending → in-progress → completed).
+5. Update progress percentages in `plan.md` overview from real checkbox counts.
+6. Report unresolved mappings when completed tasks cannot be matched to a phase file.
+7. Git commit captures state transition for next session.
 
 ## Cross-Session Resume
 
-When user runs `/cook path/to/plan.md` in a new session:
+When user runs `/ck:cook path/to/plan.md` in a new session:
 1. `TaskList()` → empty (tasks died with old session)
 2. Read plan files → re-hydrate from unchecked `[ ]` items
 3. Already-checked `[x]` = done, creates tasks only for remaining work
