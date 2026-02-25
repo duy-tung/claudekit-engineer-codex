@@ -1,6 +1,7 @@
 ---
 name: ck:plans-kanban
 description: View plans dashboard with progress tracking and timeline visualization. Use for kanban boards, plan status overview, phase progress, milestone tracking, project visibility.
+argument-hint: "[plans-dir]"
 ---
 
 # plans-kanban

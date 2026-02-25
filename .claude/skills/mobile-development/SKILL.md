@@ -3,6 +3,7 @@ name: ck:mobile-development
 description: Build mobile apps with React Native, Flutter, Swift/SwiftUI, Kotlin/Jetpack Compose. Use for iOS/Android, mobile UX, performance optimization, offline-first, app store deployment.
 license: MIT
 version: 1.0.0
+argument-hint: "[platform] [feature]"
 ---
 
 # Mobile Development Skill

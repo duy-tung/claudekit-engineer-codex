@@ -561,11 +561,18 @@ def discover_skills(skills_dir: Path) -> dict:
         if category not in skills:
             skills[category] = []
 
-        skills[category].append({
+        entry = {
             "name": formatted_name,
             "description": clean_desc,
             "category": category,
-        })
+        }
+
+        # Include argument-hint for discoverability
+        arg_hint = fm.get('argument-hint', '')
+        if arg_hint:
+            entry["argument_hint"] = str(arg_hint)
+
+        skills[category].append(entry)
 
         # Track categories
         if category not in categories:
@@ -726,7 +733,9 @@ def show_category_guide(data: dict, category: str, prefix: str) -> None:
     if cmds:
         print("**Skills:**")
         for cmd in cmds:
-            print(f"- `{cmd['name']}` - {cmd['description']}")
+            hint = cmd.get('argument_hint', '')
+            hint_suffix = f" `{hint}`" if hint else ""
+            print(f"- `{cmd['name']}`{hint_suffix} - {cmd['description']}")
 
     # Tip at the end
     if "tip" in guide:
@@ -779,8 +788,15 @@ def show_command(data: dict, command: str, prefix: str) -> None:
     print(found['description'])
     print()
     print(f"**Category:** {found['category']}")
-    print()
-    print(f"**Usage:** `{found['name']} <your-input>`")
+
+    # Show argument hint if available
+    arg_hint = found.get('argument_hint', '')
+    if arg_hint:
+        print()
+        print(f"**Usage:** `{found['name']} {arg_hint}`")
+    else:
+        print()
+        print(f"**Usage:** `{found['name']} <your-input>`")
 
     # Show related skills (same category)
     cat = found['category']
@@ -816,7 +832,9 @@ def do_search(data: dict, term: str, prefix: str, emit_marker: bool = True) -> N
     print()
     print(f"Found {len(matches)} matches:")
     for cmd in matches[:8]:
-        print(f"- `{cmd['name']}` - {cmd['description']}")
+        hint = cmd.get('argument_hint', '')
+        hint_suffix = f" `{hint}`" if hint else ""
+        print(f"- `{cmd['name']}`{hint_suffix} - {cmd['description']}")
 
 
 def format_disambiguation(task: str, candidates: list) -> None:
@@ -952,7 +970,9 @@ def recommend_task(data: dict, task: str, prefix: str) -> None:
     if top_cat in commands and commands[top_cat]:
         print("**Skills:**")
         for cmd in commands[top_cat][:4]:
-            print(f"- `{cmd['name']}` - {cmd['description']}")
+            hint = cmd.get('argument_hint', '')
+            hint_suffix = f" `{hint}`" if hint else ""
+            print(f"- `{cmd['name']}`{hint_suffix} - {cmd['description']}")
 
     if "tip" in guide:
         print()
