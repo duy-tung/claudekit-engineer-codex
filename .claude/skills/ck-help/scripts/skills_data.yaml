@@ -417,7 +417,7 @@
   has_scripts: false
   name: remotion
   path: remotion/SKILL.md
-- argument_hint: '[path] [--style xml|markdown|plain]'
+- argument_hint: '[path] [--style xml|markdown|plain|json]'
   category: dev-tools
   description: Pack repositories into AI-friendly files with Repomix (XML, Markdown,
     plain text). Use for codebase snapshots, LLM context preparation, security audits,
@@ -490,7 +490,7 @@
   has_scripts: false
   name: tanstack
   path: tanstack/SKILL.md
-- argument_hint: <template> <context> [--devs N|--delegate]
+- argument_hint: <template> <context> [--devs|--researchers|--reviewers N] [--delegate]
   category: dev-tools
   description: Orchestrate Agent Teams for parallel multi-session collaboration. Use
     for research, implementation, review, and debug workflows requiring independent
@@ -557,7 +557,7 @@
   has_scripts: false
   name: watzup
   path: watzup/SKILL.md
-- argument_hint: <file-or-pattern>
+- argument_hint: '[file-or-pattern]'
   category: frontend
   description: Review UI code for Web Interface Guidelines compliance. Use when asked
     to "review my UI", "check accessibility", "audit design", "review UX", or "check

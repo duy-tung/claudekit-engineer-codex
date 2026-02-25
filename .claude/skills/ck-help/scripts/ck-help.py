@@ -832,7 +832,9 @@ def do_search(data: dict, term: str, prefix: str, emit_marker: bool = True) -> N
     print()
     print(f"Found {len(matches)} matches:")
     for cmd in matches[:8]:
-        print(f"- `{cmd['name']}` - {cmd['description']}")
+        hint = cmd.get('argument_hint', '')
+        hint_suffix = f" `{hint}`" if hint else ""
+        print(f"- `{cmd['name']}`{hint_suffix} - {cmd['description']}")
 
 
 def format_disambiguation(task: str, candidates: list) -> None:
@@ -968,7 +970,9 @@ def recommend_task(data: dict, task: str, prefix: str) -> None:
     if top_cat in commands and commands[top_cat]:
         print("**Skills:**")
         for cmd in commands[top_cat][:4]:
-            print(f"- `{cmd['name']}` - {cmd['description']}")
+            hint = cmd.get('argument_hint', '')
+            hint_suffix = f" `{hint}`" if hint else ""
+            print(f"- `{cmd['name']}`{hint_suffix} - {cmd['description']}")
 
     if "tip" in guide:
         print()
