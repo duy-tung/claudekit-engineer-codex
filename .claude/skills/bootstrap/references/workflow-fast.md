@@ -30,7 +30,7 @@ No user gate — proceed directly.
 
 ## Step 3: Planning
 
-Activate **plan** skill: `/plan --fast <requirements>`
+Activate **ck:plan** skill: `/ck:plan --fast <requirements>`
 - Skip research (already done above)
 - Read codebase docs → create plan directly
 - Plan directory using `## Naming` pattern
@@ -42,7 +42,7 @@ No user gate — proceed to implementation.
 
 Load `references/shared-phases.md` for remaining phases.
 
-Activate **cook** skill: `/cook --auto <plan-path>`
+Activate **ck:cook** skill: `/ck:cook --auto <plan-path>`
 - Skips all review gates (fast planning pairs with fast execution)
 - Auto-approves if score≥9.5 and 0 critical issues
 - Continues through all phases without stopping

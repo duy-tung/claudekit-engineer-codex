@@ -19,7 +19,7 @@ T6 = TaskCreate(subject="Finalize",             activeForm="Finalizing",        
 
 ### Step 1: Debug & Investigate
 `TaskUpdate(T1, status="in_progress")`
-Activate `debug` skill. Use `debugger` subagent if needed.
+Activate `ck:debug` skill. Use `debugger` subagent if needed.
 
 - Read error messages, logs, stack traces
 - Reproduce the issue
@@ -52,8 +52,8 @@ See `references/parallel-exploration.md` for patterns.
 `TaskUpdate(T3, status="in_progress")` — auto-unblocked when T1 + T2 complete.
 Fix the issue following debugging findings.
 
-- Apply `problem-solving` skill if stuck
-- Use `sequential-thinking` for complex logic
+- Apply `ck:problem-solving` skill if stuck
+- Use `ck:sequential-thinking` for complex logic
 
 **After implementation - Parallel Verification:**
 Launch `Bash` agents in parallel to verify:
@@ -99,9 +99,9 @@ See `references/review-cycle.md` for mode-specific handling.
 
 | Step | Skills/Subagents |
 |------|------------------|
-| 1 | `debug`, `debugger` subagent |
+| 1 | `ck:debug`, `debugger` subagent |
 | 2 | Multiple `Explore` subagents in parallel (optional) |
-| 3 | `problem-solving`, `sequential-thinking`, parallel `Bash` for verification |
+| 3 | `ck:problem-solving`, `ck:sequential-thinking`, parallel `Bash` for verification |
 | 4 | `tester` subagent |
 | 5 | `code-reviewer` subagent |
 | 6 | `git-manager`, `docs-manager` subagents |

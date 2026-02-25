@@ -17,7 +17,7 @@ Thorough copy development with research, planning, and execution.
    - Target audience insights
    - Industry best practices
    - Product/service details
-4. **Scout codebase** → `/scout ext` (preferred) or `/scout` to find relevant files
+4. **Scout codebase** → `/ck:scout ext` (preferred) or `/ck:scout` to find relevant files
 5. **Plan** → Use `planner` agent to outline copy structure and strategy
 6. **Write** → Use `fullstack-developer` agent to execute plan
 

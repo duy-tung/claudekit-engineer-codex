@@ -46,7 +46,7 @@ Spawn multiple `researcher` subagents in parallel:
 
 ## Step 5: Planning
 
-Activate **plan** skill: `/plan --hard <requirements>`
+Activate **ck:plan** skill: `/ck:plan --hard <requirements>`
 - Planner creates directory using `## Naming` pattern
 - Overview at `plan.md` (<80 lines) + `phase-XX-*.md` files
 - Present pros/cons of plan
@@ -57,4 +57,4 @@ Activate **plan** skill: `/plan --hard <requirements>`
 
 Load `references/shared-phases.md` for remaining phases.
 
-Activate **cook** skill: `/cook <plan-path>` (interactive mode — review gates at each step)
+Activate **ck:cook** skill: `/ck:cook <plan-path>` (interactive mode — review gates at each step)

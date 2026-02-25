@@ -116,6 +116,6 @@ Update `status` when plan state changes.
 
 ## Related Skills
 
-- `plan` — Creates implementation plans (planning phase)
-- `cook` — Implements plans (execution phase, invokes project-manager at finalize)
+- `ck:plan` — Creates implementation plans (planning phase)
+- `ck:cook` — Implements plans (execution phase, invokes project-manager at finalize)
 - `plans-kanban` — Visual dashboard for plan viewing

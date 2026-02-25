@@ -35,7 +35,7 @@ No user gate — auto-select best option.
 
 ## Step 4: Planning
 
-Activate **plan** skill: `/plan --auto <requirements>`
+Activate **ck:plan** skill: `/ck:plan --auto <requirements>`
 - Planning skill auto-detects complexity and picks appropriate mode
 - Creates plan directory using `## Naming` pattern
 - Overview at `plan.md` (<80 lines) + `phase-XX-*.md` files
@@ -46,7 +46,7 @@ No user gate — proceed to implementation.
 
 Load `references/shared-phases.md` for remaining phases.
 
-Activate **cook** skill: `/cook --auto <plan-path>`
+Activate **ck:cook** skill: `/ck:cook --auto <plan-path>`
 - Skips all review gates
 - Auto-approves if score≥9.5 and 0 critical issues
 - Continues through all phases without stopping

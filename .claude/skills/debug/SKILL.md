@@ -103,10 +103,10 @@ Frontend fix   → frontend-verification.md (Chrome/devtools)
 
 - **Database:** `psql` for PostgreSQL queries and diagnostics
 - **CI/CD:** `gh` CLI for GitHub Actions logs and pipeline debugging
-- **Codebase:** `docs-seeker` skill for package/plugin docs; `repomix` for codebase summary
-- **Scouting:** `/scout` or `/scout ext` for finding relevant files
+- **Codebase:** `ck:docs-seeker` skill for package/plugin docs; `repomix` for codebase summary
+- **Scouting:** `/ck:scout` or `/ck:scout ext` for finding relevant files
 - **Frontend:** Chrome browser or `chrome-devtools` skill for visual verification (screenshots, console, network)
-- **Skills:** Activate `problem-solving` skill when stuck on complex issues
+- **Skills:** Activate `ck:problem-solving` skill when stuck on complex issues
 
 ## Red Flags
 

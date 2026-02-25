@@ -26,15 +26,15 @@ Present as options via `AskUserQuestion` with header "Preview Operation", questi
 ## Usage
 
 ### View Mode
-- `/preview <file.md>` - View markdown file in novel-reader UI
-- `/preview <directory/>` - Browse directory contents
-- `/preview --stop` - Stop running server
+- `/ck:preview <file.md>` - View markdown file in novel-reader UI
+- `/ck:preview <directory/>` - Browse directory contents
+- `/ck:preview --stop` - Stop running server
 
 ### Generation Mode
-- `/preview --explain <topic>` - Generate visual explanation (ASCII + Mermaid + prose)
-- `/preview --slides <topic>` - Generate presentation slides (one concept per slide)
-- `/preview --diagram <topic>` - Generate focused diagram (ASCII + Mermaid)
-- `/preview --ascii <topic>` - Generate ASCII-only diagram (terminal-friendly)
+- `/ck:preview --explain <topic>` - Generate visual explanation (ASCII + Mermaid + prose)
+- `/ck:preview --slides <topic>` - Generate presentation slides (one concept per slide)
+- `/ck:preview --diagram <topic>` - Generate focused diagram (ASCII + Mermaid)
+- `/ck:preview --ascii <topic>` - Generate ASCII-only diagram (terminal-friendly)
 
 ## Argument Resolution
 
@@ -65,10 +65,10 @@ When processing arguments, follow this priority order:
 | Error | Action |
 |-------|--------|
 | Invalid topic (empty) | Ask user to provide a topic |
-| Flag without topic | Ask user: "Please provide a topic: `/preview --explain <topic>`" |
+| Flag without topic | Ask user: "Please provide a topic: `/ck:preview --explain <topic>`" |
 | Topic becomes empty after sanitization | Ask for topic with alphanumeric characters |
 | File write failure | Report error, suggest checking permissions |
-| Server startup failure | Check if port in use, try `/preview --stop` first |
+| Server startup failure | Check if port in use, try `/ck:preview --stop` first |
 | No generation flag + unresolvable reference | Ask user to clarify which file they meant |
 | Existing file at output path | Overwrite with new content (no prompt) |
 | Server already running | Reuse existing server instance, just open new URL |

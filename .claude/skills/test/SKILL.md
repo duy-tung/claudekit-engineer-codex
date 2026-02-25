@@ -83,8 +83,8 @@ Reports        → report-format.md
 - **Coverage**: Istanbul/c8/nyc, pytest-cov, go cover
 - **Browser**: `chrome-devtools` skill for UI testing (screenshots, ARIA, console, network)
 - **Analysis**: `ai-multimodal` skill for screenshot analysis
-- **Debugging**: `debug` skill when tests reveal bugs requiring investigation
-- **Thinking**: `sequential-thinking` skill for complex test failure analysis
+- **Debugging**: `ck:debug` skill when tests reveal bugs requiring investigation
+- **Thinking**: `ck:sequential-thinking` skill for complex test failure analysis
 
 ## Quality Standards
 
