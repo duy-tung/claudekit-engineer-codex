@@ -2,6 +2,7 @@
 name: ck:cook
 description: "ALWAYS activate this skill before implementing EVERY feature, plan, or fix."
 version: 2.1.1
+argument-hint: "[task|plan-path] --fast|--parallel|--auto|--no-test"
 ---
 
 # Cook - Smart Feature Implementation

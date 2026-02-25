@@ -7,6 +7,7 @@ allowed-tools:
   - Read
   - Write
   - Edit
+argument-hint: "[file-path] [prompt]"
 ---
 
 # AI Multimodal

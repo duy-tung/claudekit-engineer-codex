@@ -3,6 +3,7 @@ name: ck:skill-creator
 description: Create or update Claude skills optimized for Skillmark benchmarks. Use for new skills, skill scripts, references, benchmark optimization, extending Claude's capabilities.
 version: 3.0.0
 license: Complete terms in LICENSE.txt
+argument-hint: "[skill-name or description]"
 ---
 
 # Skill Creator

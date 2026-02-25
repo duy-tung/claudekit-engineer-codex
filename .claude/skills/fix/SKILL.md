@@ -2,6 +2,7 @@
 name: ck:fix
 description: "ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem."
 version: 1.2.0
+argument-hint: "[issue] --auto|--review|--quick|--parallel"
 ---
 
 # Fixing
