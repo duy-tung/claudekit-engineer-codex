@@ -1,3 +1,10 @@
+## [2.13.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.7...v2.13.0-beta.8) (2026-02-25)
+
+
+### 🐞 Bug Fixes
+
+* remove redundant [CK] tag from skill descriptions ([23844a1](https://github.com/claudekit/claudekit-engineer/commit/23844a1f27d36ee519582e111cf0b43d699886d1)), closes [claudekit/claudekit-engineer#513](https://github.com/claudekit/claudekit-engineer/issues/513)
+
 ## [2.13.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.6...v2.13.0-beta.7) (2026-02-25)
 
 
