@@ -1,0 +1,9 @@
+{
+  "name": "ck",
+  "description": "ClaudeKit skills — AI-powered development workflows",
+  "version": "3.0.0-beta.1",
+  "author": {
+    "name": "ClaudeKit",
+    "url": "https://github.com/claudekit"
+  }
+}

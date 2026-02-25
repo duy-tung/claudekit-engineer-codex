@@ -13,7 +13,7 @@ const crypto = require('crypto');
 const { execSync } = require('child_process');
 
 // Directories to include in release
-const INCLUDE_DIRS = ['.claude', '.opencode', 'plans/templates'];
+const INCLUDE_DIRS = ['.claude', '.claude-plugin', '.opencode', 'plugins', 'plans/templates'];
 const INCLUDE_FILES = ['.gitignore', '.repomixignore', '.mcp.json', 'CLAUDE.md', 'AGENTS.md'];
 
 // Directories to skip
@@ -159,6 +159,8 @@ function main() {
 
       // Strip .claude/ prefix for files inside .claude directory
       // CLI tracks files relative to .claude/, not project root
+      // Note: .claude-plugin/ and plugins/ paths are NOT stripped —
+      // they're read from extractDir by plugin-installer.ts, not tracked by CLI sync.
       if (relativePath.startsWith('.claude/')) {
         relativePath = relativePath.slice('.claude/'.length);
       }

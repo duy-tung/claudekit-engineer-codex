@@ -69,16 +69,16 @@ Enable in `settings.json` (may be GA in Claude Code 2.1.33+):
 
 ## CK-Native Behavior
 
-The `/team` skill (v2.1.0) is an **imperative execution engine** — templates auto-execute on activation, not a manual playbook.
+The `/ck:team` skill (v2.1.0) is an **imperative execution engine** — templates auto-execute on activation, not a manual playbook.
 
 It automatically integrates with the CK workflow stack:
 
 | Template | Wraps Workflow | Auto-Injected |
 |----------|---------------|---------------|
-| `/team research` | `/research` | Report naming, output format |
-| `/team cook` | `/cook` | Phase sequence, docs sync eval |
-| `/team review` | `/code-review` | Evidence gates, severity ratings |
-| `/team debug` | `/fix` | Root-cause-first, adversarial hypotheses |
+| `/ck:team research` | `/ck:research` | Report naming, output format |
+| `/ck:team cook` | `/ck:cook` | Phase sequence, docs sync eval |
+| `/ck:team review` | `/ck:code-review` | Evidence gates, severity ratings |
+| `/ck:team debug` | `/ck:fix` | Root-cause-first, adversarial hypotheses |
 
 Teammates automatically receive CK context (reports path, naming pattern, branch, commit conventions) via the SubagentStart hook (`team-context-inject.cjs`).
 
@@ -502,7 +502,7 @@ All hooks follow fail-open design (exit 0 always) and are gated by `isHookEnable
 ## Quick Start
 
 1. Ensure `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set
-2. Tell Claude: `/team research "how should we optimize our database queries?"`
+2. Tell Claude: `/ck:team research "how should we optimize our database queries?"`
 3. Watch 3 researchers investigate in parallel
 4. Lead synthesizes findings into actionable report
 5. Team auto-cleans up when done

@@ -2,7 +2,7 @@
 /**
  * Plan Subagent Stop Hook - Cook Skill Reminder
  *
- * Fires when Plan subagent completes. Reminds to invoke /cook --auto before implementation.
+ * Fires when Plan subagent completes. Reminds to invoke /ck:cook --auto before implementation.
  * Also outputs full absolute path so new sessions (after /clear) can find the plan in worktrees.
  *
  * Exit Codes:
@@ -40,14 +40,19 @@ try {
       }
     }
 
+    // Detect plugin context: check if plugins/ck/ exists at project root
+    const projectRoot = process.cwd();
+    const isPluginContext = fs.existsSync(path.join(projectRoot, 'plugins', 'ck'));
+    const cookCmd = isPluginContext ? '/ck:cook' : '/cook';
+
     // Output reminder with full absolute path if available
-    console.log('MUST invoke /cook --auto skill before implementing the plan');
+    console.log(`MUST invoke ${cookCmd} --auto skill before implementing the plan`);
     if (planPath) {
       const planMdPath = path.join(planPath, 'plan.md');
-      console.log(`Best Practice: Run /clear then /cook ${planMdPath}`);
+      console.log(`Best Practice: Run /clear then ${cookCmd} ${planMdPath}`);
     } else {
       // Fallback when plan path unavailable
-      console.log('Best Practice: Run /clear then /cook {full-absolute-path-to-plan.md}');
+      console.log(`Best Practice: Run /clear then ${cookCmd} {full-absolute-path-to-plan.md}`);
     }
 
     process.exit(0);
