@@ -1,3 +1,10 @@
+## [2.13.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.6...v2.13.0-beta.7) (2026-02-25)
+
+
+### 🚀 Features
+
+* add ck: namespace prefix to all skill names ([7dd3d63](https://github.com/claudekit/claudekit-engineer/commit/7dd3d631e6a9a276d74f7356ceb5ed568a09dd98)), closes [#514](https://github.com/claudekit/claudekit-engineer/issues/514)
+
 ## [2.13.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.5...v2.13.0-beta.6) (2026-02-25)
 
 
