@@ -1,6 +1,6 @@
 ---
 name: ck:bootstrap
-description: "[CK] Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent)."
+description: "Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent)."
 license: MIT
 ---
 

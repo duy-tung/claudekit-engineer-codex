@@ -1,6 +1,6 @@
 ---
 name: ck:journal
-description: "[CK] Write journal entries analyzing recent changes and session reflections."
+description: "Write journal entries analyzing recent changes and session reflections."
 ---
 
 # Journal
