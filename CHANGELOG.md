@@ -1,3 +1,60 @@
+## [2.13.0](https://github.com/claudekit/claudekit-engineer/compare/v2.12.1...v2.13.0) (2026-02-25)
+
+
+### 🚀 Features
+
+* add argument-hint to all skills for discoverability ([#520](https://github.com/claudekit/claudekit-engineer/issues/520)) ([7b1417a](https://github.com/claudekit/claudekit-engineer/commit/7b1417a1722062f98401bf8398f9e42baf146f40))
+* add ck: namespace prefix to all skill names ([7dd3d63](https://github.com/claudekit/claudekit-engineer/commit/7dd3d631e6a9a276d74f7356ceb5ed568a09dd98)), closes [#514](https://github.com/claudekit/claudekit-engineer/issues/514)
+* **ck-help:** add subcommand-aware query routing ([7794a48](https://github.com/claudekit/claudekit-engineer/commit/7794a484423cadb26b34ff002b0530d915550001))
+* migrate all 19 claudekit-engineer commands to skills ([f5af9aa](https://github.com/claudekit/claudekit-engineer/commit/f5af9aa1ed9430417a6e3ba7eda0435e3a8f253d))
+* migrate skills to CC plugin format for ck: namespace ([5e6da92](https://github.com/claudekit/claudekit-engineer/commit/5e6da922a312a146c41e35b1503ec57fe207e8e0)), closes [#491](https://github.com/claudekit/claudekit-engineer/issues/491)
+* **plugin:** include plugin dirs in release and restore skill deletions ([5a20ea4](https://github.com/claudekit/claudekit-engineer/commit/5a20ea4c596bd994c75d1f89e9c819093d53bd52))
+* **skills:** add argument-hint frontmatter and subcommand browsing to 6 skills ([327ad87](https://github.com/claudekit/claudekit-engineer/commit/327ad87baa25cec8b376627df77e78b5eb3e7da3))
+
+
+### 🐞 Bug Fixes
+
+* add ck: prefix to all skill cross-references ([99cfe27](https://github.com/claudekit/claudekit-engineer/commit/99cfe2775bc1250b4d75c96c0e41a12bdf5f4237)), closes [claudekit/claudekit-engineer#513](https://github.com/claudekit/claudekit-engineer/issues/513)
+* add ck: prefix to remaining 88 missed cross-references ([e3045fb](https://github.com/claudekit/claudekit-engineer/commit/e3045fb4b48a6eeb908174abfa64a52c990425ce))
+* add missing skills to metadata.json deletions array ([665dc75](https://github.com/claudekit/claudekit-engineer/commit/665dc75040eadf6a98f02e00d47374cdb6c68df4)), closes [#513](https://github.com/claudekit/claudekit-engineer/issues/513)
+* address code review findings on argument-hint values ([5453dad](https://github.com/claudekit/claudekit-engineer/commit/5453dad397de671d4e784bf068edb76d84977402))
+* address review round 2 findings ([a36db25](https://github.com/claudekit/claudekit-engineer/commit/a36db257838aa808d9231d1847e00e193279b41c))
+* comprehensive plugin namespace cleanup after parallel code review ([25bc4b5](https://github.com/claudekit/claudekit-engineer/commit/25bc4b5e74936eb03a30adb44770d0b6a8958d48))
+* **plugin:** migrate script paths to ${CLAUDE_PLUGIN_ROOT} ([6e35bea](https://github.com/claudekit/claudekit-engineer/commit/6e35bea73f262d85490cf2fd462695a131aac42d))
+* **plugin:** OpenCode generation + template-skill deletion ([6da4106](https://github.com/claudekit/claudekit-engineer/commit/6da41061d048bdc31e8fb2232a0187df388e2421))
+* **plugin:** sync version to 3.0.0-beta.1 and fix script permissions ([714b8cd](https://github.com/claudekit/claudekit-engineer/commit/714b8cdd97308422e34084288c4006945de5ba6a))
+* **release:** add plugin validation, version sync, and OpenCode path resolution ([e590e2c](https://github.com/claudekit/claudekit-engineer/commit/e590e2cb4c2d713894c1710745b42f03b2b1e2fc))
+* remove redundant [CK] tag from skill descriptions ([23844a1](https://github.com/claudekit/claudekit-engineer/commit/23844a1f27d36ee519582e111cf0b43d699886d1)), closes [claudekit/claudekit-engineer#513](https://github.com/claudekit/claudekit-engineer/issues/513)
+* resolve stale references and inconsistencies after dev merge ([178584d](https://github.com/claudekit/claudekit-engineer/commit/178584da0a81e7ab664cc6959fb11e86a7132946))
+* **scripts:** restore generate_catalogs.py to .claude/scripts/ for user deployment ([757a901](https://github.com/claudekit/claudekit-engineer/commit/757a9011798a32a0b94da54bae80362df9fad1ec)), closes [#325](https://github.com/claudekit/claudekit-engineer/issues/325)
+* **skills:** address review findings from commands-to-skills migration ([9b7dee2](https://github.com/claudekit/claudekit-engineer/commit/9b7dee2e41326744cdfe6fcfbb295bb1d5409a6c))
+* **skills:** address second-pass review findings for commands-to-skills migration ([d366fb9](https://github.com/claudekit/claudekit-engineer/commit/d366fb9b66f885c9be3db4b6bc5dba5497f8b7e0))
+* **skills:** address third-pass review findings ([b19cf5b](https://github.com/claudekit/claudekit-engineer/commit/b19cf5be5c55fada0258c60d9d881fa7b9bced7d))
+* **skills:** remove dead elif branches and PROJECT/ path remnants ([b001048](https://github.com/claudekit/claudekit-engineer/commit/b0010489b99bce650ce019dc2825732d8007fbc1))
+* **workflows:** enforce full-plan phase sync-back on finalize ([a95ab81](https://github.com/claudekit/claudekit-engineer/commit/a95ab8183538d1e769e52861ae520f940e3d8bbb))
+* **worktree:** harden sanitization and matching behavior ([8be2a2f](https://github.com/claudekit/claudekit-engineer/commit/8be2a2f60d7f8e5ff784c1405a9bf53fa95e2fb1))
+
+
+### 📚 Documentation
+
+* **architecture:** shift core docs to skills model ([2dca8e7](https://github.com/claudekit/claudekit-engineer/commit/2dca8e72aab5336372ef411bb86c806b3f714938))
+* **readme:** replace stale command references ([8aa3cea](https://github.com/claudekit/claudekit-engineer/commit/8aa3ceae787d5b7acb12b600913a416c38127443))
+* **skills:** fix remaining command-to-skill doc references ([4837489](https://github.com/claudekit/claudekit-engineer/commit/48374897f90840bfdae8024edd68c13e9f1249db))
+* **skills:** normalize review and subcommand syntax ([276e807](https://github.com/claudekit/claudekit-engineer/commit/276e8074b2dd86e6965bb241f3a97cd86dc2a056))
+* update docs for plugin namespace migration ([091dfba](https://github.com/claudekit/claudekit-engineer/commit/091dfba271aab6f40e49757fa52dc0fa7c8ec6a9))
+* **workflow:** align plan syntax references ([6803b63](https://github.com/claudekit/claudekit-engineer/commit/6803b632ec3ea9d1c4884a385d31d406d9576378))
+
+
+### ♻️ Code Refactoring
+
+* **scripts:** wrap legacy ck-help entrypoint ([6e99192](https://github.com/claudekit/claudekit-engineer/commit/6e991926981c8a0208850eb0e0f68da41158259c))
+* **scripts:** wrap legacy worktree entrypoints ([60eb573](https://github.com/claudekit/claudekit-engineer/commit/60eb573d9b39d90421b1a1d8d3caa6dc07127c37))
+
+
+### ✅ Tests
+
+* **ck-help:** refresh canonical help regression suite ([eb435f2](https://github.com/claudekit/claudekit-engineer/commit/eb435f2b9ddbf0a8fc8c5adab4e0e72f96146e16))
+
 ## [2.13.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.9...v2.13.0-beta.10) (2026-02-25)
 
 
