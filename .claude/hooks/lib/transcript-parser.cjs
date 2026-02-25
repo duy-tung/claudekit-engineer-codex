@@ -98,9 +98,10 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
           latestTodos.push(...block.input.todos);
         }
       } else if (block.name === 'TaskCreate') {
-        // Native Task API: Add new task
+        // Native Task API: Add new task (use block.id as synthetic task id for tracking)
         if (block.input?.subject) {
           latestTodos.push({
+            id: block.id,
             content: block.input.subject,
             status: 'pending',
             activeForm: block.input.activeForm || null
@@ -108,10 +109,18 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
         }
       } else if (block.name === 'TaskUpdate') {
         // Native Task API: Update existing task status
+        // Match by taskId from input against id or index-based fallback
         if (block.input?.taskId && block.input?.status) {
-          const task = latestTodos.find(t => t.id === block.input.taskId);
+          const taskId = block.input.taskId;
+          let task = latestTodos.find(t => t.id === taskId);
+          // Fallback: TaskUpdate uses sequential numeric ids (1-based) from TaskCreate order
+          if (!task) {
+            const idx = parseInt(taskId, 10) - 1;
+            if (idx >= 0 && idx < latestTodos.length) task = latestTodos[idx];
+          }
           if (task) {
             task.status = block.input.status;
+            if (block.input.activeForm) task.activeForm = block.input.activeForm;
           }
         }
       } else {

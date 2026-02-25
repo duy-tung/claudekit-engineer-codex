@@ -46,21 +46,37 @@ function getTerminalWidth() {
 }
 
 /**
- * Calculate visible string length (strip ANSI codes, account for emoji width)
- * Emojis typically render as 2 columns in terminals
+ * Calculate visible string length (strip ANSI codes, account for wide characters)
  * Uses codepoint iteration (for...of) to correctly handle SMP emoji (surrogate pairs)
+ * Accounts for East Asian Width Ambiguous characters used in statusline
  */
 function visibleLength(str) {
   if (!str || typeof str !== 'string') return 0;
   // Strip ANSI escape codes
   const noAnsi = str.replace(/\x1b\[[0-9;]*m/g, '');
-  // Iterate by codepoint (not UTF-16 code unit) to correctly count SMP emoji
   let len = 0;
   for (const ch of noAnsi) {
     const cp = ch.codePointAt(0);
-    // Emoji ranges: SMP emoji (U+1F300-1F9FF), dingbats (U+2600-27BF)
-    if ((cp >= 0x1F300 && cp <= 0x1F9FF) || (cp >= 0x2600 && cp <= 0x26FF) || (cp >= 0x2700 && cp <= 0x27BF)) {
-      len += 2; // Emoji renders as 2 terminal columns
+    if (
+      // SMP emoji (U+1F300-1F9FF) — 🤖📁🌿📝💵🔋
+      (cp >= 0x1F300 && cp <= 0x1F9FF) ||
+      // Misc symbols (U+2600-26FF) — ⌛ is NOT here, it's U+231B
+      (cp >= 0x2600 && cp <= 0x26FF) ||
+      // Dingbats (U+2700-27BF) — ✓ etc (NOTE: ✓ is EAW:N but most terminals render as 2)
+      (cp >= 0x2700 && cp <= 0x27BF) ||
+      // Hourglass/timer symbols — ⌛ (U+231B), ⏰ (U+23F0), ⏱ (U+23F1), ⏳ (U+23F3)
+      (cp >= 0x2300 && cp <= 0x23FF)
+    ) {
+      len += 2;
+    } else if (
+      // EAW Ambiguous characters used in statusline — treat as 1 col (safe default)
+      // ▰▱ (U+25B0-25B1), ○● (U+25CB,25CF), ▸ (U+25B8), → (U+2192), ↑↓ (U+2191,U+2193)
+      // These are EAW:A — render as 1 on most Western terminals, 2 on CJK terminals
+      // We count as 1 (Western default) since Claude Code itself renders in Western width context
+      (cp >= 0x2190 && cp <= 0x21FF) || // Arrows (→↑↓←)
+      (cp >= 0x25A0 && cp <= 0x25FF)    // Geometric shapes (▰▱○●▸▪)
+    ) {
+      len += 1;
     } else {
       len += 1;
     }
@@ -86,15 +102,19 @@ function formatElapsed(startTime, endTime) {
 }
 
 /**
- * Read stdin asynchronously
+ * Read stdin asynchronously with timeout (prevents hang if Claude Code dies before EOF)
  */
 async function readStdin() {
   return new Promise((resolve, reject) => {
     const chunks = [];
     stdin.setEncoding('utf8');
+    const timer = setTimeout(() => {
+      stdin.destroy();
+      resolve(chunks.join(''));
+    }, 5000);
     stdin.on('data', chunk => chunks.push(chunk));
-    stdin.on('end', () => resolve(chunks.join('')));
-    stdin.on('error', reject);
+    stdin.on('end', () => { clearTimeout(timer); resolve(chunks.join('')); });
+    stdin.on('error', (err) => { clearTimeout(timer); reject(err); });
   });
 }
 

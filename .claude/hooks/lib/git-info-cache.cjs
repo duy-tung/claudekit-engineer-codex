@@ -23,6 +23,7 @@ const CACHE_MISS = Symbol('cache_miss');
 
 /**
  * Safe command execution wrapper with optional cwd
+ * Timeout prevents hangs on slow/network-mounted repos
  */
 function execIn(cmd, cwd) {
   try {
@@ -30,7 +31,8 @@ function execIn(cmd, cwd) {
       encoding: 'utf8',
       stdio: ['pipe', 'pipe', 'ignore'],
       windowsHide: true,
-      cwd: cwd || undefined
+      cwd: cwd || undefined,
+      timeout: 3000
     }).trim();
   } catch {
     return '';
