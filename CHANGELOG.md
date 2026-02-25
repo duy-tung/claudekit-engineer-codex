@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/claudekit/claudekit-engineer/compare/v2.12.0...v2.12.1) (2026-02-25)
+
+
+### 🐞 Bug Fixes
+
+* **skill:** `chrome-devtools` evaluate should use await ([791cab6](https://github.com/claudekit/claudekit-engineer/commit/791cab6d4033c67360de8db2b011bf2b064410e8))
+
 ## [2.12.0](https://github.com/claudekit/claudekit-engineer/compare/v2.11.3...v2.12.0) (2026-02-24)
 
 
