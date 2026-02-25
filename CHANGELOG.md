@@ -1,3 +1,11 @@
+## [2.13.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.8...v2.13.0-beta.9) (2026-02-25)
+
+
+### 🐞 Bug Fixes
+
+* add ck: prefix to all skill cross-references ([99cfe27](https://github.com/claudekit/claudekit-engineer/commit/99cfe2775bc1250b4d75c96c0e41a12bdf5f4237)), closes [claudekit/claudekit-engineer#513](https://github.com/claudekit/claudekit-engineer/issues/513)
+* add ck: prefix to remaining 88 missed cross-references ([e3045fb](https://github.com/claudekit/claudekit-engineer/commit/e3045fb4b48a6eeb908174abfa64a52c990425ce))
+
 ## [2.13.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.7...v2.13.0-beta.8) (2026-02-25)
 
 
