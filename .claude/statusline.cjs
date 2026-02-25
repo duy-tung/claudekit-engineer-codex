@@ -48,14 +48,24 @@ function getTerminalWidth() {
 /**
  * Calculate visible string length (strip ANSI codes, account for emoji width)
  * Emojis typically render as 2 columns in terminals
+ * Uses codepoint iteration (for...of) to correctly handle SMP emoji (surrogate pairs)
  */
 function visibleLength(str) {
   if (!str || typeof str !== 'string') return 0;
   // Strip ANSI escape codes
   const noAnsi = str.replace(/\x1b\[[0-9;]*m/g, '');
-  // Count emojis (they render as ~2 cols) - common emoji ranges
-  const emojiMatches = noAnsi.match(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu) || [];
-  return noAnsi.length + emojiMatches.length; // +1 per emoji (base length + 1 = 2 cols)
+  // Iterate by codepoint (not UTF-16 code unit) to correctly count SMP emoji
+  let len = 0;
+  for (const ch of noAnsi) {
+    const cp = ch.codePointAt(0);
+    // Emoji ranges: SMP emoji (U+1F300-1F9FF), dingbats (U+2600-27BF)
+    if ((cp >= 0x1F300 && cp <= 0x1F9FF) || (cp >= 0x2600 && cp <= 0x26FF) || (cp >= 0x2700 && cp <= 0x27BF)) {
+      len += 2; // Emoji renders as 2 terminal columns
+    } else {
+      len += 1;
+    }
+  }
+  return len;
 }
 
 /**
@@ -327,12 +337,12 @@ function renderCompact(ctx) {
   }
   const usageStr = buildUsageString(ctx);
   if (usageStr) line1 += `  ⌛ ${usageStr}`;
-  console.log(line1.replace(/ /g, '\u00A0'));
+  console.log(line1);
 
   // Line 2: Location (branch + directory)
   let line2 = `📁 ${ctx.currentDir}`;
   if (ctx.gitBranch) line2 += `  🌿 ${ctx.gitBranch}`;
-  console.log(line2.replace(/ /g, '\u00A0'));
+  console.log(line2);
 }
 
 /**
@@ -356,10 +366,10 @@ function render(ctx, singleLineMode = false) {
     if (todosLine) lines.push(todosLine);
   }
 
-  // Output all lines with non-breaking spaces for alignment
+  // Output lines directly — no non-breaking space replacement or RESET prefix
+  // (NBSP causes double-width counting in Claude Code's renderer; RESET causes column-reset artifacts)
   for (const line of lines) {
-    const outputLine = shouldUseColor ? `${RESET}${line.replace(/ /g, '\u00A0')}` : line;
-    console.log(outputLine);
+    console.log(line);
   }
 }
 
