@@ -1,3 +1,10 @@
+## [2.13.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.5...v2.13.0-beta.6) (2026-02-25)
+
+
+### 🐞 Bug Fixes
+
+* add missing skills to metadata.json deletions array ([665dc75](https://github.com/claudekit/claudekit-engineer/commit/665dc75040eadf6a98f02e00d47374cdb6c68df4)), closes [#513](https://github.com/claudekit/claudekit-engineer/issues/513)
+
 ## [2.13.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0-beta.4...v2.13.0-beta.5) (2026-02-25)
 
 
