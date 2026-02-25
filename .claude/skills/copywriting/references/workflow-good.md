@@ -10,8 +10,8 @@ Thorough copy development with research, planning, and execution.
 
 ## Workflow Steps
 
-1. **Screenshots provided** → Use `ai-multimodal` skill for detailed context analysis
-2. **Videos provided** → Use `ai-multimodal` video-analysis for comprehensive context
+1. **Screenshots provided** → Use `ck:ai-multimodal` skill for detailed context analysis
+2. **Videos provided** → Use `ck:ai-multimodal` video-analysis for comprehensive context
 3. **Research** → Spawn multiple `researcher` agents in parallel:
    - Competitor messaging analysis
    - Target audience insights

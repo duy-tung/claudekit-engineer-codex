@@ -68,7 +68,7 @@ All modes share core steps with mode-specific variations.
 - Use `TaskUpdate` to mark tasks as `in_progress` immediately.
 - Execute phase tasks sequentially (Step 3.1, 3.2, etc.)
 - Use `ui-ux-designer` for frontend
-- Use `ai-multimodal` for image assets
+- Use `ck:ai-multimodal` for image assets
 - Run type checking after each file
 
 **Parallel mode:**

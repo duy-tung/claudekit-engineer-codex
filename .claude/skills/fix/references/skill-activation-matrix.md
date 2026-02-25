@@ -27,7 +27,7 @@ Skip Tasks for Quick workflow (< 3 steps). See `references/task-orchestration.md
 | `ck:sequential-thinking` | Complex logic chain, multi-step reasoning needed |
 | `ck:brainstorm` | Multiple valid approaches, architecture decision |
 | `ck:context-engineering` | Fixing AI/LLM/agent code, context window issues |
-| `ai-multimodal` | UI issues, screenshots provided, visual bugs |
+| `ck:ai-multimodal` | UI issues, screenshots provided, visual bugs |
 
 ## Subagent Usage
 
@@ -75,4 +75,4 @@ See `references/parallel-exploration.md` for detailed patterns.
 | "complex", "multi-step" | `ck:sequential-thinking` |
 | "which approach", "options" | `ck:brainstorm` |
 | "latest docs", "best practice" | `researcher` subagent |
-| Screenshot attached | `ai-multimodal` |
+| Screenshot attached | `ck:ai-multimodal` |

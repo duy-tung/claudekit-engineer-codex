@@ -58,7 +58,7 @@ CK Context:
 
 ## ON `/ck:team research <topic>` [--researchers N]:
 
-*Wraps /research skill — scope, gather, analyze, report.*
+*Wraps /ck:research skill — scope, gather, analyze, report.*
 
 IMMEDIATELY execute in order:
 
@@ -99,7 +99,7 @@ IMMEDIATELY execute in order:
 
 ## ON `/ck:team cook <plan-path-or-description>` [--devs N]:
 
-*Wraps /cook skill — plan, code, test, review, finalize.*
+*Wraps /ck:cook skill — plan, code, test, review, finalize.*
 
 IMMEDIATELY execute in order:
 
@@ -128,7 +128,7 @@ IMMEDIATELY execute in order:
    - `Task(subagent_type: "tester", model: "haiku", name: "tester")`
    - Tester runs full test suite, reports pass/fail
 
-6. **DOCS SYNC EVAL** (MANDATORY for cook — from /cook finalize):
+6. **DOCS SYNC EVAL** (MANDATORY for cook — from /ck:cook finalize):
    ```
    Docs impact: [none|minor|major]
    Action: [no update needed — <reason>] | [updated <page>] | [needs separate PR]
@@ -143,7 +143,7 @@ IMMEDIATELY execute in order:
 
 ## ON `/ck:team review <scope>` [--reviewers N]:
 
-*Wraps /code-review skill — scout, review, synthesize with evidence gates.*
+*Wraps /ck:code-review skill — scout, review, synthesize with evidence gates.*
 
 IMMEDIATELY execute in order:
 
@@ -181,7 +181,7 @@ IMMEDIATELY execute in order:
 
 ## ON `/ck:team debug <issue>` [--debuggers N]:
 
-*Wraps /fix skill — root-cause-first, adversarial hypotheses, disprove to converge.*
+*Wraps /ck:fix skill — root-cause-first, adversarial hypotheses, disprove to converge.*
 
 IMMEDIATELY execute in order:
 

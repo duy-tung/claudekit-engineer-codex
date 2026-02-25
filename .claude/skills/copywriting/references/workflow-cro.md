@@ -47,8 +47,8 @@ Analyze content and optimize for conversion based on user-reported issues.
 
 ## Workflow Steps
 
-1. **Screenshots provided** → Use `ai-multimodal` skill to analyze conversion issues
-2. **Videos provided** → Use `ai-multimodal` video-analysis for bottleneck identification
+1. **Screenshots provided** → Use `ck:ai-multimodal` skill to analyze conversion issues
+2. **Videos provided** → Use `ck:ai-multimodal` video-analysis for bottleneck identification
 3. **URL provided** → Use `web_fetch` tool to fetch and analyze current issues
 4. **Scout codebase** → `/ck:scout ext` (preferred) or `/ck:scout` to find relevant files
 5. **Implement** → Use `fullstack-developer` agent to write enhanced copy into code files

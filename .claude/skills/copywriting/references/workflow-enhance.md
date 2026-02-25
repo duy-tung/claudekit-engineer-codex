@@ -10,8 +10,8 @@ Analyze existing copy issues and enhance for better performance.
 
 ## Workflow Steps
 
-1. **Screenshots provided** → Use `ai-multimodal` skill to analyze and describe issues in detail
-2. **Videos provided** → Use `ai-multimodal` video-analysis to extract relevant copy issues
+1. **Screenshots provided** → Use `ck:ai-multimodal` skill to analyze and describe issues in detail
+2. **Videos provided** → Use `ck:ai-multimodal` video-analysis to extract relevant copy issues
 3. **Scout codebase** → `/ck:scout ext` (preferred) or `/ck:scout` to find files needing enhancement
 4. **Implement** → Use `fullstack-developer` agent to write enhanced copy into code files
 

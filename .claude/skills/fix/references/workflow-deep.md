@@ -118,5 +118,5 @@ See `references/review-cycle.md` for mode-specific handling.
 | 8 | `project-manager`, `docs-manager`, `Bash` |
 
 **Rules:** Don't skip steps. Validate before proceeding. One phase at a time.
-**Frontend:** Use `chrome`, `chrome-devtools` or any relevant skills/tools to verify.
-**Visual Assets:** Use `ai-multimodal` for visual assets generation, analysis and verification.
+**Frontend:** Use `chrome`, `ck:chrome-devtools` or any relevant skills/tools to verify.
+**Visual Assets:** Use `ck:ai-multimodal` for visual assets generation, analysis and verification.

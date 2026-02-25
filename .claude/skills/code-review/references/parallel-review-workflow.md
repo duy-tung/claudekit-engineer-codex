@@ -62,7 +62,7 @@ Launch N `code-reviewer` subagents simultaneously:
 ### 5. Auto-Fix Pipeline
 
 **IF** unhandled/partial edge cases found:
-- Ask: "Found N unhandled edge cases. Fix with /fix --parallel? [Y/n]"
+- Ask: "Found N unhandled edge cases. Fix with /ck:fix --parallel? [Y/n]"
 
 ### 6. Final Report
 - Summary of verification
