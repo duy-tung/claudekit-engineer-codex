@@ -85,7 +85,7 @@ function shouldFetch(isUserPrompt = false) {
  * Write cache atomically (temp+rename prevents partial reads by statusline)
  */
 function writeCache(status, data = null) {
-	const tmpFile = USAGE_CACHE_FILE + '.tmp';
+	const tmpFile = `${USAGE_CACHE_FILE}.${process.pid}.${Date.now()}.${Math.random().toString(16).slice(2)}.tmp`;
 	try {
 		fs.writeFileSync(
 			tmpFile,

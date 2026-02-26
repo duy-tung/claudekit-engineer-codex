@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Import modular components
-const { green, yellow, red, cyan, magenta, dim, coloredBar, RESET, shouldUseColor } = require('./hooks/lib/colors.cjs');
+const { green, yellow, red, cyan, magenta, dim, coloredBar } = require('./hooks/lib/colors.cjs');
 const { parseTranscript } = require('./hooks/lib/transcript-parser.cjs');
 const { countConfigs } = require('./hooks/lib/config-counter.cjs');
 const { loadConfig } = require('./hooks/lib/ck-config-utils.cjs');
@@ -22,6 +22,11 @@ const { getGitInfo } = require('./hooks/lib/git-info-cache.cjs');
 
 // Buffer constant matching /context output (22.5% of 200k)
 const AUTOCOMPACT_BUFFER = 45000;
+const GRAPHEME_SEGMENTER = (
+  typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
+)
+  ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+  : null;
 
 /**
  * Expand home directory to ~
@@ -46,40 +51,53 @@ function getTerminalWidth() {
 }
 
 /**
- * Calculate visible string length (strip ANSI codes, account for wide characters)
- * Uses codepoint iteration (for...of) to correctly handle SMP emoji (surrogate pairs)
- * Accounts for East Asian Width Ambiguous characters used in statusline
+ * Calculate terminal-visible string length.
+ * Uses grapheme clusters and width heuristics for emoji/combining/CJK text.
  */
 function visibleLength(str) {
   if (!str || typeof str !== 'string') return 0;
-  // Strip ANSI escape codes
   const noAnsi = str.replace(/\x1b\[[0-9;]*m/g, '');
+  const clusters = GRAPHEME_SEGMENTER
+    ? Array.from(GRAPHEME_SEGMENTER.segment(noAnsi), s => s.segment)
+    : Array.from(noAnsi);
+
   let len = 0;
-  for (const ch of noAnsi) {
-    const cp = ch.codePointAt(0);
-    if (
-      // SMP emoji (U+1F300-1F9FF) — 🤖📁🌿📝💵🔋
-      (cp >= 0x1F300 && cp <= 0x1F9FF) ||
-      // Misc symbols (U+2600-26FF) — ⌛ is NOT here, it's U+231B
-      (cp >= 0x2600 && cp <= 0x26FF) ||
-      // Dingbats (U+2700-27BF) — ✓ etc (NOTE: ✓ is EAW:N but most terminals render as 2)
-      (cp >= 0x2700 && cp <= 0x27BF) ||
-      // Hourglass/timer symbols — ⌛ (U+231B), ⏰ (U+23F0), ⏱ (U+23F1), ⏳ (U+23F3)
-      (cp >= 0x2300 && cp <= 0x23FF)
-    ) {
+  for (const cluster of clusters) {
+    if (!cluster) continue;
+
+    if (/^[\u0000-\u001f\u007f]+$/.test(cluster)) continue; // control chars
+    if (/^\p{Mark}+$/u.test(cluster)) continue; // combining marks
+
+    const first = cluster.codePointAt(0);
+    if (first === 0x200d || first === 0xfe0e || first === 0xfe0f) continue;
+
+    // Emoji grapheme clusters render as 2 columns in most terminals.
+    if ((cluster.includes('\u200d') && /\p{Extended_Pictographic}/u.test(cluster)) ||
+        /\p{Extended_Pictographic}/u.test(cluster)) {
       len += 2;
-    } else if (
-      // EAW Ambiguous characters used in statusline — treat as 1 col (safe default)
-      // ▰▱ (U+25B0-25B1), ○● (U+25CB,25CF), ▸ (U+25B8), → (U+2192), ↑↓ (U+2191,U+2193)
-      // These are EAW:A — render as 1 on most Western terminals, 2 on CJK terminals
-      // We count as 1 (Western default) since Claude Code itself renders in Western width context
-      (cp >= 0x2190 && cp <= 0x21FF) || // Arrows (→↑↓←)
-      (cp >= 0x25A0 && cp <= 0x25FF)    // Geometric shapes (▰▱○●▸▪)
-    ) {
-      len += 1;
-    } else {
-      len += 1;
+      continue;
     }
+
+    // Full-width CJK ranges.
+    if (first >= 0x1100 && (
+      first <= 0x115f ||
+      first === 0x2329 ||
+      first === 0x232a ||
+      (first >= 0x2e80 && first <= 0xa4cf && first !== 0x303f) ||
+      (first >= 0xac00 && first <= 0xd7a3) ||
+      (first >= 0xf900 && first <= 0xfaff) ||
+      (first >= 0xfe10 && first <= 0xfe19) ||
+      (first >= 0xfe30 && first <= 0xfe6f) ||
+      (first >= 0xff00 && first <= 0xff60) ||
+      (first >= 0xffe0 && first <= 0xffe6) ||
+      (first >= 0x1f200 && first <= 0x1f251) ||
+      (first >= 0x20000 && first <= 0x3fffd)
+    )) {
+      len += 2;
+      continue;
+    }
+
+    len += 1;
   }
   return len;
 }
@@ -102,19 +120,46 @@ function formatElapsed(startTime, endTime) {
 }
 
 /**
- * Read stdin asynchronously with timeout (prevents hang if Claude Code dies before EOF)
+ * Read stdin asynchronously.
+ * Optional inactivity timeout can be enabled via CK_STATUSLINE_STDIN_TIMEOUT_MS.
  */
 async function readStdin() {
   return new Promise((resolve, reject) => {
     const chunks = [];
     stdin.setEncoding('utf8');
-    const timer = setTimeout(() => {
-      stdin.destroy();
+
+    const parsedTimeout = Number.parseInt(env.CK_STATUSLINE_STDIN_TIMEOUT_MS || '', 10);
+    const timeoutMs = Number.isFinite(parsedTimeout) && parsedTimeout > 0 ? parsedTimeout : 0;
+    let timer = null;
+
+    const clearTimer = () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    };
+
+    const armTimer = () => {
+      if (!timeoutMs) return;
+      clearTimer();
+      timer = setTimeout(() => {
+        reject(new Error(`stdin read timeout after ${timeoutMs}ms`));
+      }, timeoutMs);
+    };
+
+    armTimer();
+    stdin.on('data', chunk => {
+      chunks.push(chunk);
+      armTimer();
+    });
+    stdin.on('end', () => {
+      clearTimer();
       resolve(chunks.join(''));
-    }, 5000);
-    stdin.on('data', chunk => chunks.push(chunk));
-    stdin.on('end', () => { clearTimeout(timer); resolve(chunks.join('')); });
-    stdin.on('error', (err) => { clearTimeout(timer); reject(err); });
+    });
+    stdin.on('error', (err) => {
+      clearTimer();
+      reject(err);
+    });
   });
 }
 
@@ -173,7 +218,7 @@ function renderSessionLines(ctx) {
   if (ctx.contextPercent > 0) {
     sessionPart += `  ${coloredBar(ctx.contextPercent, 12)} ${ctx.contextPercent}%`;
   }
-  // Add usage/reset info to session part (stays on line 1 with model - Claude Code only reads line 1)
+  // Keep usage/reset info close to model/context for quick scanning.
   const usageStr = buildUsageString(ctx);
   if (usageStr) {
     sessionPart += `  ⌛ ${usageStr.replace(/\)$/, ' used)')}`;
@@ -192,8 +237,8 @@ function renderSessionLines(ctx) {
   const sessionLen = visibleLength(sessionPart);
   const statsLen = visibleLength(statsPart);
 
-  // Layout priority: SESSION FIRST (Claude Code only reads line 1)
-  // Line 1: model + context + usage (most important for Claude Code)
+  // Layout priority: session info first for readability.
+  // Line 1: model + context + usage
   // Line 2+: location, git, stats
   const allOneLine = `${sessionPart}  ${locationPart}  ${statsPart}`;
   const sessionLocation = `${sessionPart}  ${locationPart}`;
@@ -386,8 +431,7 @@ function render(ctx, singleLineMode = false) {
     if (todosLine) lines.push(todosLine);
   }
 
-  // Output lines directly — no non-breaking space replacement or RESET prefix
-  // (NBSP causes double-width counting in Claude Code's renderer; RESET causes column-reset artifacts)
+  // Output lines directly to avoid formatting surprises across terminals/renderers.
   for (const line of lines) {
     console.log(line);
   }
