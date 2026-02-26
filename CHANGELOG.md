@@ -1,3 +1,10 @@
+## [2.13.1-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.13.1-beta.1...v2.13.1-beta.2) (2026-02-26)
+
+
+### 🐞 Bug Fixes
+
+* **schema:** sync codingLevel range with ck-help levels ([515a711](https://github.com/claudekit/claudekit-engineer/commit/515a71196037e4dcae3eda701b067a4eb8c8f942))
+
 ## [2.13.1-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0...v2.13.1-beta.1) (2026-02-26)
 
 
