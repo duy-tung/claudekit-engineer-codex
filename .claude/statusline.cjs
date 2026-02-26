@@ -524,7 +524,7 @@ async function main() {
     // Read actual reset time and utilization from usage limits cache (written by usage-context-awareness hook)
     let usagePercent = null;
     try {
-      const usageCachePath = path.join(os.tmpdir(), 'ck-usage-limits-cache.json');
+      const usageCachePath = env.CK_USAGE_CACHE_PATH || path.join(os.tmpdir(), 'ck-usage-limits-cache.json');
       if (fs.existsSync(usageCachePath)) {
         const cache = JSON.parse(fs.readFileSync(usageCachePath, 'utf8'));
 
