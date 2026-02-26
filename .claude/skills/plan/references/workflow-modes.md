@@ -90,9 +90,9 @@ Adversarial review that spawns hostile reviewers to find flaws before validation
 
 **Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
 
-**Invocation:** Use the `Skill` tool to invoke `plan:red-team` with the plan directory path as argument:
+**Invocation:** Run `/ck:plan red-team {plan-directory-path}`.
 ```
-Skill(skill: "ck:plan:red-team", args: "{plan-directory-path}")
+/ck:plan red-team {plan-directory-path}
 ```
 
 **Sequence:** Red team runs BEFORE validation because:
@@ -107,12 +107,12 @@ Check `## Plan Context` → `Validation: mode=X, questions=MIN-MAX`:
 | Mode | Behavior |
 |------|----------|
 | `prompt` | Ask: "Validate this plan with interview?" → Yes (Recommended) / No |
-| `auto` | Use the `Skill` tool: `Skill(skill: "ck:plan:validate", args: "{plan-directory-path}")` |
+| `auto` | Run `/ck:plan validate {plan-directory-path}` |
 | `off` | Skip validation |
 
-**Invocation (when prompt mode, user says yes):** Use the `Skill` tool to invoke `plan:validate`:
+**Invocation (when prompt mode, user says yes):** Run:
 ```
-Skill(skill: "ck:plan:validate", args: "{plan-directory-path}")
+/ck:plan validate {plan-directory-path}
 ```
 
 **Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
@@ -128,10 +128,10 @@ After plan creation, MUST output with **actual absolute path**:
 | parallel | `/ck:cook --parallel {path}/plan.md` |
 | two | `/ck:cook {path}/plan.md` |
 
-> **Best Practice:** Run `/clear` before implementing to start fresh context.
+> **Best Practice:** Run `/clear` before implementing to reduce planning-context carryover.
 > Then run the cook command above.
 
-**Why absolute path?** After `/clear`, new session loses context.
+**Why absolute path?** After `/clear`, the new session loses previous context.
 This reminder is **NON-NEGOTIABLE** — always output after presenting the plan.
 
 ## Pre-Creation Check

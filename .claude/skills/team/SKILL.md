@@ -14,7 +14,7 @@ Coordinate multiple independent Claude Code sessions. Each teammate has own cont
 ## Usage
 
 ```
-/team <template> <context> [flags]
+/ck:team <template> <context> [flags]
 ```
 
 **Templates:** `ck:research`, `ck:cook`, `ck:code-review`, `ck:debug`

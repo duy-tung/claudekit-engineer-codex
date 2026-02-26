@@ -56,7 +56,7 @@ Remind user with absolute path:
 > /ck:cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
 > **Why `--auto`?** Plan was already validated — safe to skip review gates.
-> **Why absolute path?** After `/clear`, the new session loses context.
+> **Why absolute path?** After `/clear`, the new session loses previous context.
 > Fresh context helps Claude focus solely on implementation without planning context pollution.
 
 ## Important Notes

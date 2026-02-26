@@ -14,7 +14,7 @@ End-to-end implementation with automatic workflow detection.
 ## Usage
 
 ```
-/cook <natural language task OR plan path>
+/ck:cook <natural language task OR plan path>
 ```
 
 **IMPORTANT:** If no flag is provided, the skill will use the `interactive` mode by default for the workflow.
@@ -28,8 +28,8 @@ End-to-end implementation with automatic workflow detection.
 
 **Example:**
 ```
-/cook "Add user authentication to the app" --fast
-/cook path/to/plan.md --auto
+/ck:cook "Add user authentication to the app" --fast
+/ck:cook path/to/plan.md --auto
 ```
 
 ## Smart Intent Detection

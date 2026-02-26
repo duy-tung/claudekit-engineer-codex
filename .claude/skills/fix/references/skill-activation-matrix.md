@@ -61,7 +61,7 @@ See `references/parallel-exploration.md` for detailed patterns.
 
 | Workflow | Skills Activated |
 |----------|------------------|
-| Quick | `debug`, `ck:code-review`, parallel `Bash` verification |
+| Quick | `ck:debug`, `ck:code-review`, parallel `Bash` verification |
 | Standard | Above + Tasks, `ck:problem-solving`, `ck:sequential-thinking`, `tester`, parallel `Explore` |
 | Deep | All above + `ck:brainstorm`, `ck:context-engineering`, `researcher`, `planner` |
 | Parallel | Per-issue Task trees + `fullstack-developer` agents + coordination via `TaskList` |

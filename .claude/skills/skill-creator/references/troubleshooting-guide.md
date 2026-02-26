@@ -11,8 +11,9 @@
 - Validate YAML syntax
 
 **Error: "Invalid skill name"**
-- Must be kebab-case, no spaces, no capitals
-- Wrong: `My Cool Skill` → Correct: `my-cool-skill`
+- Use either `skill-name` or `namespace:skill-name`
+- Namespace and skill id must be kebab-case (no spaces, no capitals)
+- Wrong: `My Cool Skill` → Correct: `ck:my-cool-skill`
 
 ## Skill Doesn't Trigger
 
