@@ -1,3 +1,10 @@
+## [2.13.1-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0...v2.13.1-beta.1) (2026-02-26)
+
+
+### 🐞 Bug Fixes
+
+* **skills:** normalize Claude slash invocation references ([620a126](https://github.com/claudekit/claudekit-engineer/commit/620a12683439e78d80b323f688909c1f6ee47a25))
+
 ## [2.13.0](https://github.com/claudekit/claudekit-engineer/compare/v2.12.1...v2.13.0) (2026-02-25)
 
 
