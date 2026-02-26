@@ -54,14 +54,14 @@ node .claude/skills/markdown-novel-viewer/scripts/server.cjs \
 node .claude/skills/markdown-novel-viewer/scripts/server.cjs --stop
 ```
 
-## Slash Command
+## Skill Invocation
 
 Use `/ck:preview` for quick access:
 
 ```bash
-/preview plans/my-plan/plan.md    # View markdown file
-/preview plans/                   # Browse directory
-/preview --stop                   # Stop server
+/ck:preview plans/my-plan/plan.md    # View markdown file
+/ck:preview plans/                   # Browse directory
+/ck:preview --stop                   # Stop server
 ```
 
 ## Features
@@ -201,7 +201,7 @@ To access from another device on your network:
 
 ```bash
 # Start with 0.0.0.0 to bind to all interfaces
-node server.cjs --file ./README.md --host 0.0.0.0 --port 3456
+node .claude/skills/markdown-novel-viewer/scripts/server.cjs --file ./README.md --host 0.0.0.0 --port 3456
 ```
 
 When using `--host 0.0.0.0`, the server auto-detects your local network IP and includes it in the output:

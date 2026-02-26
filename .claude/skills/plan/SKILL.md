@@ -75,8 +75,8 @@ Load: `references/output-standards.md`
 3. **Research Phase** → Spawn researchers (skip in fast mode)
 4. **Codebase Analysis** → Read docs, scout if needed
 5. **Plan Documentation** → Write comprehensive plan via planner subagent
-6. **Red Team Review** → Use `Skill` tool: `plan:red-team {plan-path}` (hard/parallel/two modes)
-7. **Post-Plan Validation** → Use `Skill` tool: `plan:validate {plan-path}` (hard/parallel/two modes)
+6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/parallel/two modes)
+7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/parallel/two modes)
 8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
 9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
 

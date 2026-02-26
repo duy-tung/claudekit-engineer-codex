@@ -14,7 +14,7 @@ End-to-end project bootstrapping from idea to running code.
 ## Usage
 
 ```
-/bootstrap <user-requirements>
+/ck:bootstrap <user-requirements>
 ```
 
 **Flags** (optional, default `--auto`):
@@ -28,8 +28,8 @@ End-to-end project bootstrapping from idea to running code.
 
 **Example:**
 ```
-/bootstrap "Build a SaaS dashboard with auth" --fast
-/bootstrap "E-commerce platform with Stripe" --parallel
+/ck:bootstrap "Build a SaaS dashboard with auth" --fast
+/ck:bootstrap "E-commerce platform with Stripe" --parallel
 ```
 
 ## Workflow Overview
