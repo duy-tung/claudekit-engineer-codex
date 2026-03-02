@@ -39,5 +39,5 @@ Spawn multiple subagents simultaneously for independent tasks:
 
 ## Agent Teams (Optional)
 
-For multi-session parallel collaboration, activate the `/team` skill.
+For multi-session parallel collaboration, activate the `/ck:team` skill.
 Not part of the default orchestration workflow. See `.claude/skills/team/SKILL.md` for templates, decision criteria, and spawn instructions.
