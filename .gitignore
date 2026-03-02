@@ -84,3 +84,6 @@ external/
 
 # Git worktrees (local development only)
 worktrees/
+
+# demo
+.claude/skills/ai-multimodal/assets/demo-*
