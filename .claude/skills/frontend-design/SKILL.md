@@ -60,6 +60,7 @@ Before coding, commit to a BOLD aesthetic direction:
 | Extract guidelines | `./references/design-extraction-overview.md` |
 | Optimization | `./references/technical-overview.md` |
 | Animations | `./references/animejs.md` |
+| Magic UI (80+ components) | `./references/magicui-components.md` |
 
 Quick start: `./references/ai-multimodal-overview.md`
 
