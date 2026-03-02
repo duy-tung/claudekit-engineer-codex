@@ -82,13 +82,13 @@ Provide a production-ready template that:
 ### 2. Comprehensive Slash Commands
 
 **Core Development Commands**:
-- `/plan` - Research and create implementation plans
-- `/cook` - Implement features with full workflow
-- `/test` - Run comprehensive test suites
-- `/ask` - Expert technical consultation
-- `/bootstrap` - Initialize new projects end-to-end
-- `/brainstorm` - Solution ideation and evaluation
-- `/debug` - Deep issue analysis
+- `/ck:plan` - Research and create implementation plans
+- `/ck:cook` - Implement features with full workflow
+- `/ck:test` - Run comprehensive test suites
+- `/ck:ask` - Expert technical consultation
+- `/ck:bootstrap` - Initialize new projects end-to-end
+- `/ck:brainstorm` - Solution ideation and evaluation
+- `/ck:debug` - Deep issue analysis
 
 **Skill Organization** (`.claude/skills/`):
 Command behavior is implemented via skill directories:
@@ -167,7 +167,7 @@ Command behavior is implemented via skill directories:
 **FR2: Command System**
 - Parse slash commands with arguments
 - Route to appropriate agent workflows
-- Support nested commands (e.g., `/fix:ci`)
+- Support nested commands (e.g., `/ck:fix:ci`)
 - Provide command discovery and help
 
 **FR3: Documentation Management**
@@ -362,7 +362,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Developer
 **Goal**: Add feature with full workflow
 **Flow**:
-1. Run `/cook "add user authentication"`
+1. Run `/ck:cook "add user authentication"`
 2. Planner creates implementation plan
 3. Researcher agents explore auth solutions
 4. Developer reviews and approves plan
@@ -378,7 +378,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Developer
 **Goal**: Identify and fix production bug
 **Flow**:
-1. Run `/debug "API timeout errors"`
+1. Run `/ck:debug "API timeout errors"`
 2. Debugger agent analyzes logs and system
 3. Root cause identified
 4. Fix plan created
@@ -394,8 +394,8 @@ Command behavior is implemented via skill directories:
 **Goal**: Maintain professional git history
 **Flow**:
 1. Developer completes feature implementation
-2. Run tests via `/test` command
-3. Code review via `/cook` workflow
+2. Run tests via `/ck:test` command
+3. Code review via `/ck:cook` workflow
 4. Conventional commit via git-manager agent
 5. Push to feature branch
 6. Create PR via GitHub interface
@@ -406,7 +406,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Project Manager
 **Goal**: Ensure docs are current
 **Flow**:
-1. Run `/docs update`
+1. Run `/ck:docs update`
 2. Docs manager scans codebase
 3. Generates fresh summary with repomix
 4. Identifies outdated sections
@@ -547,7 +547,7 @@ Command behavior is implemented via skill directories:
 ## Glossary
 
 - **Agent**: Specialized AI assistant with specific expertise and responsibilities
-- **Slash Command**: Shortcut that triggers agent workflows (e.g., `/plan`)
+- **Slash Command**: Shortcut that triggers agent workflows (e.g., `/ck:plan`)
 - **Skill**: Reusable knowledge module for specific technologies or patterns
 - **MCP**: Model Context Protocol for AI tool integration
 - **Repomix**: Tool for compacting codebases into AI-friendly format

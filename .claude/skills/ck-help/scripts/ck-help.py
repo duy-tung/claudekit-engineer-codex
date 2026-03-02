@@ -283,9 +283,9 @@ CATEGORY_GUIDES = {
     "bootstrap": {
         "title": "Project Setup",
         "workflow": [
-            ("Quick start", "`/bootstrap --fast` \"requirements\""),
-            ("Full setup", "`/bootstrap` \"detailed requirements\""),
-            ("Auto mode", "`/bootstrap --auto` (default)"),
+            ("Quick start", "`/ck:bootstrap --fast` \"requirements\""),
+            ("Full setup", "`/ck:bootstrap` \"detailed requirements\""),
+            ("Auto mode", "`/ck:bootstrap --auto` (default)"),
         ],
         "tip": "Include tech stack preferences in description",
     },
@@ -299,8 +299,8 @@ CATEGORY_GUIDES = {
     "docs": {
         "title": "Documentation",
         "workflow": [
-            ("Initialize", "`/docs init`"),
-            ("Update", "`/docs update`"),
+            ("Initialize", "`/ck:docs init`"),
+            ("Update", "`/ck:docs update`"),
         ],
         "tip": "Keep docs close to code for accuracy",
     },
@@ -367,11 +367,11 @@ CATEGORY_GUIDES = {
     "fix": {
         "title": "Fixing Issues & Debugging",
         "workflow": [
-            ("Auto fix", "`/fix` \"describe the issue\""),
-            ("Parallel", "`/fix --parallel` (multi-agent debug)"),
-            ("Debug only", "`/debug` (root cause analysis)"),
+            ("Auto fix", "`/ck:fix` \"describe the issue\""),
+            ("Parallel", "`/ck:fix --parallel` (multi-agent debug)"),
+            ("Debug only", "`/ck:debug` (root cause analysis)"),
         ],
-        "tip": "Activate /fix before fixing any bug, error, test failure, or CI/CD issue",
+        "tip": "Activate /ck:fix before fixing any bug, error, test failure, or CI/CD issue",
     },
     "git": {
         "title": "Git Operations",
