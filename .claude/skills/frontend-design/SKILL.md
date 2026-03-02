@@ -2,6 +2,9 @@
 name: ck:frontend-design
 description: Create polished frontend interfaces from designs/screenshots/videos. Use for web components, 3D experiences, replicating UI designs, quick prototypes, immersive interfaces, avoiding AI slop.
 license: Complete terms in LICENSE.txt
+metadata:
+  author: claudekit
+  version: "1.0.0"
 ---
 
 Create distinctive, production-grade frontend interfaces. Implement real working code with exceptional aesthetic attention.
@@ -60,6 +63,7 @@ Before coding, commit to a BOLD aesthetic direction:
 | Extract guidelines | `./references/design-extraction-overview.md` |
 | Optimization | `./references/technical-overview.md` |
 | Animations | `./references/animejs.md` |
+| Magic UI (80+ components) | `./references/magicui-components.md` |
 
 Quick start: `./references/ai-multimodal-overview.md`
 

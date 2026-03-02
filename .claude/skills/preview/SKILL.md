@@ -2,6 +2,9 @@
 name: ck:preview
 description: "View files/directories OR generate visual explanations, slides, diagrams."
 argument-hint: "[path] OR --explain|--slides|--diagram|--ascii [topic]"
+metadata:
+  author: claudekit
+  version: "1.0.0"
 ---
 
 # Preview

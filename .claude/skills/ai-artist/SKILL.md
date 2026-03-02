@@ -54,7 +54,7 @@ python3 scripts/generate.py "futuristic city" -o city.png --mode all -v
 | `-o, --output` | Output path (required) |
 | `-m, --mode` | search, creative, wild, or all |
 | `-ar, --aspect-ratio` | 1:1, 16:9, 9:16, etc. |
-| `--model` | flash (fast) or pro (quality/4K) |
+| `--model` | flash2 (default, fast+quality), flash (previous), pro (quality/4K) |
 | `-v, --verbose` | Show matched prompts and details |
 | `--dry-run` | Show prompt without generating |
 | `--skip` | Bypass validation interview |

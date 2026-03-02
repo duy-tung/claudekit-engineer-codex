@@ -1,8 +1,10 @@
 ---
 name: ck:team
 description: "Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, review, and debug workflows requiring independent teammates."
-version: 2.1.0
 argument-hint: "<template> <context> [--devs|--researchers|--reviewers N] [--delegate]"
+metadata:
+  author: claudekit
+  version: "2.1.0"
 ---
 
 # Agent Teams - CK-Native Orchestration Engine

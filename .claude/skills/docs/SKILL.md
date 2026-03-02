@@ -2,6 +2,9 @@
 name: ck:docs
 description: "Analyze codebase and manage project documentation — init, update, summarize."
 argument-hint: "init|update|summarize"
+metadata:
+  author: claudekit
+  version: "1.0.0"
 ---
 
 # Documentation Management
