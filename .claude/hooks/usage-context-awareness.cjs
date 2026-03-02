@@ -82,17 +82,23 @@ function shouldFetch(isUserPrompt = false) {
 }
 
 /**
- * Write cache with status (available or unavailable)
+ * Write cache atomically (temp+rename prevents partial reads by statusline)
  */
 function writeCache(status, data = null) {
-	fs.writeFileSync(
-		USAGE_CACHE_FILE,
-		JSON.stringify({
-			timestamp: Date.now(),
-			status,
-			data,
-		})
-	);
+	const tmpFile = `${USAGE_CACHE_FILE}.${process.pid}.${Date.now()}.${Math.random().toString(16).slice(2)}.tmp`;
+	try {
+		fs.writeFileSync(
+			tmpFile,
+			JSON.stringify({
+				timestamp: Date.now(),
+				status,
+				data,
+			})
+		);
+		fs.renameSync(tmpFile, USAGE_CACHE_FILE);
+	} catch {
+		try { fs.unlinkSync(tmpFile); } catch {}
+	}
 }
 
 /**
