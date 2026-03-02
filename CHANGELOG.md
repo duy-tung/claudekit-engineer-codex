@@ -1,3 +1,18 @@
+## [2.14.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.3...v2.14.0-beta.4) (2026-03-02)
+
+
+### 🐞 Bug Fixes
+
+* change shipped statusline default from minimal to full ([e726acf](https://github.com/claudekit/claudekit-engineer/commit/e726acf755129bbfe3db3900b1c2b739f0f21dc9))
+* fix additional statusline rendering issues ([530eb72](https://github.com/claudekit/claudekit-engineer/commit/530eb72f3f4d59acd9031850817b7c9f1d7131f3))
+* fix statusline display corruption from NBSP and ANSI reset ([612ad50](https://github.com/claudekit/claudekit-engineer/commit/612ad503051f54e942712b515d3cba79c3c0ce90)), closes [#515](https://github.com/claudekit/claudekit-engineer/issues/515)
+* **statusline:** harden task mapping and timeout/cache handling ([496510e](https://github.com/claudekit/claudekit-engineer/commit/496510e56772f87f7f1fe138343a81a3d125e0bc))
+
+
+### ✅ Tests
+
+* **statusline:** add cross-platform scenario suite and harden assertions ([517b842](https://github.com/claudekit/claudekit-engineer/commit/517b8420288358524dd4d737d04d9acfb72c02ed))
+
 ## [2.14.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.2...v2.14.0-beta.3) (2026-03-02)
 
 
