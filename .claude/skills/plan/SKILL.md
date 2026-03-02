@@ -1,7 +1,7 @@
 ---
 name: ck:plan
 description: "Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
-argument-hint: "[task] OR archive|red-team|validate"
+argument-hint: "[task] OR [archive|red-team|validate]"
 license: MIT
 metadata:
   author: claudekit
@@ -11,6 +11,8 @@ metadata:
 # Planning
 
 Create detailed technical implementation plans through research, codebase analysis, solution design, and comprehensive documentation.
+
+**IMPORTANT:** Before you start, scan unfinished plans in the current project at `./plans/` directory, read the `plan.md`, if there are relevant plans with your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
 
 ## Default (No Arguments)
 
