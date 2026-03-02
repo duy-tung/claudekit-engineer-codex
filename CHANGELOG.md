@@ -1,3 +1,22 @@
+## [2.14.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.13.1-beta.2...v2.14.0-beta.1) (2026-03-02)
+
+
+### 🚀 Features
+
+* **skills:** add /ck:llms skill to generate llms.txt ([b359128](https://github.com/claudekit/claudekit-engineer/commit/b3591282f4ce633aad52ec4cab0f65b03024b075))
+
+
+### 🐞 Bug Fixes
+
+* **skills:** correct \`version\` metadata in skill's frontmatter ([bf4e728](https://github.com/claudekit/claudekit-engineer/commit/bf4e7282dff2a02965af9b0ab0bf41d1bcfbc957))
+
+
+### ⚡ Performance Improvements
+
+* **skills:** add `magicui` reference to `frontend-design` skill ([337ea5a](https://github.com/claudekit/claudekit-engineer/commit/337ea5aa3510195a04f4e953f6db459c51467377))
+* **skills:** update nano banana 2 model to ai-multimodal and ai-artist skills ([c408a1c](https://github.com/claudekit/claudekit-engineer/commit/c408a1c9fc2918e8322a97cfa027de2ac7051c1b))
+* **skills:** update new nano banana 2 model to `ai-multimodal` skill ([a08e019](https://github.com/claudekit/claudekit-engineer/commit/a08e01911ab0d9a94d1f5b7693fbed80b0992282))
+
 ## [2.13.1-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.13.1-beta.1...v2.13.1-beta.2) (2026-02-26)
 
 
