@@ -82,35 +82,35 @@ def main():
         "overview renders",
         "",
         expect_type="category-guide",
-        expect_contains=["claudekit skills", "quick start", "/code-review"],
+        expect_contains=["claudekit skills", "quick start", "/ck:code-review"],
     )
 
     test(
         "category query routes correctly",
         "fix",
         expect_type="category-guide",
-        expect_contains=["fixing issues", "/fix --parallel"],
+        expect_contains=["fixing issues", "/ck:fix --parallel"],
     )
 
     test(
         "multi-word task routes to recommendation",
         "test my login",
         expect_type="task-recommendations",
-        expect_contains=["recommended for", "/test"],
+        expect_contains=["recommended for", "/ck:test"],
     )
 
     test(
         "subcommand space syntax resolves to command details",
         "plan archive",
         expect_type="command-details",
-        expect_contains=["/plan archive", "usage"],
+        expect_contains=["/ck:plan archive", "usage"],
     )
 
     test(
         "legacy colon syntax alias resolves to command details",
         "plan:validate",
         expect_type="command-details",
-        expect_contains=["/plan validate", "usage"],
+        expect_contains=["/ck:plan validate", "usage"],
     )
 
     test(

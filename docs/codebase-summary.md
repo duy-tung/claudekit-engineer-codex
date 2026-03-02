@@ -74,14 +74,14 @@ claudekit-engineer/
 ### 2. Slash Commands System (Skill-Backed)
 
 **Core Development Commands**:
-- `/plan` - Research and planning
-- `/cook` - Feature implementation
-- `/test` - Test execution
-- `/ask` - Technical consultation
-- `/bootstrap` - Project initialization
-- `/brainstorm` - Solution ideation
-- `/debug` - Issue debugging
-- `/fix` - Bug fixes
+- `/ck:plan` - Research and planning
+- `/ck:cook` - Feature implementation
+- `/ck:test` - Test execution
+- `/ck:ask` - Technical consultation
+- `/ck:bootstrap` - Project initialization
+- `/ck:brainstorm` - Solution ideation
+- `/ck:debug` - Issue debugging
+- `/ck:fix` - Bug fixes
 
 **Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows

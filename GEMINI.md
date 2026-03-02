@@ -65,7 +65,7 @@ Gemini CLI automatically loads this file when executed in this project directory
 
 ## Integration with Claude Code
 
-Claude Code uses `/use-mcp` command to delegate MCP operations to you. The workflow:
+Claude Code uses `/ck:use-mcp` command to delegate MCP operations to you. The workflow:
 
 1. Claude Code sends task via stdin: `echo "task" | gemini -y -m <gemini.model>`
 2. You execute the appropriate MCP tool(s)
