@@ -8,7 +8,7 @@ Adversarially review an implementation plan by spawning parallel reviewer subage
 
 1. If `$ARGUMENTS` provided → Use that path
 2. Else check `## Plan Context` section → Use active plan path
-3. If no plan found → Ask user to specify path or run `/plan` first
+3. If no plan found → Ask user to specify path or run `/ck:plan` first
 
 ## Workflow
 
@@ -68,7 +68,7 @@ Add `## Red Team Review` section to `plan.md`.
 - Key risks addressed
 
 ## Next Steps (MANDATORY)
-Remind user to run `/plan validate` then `/cook --auto`.
+Remind user to run `/ck:plan validate` then `/ck:cook --auto`.
 
 ## Important Notes
 - Reviewers must be HOSTILE, not helpful

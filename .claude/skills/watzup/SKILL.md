@@ -1,6 +1,6 @@
 ---
-name: watzup
-description: "[CK] Review recent changes and wrap up the current work session."
+name: ck:watzup
+description: "Review recent changes and wrap up the current work session."
 ---
 
 # Wrap Up

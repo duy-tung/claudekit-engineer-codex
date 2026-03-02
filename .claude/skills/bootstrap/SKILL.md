@@ -1,7 +1,8 @@
 ---
-name: bootstrap
-description: "[CK] Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent)."
+name: ck:bootstrap
+description: "Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent)."
 license: MIT
+argument-hint: "[requirements] [--full|--auto|--fast|--parallel]"
 ---
 
 # Bootstrap - New Project Scaffolding
@@ -13,7 +14,7 @@ End-to-end project bootstrapping from idea to running code.
 ## Usage
 
 ```
-/bootstrap <user-requirements>
+/ck:bootstrap <user-requirements>
 ```
 
 **Flags** (optional, default `--auto`):
@@ -27,8 +28,8 @@ End-to-end project bootstrapping from idea to running code.
 
 **Example:**
 ```
-/bootstrap "Build a SaaS dashboard with auth" --fast
-/bootstrap "E-commerce platform with Stripe" --parallel
+/ck:bootstrap "Build a SaaS dashboard with auth" --fast
+/ck:bootstrap "E-commerce platform with Stripe" --parallel
 ```
 
 ## Workflow Overview
@@ -62,20 +63,20 @@ Check if Git initialized. If not:
 After early phases (research, tech stack, design), trigger downstream skills:
 
 ### Planning Phase
-Activate **plan** skill with mode-appropriate flag:
-- `--full` → `/plan --hard <requirements>` (thorough research + validation)
-- `--auto` → `/plan --auto <requirements>` (auto-detect complexity)
-- `--fast` → `/plan --fast <requirements>` (skip research)
-- `--parallel` → `/plan --parallel <requirements>` (file ownership + dependency graph)
+Activate **ck:plan** skill with mode-appropriate flag:
+- `--full` → `/ck:plan --hard <requirements>` (thorough research + validation)
+- `--auto` → `/ck:plan --auto <requirements>` (auto-detect complexity)
+- `--fast` → `/ck:plan --fast <requirements>` (skip research)
+- `--parallel` → `/ck:plan --parallel <requirements>` (file ownership + dependency graph)
 
 Planning skill outputs a plan path. Pass this to cook.
 
 ### Implementation Phase
-Activate **cook** skill with the plan path and mode-appropriate flag:
-- `--full` → `/cook <plan-path>` (interactive review gates)
-- `--auto` → `/cook --auto <plan-path>` (skip review gates)
-- `--fast` → `/cook --auto <plan-path>` (skip review gates)
-- `--parallel` → `/cook --parallel <plan-path>` (multi-agent execution)
+Activate **ck:cook** skill with the plan path and mode-appropriate flag:
+- `--full` → `/ck:cook <plan-path>` (interactive review gates)
+- `--auto` → `/ck:cook --auto <plan-path>` (skip review gates)
+- `--fast` → `/ck:cook --auto <plan-path>` (skip review gates)
+- `--parallel` → `/ck:cook --parallel <plan-path>` (multi-agent execution)
 
 ## Role
 

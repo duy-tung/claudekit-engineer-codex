@@ -15,7 +15,7 @@ Read the plan directory:
 - `plan.md` - Overview and phases list
 - `phase-*.md` - 20 first lines of each phase file to understand the progress and status
 
-### Step 2: Summarize the plans and document them with `/journal` slash command
+### Step 2: Summarize the plans and document them with `/ck:journal` skill invocation
 Use `AskUserQuestion` tool to ask if user wants to document journal entries or not.
 Skip this step if user selects "No".
 If user selects "Yes":
@@ -35,8 +35,8 @@ Start archiving the plans based on the user's choice:
 
 ### Step 5: Ask if user wants to commit the changes
 Use `AskUserQuestion` tool to ask if user wants to commit the changes with these options:
-- Stage and commit the changes (Use `/git cm` slash command)
-- Commit and push the changes (Use `/git cp` slash command)
+- Stage and commit the changes (Use `/ck:git` for commit flow)
+- Commit and push the changes (Use `/ck:git` for push flow)
 - Nah, I'll do it later
 
 ## Output

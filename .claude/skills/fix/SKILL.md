@@ -1,7 +1,8 @@
 ---
-name: fix
-description: "[CK] ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem."
+name: ck:fix
+description: "ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem."
 version: 1.2.0
+argument-hint: "[issue] --auto|--review|--quick|--parallel"
 ---
 
 # Fixing
@@ -31,7 +32,7 @@ See `references/mode-selection.md` for AskUserQuestion format.
 
 ### Step 2: Debug
 
-- Activate `debug` skill.
+- Activate `ck:debug` skill.
 - Guess all possible root causes.
 - Spawn multiple `Explore` subagents in parallel to verify each hypothesis.
 - Create report with all findings for the next step.
@@ -72,8 +73,8 @@ Classify before routing. See `references/complexity-assessment.md`.
 
 See `references/skill-activation-matrix.md` for complete matrix.
 
-**Always activate:** `debug` (all workflows)
-**Conditional:** `problem-solving`, `sequential-thinking`, `brainstorm`, `context-engineering`
+**Always activate:** `ck:debug` (all workflows)
+**Conditional:** `ck:problem-solving`, `ck:sequential-thinking`, `ck:brainstorm`, `ck:context-engineering`
 **Subagents:** `debugger`, `researcher`, `planner`, `code-reviewer`, `tester`, `Bash`
 **Parallel:** Multiple `Explore` agents for scouting, `Bash` agents for verification
 
