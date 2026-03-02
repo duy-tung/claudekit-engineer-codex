@@ -1,9 +1,11 @@
 ---
 name: ck:skill-creator
 description: Create or update Claude skills optimized for Skillmark benchmarks. Use for new skills, skill scripts, references, benchmark optimization, extending Claude's capabilities.
-version: 3.0.0
 license: Complete terms in LICENSE.txt
 argument-hint: "[skill-name or description]"
+metadata:
+  author: claudekit
+  version: "3.0.0"
 ---
 
 # Skill Creator
@@ -27,6 +29,8 @@ Create effective, benchmark-optimized Claude skills using progressive disclosure
 | Scripts | No limit | Executed without loading |
 
 ## Skill Structure
+
+New skills or updated skills **MUST** be created in current working directory: `./.claude/.skills` (**NOT** in `~/.claude/skills` **UNLESS** you are requested to do so)
 
 ```
 skill-name/

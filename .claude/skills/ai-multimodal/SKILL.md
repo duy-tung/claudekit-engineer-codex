@@ -8,6 +8,9 @@ allowed-tools:
   - Write
   - Edit
 argument-hint: "[file-path] [prompt]"
+metadata:
+  author: claudekit
+  version: "1.0.0"
 ---
 
 # AI Multimodal

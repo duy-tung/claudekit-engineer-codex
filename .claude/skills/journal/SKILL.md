@@ -2,6 +2,9 @@
 name: ck:journal
 description: "Write journal entries analyzing recent changes and session reflections."
 argument-hint: "[topic or reflection]"
+metadata:
+  author: claudekit
+  version: "1.0.0"
 ---
 
 # Journal
