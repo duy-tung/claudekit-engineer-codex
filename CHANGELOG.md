@@ -1,3 +1,15 @@
+## [2.14.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.1...v2.14.0-beta.2) (2026-03-02)
+
+
+### 📚 Documentation
+
+* update claude rules ([af0d601](https://github.com/claudekit/claudekit-engineer/commit/af0d6016b4ebc5a94134216460bfa3e0a13e181c))
+
+
+### ⚡ Performance Improvements
+
+* **skills:** add MiniMax models to `ai-multimodal` skill ([ba78a99](https://github.com/claudekit/claudekit-engineer/commit/ba78a99e7061968763d5f357aec89048b63a3cf0))
+
 ## [2.14.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.13.1-beta.2...v2.14.0-beta.1) (2026-03-02)
 
 
