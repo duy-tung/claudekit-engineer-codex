@@ -1,3 +1,11 @@
+## [2.14.0-beta.3](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.2...v2.14.0-beta.3) (2026-03-02)
+
+
+### 🐞 Bug Fixes
+
+* complete ck: namespace migration in agents, rules, and hooks ([c14c072](https://github.com/claudekit/claudekit-engineer/commit/c14c072b1a08c095b17274ce9840715de31d4189)), closes [#531](https://github.com/claudekit/claudekit-engineer/issues/531)
+* complete ck: namespace migration in README, ck-help, tests, and docs ([06c4e90](https://github.com/claudekit/claudekit-engineer/commit/06c4e905cb4ca26c770b882e70ed9a52aeec9206)), closes [#532](https://github.com/claudekit/claudekit-engineer/issues/532)
+
 ## [2.14.0-beta.2](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.1...v2.14.0-beta.2) (2026-03-02)
 
 
