@@ -356,8 +356,6 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - Performance: Reduces AI token usage and improves response time
 
 **Testing**:
-- Cross-platform test suites (`test-scout-block.sh`, `test-scout-block.ps1`)
-- Comprehensive coverage (11 Unix tests, 7 Windows tests)
 - Validates: blocked/allowed patterns, error handling, edge cases, JSON validation
 
 **Hook Configuration** (`.claude/settings.json`):

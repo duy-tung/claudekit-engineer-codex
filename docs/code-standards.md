@@ -697,9 +697,7 @@ Mistakes to avoid
 .claude/hooks/
 ├── scout-block.js        # Node.js dispatcher (cross-platform entry)
 ├── scout-block.sh        # Bash implementation (Unix)
-├── scout-block.ps1       # PowerShell implementation (Windows)
-├── test-scout-block.sh   # Unix test suite
-└── test-scout-block.ps1  # Windows test suite
+└── scout-block.ps1       # PowerShell implementation (Windows)
 ```
 
 **Implementation Requirements**:

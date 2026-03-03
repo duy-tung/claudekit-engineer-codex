@@ -154,7 +154,7 @@ claudekit-engineer/
 - Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation
 - Performance: Optimized token consumption
 - Cross-Platform: Windows (PowerShell) & Unix (Bash) via Node.js dispatcher
-- Comprehensive Test Coverage: test-scout-block.sh (11 tests), test-scout-block.ps1 (7 tests)
+- Comprehensive Test Coverage: scout-block hook validated via Node.js test suite
 
 ### 5. Workflows
 
@@ -313,7 +313,7 @@ None (template project)
 ## Integration Capabilities
 
 ### Discord Notifications
-Script: `.claude/hooks/send-discord.sh`
+Script: `.claude/hooks/notifications/notify.cjs` + `providers/discord.cjs`
 Purpose: Send project updates to Discord channels
 
 ### GitHub Actions
