@@ -39,9 +39,9 @@ def assert_route(query: str, expected_marker: str, expected_snippets: list[str])
 
 
 TESTS = [
-    ("fix login bug", "task-recommendations", ["/fix"]),
-    ("docs update", "command-details", ["/docs update"]),
-    ("plan:validate", "command-details", ["/plan validate"]),
+    ("fix login bug", "task-recommendations", ["/ck:fix"]),
+    ("docs update", "command-details", ["/ck:docs update"]),
+    ("plan:validate", "command-details", ["/ck:plan validate"]),
     ("watzup", "category-guide", ["wrap-up"]),
 ]
 

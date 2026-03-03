@@ -28,7 +28,7 @@ Before reviewing, scout for edge cases the diff doesn't show:
 git diff --name-only HEAD~1  # Get changed files
 ```
 
-Use `/scout` with edge-case-focused prompt:
+Use `/ck:scout` with edge-case-focused prompt:
 ```
 Scout edge cases for recent changes.
 Changed: {files}

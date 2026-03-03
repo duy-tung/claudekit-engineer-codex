@@ -152,13 +152,13 @@ Issues, blockers, or questions
 #### 3.1 Command Categories
 
 **Core Development**:
-- `/plan` - Research and planning
-- `/cook` - Feature implementation
-- `/test` - Test execution
-- `/ask` - Technical consultation
-- `/bootstrap` - Project initialization
-- `/brainstorm` - Solution ideation
-- `/debug` - Deep analysis
+- `/ck:plan` - Research and planning
+- `/ck:cook` - Feature implementation
+- `/ck:test` - Test execution
+- `/ck:ask` - Technical consultation
+- `/ck:bootstrap` - Project initialization
+- `/ck:brainstorm` - Solution ideation
+- `/ck:debug` - Deep analysis
 
 **Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
@@ -214,7 +214,7 @@ Explore different approaches simultaneously
 #### 4.2 Standard Workflows
 
 **Feature Development Workflow**:
-1. User: `/cook "add user authentication"`
+1. User: `/ck:cook "add user authentication"`
 2. Planner: Create implementation plan
 3. Researchers: Explore auth solutions (parallel)
 4. Planner: Synthesize research, create detailed plan
@@ -227,7 +227,7 @@ Explore different approaches simultaneously
 11. Git Manager: Commit with conventional message
 
 **Bug Fix Workflow**:
-1. User: `/debug "API timeout errors"`
+1. User: `/ck:debug "API timeout errors"`
 2. Debugger: Analyze logs and system
 3. Debugger: Identify root cause
 4. Planner: Create fix plan
@@ -237,7 +237,7 @@ Explore different approaches simultaneously
 8. Git Manager: Commit fix
 
 **Documentation Update Workflow**:
-1. User: `/docs update`
+1. User: `/ck:docs update`
 2. Docs Manager: Check doc freshness
 3. (If >1 day old): Run `repomix` for codebase summary
 4. Docs Manager: Analyze codebase changes
@@ -580,7 +580,7 @@ Remote Repository (GitHub)
 ┌─────────────┐
 │    User     │
 └──────┬──────┘
-       │ /cook "add auth"
+       │ /ck:cook "add auth"
        ↓
 ┌─────────────────────┐
 │   Command Parser    │
