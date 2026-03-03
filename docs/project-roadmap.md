@@ -43,7 +43,7 @@ Expanding platform support and improving developer experience across Windows, ma
 Enabled Windows users to use Claude Code statusline functionality through multiple cross-platform script implementations.
 
 **Deliverables Completed:**
-- `statusline.ps1` - PowerShell native implementation for Windows
+- `statusline.cjs` - Cross-platform Node.js implementation (supersedes statusline.sh/.ps1)
 - `statusline.js` - Node.js universal fallback implementation
 - `docs/statusline-windows-support.md` - Comprehensive user guide (4 setup options)
 - `docs/statusline-architecture.md` - Technical architecture & implementation details
@@ -464,7 +464,7 @@ Enterprise-grade features and deployment options.
 
 #### Features Added
 - **Windows Statusline Support:** Complete cross-platform statusline implementation
-  - PowerShell native implementation (statusline.ps1)
+  - Node.js CJS implementation (statusline.cjs) — unified cross-platform solution
   - Node.js universal fallback (statusline.js)
   - Support for Windows PowerShell 5.1+, PowerShell Core 7+
   - Git Bash and WSL full compatibility
