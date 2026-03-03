@@ -1,3 +1,15 @@
+## [2.14.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.4...v2.14.0-beta.5) (2026-03-03)
+
+
+### 📚 Documentation
+
+* **skills:** add Task tool availability fallback notes across skills ([64e213a](https://github.com/claudekit/claudekit-engineer/commit/64e213ade07cb50e6c68f6e787cd375cc2d39909))
+
+
+### ⚡ Performance Improvements
+
+* **skills:** `plan` skill should update relevant unfinished plans if needed ([7a99c73](https://github.com/claudekit/claudekit-engineer/commit/7a99c73f44f6e1262cf14f01d2ca057f2e39e6ee))
+
 ## [2.14.0-beta.4](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.3...v2.14.0-beta.4) (2026-03-02)
 
 
