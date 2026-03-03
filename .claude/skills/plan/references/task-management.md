@@ -4,6 +4,8 @@
 
 Claude Tasks are **ephemeral** — they die when the session ends. `~/.claude/tasks/` holds lock files only, NOT task data. Plan files (plan.md, phase-XX.md with checkboxes) are the **persistent** layer.
 
+**Tool Availability:** `TaskCreate`/`TaskUpdate`/`TaskGet`/`TaskList` are **CLI-only** — disabled in VSCode extension (`isTTY` check). If these tools error, use `TodoWrite` for progress tracking. Plan files remain the source of truth; hydration is an optimization, not a requirement.
+
 The **hydration pattern** bridges sessions:
 
 ```

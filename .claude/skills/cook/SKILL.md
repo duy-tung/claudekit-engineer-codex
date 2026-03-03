@@ -55,7 +55,7 @@ See `references/intent-detection.md` for detection logic.
 
 **Default (non-auto):** Stops at `[Review]` gates for human approval before each major step.
 **Auto mode (`--auto`):** Skips human review gates, implements all phases continuously.
-**Claude Tasks:** Utilize all these tools `TaskCreate`, `TaskUpdate`, `TaskGet` and `TaskList` during implementation step.
+**Claude Tasks:** Utilize `TaskCreate`, `TaskUpdate`, `TaskGet`, `TaskList` during implementation step. **Fallback:** These are CLI-only tools — unavailable in VSCode extension. If they error, use `TodoWrite` for progress tracking instead.
 
 | Mode | Research | Testing | Review Gates | Phase Progression |
 |------|----------|---------|--------------|-------------------|
@@ -86,7 +86,7 @@ Human review required at these checkpoints (skipped with `--auto`):
 - **Finalize (MANDATORY - never skip):**
   1. `project-manager` subagent → run full plan sync-back (all completed tasks/steps across all `phase-XX-*.md`, not only current phase), then update `plan.md` status/progress
   2. `docs-manager` subagent → update `./docs` if changes warrant
-  3. `TaskUpdate` → mark all Claude Tasks complete after sync-back verification
+  3. `TaskUpdate` → mark all Claude Tasks complete after sync-back verification (skip if Task tools unavailable)
   4. Ask user if they want to commit via `git-manager` subagent
 
 ## Required Subagents (MANDATORY)

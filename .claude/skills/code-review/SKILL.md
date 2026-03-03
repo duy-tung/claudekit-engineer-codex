@@ -95,6 +95,8 @@ SITUATION?
 
 **When:** Multi-file features (3+ changed files), parallel code-reviewer scopes, review cycles with Critical fix iterations.
 
+**Fallback:** Task tools (`TaskCreate`/`TaskUpdate`/`TaskGet`/`TaskList`) are CLI-only — unavailable in VSCode extension. If they error, use `TodoWrite` for tracking and run pipeline sequentially. Review quality is identical.
+
 **Pipeline:** scout → review → fix → verify (each a Task with dependency chain)
 
 ```

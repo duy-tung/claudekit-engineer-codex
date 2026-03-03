@@ -1,7 +1,7 @@
 ---
 name: ck:plan
 description: "Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
-argument-hint: "[task] OR archive|red-team|validate"
+argument-hint: "[task] OR [archive|red-team|validate]"
 license: MIT
 metadata:
   author: claudekit
@@ -11,6 +11,8 @@ metadata:
 # Planning
 
 Create detailed technical implementation plans through research, codebase analysis, solution design, and comprehensive documentation.
+
+**IMPORTANT:** Before you start, scan unfinished plans in the current project at `./plans/` directory, read the `plan.md`, if there are relevant plans with your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
 
 ## Default (No Arguments)
 
@@ -97,13 +99,14 @@ Plan files = persistent. Tasks = session-scoped. Hydration bridges the gap.
 
 **Default:** Auto-hydrate tasks after plan files are written. Skip with `--no-tasks`.
 **3-Task Rule:** <3 phases → skip task creation.
+**Fallback:** Task tools (`TaskCreate`/`TaskUpdate`/`TaskGet`/`TaskList`) are CLI-only — unavailable in VSCode extension. If they error, use `TodoWrite` for tracking. Plan files remain the source of truth; hydration is an optimization, not a requirement.
 
 Load: `references/task-management.md` for hydration pattern, TaskCreate patterns, cook handoff protocol.
 
 ### Hydration Workflow
 1. Write plan.md + phase files (persistent layer)
-2. TaskCreate per phase with `addBlockedBy` chain
-3. TaskCreate for critical/high-risk steps within phases
+2. TaskCreate per phase with `addBlockedBy` chain (skip if Task tools unavailable)
+3. TaskCreate for critical/high-risk steps within phases (skip if Task tools unavailable)
 4. Metadata: phase, priority, effort, planDir, phaseFile
 5. Cook picks up via TaskList (same session) or re-hydrates (new session)
 
