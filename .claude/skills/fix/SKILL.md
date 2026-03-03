@@ -55,6 +55,7 @@ Classify before routing. See `references/complexity-assessment.md`.
 - Use `TaskCreate` with `addBlockedBy` for dependency chains
 - Update via `TaskUpdate` as each phase completes
 - For Parallel: create separate task trees per independent issue
+- **Fallback:** Task tools (`TaskCreate`/`TaskUpdate`/`TaskGet`/`TaskList`) are CLI-only — unavailable in VSCode extension. If they error, use `TodoWrite` for progress tracking. Fix workflow remains fully functional without them.
 
 ### Step 4: Fix Implementation & Verification
 
@@ -66,7 +67,7 @@ Classify before routing. See `references/complexity-assessment.md`.
 
 1. Report summary: confidence score, changes, files
 2. `docs-manager` subagent → update `./docs` if changes warrant (NON-OPTIONAL)
-3. `TaskUpdate` → mark ALL Claude Tasks `completed`
+3. `TaskUpdate` → mark ALL Claude Tasks `completed` (skip if Task tools unavailable)
 4. Ask user if they want to commit via `git-manager` subagent
 
 ---

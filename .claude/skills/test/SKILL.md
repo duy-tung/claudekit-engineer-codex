@@ -109,3 +109,5 @@ When operating as teammate:
 3. Wait for blocked tasks (implementation) to complete before testing
 4. Respect file ownership — only create/edit test files assigned
 5. When done: `TaskUpdate(status: "completed")` then `SendMessage` results to lead
+
+**Fallback:** Task tools (`TaskList`/`TaskUpdate`/`TaskGet`) are CLI-only — unavailable in VSCode extension. If they error, use `TodoWrite` for progress tracking and coordinate via `SendMessage` only.

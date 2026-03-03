@@ -12,6 +12,7 @@ metadata:
 Coordinate multiple independent Claude Code sessions. Each teammate has own context window, loads project context (CLAUDE.md, skills, agents), communicates via shared task list and messaging.
 
 **Requires:** Agent Teams enabled. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json env if using Claude Code < 2.1.33. May be GA in 2.1.33+.
+**Requires:** CLI terminal — `TaskCreate`/`TaskUpdate`/`TaskGet`/`TaskList` and `TeamCreate`/`TeamDelete` are **disabled in VSCode extension** (`isTTY` check). Agent Teams CANNOT run in VSCode.
 
 ## Usage
 

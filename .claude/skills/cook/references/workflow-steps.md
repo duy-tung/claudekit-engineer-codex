@@ -2,6 +2,8 @@
 
 All modes share core steps with mode-specific variations.
 
+**Task Tool Fallback:** `TaskCreate`/`TaskUpdate`/`TaskGet`/`TaskList` are CLI-only — unavailable in VSCode extension. If they error, use `TodoWrite` for progress tracking. All workflow steps remain functional without Task tools.
+
 ## Step 0: Intent Detection & Setup
 
 1. Parse input with `intent-detection.md` rules
@@ -165,8 +167,8 @@ code:        0 → skip → skip → 3 → [R] → 4 → [R] → 5(user) → 6
   - Step 4: `tester` (and `debugger` if failures)
   - Step 5: `code-reviewer`
   - Step 6: `project-manager`, `docs-manager`, `git-manager`
-- Use `TaskCreate` to create Claude Tasks for each unchecked item with priority order and dependencies.
-- Use `TaskUpdate` to mark Claude Tasks `in_progress` when picking up a task.
-- Use `TaskUpdate` to mark Claude Tasks `complete` immediately after finalizing the task.
+- Use `TaskCreate` to create Claude Tasks for each unchecked item with priority order and dependencies (or `TodoWrite` if Task tools unavailable).
+- Use `TaskUpdate` to mark Claude Tasks `in_progress` when picking up a task (skip if Task tools unavailable).
+- Use `TaskUpdate` to mark Claude Tasks `complete` immediately after finalizing the task (skip if Task tools unavailable).
 - All step outputs follow format: `✓ Step [N]: [status] - [metrics]`
 - **VALIDATION:** If Task tool calls = 0 at end of workflow, the workflow is INCOMPLETE.

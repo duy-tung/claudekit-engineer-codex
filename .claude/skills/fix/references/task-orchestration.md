@@ -2,6 +2,8 @@
 
 Native Claude Task tools for tracking and coordinating fix workflows.
 
+**Tool Availability:** `TaskCreate`, `TaskUpdate`, `TaskGet`, `TaskList` are **CLI-only** — disabled in VSCode extension (`isTTY` check). If these tools error, use `TodoWrite` for progress tracking instead. Fix workflow remains fully functional — Tasks add visibility and coordination, not core functionality.
+
 ## When to Use Tasks
 
 | Complexity | Use Tasks? | Reason |
