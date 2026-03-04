@@ -61,6 +61,8 @@ effort: 8h
 issue: 123
 branch: kai/feat/oauth-auth
 tags: [auth, backend, security]
+blockedBy: []
+blocks: [260115-0900-user-dashboard]
 created: 2025-12-16
 ---
 
@@ -69,6 +71,12 @@ created: 2025-12-16
 ## Overview
 
 Brief description of what this plan accomplishes.
+
+## Cross-Plan Dependencies
+
+| Relationship | Plan | Status |
+|-------------|------|--------|
+| Blocks | [260115-0900-user-dashboard](../260115-0900-user-dashboard/plan.md) | pending |
 
 ## Phases
 

@@ -14,6 +14,27 @@ Create detailed technical implementation plans through research, codebase analys
 
 **IMPORTANT:** Before you start, scan unfinished plans in the current project at `./plans/` directory, read the `plan.md`, if there are relevant plans with your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
 
+### Cross-Plan Dependency Detection
+
+During the pre-creation scan, detect and mark blocking relationships between plans:
+
+1. **Scan** — Read `plan.md` frontmatter of each unfinished plan (status != `completed`/`cancelled`)
+2. **Compare scope** — Check overlapping files, shared dependencies, same feature area
+3. **Classify relationship:**
+   - New plan needs output of existing plan → new plan `blockedBy: [existing-plan-dir]`
+   - New plan changes something existing plan depends on → existing plan `blockedBy: [new-plan-dir]`, new plan `blocks: [existing-plan-dir]`
+   - Mutual dependency → both plans reference each other in `blockedBy`/`blocks`
+4. **Bidirectional update** — When relationship detected, update BOTH `plan.md` files' frontmatter
+5. **Ambiguous?** → Use `AskUserQuestion` with header "Plan Dependency", present detected overlap, ask user to confirm relationship type (blocks/blockedBy/none)
+
+**Frontmatter fields** (relative plan dir paths):
+```yaml
+blockedBy: [260301-1200-auth-system]     # This plan waits on these plans
+blocks: [260228-0900-user-dashboard]     # This plan blocks these plans
+```
+
+**Status interaction:** A plan with `blockedBy` entries where ANY blocker is not `completed` → plan status should note `blocked` in its overview. When all blockers complete, the blocked plan becomes unblocked automatically on next scan.
+
 ## Default (No Arguments)
 
 If invoked with a task description, proceed with planning workflow. If invoked WITHOUT arguments or with unclear intent, use `AskUserQuestion` to present available operations:
@@ -76,6 +97,7 @@ Load: `references/output-standards.md`
 ## Workflow Process
 
 1. **Pre-Creation Check** → Check Plan Context for active/suggested/none
+1b. **Cross-Plan Scan** → Scan unfinished plans, detect `blockedBy`/`blocks` relationships, update both plans
 2. **Mode Detection** → Auto-detect or use explicit flag (see `workflow-modes.md`)
 3. **Research Phase** → Spawn researchers (skip in fast mode)
 4. **Codebase Analysis** → Read docs, scout if needed
