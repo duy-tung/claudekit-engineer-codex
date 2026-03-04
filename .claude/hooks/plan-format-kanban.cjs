@@ -34,16 +34,47 @@ process.stdin.on('end', () => {
     const badPattern = /\|\s*\d+[a-z]?\s*\|\s*\[phase-\d+[a-z]?-[^\]]*\.md\]\(/gi;
     const matches = content.match(badPattern);
 
+    const warnings = [];
+
     if (matches && matches.length > 0) {
-      const warning = [
+      warnings.push(
         '[!] plan.md: Link text should be human-readable, not filenames.',
         `    Found ${matches.length} instance(s) using filename as link text.`,
         '    Bad:  [phase-01-setup.md](./phase-01-setup.md)',
         '    Good: [Setup Environment](./phase-01-setup.md)',
         '    Update link text to descriptive phase names for better readability.'
-      ].join('\n');
+      );
+    }
 
-      process.stdout.write(JSON.stringify({ continue: true, additionalContext: warning }));
+    // Check for direct status edits in phases table
+    if (toolName === 'Edit' || toolName === 'Write') {
+      const toolOutput = data.tool_input?.new_string || data.tool_input?.content || '';
+      const statusEditPattern = /\|\s*(Pending|In Progress|Completed|In-Progress)\s*\|/gi;
+      const editingStatus = statusEditPattern.test(toolOutput);
+
+      // Only warn if editing a plan.md file's phases table
+      if (editingStatus) {
+        const isPhaseTable = /\|\s*Phase\s*\|\s*Name\s*\|\s*Status\s*\|/i.test(toolOutput);
+
+        // Also check if the edit target contains phase table markers
+        const oldString = data.tool_input?.old_string || '';
+        const editingPhaseRow = /^\|\s*\d+[a-z]?\s*\|/im.test(oldString) || /^\|\s*\d+[a-z]?\s*\|/im.test(toolOutput);
+
+        if (isPhaseTable || editingPhaseRow) {
+          warnings.push(
+            '\n[Plan Status Warning] Direct status edit detected in phases table.',
+            'Use CLI for deterministic status updates:',
+            '  ck plan check <id>          # Mark completed',
+            '  ck plan check <id> --start  # Mark in-progress',
+            '  ck plan uncheck <id>        # Revert to pending',
+            'Direct edits may break canonical format.'
+          );
+        }
+      }
+    }
+
+    if (warnings.length > 0) {
+      process.stdout.write(JSON.stringify({ continue: true, additionalContext: warnings.join('\n') }));
       return;
     }
 
