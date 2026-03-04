@@ -2,8 +2,8 @@
 /**
  * Session State Hook - Persist/restore session progress across sessions
  *
- * Fires on: SessionStart (load), Stop (persist+archive), SubagentStop (append)
- * Purpose: Eliminate context loss between sessions
+ * Fires on: SessionStart (load+compact), Stop (persist+archive), SubagentStop (append)
+ * Purpose: Eliminate context loss between sessions and across compactions
  *
  * Exit Codes:
  *   0 - Always (fail-open, non-blocking)
@@ -12,7 +12,6 @@
 // Crash wrapper
 try {
   const fs = require('fs');
-  const path = require('path');
   const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
 
   if (!isHookEnabled('session-state')) process.exit(0);
@@ -32,15 +31,24 @@ try {
   // --- SessionStart: load previous state ---
   // SessionStart stdin has `source` field, not hook_event_name
   if (!eventType) {
-    // Only inject on fresh startup (not resume/clear/compact) to avoid duplicates
-    if (data.source && data.source !== 'startup') process.exit(0);
+    const isCompact = data.source === 'compact';
+    // Only inject on startup or compact (skip resume/clear)
+    if (data.source && data.source !== 'startup' && !isCompact) process.exit(0);
 
     const state = loadState(process.cwd());
     if (state) {
-      console.log('\n--- Previous Session State ---');
-      console.log(state);
-      console.log('--- End Session State ---\n');
-      console.log('Review above state from your last session. Continue where you left off or start fresh.');
+      if (isCompact) {
+        console.log('\n--- Session State (Post-Compaction Recovery) ---');
+        console.log(state);
+        console.log('--- End Session State ---\n');
+        console.log('Context was compacted. Above is your last saved progress. Resume from where you left off.');
+        console.log('IMPORTANT: Re-read active plan files and todo list. Do NOT re-do completed work.');
+      } else {
+        console.log('\n--- Previous Session State ---');
+        console.log(state);
+        console.log('--- End Session State ---\n');
+        console.log('Review above state from your last session. Continue where you left off or start fresh.');
+      }
     }
     process.exit(0);
   }

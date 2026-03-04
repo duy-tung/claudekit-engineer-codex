@@ -146,11 +146,12 @@ claudekit-engineer/
    - Improves AI response time and token efficiency
 
 5. **session-state.cjs** - Session State Persistence
-   - Persists session progress across sessions
-   - Loads previous state on SessionStart
+   - Persists session progress across sessions and context compactions
+   - Loads previous state on SessionStart (startup and post-compaction recovery)
    - Archives old states with rotation (keeps 5)
    - Extracts todos, modified files, branch, and plan info
    - 7-day auto-expiry, atomic writes, fail-safe
+   - Post-compaction: Injects last saved state with guidance to resume without re-doing work
 
 6. **privacy-block.cjs** - Sensitive File Access Control
 7. **descriptive-name.cjs** - Naming conventions enforcement

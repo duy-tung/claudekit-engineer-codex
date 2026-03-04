@@ -360,10 +360,11 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 
 **5. Session-State Hook** (`session-state.cjs`)
 
-- **Trigger**: SessionStart (load), Stop (persist), SubagentStop (append)
-- **Purpose**: Persist and restore session progress across sessions
+- **Trigger**: SessionStart (on startup and context compaction), Stop (persist), SubagentStop (append)
+- **Purpose**: Persist and restore session progress across sessions and context compactions
 - **Functionality**:
-  - **SessionStart**: Loads previous session state from `.claude/session-state/latest.md` and displays it
+  - **SessionStart (Startup)**: Loads previous session state from `.claude/session-state/latest.md` and displays it for context recovery
+  - **SessionStart (Post-Compaction)**: Restores last saved state after context compaction with special guidance to resume without re-doing completed work
   - **Stop**: Finalizes and archives current session state (keeps last 5 archives)
   - **SubagentStop**: Appends subagent completion results to ongoing session state
   - Extracts todos from transcript, branch info, active plan, and modified files
