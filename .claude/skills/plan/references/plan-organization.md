@@ -72,11 +72,15 @@ Brief description of what this plan accomplishes.
 
 ## Phases
 
-| # | Phase | Status | Effort | Link |
-|---|-------|--------|--------|------|
-| 1 | Setup | Pending | 2h | [phase-01](./phase-01-setup.md) |
-| 2 | Implementation | Pending | 4h | [phase-02](./phase-02-impl.md) |
-| 3 | Testing | Pending | 2h | [phase-03](./phase-03-test.md) |
+| Phase | Name | Status |
+|-------|------|--------|
+| 1 | [Setup Environment](./phase-01-setup.md) | Pending |
+| 2 | [Core Implementation](./phase-02-impl.md) | Pending |
+| 3 | [Testing & Validation](./phase-03-test.md) | Pending |
+
+<!-- IMPORTANT: Link text MUST be human-readable names (not filenames).
+     Bad:  [phase-01-setup.md](./phase-01-setup.md)
+     Good: [Setup Environment](./phase-01-setup.md) -->
 
 ## Dependencies
 

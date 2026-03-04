@@ -89,6 +89,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/post-edit-simplify-reminder.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/plan-format-kanban.cjs"
           }
         ]
       },
