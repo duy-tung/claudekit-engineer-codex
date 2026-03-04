@@ -130,6 +130,24 @@ All modes share core steps with mode-specific variations.
    - `Task(subagent_type="project-manager", prompt="Run full sync-back for [plan-path]: reconcile all completed Claude Tasks with all phase files, backfill stale completed checkboxes across every phase, then update plan.md frontmatter/table progress. Do NOT only mark current phase.", description="Update plan")`
    - `Task(subagent_type="docs-manager", prompt="Update docs for changes.", description="Update docs")`
 2. Project-manager sync-back MUST include:
+
+### Status Sync (Finalize)
+
+Use CLI commands for deterministic status updates:
+
+```bash
+# Mark completed phases
+ck plan check <phase-id>
+
+# Mark in-progress phases
+ck plan check <phase-id> --start
+
+# Revert if needed
+ck plan uncheck <phase-id>
+```
+
+**Fallback:** If `ck` is not available, edit plan.md directly —
+only change the Status column cell, preserve table structure.
    - Sweep all `phase-XX-*.md` files in the plan directory.
    - Mark every completed item `[ ] → [x]` based on completed tasks (including earlier phases finished before current phase).
    - Update `plan.md` status/progress (`pending`/`in-progress`/`completed`) from actual checkbox state.

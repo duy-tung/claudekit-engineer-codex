@@ -44,6 +44,34 @@ See SKILL.md "Active Plan State" section for full rules. Key points:
 - After creating plan: `node .claude/scripts/set-active-plan.cjs {plan-dir}`
 - Active plans use plan-specific reports path; suggested plans use default path
 
+## Plan Creation via CLI
+
+After determining phases from research/design:
+
+1. **Scaffold via CLI:**
+   ```bash
+   ck plan create \
+     --title "{plan title}" \
+     --phases "{Phase1},{Phase2},{Phase3}" \
+     --dir {plan-dir} \
+     --priority {P1|P2|P3} \
+     [--issue {N}]
+   ```
+
+2. **Fill content sections** in plan.md via Edit tool:
+   - `## Overview` — brief description
+   - `## Dependencies` — cross-plan dependencies
+
+3. **Fill each phase-XX.md** with:
+   - Architecture, implementation steps, success criteria
+   - Requirements, risk assessment, security considerations
+
+4. **NEVER edit the Phases table directly** — it's CLI-owned.
+   Use `ck plan check/uncheck/add-phase` for structural changes.
+
+**Fallback:** If `ck` CLI is not available (e.g., user hasn't installed),
+write plan.md directly using the canonical 3-column format.
+
 ## File Structure
 
 ### Overview Plan (plan.md)
@@ -80,11 +108,15 @@ Brief description of what this plan accomplishes.
 
 ## Phases
 
-| # | Phase | Status | Effort | Link |
-|---|-------|--------|--------|------|
-| 1 | Setup | Pending | 2h | [phase-01](./phase-01-setup.md) |
-| 2 | Implementation | Pending | 4h | [phase-02](./phase-02-impl.md) |
-| 3 | Testing | Pending | 2h | [phase-03](./phase-03-test.md) |
+| Phase | Name | Status |
+|-------|------|--------|
+| 1 | [Setup Environment](./phase-01-setup.md) | Pending |
+| 2 | [Core Implementation](./phase-02-impl.md) | Pending |
+| 3 | [Testing & Validation](./phase-03-test.md) | Pending |
+
+<!-- IMPORTANT: Link text MUST be human-readable names (not filenames).
+     Bad:  [phase-01-setup.md](./phase-01-setup.md)
+     Good: [Setup Environment](./phase-01-setup.md) -->
 
 ## Dependencies
 
