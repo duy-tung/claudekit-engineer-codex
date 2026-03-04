@@ -114,7 +114,7 @@ claudekit-engineer/
 - shopify, skill-creator, template-skill, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
 
-### 4. Hook System (8 Core Hooks)
+### 4. Hook System (9+ Core Hooks)
 
 **Location**: `.claude/hooks/`
 
@@ -145,10 +145,17 @@ claudekit-engineer/
    - Automatic platform detection via `process.platform`
    - Improves AI response time and token efficiency
 
-5. **privacy-block.cjs** - Sensitive File Access Control
-6. **descriptive-name.cjs** - Naming conventions enforcement
-7. **post-edit-simplify-reminder.cjs** - Post-edit optimization hints
-8. **usage-context-awareness.cjs** - Context-aware usage patterns
+5. **session-state.cjs** - Session State Persistence
+   - Persists session progress across sessions
+   - Loads previous state on SessionStart
+   - Archives old states with rotation (keeps 5)
+   - Extracts todos, modified files, branch, and plan info
+   - 7-day auto-expiry, atomic writes, fail-safe
+
+6. **privacy-block.cjs** - Sensitive File Access Control
+7. **descriptive-name.cjs** - Naming conventions enforcement
+8. **post-edit-simplify-reminder.cjs** - Post-edit optimization hints
+9. **usage-context-awareness.cjs** - Context-aware usage patterns
 
 **Hook Features:**
 - Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation

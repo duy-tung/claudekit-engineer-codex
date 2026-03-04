@@ -13,6 +13,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/session-init.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-state.cjs"
           }
         ]
       }
@@ -39,6 +43,14 @@
           {
             "type": "command",
             "command": "node .claude/hooks/cook-after-plan-reminder.cjs"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-state.cjs"
           }
         ]
       }
@@ -78,6 +90,16 @@
           {
             "type": "command",
             "command": "node .claude/hooks/privacy-block.cjs"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-state.cjs"
           }
         ]
       }
