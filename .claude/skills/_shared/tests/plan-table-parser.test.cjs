@@ -8,6 +8,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const { mkdtempSync } = require('node:fs');
+const { tmpdir } = require('node:os');
 const { parsePlanPhases, normalizeStatus, filenameToTitle } = require('../lib/plan-table-parser.cjs');
 
 let passed = 0, failed = 0;
@@ -26,8 +28,8 @@ function assertIncludes(str, sub, msg) {
 }
 
 // --- Temp directory setup ---
-const tmpDir = '/tmp/test-plan-table-parser';
-fs.mkdirSync(tmpDir, { recursive: true });
+// L1: Use mkdtempSync instead of fixed /tmp/ path to avoid conflicts in parallel runs
+const tmpDir = mkdtempSync(path.join(tmpdir(), 'ck-plan-parser-'));
 function tmpFile(name, content) {
   const fp = path.join(tmpDir, name);
   fs.mkdirSync(path.dirname(fp), { recursive: true });
@@ -275,6 +277,63 @@ test('Mixed alphanumeric + pure numeric IDs in same table', () => {
   assertEqual(phases[2].phaseId, '2', 'phaseId 2');
   assertEqual(phases[1].status, 'completed', '1b done');
   assertEqual(phases[2].status, 'in-progress', '2 in-progress');
+});
+
+// ============================================================
+// M8: Tests merged from unit test file (.claude/skills/_shared/lib/__tests__/plan-table-parser.test.cjs)
+// These cover cases not already present in this integration suite.
+
+console.log('\n--- normalizeStatus (unit) ---');
+
+test('null input -> pending', () => assertEqual(normalizeStatus(null), 'pending', 'status'));
+
+console.log('\n--- filenameToTitle (unit: acronyms) ---');
+
+// Note: capitalizes all words including conjunctions (intentional — simpler, consistent)
+test('CLI, SDK acronyms uppercased', () => assertEqual(filenameToTitle('phase-01-setup-cli-sdk.md'), 'Setup CLI SDK', 'title'));
+test('API acronym uppercased', () => assertEqual(filenameToTitle('phase-02-implement-api.md'), 'Implement API', 'title'));
+test('UI acronym uppercased', () => assertEqual(filenameToTitle('phase-03-build-ui-components.md'), 'Build UI Components', 'title'));
+
+console.log('\n--- Format 0 (unit: letter normalization) ---');
+
+test('Format 0: phaseId letter normalized to lowercase (1A -> 1a)', () => {
+  const content = `| # | Phase | Status |
+|---|-------|--------|
+| 1A | Setup Part A | completed |`;
+  const phases = parsePlanPhases(content, tmpDir);
+  assertEqual(phases.length, 1, 'phase count');
+  assertEqual(phases[0].phaseId, '1a', 'phaseId lowercase');
+});
+
+test('Format 0: row names parsed correctly', () => {
+  const content = `| # | Phase | Status |
+|---|-------|--------|
+| 1 | Alpha | completed |
+| 2 | Beta | pending |`;
+  const phases = parsePlanPhases(content, tmpDir);
+  assertEqual(phases.length, 2, 'phase count');
+  assertEqual(phases[0].name, 'Alpha', 'phase 1 name');
+  assertEqual(phases[1].name, 'Beta', 'phase 2 name');
+});
+
+console.log('\n--- Format 2 (unit: link-first table) ---');
+
+test('Format 2: [Phase N](path) link-first table', () => {
+  const content = `| [Phase 1](./phase-01-setup.md) | Setup environment | completed |
+| [Phase 2](./phase-02-impl.md) | Implementation | in-progress |`;
+  const phases = parsePlanPhases(content, tmpDir);
+  assertEqual(phases.length, 2, 'phase count');
+  assertEqual(phases[0].phaseId, '1', 'phaseId 1');
+  assertEqual(phases[0].status, 'completed', 'phase 1 status');
+  assertEqual(phases[1].phaseId, '2', 'phaseId 2');
+  assertEqual(phases[1].status, 'in-progress', 'phase 2 status');
+});
+
+console.log('\n--- M5: Date in status position ---');
+
+test('M5: Date value in status position treated as completed', () => {
+  assertEqual(normalizeStatus('2026-01-01'), 'completed', 'date -> completed');
+  assertEqual(normalizeStatus('2025-12-31'), 'completed', 'date -> completed');
 });
 
 // ============================================================

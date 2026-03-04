@@ -8,6 +8,8 @@ const path = require('path');
 /** Maps raw status strings to canonical values */
 function normalizeStatus(raw) {
   const s = (raw || '').toLowerCase().trim();
+  // Date values (e.g., "2026-01-01") in status position mean "completed"
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return 'completed';
   if (s.includes('complete') || s.includes('done') || s.includes('✓') || s.includes('✅')) return 'completed';
   if (s.includes('progress') || s.includes('active') || s.includes('wip') || s.includes('🔄')) return 'in-progress';
   return 'pending';
@@ -19,6 +21,7 @@ const ACRONYMS = new Set(['api', 'ui', 'ux', 'cli', 'ci', 'cd', 'db', 'sql', 'cs
 /** Converts phase filename to title only if it matches phase-NNx-*.md pattern */
 function filenameToTitle(name) {
   if (!/^phase-\d+[a-z]?-.*\.md$/i.test(name)) return name;
+  // Note: capitalizes all words including conjunctions (intentional — simpler, consistent)
   return name
     .replace(/^phase-\d+[a-z]?-/i, '')
     .replace(/\.md$/i, '')
@@ -62,10 +65,15 @@ function parseFormat0(content, dir, options) {
     if (!sepLine.trim().startsWith('|') || !sepLine.includes('---')) { i++; continue; }
 
     const headers = lines[i].split('|').map(h => h.trim().toLowerCase()).filter(Boolean);
-    let phaseCol = -1, nameCol = -1, statusCol = -1;
+    let phaseCol = -1, nameCol = -1, nameColExplicit = false, statusCol = -1;
     headers.forEach((h, idx) => {
       if (h === '#' || h === 'phase' || h === 'id') { if (phaseCol < 0) phaseCol = idx; }
-      if ((h === 'name' || h === 'phase') && idx !== phaseCol) { if (nameCol < 0) nameCol = idx; }
+      // Explicit name column headers (H1: also recognize 'task' and 'description')
+      if ((h === 'name' || h === 'task' || h === 'description') && !nameColExplicit) {
+        nameCol = idx; nameColExplicit = true;
+      }
+      // 'phase' can also be the name col if not already taken as phaseCol
+      if (h === 'phase' && idx !== phaseCol && !nameColExplicit) { if (nameCol < 0) nameCol = idx; }
       if (h === 'status') statusCol = idx;
     });
     if (statusCol < 0) { i += 2; continue; }
@@ -81,17 +89,19 @@ function parseFormat0(content, dir, options) {
       const idMatch = phaseRaw.match(/(\d+)([a-z]?)/i);
       if (!idMatch) { j++; continue; }
 
-      const linkMatch = nameRaw.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      // H2: Only check nameRaw and phaseRaw for links, not all columns (avoids false positives)
+      const linkMatch = nameRaw.match(/\[([^\]]+)\]\(([^)]+)\)/) || phaseRaw.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      // Note: file is null when no link found (not empty string)
+      // This is intentional — consumers check `p.file !== null`
       let name, filePath, linkText;
       if (linkMatch) {
         linkText = linkMatch[1];
         filePath = linkMatch[2];
         name = /^phase-\d+[a-z]?-.*\.md$/i.test(linkText) ? filenameToTitle(linkText) : linkText;
       } else {
-        const anyLink = cols.join(' ').match(/\[([^\]]+)\]\(([^)]+)\)/);
         name = nameRaw || `Phase ${idMatch[1]}`;
-        filePath = anyLink ? anyLink[2] : null;
-        linkText = anyLink ? anyLink[1] : name;
+        filePath = null;
+        linkText = name;
       }
       phases.push(makePhase(idMatch[1], idMatch[2], name, statusRaw, filePath, linkText, dir, options));
       j++;

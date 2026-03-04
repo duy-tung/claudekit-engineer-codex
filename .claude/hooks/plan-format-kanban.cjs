@@ -49,27 +49,27 @@ process.stdin.on('end', () => {
     // Check for direct status edits in phases table
     if (toolName === 'Edit' || toolName === 'Write') {
       const toolOutput = data.tool_input?.new_string || data.tool_input?.content || '';
-      const statusEditPattern = /\|\s*(Pending|In Progress|Completed|In-Progress)\s*\|/gi;
-      const editingStatus = statusEditPattern.test(toolOutput);
+
+      // M6: Only detect status edits in actual table rows (lines starting with |)
+      // Avoids false positives from frontmatter or prose containing status words
+      const lines = (toolOutput || '').split('\n');
+      const editingTableStatus = lines.some(line => {
+        // Must be a table row containing a phase ID AND a status keyword
+        return /^\|\s*\d+[a-z]?\s*\|/i.test(line) &&
+               /\|\s*(Pending|In Progress|Completed|In-Progress)\s*\|/i.test(line);
+      });
 
       // Only warn if editing a plan.md file's phases table
-      if (editingStatus) {
-        const isPhaseTable = /\|\s*Phase\s*\|\s*Name\s*\|\s*Status\s*\|/i.test(toolOutput);
-
-        // Also check if the edit target contains phase table markers
-        const oldString = data.tool_input?.old_string || '';
-        const editingPhaseRow = /^\|\s*\d+[a-z]?\s*\|/im.test(oldString) || /^\|\s*\d+[a-z]?\s*\|/im.test(toolOutput);
-
-        if (isPhaseTable || editingPhaseRow) {
-          warnings.push(
-            '\n[Plan Status Warning] Direct status edit detected in phases table.',
-            'Use CLI for deterministic status updates:',
-            '  ck plan check <id>          # Mark completed',
-            '  ck plan check <id> --start  # Mark in-progress',
-            '  ck plan uncheck <id>        # Revert to pending',
-            'Direct edits may break canonical format.'
-          );
-        }
+      if (editingTableStatus) {
+        warnings.push(
+          '\n[Plan Status Warning] Direct status edit detected in phases table.',
+          'Canonical format: | Phase | Name | Status | (3-column table)',
+          'Use CLI for deterministic status updates:',
+          '  ck plan check <id>          # Mark completed',
+          '  ck plan check <id> --start  # Mark in-progress',
+          '  ck plan uncheck <id>        # Revert to pending',
+          'Direct edits may break canonical format.'
+        );
       }
     }
 

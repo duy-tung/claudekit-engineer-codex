@@ -108,28 +108,32 @@ function renderPhaseItem(phase, index, currentIndex, normalizedCurrentPath) {
   const isSameFile = normalizedPhasePath === normalizedCurrentPath;
   const fileExists = fs.existsSync(phase.file);
 
+  // M7: escape statusClass and phase.anchor to prevent XSS in HTML attributes
+  const safeStatusClass = escapeHtml(statusClass);
+  const safeAnchor = phase.anchor ? escapeHtml(phase.anchor) : null;
+
   if (!fileExists) {
-    return `<li class="phase-item unavailable" data-status="${statusClass}" title="Phase planned but not yet implemented">
+    return `<li class="phase-item unavailable" data-status="${safeStatusClass}" title="Phase planned but not yet implemented">
       <span class="phase-link-disabled">
-        <span class="status-dot ${statusClass}"></span>
+        <span class="status-dot ${safeStatusClass}"></span>
         <span class="phase-name">${escapeHtml(phase.name)}</span>
         <span class="unavailable-badge">Planned</span>
       </span></li>`;
   }
 
   let href, isInlineSection = false;
-  if (isSameFile && phase.anchor) { href = `#${phase.anchor}`; isInlineSection = true; }
-  else if (phase.anchor) { href = `/view?file=${encodeURIComponent(phase.file)}#${phase.anchor}`; }
+  if (isSameFile && safeAnchor) { href = `#${safeAnchor}`; isInlineSection = true; }
+  else if (safeAnchor) { href = `/view?file=${encodeURIComponent(phase.file)}#${safeAnchor}`; }
   else { href = `/view?file=${encodeURIComponent(phase.file)}`; }
 
-  const dataAnchor = phase.anchor ? `data-anchor="${phase.anchor}"` : '';
+  const dataAnchor = safeAnchor ? `data-anchor="${safeAnchor}"` : '';
   const inlineSectionClass = isInlineSection ? 'inline-section' : '';
   const typeIcon = isInlineSection
     ? `<svg class="phase-type-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-.5 9.45a.75.75 0 01-1.06-1.06l-1.25 1.25a2 2 0 01-2.83-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25z"/></svg>`
     : `<svg class="phase-type-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V4.664a.25.25 0 00-.073-.177l-2.914-2.914a.25.25 0 00-.177-.073H3.75zM2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0112.25 16h-8.5A1.75 1.75 0 012 14.25V1.75z"/></svg>`;
 
-  return `<li class="phase-item ${isActive ? 'active' : ''} ${inlineSectionClass}" data-status="${statusClass}" ${dataAnchor}>
-    <a href="${href}">${typeIcon}<span class="status-dot ${statusClass}"></span><span class="phase-name">${escapeHtml(phase.name)}</span></a></li>`;
+  return `<li class="phase-item ${isActive ? 'active' : ''} ${inlineSectionClass}" data-status="${safeStatusClass}" ${dataAnchor}>
+    <a href="${href}">${typeIcon}<span class="status-dot ${safeStatusClass}"></span><span class="phase-name">${escapeHtml(phase.name)}</span></a></li>`;
 }
 
 /** Generate navigation sidebar HTML */
