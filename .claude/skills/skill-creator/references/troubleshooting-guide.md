@@ -75,7 +75,7 @@
 **Symptom:** Skill seems slow or responses degraded.
 
 **Solutions:**
-1. Move detailed docs to `references/` — keep SKILL.md under 150 lines
+1. Move detailed docs to `references/` — keep SKILL.md under 300 lines
 2. Link to references instead of inlining content
 3. Evaluate if too many skills enabled simultaneously (>20-50 may degrade)
 4. Consider skill "packs" for related capabilities

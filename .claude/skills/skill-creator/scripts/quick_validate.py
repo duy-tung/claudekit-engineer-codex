@@ -74,6 +74,13 @@ def validate_skill(skill_path):
                     "or contain consecutive hyphens"
                 )
 
+    # Validate name length (official max: 64 chars)
+    if name_match:
+        if len(skill_id) > 64:
+            return False, f"Skill id '{skill_id}' exceeds 64 characters ({len(skill_id)})"
+        if namespace and len(namespace) > 64:
+            return False, f"Namespace '{namespace}' exceeds 64 characters ({len(namespace)})"
+
     # Extract and validate description
     desc_match = re.search(r'description:\s*(.+)', frontmatter)
     if desc_match:
@@ -86,6 +93,10 @@ def validate_skill(skill_path):
         # Check for angle brackets
         if '<' in description or '>' in description:
             return False, "Description cannot contain angle brackets (< or >)"
+
+        # Check description length (official max: 1024 chars)
+        if len(description) > 1024:
+            return False, f"Description exceeds 1024 characters ({len(description)})"
 
     return True, "Skill is valid!"
 

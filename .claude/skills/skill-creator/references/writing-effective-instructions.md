@@ -66,7 +66,7 @@ Before writing queries, consult `references/api-patterns.md` for:
 
 ## Use Progressive Disclosure
 
-Keep SKILL.md focused on core instructions (<150 lines). Move to `references/`:
+Keep SKILL.md focused on core instructions (<300 lines). Move to `references/`:
 - Detailed API documentation
 - Database schemas
 - Extended examples
