@@ -1,3 +1,23 @@
+## [2.14.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.5...v2.14.0-beta.6) (2026-03-04)
+
+
+### 🚀 Features
+
+* **hooks:** add session-state persistence hook for cross-session state management ([506638b](https://github.com/claudekit/claudekit-engineer/commit/506638b53260bb5a3fe0a55015f92158a1f5b646))
+* **hooks:** add strategic compaction support to session-state hook ([cd3648b](https://github.com/claudekit/claudekit-engineer/commit/cd3648b75c645d7609ba132eff9d84aad64d8422))
+* **skills:** add `project-organization` skill with file structure, naming and standards ([87377bd](https://github.com/claudekit/claudekit-engineer/commit/87377bd381998f47061d16b8c4e9c6b32520113e))
+* **skills:** add security-scan skill for secret and vulnerability detection ([1a09c99](https://github.com/claudekit/claudekit-engineer/commit/1a09c99cf6702363b280441d6a688c6e828c0548))
+
+
+### 📚 Documentation
+
+* update references to removed shell scripts ([f918319](https://github.com/claudekit/claudekit-engineer/commit/f918319c6278a6ed969e56f0c7a2534ac359d687))
+
+
+### ⚡ Performance Improvements
+
+* **skills:** enhance `skill-creator` based on anthropic official skill with new eval & factors ([55ca25a](https://github.com/claudekit/claudekit-engineer/commit/55ca25aac53cb1866fbdd7a279b225654a240559))
+
 ## [2.14.0-beta.5](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.4...v2.14.0-beta.5) (2026-03-03)
 
 
