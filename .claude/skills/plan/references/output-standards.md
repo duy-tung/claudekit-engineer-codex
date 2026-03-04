@@ -16,6 +16,8 @@ effort: 4h       # Estimated total effort
 issue: 74        # GitHub issue number (if applicable)
 branch: kai/feat/feature-name
 tags: [frontend, api]  # Category tags
+blockedBy: []    # Plan dirs this plan waits on (e.g., [260301-1200-auth-system])
+blocks: []       # Plan dirs this plan blocks (e.g., [260228-0900-user-dashboard])
 created: 2025-12-16
 ---
 ```
@@ -31,6 +33,8 @@ When creating plans, auto-populate these fields:
 - **issue**: Parse from branch name or context
 - **branch**: Current git branch (`git branch --show-current`)
 - **tags**: Infer from task keywords (e.g., frontend, backend, api, auth)
+- **blockedBy**: Detected during pre-creation scan (empty `[]` if none)
+- **blocks**: Detected during pre-creation scan (empty `[]` if none)
 - **created**: Today's date in YYYY-MM-DD format
 
 ### Tag Vocabulary (Recommended)
