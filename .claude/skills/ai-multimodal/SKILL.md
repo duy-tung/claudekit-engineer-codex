@@ -100,6 +100,10 @@ Load for detailed guidance:
   ...
   ```
 
+## Outputs
+
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
+
 ## Resources
 
 - [Gemini API Docs](https://ai.google.dev/gemini-api/docs/)

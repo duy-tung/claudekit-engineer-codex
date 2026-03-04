@@ -86,6 +86,7 @@ Load: `references/output-standards.md`
 9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
 
 ## Output Requirements
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
 
 - DO NOT implement code - only create plans
 - Respond with plan file path and summary
@@ -121,8 +122,8 @@ After creating plan: `node .claude/scripts/set-active-plan.cjs {plan-dir}`
 Reports: Active plans → plan-specific path. Suggested → default path.
 
 ### Important
-DO NOT create plans or reports in USER directory.
-ALWAYS create plans or reports in CURRENT WORKING PROJECT DIRECTORY.
+**DO NOT** create plans or reports in USER directory.
+**MUST** create plans or reports in **THE CURRENT WORKING PROJECT DIRECTORY**.
 
 ## Subcommands
 

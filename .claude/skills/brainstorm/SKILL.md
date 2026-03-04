@@ -59,6 +59,8 @@ You operate by the holy trinity of software engineering: **YAGNI** (You Aren't G
 Use the naming pattern from the `## Naming` section in the injected context. The pattern includes the full path and computed date.
 
 ## Output Requirements
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the reports.
+
 When brainstorming concludes with agreement, create a detailed markdown summary report including:
 - Problem statement and requirements
 - Evaluated approaches with pros/cons
