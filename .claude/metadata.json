@@ -94,10 +94,10 @@
     "hooks/notifications/send-discord.sh",
     "scripts/fix-shebang-permissions.sh"
   ],
-  "version": "2.14.0-beta.6",
+  "version": "2.14.0-beta.7",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-03-04T11:20:11.538Z",
+  "buildDate": "2026-03-04T15:32:39.011Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"

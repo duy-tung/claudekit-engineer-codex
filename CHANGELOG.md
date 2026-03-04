@@ -1,3 +1,15 @@
+## [2.14.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.6...v2.14.0-beta.7) (2026-03-04)
+
+
+### 🚀 Features
+
+* **skills:** add `deploy` skills support popular PaaS & cloud providers ([e136d0c](https://github.com/claudekit/claudekit-engineer/commit/e136d0caa58b4c192c2867094ed31e64d3b488cd))
+
+
+### 🐞 Bug Fixes
+
+* **skills:** `plan` should detect cross-plan dependency ([c7575b5](https://github.com/claudekit/claudekit-engineer/commit/c7575b54f0dec8d5532295ad8bc2dae48c2fb544))
+
 ## [2.14.0-beta.6](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.5...v2.14.0-beta.6) (2026-03-04)
 
 
