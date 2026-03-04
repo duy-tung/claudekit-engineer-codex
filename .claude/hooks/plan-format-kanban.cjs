@@ -55,8 +55,9 @@ process.stdin.on('end', () => {
       const lines = (toolOutput || '').split('\n');
       const editingTableStatus = lines.some(line => {
         // Must be a table row containing a phase ID AND a status keyword
+        // Covers all values the shared normalizeStatus() recognizes
         return /^\|\s*\d+[a-z]?\s*\|/i.test(line) &&
-               /\|\s*(Pending|In Progress|Completed|In-Progress)\s*\|/i.test(line);
+               /\|\s*(Pending|In Progress|In-Progress|Completed|Complete|Done|Active|WIP)\s*\|/i.test(line);
       });
 
       // Only warn if editing a plan.md file's phases table
