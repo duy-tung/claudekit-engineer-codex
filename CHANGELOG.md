@@ -1,3 +1,27 @@
+## [2.14.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.7...v2.14.0-beta.8) (2026-03-04)
+
+
+### 🚀 Features
+
+* **skills:** add CLI-first plan creation and status sync references ([0f78a03](https://github.com/claudekit/claudekit-engineer/commit/0f78a03f8311e8bc1289fed6dd26366e8bd7fd15))
+
+
+### 🐞 Bug Fixes
+
+* consolidate plan-table-parser into shared module with 7-format support ([#523](https://github.com/claudekit/claudekit-engineer/issues/523), [#528](https://github.com/claudekit/claudekit-engineer/issues/528)) ([1f694d1](https://github.com/claudekit/claudekit-engineer/commit/1f694d1fc01fb486b98bdf149891a2310103249a))
+* escape HTML in plan navigator, add null guard and acronym handling to parser ([bbb9484](https://github.com/claudekit/claudekit-engineer/commit/bbb948479b50b0a132fbe8b2f69f47a2415a1884))
+* **parser:** address all review findings for parity, security, and test quality ([45dbf9a](https://github.com/claudekit/claudekit-engineer/commit/45dbf9a67bd0d58e455b1e30fbc3998e2e534b91))
+
+
+### 📚 Documentation
+
+* **skills:** add CLI-first status update section to progress-tracking ([b6f3400](https://github.com/claudekit/claudekit-engineer/commit/b6f34004917b993b7d23d085151c7e2eff8bc0f9))
+
+
+### ♻️ Code Refactoring
+
+* **parser:** DRY normalizeStatus via shared module import ([99e4b99](https://github.com/claudekit/claudekit-engineer/commit/99e4b994c84273db02ed83dd63f5d17ffd6f1d67))
+
 ## [2.14.0-beta.7](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.6...v2.14.0-beta.7) (2026-03-04)
 
 
