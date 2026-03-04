@@ -13,6 +13,9 @@ function normalizeStatus(raw) {
   return 'pending';
 }
 
+/** Known acronyms that should be fully uppercased in phase titles */
+const ACRONYMS = new Set(['api', 'ui', 'ux', 'cli', 'ci', 'cd', 'db', 'sql', 'css', 'html', 'sdk']);
+
 /** Converts phase filename to title only if it matches phase-NNx-*.md pattern */
 function filenameToTitle(name) {
   if (!/^phase-\d+[a-z]?-.*\.md$/i.test(name)) return name;
@@ -20,13 +23,17 @@ function filenameToTitle(name) {
     .replace(/^phase-\d+[a-z]?-/i, '')
     .replace(/\.md$/i, '')
     .replace(/-/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
+    .replace(/\b\w+/g, (word) =>
+      ACRONYMS.has(word.toLowerCase())
+        ? word.toUpperCase()
+        : word.charAt(0).toUpperCase() + word.slice(1)
+    );
 }
 
 /** Build a phase object from extracted parts */
 function makePhase(phaseIdStr, letterStr, name, statusRaw, filePath, linkText, dir, options) {
   const phaseNum = parseInt(phaseIdStr, 10);
-  const phaseId = `${phaseNum}${letterStr || ''}`;
+  const phaseId = `${phaseNum}${(letterStr || '').toLowerCase()}`;
   const resolvedFile = filePath ? path.resolve(dir, filePath) : null;
   const obj = {
     phase: phaseNum,
@@ -67,7 +74,7 @@ function parseFormat0(content, dir, options) {
     let j = i + 2;
     while (j < lines.length && lines[j].trim().startsWith('|')) {
       const cols = lines[j].split('|').map(c => c.trim()).filter((_, k) => k > 0);
-      cols.pop();
+      if (cols.length > 0 && cols[cols.length - 1] === '') cols.pop();
       const phaseRaw = phaseCol >= 0 ? (cols[phaseCol] || '') : '';
       const nameRaw = nameCol >= 0 ? (cols[nameCol] || '') : '';
       const statusRaw = statusCol >= 0 ? (cols[statusCol] || '') : 'pending';
@@ -99,6 +106,7 @@ function parseFormat0(content, dir, options) {
 
 /** Core parser — tries Format 0 first, then fallbacks */
 function parsePlanPhases(content, dir, options = {}) {
+  if (!content) return [];
   options = { generateAnchors: false, slugify: null, ...options };
 
   // Format 0: header-aware table (highest priority)

@@ -7,6 +7,12 @@ const fs = require('fs');
 const path = require('path');
 const { parsePlanPhases, normalizeStatus, filenameToTitle } = require('../../../_shared/lib/plan-table-parser.cjs');
 
+/** Escape HTML special characters to prevent XSS */
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 /** Generate a slug from text for anchor IDs */
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -87,7 +93,7 @@ function getNavigationContext(filePath) {
 
 /** Get status badge HTML for a phase group */
 function getGroupBadge(phases) {
-  const completed = phases.filter(p => p.status === 'completed' || p.status === 'done').length;
+  const completed = phases.filter(p => p.status === 'completed').length;
   const inProgress = phases.filter(p => p.status === 'in-progress').length;
   if (completed === phases.length) return '<span class="phase-badge badge-done">&#10003;</span>';
   if (inProgress > 0) return '<span class="phase-badge badge-progress">&#9679;</span>';
@@ -106,7 +112,7 @@ function renderPhaseItem(phase, index, currentIndex, normalizedCurrentPath) {
     return `<li class="phase-item unavailable" data-status="${statusClass}" title="Phase planned but not yet implemented">
       <span class="phase-link-disabled">
         <span class="status-dot ${statusClass}"></span>
-        <span class="phase-name">${phase.name}</span>
+        <span class="phase-name">${escapeHtml(phase.name)}</span>
         <span class="unavailable-badge">Planned</span>
       </span></li>`;
   }
@@ -123,7 +129,7 @@ function renderPhaseItem(phase, index, currentIndex, normalizedCurrentPath) {
     : `<svg class="phase-type-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V4.664a.25.25 0 00-.073-.177l-2.914-2.914a.25.25 0 00-.177-.073H3.75zM2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0112.25 16h-8.5A1.75 1.75 0 012 14.25V1.75z"/></svg>`;
 
   return `<li class="phase-item ${isActive ? 'active' : ''} ${inlineSectionClass}" data-status="${statusClass}" ${dataAnchor}>
-    <a href="${href}">${typeIcon}<span class="status-dot ${statusClass}"></span><span class="phase-name">${phase.name}</span></a></li>`;
+    <a href="${href}">${typeIcon}<span class="status-dot ${statusClass}"></span><span class="phase-name">${escapeHtml(phase.name)}</span></a></li>`;
 }
 
 /** Generate navigation sidebar HTML */
@@ -138,7 +144,7 @@ function generateNavSidebar(filePath) {
   if (allPhases.length <= 15) {
     const items = allPhases.map((phase, index) => renderPhaseItem(phase, index, currentIndex, normalizedCurrentPath)).join('');
     return `<nav class="plan-nav" id="plan-nav">
-      <div class="plan-title"><span class="plan-icon">&#128214;</span><span>${planName}</span></div>
+      <div class="plan-title"><span class="plan-icon">&#128214;</span><span>${escapeHtml(planName)}</span></div>
       <ul class="phase-list">${items}</ul></nav>`;
   }
 
@@ -161,13 +167,13 @@ function generateNavSidebar(filePath) {
     const items = group.phases.map(({ phase, index }) => renderPhaseItem(phase, index, currentIndex, normalizedCurrentPath)).join('');
     return `<div class="phase-group" data-phase-id="${groupId}">
       <button class="phase-header" tabindex="0" aria-expanded="true" aria-controls="${groupId}-items">
-        <span class="phase-chevron">&#9660;</span><span class="phase-name">${groupLabel}</span>${badge}
+        <span class="phase-chevron">&#9660;</span><span class="phase-name">${escapeHtml(groupLabel)}</span>${badge}
       </button>
       <ul class="phase-items" id="${groupId}-items">${items}</ul></div>`;
   }).join('');
 
   return `<nav class="plan-nav" id="plan-nav">
-    <div class="plan-title"><span class="plan-icon">&#128214;</span><span>${planName}</span></div>
+    <div class="plan-title"><span class="plan-icon">&#128214;</span><span>${escapeHtml(planName)}</span></div>
     ${groupsHtml}</nav>`;
 }
 
@@ -180,13 +186,13 @@ function generateNavFooter(filePath) {
   const nextExists = next && fs.existsSync(next.file);
 
   const prevHtml = prev ? (prevExists
-    ? `<a href="/view?file=${encodeURIComponent(prev.file)}" class="nav-prev"><span class="nav-arrow">&larr;</span><span class="nav-label">${prev.name}</span></a>`
-    : `<span class="nav-prev nav-unavailable" title="Phase planned but not yet implemented"><span class="nav-arrow">&larr;</span><span class="nav-label">${prev.name}</span><span class="nav-badge">Planned</span></span>`)
+    ? `<a href="/view?file=${encodeURIComponent(prev.file)}" class="nav-prev"><span class="nav-arrow">&larr;</span><span class="nav-label">${escapeHtml(prev.name)}</span></a>`
+    : `<span class="nav-prev nav-unavailable" title="Phase planned but not yet implemented"><span class="nav-arrow">&larr;</span><span class="nav-label">${escapeHtml(prev.name)}</span><span class="nav-badge">Planned</span></span>`)
     : '<span></span>';
 
   const nextHtml = next ? (nextExists
-    ? `<a href="/view?file=${encodeURIComponent(next.file)}" class="nav-next"><span class="nav-label">${next.name}</span><span class="nav-arrow">&rarr;</span></a>`
-    : `<span class="nav-next nav-unavailable" title="Phase planned but not yet implemented"><span class="nav-label">${next.name}</span><span class="nav-badge">Planned</span><span class="nav-arrow">&rarr;</span></span>`)
+    ? `<a href="/view?file=${encodeURIComponent(next.file)}" class="nav-next"><span class="nav-label">${escapeHtml(next.name)}</span><span class="nav-arrow">&rarr;</span></a>`
+    : `<span class="nav-next nav-unavailable" title="Phase planned but not yet implemented"><span class="nav-label">${escapeHtml(next.name)}</span><span class="nav-badge">Planned</span><span class="nav-arrow">&rarr;</span></span>`)
     : '<span></span>';
 
   return `<footer class="nav-footer">${prevHtml}${nextHtml}</footer>`;
