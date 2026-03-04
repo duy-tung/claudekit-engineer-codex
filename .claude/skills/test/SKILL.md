@@ -98,6 +98,7 @@ Reports        → report-format.md
 - Never ignore failing tests to pass the build
 
 ## Report Output
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
 
 Use naming pattern from `## Naming` section injected by hooks.
 

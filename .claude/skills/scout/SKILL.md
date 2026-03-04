@@ -67,6 +67,8 @@ Load appropriate reference based on decision tree:
 - Each subagent must return a detailed summary report to a main agent
 
 ### 5. Collect Results
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
+
 - Timeout: 3 minutes per agent (skip non-responders)
 - `TaskUpdate` completed tasks; log timed-out agents in report (skip if Task tools unavailable)
 - Aggregate findings into single report

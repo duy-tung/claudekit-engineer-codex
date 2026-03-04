@@ -11,6 +11,8 @@ metadata:
 
 Analyze codebase and manage project documentation through scouting, analysis, and structured doc generation.
 
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
+
 ## Default (No Arguments)
 
 If invoked without arguments, use `AskUserQuestion` to present available documentation operations:

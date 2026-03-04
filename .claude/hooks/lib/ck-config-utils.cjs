@@ -71,7 +71,8 @@ const DEFAULT_CONFIG = {
     'privacy-block': true,
     'post-edit-simplify-reminder': true,
     'task-completed-handler': true,
-    'teammate-idle-handler': true
+    'teammate-idle-handler': true,
+    'session-state': true
   }
 };
 

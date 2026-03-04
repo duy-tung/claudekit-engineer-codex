@@ -285,9 +285,12 @@ function buildContextSection(sessionId) {
 
     // Warning if high usage
     if (data.percent >= CRITICAL_THRESHOLD) {
-      lines.push(`- **CRITICAL:** Context nearly full - consider compaction or being concise, update current phase's status before the compaction.`);
+      lines.push(`- **CRITICAL:** Context nearly full. Before compaction hits:`);
+      lines.push(`  1. Update TodoWrite with current progress (completed + remaining)`);
+      lines.push(`  2. Be extremely concise — no verbose explanations`);
+      lines.push(`  3. Session state will auto-restore after compaction`);
     } else if (data.percent >= WARN_THRESHOLD) {
-      lines.push(`- **WARNING:** Context usage moderate - being concise and optimize token efficiency.`);
+      lines.push(`- **WARNING:** Context usage moderate - be concise, optimize token efficiency, keep tool outputs short.`);
     }
 
     lines.push(``);

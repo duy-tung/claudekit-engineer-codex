@@ -292,6 +292,9 @@ node $SKILL_DIR/.claude/chrome-devtools/tmp/login-test.js
 ## Screenshots
 
 Skills can exist in **project-scope** or **user-scope**. Priority: project-scope > user-scope.
+
+**IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
+
 Store screenshots for analysis in `<project>/.claude/chrome-devtools/screenshots/`:
 
 ```bash

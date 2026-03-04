@@ -358,20 +358,48 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 **Testing**:
 - Validates: blocked/allowed patterns, error handling, edge cases, JSON validation
 
+**5. Session-State Hook** (`session-state.cjs`)
+
+- **Trigger**: SessionStart (on startup and context compaction), Stop (persist), SubagentStop (append)
+- **Purpose**: Persist and restore session progress across sessions and context compactions
+- **Functionality**:
+  - **SessionStart (Startup)**: Loads previous session state from `.claude/session-state/latest.md` and displays it for context recovery
+  - **SessionStart (Post-Compaction)**: Restores last saved state after context compaction with special guidance to resume without re-doing completed work
+  - **Stop**: Finalizes and archives current session state (keeps last 5 archives)
+  - **SubagentStop**: Appends subagent completion results to ongoing session state
+  - Extracts todos from transcript, branch info, active plan, and modified files
+  - Structured markdown output with completed/pending tasks separation
+  - Auto-expiry: States older than 7 days are not loaded
+  - Atomic writes: Safe concurrent access with temp-file-then-rename pattern
+  - Storage: Project-level (`.claude/session-state/`) with global fallback for non-CK projects
+
+**Storage & Archival**:
+
+- Primary: `.claude/session-state/latest.md` (current session state)
+- Archive: `.claude/session-state/archive/` (timestamped backups with rotation)
+- Archive Format: `YYYYMMDD-HHMM.md` timestamps
+- Rotation: Keeps 5 most recent archives, auto-deletes older ones
+- Fallback: `~/.claude/session-states/{hash}/` for non-CK projects (path-based hash)
+
 **Hook Configuration** (`.claude/settings.json`):
 ```json
 {
   "hooks": {
-    "SubagentStart": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "node ${CLAUDE_PROJECT_DIR}/.claude/hooks/subagent-init.cjs"
-      }]
+    "SessionStart": [{
+      "matcher": "startup|resume|clear|compact",
+      "hooks": [
+        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+      ]
     }],
-    "BeforeBash": [{
-      "type": "command",
-      "command": "node ${CLAUDE_PROJECT_DIR}/.claude/hooks/scout-block.js"
+    "SubagentStop": [{
+      "hooks": [
+        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+      ]
+    }],
+    "Stop": [{
+      "hooks": [
+        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+      ]
     }]
   }
 }
@@ -384,6 +412,7 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - Context Cascade: Environment variables flow from session to agents
 - Smart Dedup: Prevent redundant context injection
 - Comprehensive Testing: Cross-platform test coverage
+- Session Continuity: Enables context preservation across session boundaries
 
 #### 6.2 MCP (Model Context Protocol) Integration
 
