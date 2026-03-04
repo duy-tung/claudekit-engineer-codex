@@ -86,12 +86,18 @@
     "skills/debugging/**",
     "skills/frontend-design-pro/**",
     "skills/planning/**",
-    "skills/agent-teams/**"
+    "skills/agent-teams/**",
+    "statusline.sh",
+    "statusline.ps1",
+    "hooks/notifications/discord_notify.sh",
+    "hooks/notifications/telegram_notify.sh",
+    "hooks/notifications/send-discord.sh",
+    "scripts/fix-shebang-permissions.sh"
   ],
-  "version": "2.14.0-beta.4",
+  "version": "2.14.0-beta.5",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-03-02T18:07:29.369Z",
+  "buildDate": "2026-03-03T07:21:12.096Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"
