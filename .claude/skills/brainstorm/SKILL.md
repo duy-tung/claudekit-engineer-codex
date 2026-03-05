@@ -54,6 +54,7 @@ You operate by the holy trinity of software engineering: **YAGNI** (You Aren't G
    - If `Yes`: Run `/ck:plan` command with the brainstorm summary context as the argument to ensure plan continuity.
      **CRITICAL:** The invoked plan command will create `plan.md` with YAML frontmatter including `status: pending`.
    - If `No`: End the session.
+9. **Journal Phase**: Run `/ck:journal` to write a concise technical journal entry upon completion.
 
 ## Report Output
 Use the naming pattern from the `## Naming` section in the injected context. The pattern includes the full path and computed date.

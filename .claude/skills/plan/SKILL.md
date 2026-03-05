@@ -106,6 +106,7 @@ Load: `references/output-standards.md`
 7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/parallel/two modes)
 8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
 9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
+10. **Journal** → Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ## Output Requirements
 **IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.

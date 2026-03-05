@@ -98,6 +98,7 @@ IMMEDIATELY execute in order:
 9. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
 10. **REPORT**: Tell user `Research complete. Summary: {path}. N reports generated.`
+11. **JOURNAL**: Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ---
 
@@ -142,6 +143,7 @@ IMMEDIATELY execute in order:
 8. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
 9. **REPORT**: Tell user what was cooked, test results, docs impact.
+10. **JOURNAL**: Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ---
 
@@ -180,6 +182,7 @@ IMMEDIATELY execute in order:
 8. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
 9. **REPORT**: Tell user `Review complete. {X} findings ({Y} critical). Report: {path}.`
+10. **JOURNAL**: Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ---
 
@@ -218,15 +221,7 @@ IMMEDIATELY execute in order:
 9. **CLEANUP**: `TeamDelete` (no parameters — just call it)
 
 10. **REPORT**: Tell user `Debug complete. Root cause: <summary>. Report: {path}.`
-
----
-
-## Agent Memory
-
-Agents with `memory: project` retain learnings across team sessions. Memory persists in `.claude/agent-memory/<name>/` (gitignored). Useful for:
-- Code reviewer remembering project conventions
-- Debugger recalling past failure patterns
-- Tester tracking flaky tests and coverage gaps
+11. **JOURNAL**: Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ---
 
