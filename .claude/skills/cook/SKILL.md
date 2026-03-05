@@ -88,6 +88,7 @@ Human review required at these checkpoints (skipped with `--auto`):
   2. `docs-manager` subagent → update `./docs` if changes warrant
   3. `TaskUpdate` → mark all Claude Tasks complete after sync-back verification (skip if Task tools unavailable)
   4. Ask user if they want to commit via `git-manager` subagent
+  5. Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ## Required Subagents (MANDATORY)
 

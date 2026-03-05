@@ -69,6 +69,7 @@ Classify before routing. See `references/complexity-assessment.md`.
 2. `docs-manager` subagent → update `./docs` if changes warrant (NON-OPTIONAL)
 3. `TaskUpdate` → mark ALL Claude Tasks `completed` (skip if Task tools unavailable)
 4. Ask user if they want to commit via `git-manager` subagent
+5. Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ---
 
