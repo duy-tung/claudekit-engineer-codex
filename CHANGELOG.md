@@ -1,3 +1,15 @@
+## [2.14.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.8...v2.14.0-beta.9) (2026-03-05)
+
+
+### 🚀 Features
+
+* **hooks:** inject ck plan CLI commands into plan-aware subagents ([#540](https://github.com/claudekit/claudekit-engineer/issues/540)) ([584e607](https://github.com/claudekit/claudekit-engineer/commit/584e6072d9f99075506c70c5fd8327b61de7449d))
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** add fullstack-developer to plan-aware agents ([#540](https://github.com/claudekit/claudekit-engineer/issues/540)) ([9a5faeb](https://github.com/claudekit/claudekit-engineer/commit/9a5faeb0fb8568051559b6c183463a975d583e25))
+
 ## [2.14.0-beta.8](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.7...v2.14.0-beta.8) (2026-03-04)
 
 
