@@ -41,6 +41,26 @@ function getAgentContext(agentType, config) {
   return agentConfig.contextPrefix;
 }
 
+// Agent types that interact with plan status updates or save plan-scoped reports
+const PLAN_AWARE_AGENTS = new Set([
+  'planner', 'project-manager', 'code-simplifier',
+  'brainstormer', 'code-reviewer', 'fullstack-developer'
+]);
+
+/**
+ * Build ck plan CLI reference for plan-aware agents (~50 tokens)
+ * Provides deterministic plan status commands instead of manual markdown editing
+ */
+function buildPlanCliSection(agentType) {
+  if (!PLAN_AWARE_AGENTS.has(agentType)) return [];
+  return [
+    ``,
+    `## Plan CLI (deterministic updates)`,
+    `\`ck plan check <id>\` = completed | \`ck plan check <id> --start\` = in-progress | \`ck plan uncheck <id>\` = revert`,
+    `Fallback: if \`ck\` unavailable, edit plan.md Status column directly.`
+  ];
+}
+
 /**
  * Build trust verification section if enabled
  */
@@ -160,6 +180,9 @@ async function main() {
     lines.push(`## Naming`);
     lines.push(`- Report: ${path.join(reportsPath, `${agentType}-${namePattern}.md`)}`);
     lines.push(`- Plan dir: ${path.join(plansPath, namePattern)}/`);
+
+    // Plan CLI commands for plan-aware agents (Issue #540)
+    lines.push(...buildPlanCliSection(agentType));
 
     // Trust verification (if enabled)
     lines.push(...buildTrustVerification(config));
