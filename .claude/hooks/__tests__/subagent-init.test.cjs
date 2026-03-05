@@ -138,7 +138,7 @@ describe('subagent-init.cjs', () => {
   describe('Issue #540: ck plan CLI injection for plan-aware agents', () => {
 
     it('injects ck plan CLI section for plan-aware agent types', async () => {
-      const planAwareTypes = ['planner', 'project-manager', 'code-simplifier', 'brainstormer', 'code-reviewer'];
+      const planAwareTypes = ['planner', 'project-manager', 'code-simplifier', 'brainstormer', 'code-reviewer', 'fullstack-developer'];
 
       for (const agentType of planAwareTypes) {
         const result = await runHook({

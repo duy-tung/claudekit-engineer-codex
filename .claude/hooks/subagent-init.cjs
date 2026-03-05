@@ -44,7 +44,7 @@ function getAgentContext(agentType, config) {
 // Agent types that interact with plan status updates or save plan-scoped reports
 const PLAN_AWARE_AGENTS = new Set([
   'planner', 'project-manager', 'code-simplifier',
-  'brainstormer', 'code-reviewer'
+  'brainstormer', 'code-reviewer', 'fullstack-developer'
 ]);
 
 /**
