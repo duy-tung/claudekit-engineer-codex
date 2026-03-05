@@ -1,3 +1,10 @@
+## [2.14.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.9...v2.14.0-beta.10) (2026-03-05)
+
+
+### 🚀 Features
+
+* **skills:** add journal step to brainstorm, bootstrap, cook, fix, plan, team skills ([79a9c48](https://github.com/claudekit/claudekit-engineer/commit/79a9c483efae2002b97eeb217528430b6e24baae))
+
 ## [2.14.0-beta.9](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.8...v2.14.0-beta.9) (2026-03-05)
 
 
