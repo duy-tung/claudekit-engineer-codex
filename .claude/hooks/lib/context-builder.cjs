@@ -265,8 +265,11 @@ function formatUsagePercent(value, label) {
  * @returns {string[]} Lines for context section
  */
 function buildContextSection(sessionId) {
+  // TEMPORARILY DISABLED
+  return [];
   if (!sessionId) return [];
 
+  // RE-ENABLED IF NEEDED IN THE FUTURE
   try {
     const contextPath = path.join(os.tmpdir(), `ck-context-${sessionId}.json`);
     if (!fs.existsSync(contextPath)) return [];
@@ -305,6 +308,10 @@ function buildContextSection(sessionId) {
  * @returns {string[]} Lines for usage section
  */
 function buildUsageSection() {
+  // TEMPORARILY DISABLED
+  return [];
+
+  // RE-ENABLED IF NEEDED IN THE FUTURE
   const usage = readUsageCache();
   if (!usage) return [];
 
