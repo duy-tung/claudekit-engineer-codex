@@ -1,3 +1,10 @@
+## [2.14.0-beta.11](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.10...v2.14.0-beta.11) (2026-03-06)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** disable context and usage sections in reminder injection ([bc29fe7](https://github.com/claudekit/claudekit-engineer/commit/bc29fe797edc88353bc9ffc5921a29501c3cc0a8))
+
 ## [2.14.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.9...v2.14.0-beta.10) (2026-03-05)
 
 
