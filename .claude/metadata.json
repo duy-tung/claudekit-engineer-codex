@@ -92,6 +92,10 @@
     "hooks/notifications/discord_notify.sh",
     "hooks/notifications/telegram_notify.sh",
     "hooks/notifications/send-discord.sh",
+    "hooks/scout-block.sh",
+    "hooks/scout-block.ps1",
+    "hooks/scout-block.js",
+    "hooks/tests/test-scout-block.js",
     "scripts/fix-shebang-permissions.sh"
   ],
   "version": "2.14.0-beta.12",
