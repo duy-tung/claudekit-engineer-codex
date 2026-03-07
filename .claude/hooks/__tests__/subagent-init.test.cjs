@@ -148,9 +148,19 @@ describe('subagent-init.cjs', () => {
         });
 
         const context = result.output?.hookSpecificOutput?.additionalContext || '';
+
+        // Exact subcommand syntax per CLI registry
         assert.ok(
           context.includes('ck plan check'),
-          `Agent type '${agentType}' should receive ck plan CLI commands`
+          `Agent type '${agentType}' should receive 'ck plan check' command`
+        );
+        assert.ok(
+          context.includes('ck plan check') && context.includes('--start'),
+          `Agent type '${agentType}' should receive 'ck plan check <id> --start' for in-progress`
+        );
+        assert.ok(
+          context.includes('ck plan uncheck'),
+          `Agent type '${agentType}' should receive 'ck plan uncheck' command`
         );
         assert.ok(
           context.includes('Fallback'),
