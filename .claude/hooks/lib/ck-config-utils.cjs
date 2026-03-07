@@ -606,8 +606,10 @@ function getReportsPath(planPath, resolvedBy, planConfig, pathsConfig, baseDir =
   }
 
   // Return absolute path if baseDir provided
+  // Guard: if reportPath is already absolute (Issue #335 made planPath absolute),
+  // don't double-join with baseDir — path.join concatenates, not resolves
   if (baseDir) {
-    return path.join(baseDir, reportPath);
+    return path.isAbsolute(reportPath) ? reportPath : path.join(baseDir, reportPath);
   }
   return reportPath + '/';
 }
