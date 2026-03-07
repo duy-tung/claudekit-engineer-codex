@@ -1,3 +1,15 @@
+## [2.14.0-beta.13](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.12...v2.14.0-beta.13) (2026-03-07)
+
+
+### 🐞 Bug Fixes
+
+* add deprecated shell hooks to metadata.json deletions ([bad5ab2](https://github.com/claudekit/claudekit-engineer/commit/bad5ab2b58fe08af98b09d83174243eec61ab943)), closes [#548](https://github.com/claudekit/claudekit-engineer/issues/548)
+
+
+### ✅ Tests
+
+* add plan-format-kanban hook tests and strengthen subagent-init assertions ([a35637c](https://github.com/claudekit/claudekit-engineer/commit/a35637c09d05c8744b96f63f7a648ff3e8e9634c))
+
 ## [2.14.0-beta.12](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.11...v2.14.0-beta.12) (2026-03-07)
 
 
