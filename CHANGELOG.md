@@ -1,3 +1,10 @@
+## [2.14.0-beta.12](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.11...v2.14.0-beta.12) (2026-03-07)
+
+
+### 🐞 Bug Fixes
+
+* prevent doubled report path when planPath is absolute ([c6a94fb](https://github.com/claudekit/claudekit-engineer/commit/c6a94fb475b6f1f4b89a774fe76dbf007076a562)), closes [#335](https://github.com/claudekit/claudekit-engineer/issues/335)
+
 ## [2.14.0-beta.11](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.10...v2.14.0-beta.11) (2026-03-06)
 
 
