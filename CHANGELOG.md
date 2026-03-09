@@ -1,3 +1,29 @@
+## [2.14.0-beta.13](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.12...v2.14.0-beta.13) (2026-03-07)
+
+
+### 🐞 Bug Fixes
+
+* add deprecated shell hooks to metadata.json deletions ([bad5ab2](https://github.com/claudekit/claudekit-engineer/commit/bad5ab2b58fe08af98b09d83174243eec61ab943)), closes [#548](https://github.com/claudekit/claudekit-engineer/issues/548)
+
+
+### ✅ Tests
+
+* add plan-format-kanban hook tests and strengthen subagent-init assertions ([a35637c](https://github.com/claudekit/claudekit-engineer/commit/a35637c09d05c8744b96f63f7a648ff3e8e9634c))
+
+## [2.14.0-beta.12](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.11...v2.14.0-beta.12) (2026-03-07)
+
+
+### 🐞 Bug Fixes
+
+* prevent doubled report path when planPath is absolute ([c6a94fb](https://github.com/claudekit/claudekit-engineer/commit/c6a94fb475b6f1f4b89a774fe76dbf007076a562)), closes [#335](https://github.com/claudekit/claudekit-engineer/issues/335)
+
+## [2.14.0-beta.11](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.10...v2.14.0-beta.11) (2026-03-06)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** disable context and usage sections in reminder injection ([bc29fe7](https://github.com/claudekit/claudekit-engineer/commit/bc29fe797edc88353bc9ffc5921a29501c3cc0a8))
+
 ## [2.14.0-beta.10](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.9...v2.14.0-beta.10) (2026-03-05)
 
 

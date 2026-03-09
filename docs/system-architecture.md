@@ -342,10 +342,8 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - **Trigger**: Before bash/command execution
 - **Purpose**: Block access to heavy directories for performance
 - **Architecture**:
-  - Node.js dispatcher with platform-specific implementations
-  - Windows: PowerShell implementation (`scout-block.ps1`)
-  - Unix (Linux/macOS/WSL): Bash implementation (`scout-block.sh`)
-  - Platform Detection: Automatic via `process.platform`
+  - Pure Node.js implementation (`scout-block.cjs`) — cross-platform
+  - Modular internals in `scout-block/` directory (pattern-matcher, path-extractor, error-formatter, broad-pattern-detector)
   - Zero-config setup
 
 **Functionality**:

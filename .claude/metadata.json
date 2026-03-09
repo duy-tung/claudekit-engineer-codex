@@ -92,12 +92,16 @@
     "hooks/notifications/discord_notify.sh",
     "hooks/notifications/telegram_notify.sh",
     "hooks/notifications/send-discord.sh",
+    "hooks/scout-block.sh",
+    "hooks/scout-block.ps1",
+    "hooks/scout-block.js",
+    "hooks/tests/test-scout-block.js",
     "scripts/fix-shebang-permissions.sh"
   ],
-  "version": "2.14.0-beta.10",
+  "version": "2.14.0-beta.13",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-03-05T09:08:44.672Z",
+  "buildDate": "2026-03-07T03:10:55.218Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"

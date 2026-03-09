@@ -139,10 +139,8 @@ claudekit-engineer/
 
 4. **scout-block.cjs** - Cross-Platform Performance Optimization
    - Blocks access to heavy directories (node_modules, .git, __pycache__, dist/, build/)
-   - Node.js dispatcher with platform-specific implementations
-   - Unix (Bash): scout-block.sh
-   - Windows (PowerShell): scout-block.ps1
-   - Automatic platform detection via `process.platform`
+   - Pure Node.js implementation (`scout-block.cjs`) — cross-platform
+   - Modular internals: `scout-block/` (pattern-matcher, path-extractor, error-formatter, broad-pattern-detector)
    - Improves AI response time and token efficiency
 
 5. **session-state.cjs** - Session State Persistence
