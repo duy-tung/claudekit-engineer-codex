@@ -1,16 +1,16 @@
 ---
 name: ckm:design
-description: "Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Google Ads."
+description: "Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro), social photos (HTML→screenshot, multi-platform). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, create social photos, social media images, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Pinterest, TikTok, Threads, Google Ads."
 argument-hint: "[design-type] [context]"
 license: MIT
 metadata:
   author: claudekit
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Design
 
-Unified design skill: brand, tokens, UI, logo generation, CIP mockups, presentations, banners.
+Unified design skill: brand, tokens, UI, logo, CIP, slides, banners, social photos, icons.
 
 ## When to Use
 
@@ -21,6 +21,7 @@ Unified design skill: brand, tokens, UI, logo generation, CIP mockups, presentat
 - Corporate identity program (CIP) deliverables
 - Presentations and pitch decks
 - Banner design for social media, ads, web, print
+- Social photos for Instagram, Facebook, LinkedIn, Twitter, Pinterest, TikTok
 
 ## Sub-skill Routing
 
@@ -33,6 +34,7 @@ Unified design skill: brand, tokens, UI, logo generation, CIP mockups, presentat
 | CIP mockups, deliverables | CIP (built-in) | `references/cip-design.md` |
 | Presentations, pitch decks | Slides (built-in) | `references/slides.md` |
 | Banners, covers, headers | Banner (built-in) | `references/banner-sizes-and-styles.md` |
+| Social media images/photos | Social Photos (built-in) | `references/social-photos-design.md` |
 | SVG icons, icon sets | Icon (built-in) | `references/icon-design.md` |
 
 ## Logo Design (Built-in)
@@ -212,6 +214,32 @@ python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "user profile"
 
 **Model:** `gemini-3.1-pro-preview` — text-only output (SVG is XML text). No image generation API needed.
 
+## Social Photos (Built-in)
+
+Multi-platform social image design: HTML/CSS → screenshot export. Uses `ui-ux-pro-max`, `brand`, `design-system`, `chrome-devtools` skills.
+
+Load `references/social-photos-design.md` for sizes, templates, best practices.
+
+### Social Photos: Workflow
+
+1. **Orchestrate** — `project-management` skill for TODO tasks; parallel subagents for independent work
+2. **Analyze** — Parse prompt: subject, platforms, style, brand context, content elements
+3. **Ideate** — 3-5 concepts, present via `AskUserQuestion`
+4. **Design** — `/ckm:brand` → `/ckm:design-system` → randomly invoke `/ck:ui-ux-pro-max` OR `/ck:frontend-design`; HTML per idea × size
+5. **Export** — `chrome-devtools` or Playwright screenshot at exact px (2x deviceScaleFactor)
+6. **Verify** — Use Chrome MCP or `chrome-devtools` skill to visually inspect exported designs; fix layout/styling issues and re-export
+7. **Report** — Summary to `plans/reports/` with design decisions
+8. **Organize** — Invoke `assets-organizing` skill to sort output files and reports
+
+### Social Photos: Key Sizes
+
+| Platform | Size (px) | Platform | Size (px) |
+|----------|-----------|----------|-----------|
+| IG Post | 1080×1080 | FB Post | 1200×630 |
+| IG Story | 1080×1920 | X Post | 1200×675 |
+| IG Carousel | 1080×1350 | LinkedIn | 1200×627 |
+| YT Thumb | 1280×720 | Pinterest | 1000×1500 |
+
 ## Workflows
 
 ### Complete Brand Package
@@ -245,6 +273,7 @@ python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "user profile"
 | Slides Copy | `references/slides-copywriting-formulas.md` |
 | Slides Strategy | `references/slides-strategies.md` |
 | Banner Sizes & Styles | `references/banner-sizes-and-styles.md` |
+| Social Photos Guide | `references/social-photos-design.md` |
 | Icon Design Guide | `references/icon-design.md` |
 
 ## Scripts
@@ -270,5 +299,4 @@ pip install google-genai pillow
 ## Integration
 
 **External sub-skills:** brand, design-system, ui-styling
-
-**Related Skills:** frontend-design, ui-ux-pro-max, ai-multimodal
+**Related Skills:** frontend-design, ui-ux-pro-max, ai-multimodal, chrome-devtools
