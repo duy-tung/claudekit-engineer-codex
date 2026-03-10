@@ -1,8 +1,9 @@
 ---
 name: ck:ai-artist
 description: "Generate images via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent."
-version: 3.1.0
-license: MIT
+metadata:
+  author: claudekit
+  version: 3.1.0
 argument-hint: "[concept] [--mode search|creative|wild|all] [--skip]"
 ---
 
