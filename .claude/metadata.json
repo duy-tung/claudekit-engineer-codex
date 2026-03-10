@@ -96,6 +96,11 @@
     "hooks/scout-block.ps1",
     "hooks/scout-block.js",
     "hooks/tests/test-scout-block.js",
+    "hooks/session-end.cjs",
+    "hooks/write-compact-marker.cjs",
+    "hooks/lib/ck-paths.cjs",
+    "hooks/lib/context-tracker.cjs",
+    "hooks/tests/test-context-tracker.cjs",
     "scripts/fix-shebang-permissions.sh"
   ],
   "version": "2.14.0-beta.13",
