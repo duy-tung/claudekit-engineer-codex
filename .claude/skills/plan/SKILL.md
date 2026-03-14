@@ -77,6 +77,10 @@ Load: `references/workflow-modes.md` for auto-detection logic, per-mode workflow
 Always honoring **YAGNI**, **KISS**, and **DRY** principles.
 **Be honest, be brutal, straight to the point, and be concise.**
 
+### 0. Scope Challenge
+Load: `references/scope-challenge.md`
+**Skip if:** `--fast` mode or trivial task (single file fix, <20 word description)
+
 ### 1. Research & Analysis
 Load: `references/research-phase.md`
 **Skip if:** Fast mode or provided with researcher reports
@@ -98,6 +102,8 @@ Load: `references/output-standards.md`
 
 1. **Pre-Creation Check** → Check Plan Context for active/suggested/none
 1b. **Cross-Plan Scan** → Scan unfinished plans, detect `blockedBy`/`blocks` relationships, update both plans
+1c. **Scope Challenge** → Run Step 0 scope questions, select mode (see `references/scope-challenge.md`)
+    **Skip if:** `--fast` mode or trivial task
 2. **Mode Detection** → Auto-detect or use explicit flag (see `workflow-modes.md`)
 3. **Research Phase** → Spawn researchers (skip in fast mode)
 4. **Codebase Analysis** → Read docs, scout if needed

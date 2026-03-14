@@ -38,6 +38,7 @@ Verify before implementing. Ask before assuming. Evidence before claims.
 | Requesting review | After tasks, before merge, stuck on problem | `references/requesting-code-review.md` |
 | Verification gates | Before any completion claim, commit, PR | `references/verification-before-completion.md` |
 | Edge case scouting | After implementation, before review | `references/edge-case-scouting.md` |
+| **Checklist review** | Pre-landing, `/ck:ship` pipeline, security audit | `references/checklist-workflow.md` |
 | **Task-managed reviews** | Multi-file features (3+ files), parallel reviewers, fix cycles | `references/task-management-reviews.md` |
 
 ## Quick Decision Tree
@@ -47,6 +48,7 @@ SITUATION?
 │
 ├─ Received feedback → STOP if unclear, verify if external, implement if human partner
 ├─ Completed work → Scout edge cases → Request code-reviewer subagent
+├─ Pre-landing / ship → Load checklists → Two-pass review (critical + informational)
 ├─ Multi-file feature (3+ files) → Create review pipeline tasks (scout→review→fix→verify)
 └─ About to claim status → RUN verification command FIRST
 ```
