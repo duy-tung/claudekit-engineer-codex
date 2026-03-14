@@ -13,6 +13,16 @@ When no flag specified, analyze task and pick mode:
 
 Use `AskUserQuestion` if detection is uncertain.
 
+## Scope Challenge Integration
+
+Step 0 (Scope Challenge, see `scope-challenge.md`) runs before mode detection and can influence it:
+- If user selects **EXPANSION** → auto-suggest `--hard` or `--two`
+- If user selects **REDUCTION** → auto-suggest `--fast`
+- If user selects **HOLD** → proceed with auto-detected mode
+
+Mode can still be overridden by explicit flags (`--fast`, `--hard`, etc.).
+Scope challenge is skipped when `--fast` is explicitly set or task is trivial.
+
 ## Fast Mode (`--fast`)
 
 No research. Analyze → Plan → Hydrate Tasks.
