@@ -20,8 +20,8 @@ const { countConfigs } = require('./hooks/lib/config-counter.cjs');
 const { loadConfig } = require('./hooks/lib/ck-config-utils.cjs');
 const { getGitInfo } = require('./hooks/lib/git-info-cache.cjs');
 
-// Buffer constant matching /context output (22.5% of 200k)
-const AUTOCOMPACT_BUFFER = 45000;
+// Buffer constant for fallback context calculation
+const AUTOCOMPACT_BUFFER = 40000;
 const GRAPHEME_SEGMENTER = (
   typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
 )
@@ -484,19 +484,25 @@ async function main() {
       }
     } catch {}
 
-    // Context window - use current_usage fields with AUTOCOMPACT_BUFFER
+    // Context window - prefer pre-calculated fields, fallback to manual calculation
     const usage = data.context_window?.current_usage || {};
     const contextSize = data.context_window?.context_window_size || 0;
     let contextPercent = 0;
     let totalTokens = 0;
 
-    if (contextSize > 0 && contextSize > AUTOCOMPACT_BUFFER) {
+    if (contextSize > 0) {
       totalTokens = (usage.input_tokens ?? 0) +
                     (usage.cache_creation_input_tokens ?? 0) +
                     (usage.cache_read_input_tokens ?? 0);
 
-      // Add buffer to match /context calculation
-      contextPercent = Math.min(100, Math.round(((totalTokens + AUTOCOMPACT_BUFFER) / contextSize) * 100));
+      // Use pre-calculated percentage from Claude Code (model-agnostic, works for 200K and 1M)
+      const preCalcPercent = data.context_window?.used_percentage;
+      if (typeof preCalcPercent === 'number' && preCalcPercent >= 0) {
+        contextPercent = Math.round(preCalcPercent);
+      } else if (contextSize > AUTOCOMPACT_BUFFER) {
+        // Fallback: manual calculation with buffer
+        contextPercent = Math.min(100, Math.round(((totalTokens + AUTOCOMPACT_BUFFER) / contextSize) * 100));
+      }
     }
 
     // Write context data to temp file for hooks to read
@@ -506,6 +512,7 @@ async function main() {
         const contextDataPath = path.join(os.tmpdir(), `ck-context-${sessionId}.json`);
         fs.writeFileSync(contextDataPath, JSON.stringify({
           percent: contextPercent,
+          remaining: data.context_window?.remaining_percentage ?? (100 - contextPercent),
           tokens: totalTokens,
           size: contextSize,
           usage: usage,
