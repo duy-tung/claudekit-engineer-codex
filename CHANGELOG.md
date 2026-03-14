@@ -1,3 +1,22 @@
+## [2.14.0-beta.14](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.13...v2.14.0-beta.14) (2026-03-10)
+
+
+### 🚀 Features
+
+* **skills:** add consolidated design skill with logo, CIP, slides, banner, icon ([01d0038](https://github.com/claudekit/claudekit-engineer/commit/01d0038009dd91cc1cc1724e9822e49092c503c1))
+
+
+### 🐞 Bug Fixes
+
+* add orphaned hook files to metadata.json deletions ([94a1800](https://github.com/claudekit/claudekit-engineer/commit/94a18006b4969fc4a30da025fa3c89824954bce8)), closes [#550](https://github.com/claudekit/claudekit-engineer/issues/550)
+* **skills:** correct `ai-artist` metadata ([f2ebb11](https://github.com/claudekit/claudekit-engineer/commit/f2ebb113b4c4bbba41e0398e6cda194c0cc4b9af))
+
+
+### ⚡ Performance Improvements
+
+* **skills:** update `design` skill ([369f6dc](https://github.com/claudekit/claudekit-engineer/commit/369f6dc05dc3bc430fc843d54cd073f08f1cf3bb))
+* **skills:** update `ui-ux-pro-max` skill ([81ee183](https://github.com/claudekit/claudekit-engineer/commit/81ee1839c19f32d343f551a6350aa06d5fba5761))
+
 ## [2.14.0-beta.13](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.12...v2.14.0-beta.13) (2026-03-07)
 
 
