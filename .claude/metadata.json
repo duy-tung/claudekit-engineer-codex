@@ -103,10 +103,10 @@
     "hooks/tests/test-context-tracker.cjs",
     "scripts/fix-shebang-permissions.sh"
   ],
-  "version": "2.14.0-beta.15",
+  "version": "2.14.0-beta.16",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-03-14T07:56:38.031Z",
+  "buildDate": "2026-03-14T16:34:02.502Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"

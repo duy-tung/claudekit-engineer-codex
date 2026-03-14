@@ -1,3 +1,10 @@
+## [2.14.0-beta.16](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.15...v2.14.0-beta.16) (2026-03-14)
+
+
+### 🚀 Features
+
+* **skills:** add ship pipeline, review checklists, scope challenge ([99db560](https://github.com/claudekit/claudekit-engineer/commit/99db5609a63ccc5b915923d1dc5dd520853cad96)), closes [#287](https://github.com/claudekit/claudekit-engineer/issues/287) [#250](https://github.com/claudekit/claudekit-engineer/issues/250)
+
 ## [2.14.0-beta.15](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.14...v2.14.0-beta.15) (2026-03-14)
 
 
