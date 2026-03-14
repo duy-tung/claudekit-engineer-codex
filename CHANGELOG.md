@@ -1,3 +1,10 @@
+## [2.14.0-beta.15](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.14...v2.14.0-beta.15) (2026-03-14)
+
+
+### 🐞 Bug Fixes
+
+* use pre-calculated context percentage for model-agnostic window sizing ([cd4f11c](https://github.com/claudekit/claudekit-engineer/commit/cd4f11cd2e0e19c1a00bc7b37789f2b0d1d5c5c4))
+
 ## [2.14.0-beta.14](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.13...v2.14.0-beta.14) (2026-03-10)
 
 
