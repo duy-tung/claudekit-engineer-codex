@@ -8,6 +8,12 @@ Use this template when creating PRs via `gh pr create`.
 ## Summary
 <bullet points — infer from changelog entry or commit messages>
 
+## Linked Issues
+<list issues from Step 2>
+- Closes #XX — <issue title>
+- Relates to #YY — <issue title>
+<or "No linked issues.">
+
 ## Pre-Landing Review
 <findings from review step>
 <format: "N issues (X critical, Y informational)" or "No issues found.">
@@ -22,6 +28,10 @@ Use this template when creating PRs via `gh pr create`.
 
 ## Changes
 <output of git diff --stat, trimmed to key files>
+
+## Ship Mode
+- Mode: <official|beta>
+- Target: <target-branch>
 ```
 
 ## PR Title Format
@@ -45,6 +55,10 @@ Infer type from changes:
 - Implement session management with secure cookie storage
 - Add logout endpoint with token revocation
 
+## Linked Issues
+- Closes #42 — Add OAuth2 authentication support
+- Relates to #38 — Security audit for auth module
+
 ## Pre-Landing Review
 Pre-Landing Review: 1 issue (0 critical, 1 informational)
 
@@ -60,6 +74,10 @@ Pre-Landing Review: 1 issue (0 critical, 1 informational)
  src/routes/auth.ts     | 32 ++++
  tests/auth.test.ts     | 67 +++++++
  4 files changed, 233 insertions(+)
+
+## Ship Mode
+- Mode: official
+- Target: main
 ```
 
 ## Notes
@@ -68,3 +86,5 @@ Pre-Landing Review: 1 issue (0 critical, 1 informational)
 - Include review findings even if "No issues found" — shows review happened
 - Test counts should match actual output, not estimates
 - If PR already exists, use `gh pr edit` instead of `gh pr create`
+- Always include linked issues section — traceability is critical
+- For beta PRs, target the dev/beta branch, not main
