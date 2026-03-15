@@ -58,5 +58,5 @@ GoogleService-Info.plist
 .gemini/*
 commands/**/meta/*
 commands/git/release
-./.settings.local.json
+settings.local.json
 
