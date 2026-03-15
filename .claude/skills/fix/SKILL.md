@@ -18,6 +18,48 @@ Unified skill for fixing issues of any complexity with intelligent routing.
 - `--quick` - Activate quick mode
 - `--parallel` - Activate parallel mode: route to parallel `fullstack-developer` agents per issue
 
+<HARD-GATE>
+Do NOT propose or implement fixes before completing root cause investigation (Step 2: Debug).
+Symptom fixes are failure. Find the cause first.
+If 3+ fix attempts fail, STOP and question the architecture — discuss with user before attempting more.
+User override: `--quick` mode allows fast debug→fix cycle for trivial issues (lint, type errors).
+</HARD-GATE>
+
+## Anti-Rationalization
+
+| Thought | Reality |
+|---------|---------|
+| "I can see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
+| "Quick fix for now, investigate later" | "Later" never comes. Fix properly now. |
+| "Just try changing X" | Random fixes waste time and create new bugs. |
+| "It's probably X" | "Probably" = guessing. Verify first. |
+| "One more fix attempt" (after 2+) | 3+ failures = wrong approach. Question architecture. |
+| "Emergency, no time for process" | Systematic debugging is FASTER than guess-and-check. |
+
+## Process Flow (Authoritative)
+
+```mermaid
+flowchart TD
+    A[Issue Input] --> B[Mode Selection]
+    B --> C[Debug - Root Cause Investigation]
+    C --> D[Complexity Assessment]
+    D -->|Simple| E[Quick Fix]
+    D -->|Moderate| F[Standard Workflow]
+    D -->|Complex| G[Deep Workflow]
+    D -->|Parallel| H[Multi-Agent Fix]
+    E --> I[Verify Fix]
+    F --> I
+    G --> I
+    H --> I
+    I -->|Pass| J[Finalize]
+    I -->|Fail, <3 attempts| C
+    I -->|Fail, 3+ attempts| K[Question Architecture]
+    K --> L[Discuss with User]
+    J --> M[Report + Docs + Journal]
+```
+
+**This diagram is the authoritative workflow.** If prose conflicts with this flow, follow the diagram.
+
 ## Workflow
 
 ### Step 1: Mode Selection

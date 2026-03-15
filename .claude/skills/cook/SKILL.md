@@ -34,6 +34,24 @@ End-to-end implementation with automatic workflow detection.
 /ck:cook path/to/plan.md --auto
 ```
 
+<HARD-GATE>
+Do NOT write implementation code until a plan exists and has been reviewed.
+This applies regardless of task simplicity. "Simple" tasks are where unexamined assumptions waste the most time.
+Exception: `--fast` mode skips research but still requires a plan step.
+User override: If user explicitly says "just code it" or "skip planning", respect their instruction.
+</HARD-GATE>
+
+## Anti-Rationalization
+
+| Thought | Reality |
+|---------|---------|
+| "This is too simple to plan" | Simple tasks have hidden complexity. Plan takes 30 seconds. |
+| "I already know how to do this" | Knowing ≠ planning. Write it down. |
+| "Let me just start coding" | Undisciplined action wastes tokens. Plan first. |
+| "The user wants speed" | Fastest path = plan → implement → done. Not: implement → debug → rewrite. |
+| "I'll plan as I go" | That's not planning, that's hoping. |
+| "Just this once" | Every skip is "just this once." No exceptions. |
+
 ## Smart Intent Detection
 
 | Input Pattern | Detected Mode | Behavior |
@@ -46,6 +64,30 @@ End-to-end implementation with automatic workflow detection.
 | Default | interactive | Full workflow with user input |
 
 See `references/intent-detection.md` for detection logic.
+
+## Process Flow (Authoritative)
+
+```mermaid
+flowchart TD
+    A[Intent Detection] --> B{Has plan path?}
+    B -->|Yes| F[Load Plan]
+    B -->|No| C{Mode?}
+    C -->|fast| D[Scout → Plan → Code]
+    C -->|interactive/auto| E[Research → Review → Plan]
+    E --> F
+    D --> F
+    F --> G[Review Gate]
+    G -->|approved| H[Implement]
+    G -->|rejected| E
+    H --> I[Review Gate]
+    I -->|approved| J{--no-test?}
+    J -->|No| K[Test]
+    J -->|Yes| L[Finalize]
+    K --> L
+    L --> M[Report + Journal]
+```
+
+**This diagram is the authoritative workflow.** Prose sections below provide detail for each node. If prose conflicts with this flow, follow the diagram.
 
 ## Workflow Overview
 

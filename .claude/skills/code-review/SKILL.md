@@ -34,6 +34,7 @@ Verify before implementing. Ask before assuming. Evidence before claims.
 
 | Practice | When | Reference |
 |----------|------|-----------|
+| **Spec compliance** | After implementing from plan/spec, BEFORE quality review | `references/spec-compliance-review.md` |
 | Receiving feedback | Unclear feedback, external reviewers, needs prioritization | `references/code-review-reception.md` |
 | Requesting review | After tasks, before merge, stuck on problem | `references/requesting-code-review.md` |
 | Verification gates | Before any completion claim, commit, PR | `references/verification-before-completion.md` |
@@ -47,11 +48,30 @@ Verify before implementing. Ask before assuming. Evidence before claims.
 SITUATION?
 │
 ├─ Received feedback → STOP if unclear, verify if external, implement if human partner
-├─ Completed work → Scout edge cases → Request code-reviewer subagent
+├─ Completed work from plan/spec:
+│   ├─ Stage 1: Spec compliance review (references/spec-compliance-review.md)
+│   │   └─ PASS? → Stage 2: Code quality review (code-reviewer subagent)
+│   │   └─ FAIL? → Fix missing requirements → Re-review Stage 1
+│   └─ Stage 2: Code quality review
+│       └─ Scout edge cases → Request code-reviewer subagent
+├─ Completed work (no plan) → Scout edge cases → Code quality review only
 ├─ Pre-landing / ship → Load checklists → Two-pass review (critical + informational)
 ├─ Multi-file feature (3+ files) → Create review pipeline tasks (scout→review→fix→verify)
 └─ About to claim status → RUN verification command FIRST
 ```
+
+### Two-Stage Review Protocol
+
+When a plan or spec exists for the work being reviewed:
+
+**Stage 1 — Spec Compliance** (load `references/spec-compliance-review.md`)
+- Does code match what was requested?
+- Any missing requirements? Any unjustified extras?
+- MUST pass before Stage 2
+
+**Stage 2 — Code Quality** (existing code-reviewer subagent flow)
+- Only runs AFTER spec compliance passes
+- Standards, security, performance, edge cases
 
 ## Receiving Feedback
 

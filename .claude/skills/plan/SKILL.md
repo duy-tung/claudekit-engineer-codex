@@ -98,6 +98,31 @@ Load: `references/plan-organization.md`
 ### 5. Task Breakdown & Output Standards
 Load: `references/output-standards.md`
 
+## Process Flow (Authoritative)
+
+```mermaid
+flowchart TD
+    A[Pre-Creation Check] --> B[Cross-Plan Scan]
+    B --> C[Scope Challenge]
+    C --> D[Mode Detection]
+    D -->|fast| E[Skip Research]
+    D -->|hard/parallel/two| F[Spawn Researchers]
+    E --> G[Codebase Analysis]
+    F --> G
+    G --> H[Write Plan via Planner]
+    H --> I{Red Team?}
+    I -->|Yes| J[Red Team Review]
+    I -->|No| K{Validate?}
+    J --> K
+    K -->|Yes| L[Validation Interview]
+    K -->|No| M[Hydrate Tasks]
+    L --> M
+    M --> N[Output Cook Command]
+    N --> O[Journal]
+```
+
+**This diagram is the authoritative workflow.** Prose sections below provide detail for each node.
+
 ## Workflow Process
 
 1. **Pre-Creation Check** → Check Plan Context for active/suggested/none
