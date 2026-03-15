@@ -95,6 +95,8 @@ When processing arguments, follow this priority order:
 | `--diff` without git context | Explain: "No git repo detected. Run inside a git repository." |
 | `--plan-review` without plan file or active plan | Explain: "Provide a plan file path or run from a session with an active plan." |
 | `--recap` without git history | Explain: "No git history found. Run inside a git repository with commits." |
+| `--html --ascii` combination | Not supported — `--ascii` is terminal-only by design. Suggest `--html --diagram` instead |
+| `--diff` with PR number but `gh` unavailable | Explain: "GitHub CLI (gh) is required for PR diffs. Install from https://cli.github.com/" |
 
 ## HTML Output Mode (`--html`)
 

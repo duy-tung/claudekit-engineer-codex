@@ -60,5 +60,6 @@ When explaining complex code, protocols, or architecture:
   - `/ck:preview --html --plan-review` — plan vs codebase comparison
   - `/ck:preview --html --recap [timeframe]` — project context snapshot
 - **Plan context:** Visuals save to plan folder from `## Plan Context` hook injection; if none, uses `plans/visuals/`
-- Auto-opens in browser via markdown-novel-viewer with Mermaid rendering
+- **Markdown mode:** Auto-opens in browser via markdown-novel-viewer with Mermaid rendering
+- **HTML mode:** Opens directly in browser — self-contained, no server needed
 - See `development-rules.md` → "Visual Aids" section for additional guidance

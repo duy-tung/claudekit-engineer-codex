@@ -374,9 +374,9 @@
   has_scripts: true
   name: plans-kanban
   path: plans-kanban/SKILL.md
-- argument_hint: '[path] OR --explain|--slides|--diagram|--ascii [topic]'
+- argument_hint: '[path] OR [--html] --explain|--slides|--diagram|--ascii [topic] OR --html --diff|--plan-review|--recap'
   category: utilities
-  description: View files/directories OR generate visual explanations, slides, diagrams.
+  description: View files/directories OR generate visual explanations, slides, diagrams (Markdown or self-contained HTML).
   has_references: true
   has_scripts: false
   name: preview
