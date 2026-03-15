@@ -1,3 +1,10 @@
+## [2.14.0-beta.21](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.20...v2.14.0-beta.21) (2026-03-15)
+
+
+### 🐞 Bug Fixes
+
+* restore ck: prefix in name field for ck-debug and ck-plan skills ([034022d](https://github.com/claudekit/claudekit-engineer/commit/034022d334de3a4b7491e916ebe49f2c9b9d7f75)), closes [#559](https://github.com/claudekit/claudekit-engineer/issues/559)
+
 ## [2.14.0-beta.20](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.19...v2.14.0-beta.20) (2026-03-15)
 
 
