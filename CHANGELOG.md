@@ -1,3 +1,10 @@
+## [2.14.0-beta.17](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.16...v2.14.0-beta.17) (2026-03-15)
+
+
+### ⚡ Performance Improvements
+
+* **skills:** enhance `/ck:ship` skill with official/beta flags & docs update workflows ([fac188f](https://github.com/claudekit/claudekit-engineer/commit/fac188f5b1454459a886bdaf640767581d361a05))
+
 ## [2.14.0-beta.16](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.15...v2.14.0-beta.16) (2026-03-14)
 
 
