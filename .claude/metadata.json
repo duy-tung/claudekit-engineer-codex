@@ -101,7 +101,9 @@
     "hooks/lib/ck-paths.cjs",
     "hooks/lib/context-tracker.cjs",
     "hooks/tests/test-context-tracker.cjs",
-    "scripts/fix-shebang-permissions.sh"
+    "scripts/fix-shebang-permissions.sh",
+    "skills/debug",
+    "skills/plan"
   ],
   "version": "2.14.0-beta.19",
   "name": "claudekit-engineer",
