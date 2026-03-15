@@ -1,3 +1,10 @@
+## [2.14.0-beta.20](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.19...v2.14.0-beta.20) (2026-03-15)
+
+
+### 🐞 Bug Fixes
+
+* rename debug/plan skill dirs to ck-debug/ck-plan to avoid CC built-in collision ([84ef112](https://github.com/claudekit/claudekit-engineer/commit/84ef1129138a8de9d8fcc21caa1a520d1bce8481)), closes [#559](https://github.com/claudekit/claudekit-engineer/issues/559)
+
 ## [2.14.0-beta.19](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.18...v2.14.0-beta.19) (2026-03-15)
 
 
