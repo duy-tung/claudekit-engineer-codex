@@ -52,6 +52,13 @@ When explaining complex code, protocols, or architecture:
 - Use `/ck:preview --diagram <topic>` for architecture and data flow diagrams
 - Use `/ck:preview --slides <topic>` for step-by-step walkthroughs
 - Use `/ck:preview --ascii <topic>` for terminal-friendly output only
+- **HTML mode** (add `--html` for self-contained HTML pages, opens directly in browser):
+  - `/ck:preview --html --explain <topic>` — publication-quality HTML explanation
+  - `/ck:preview --html --diagram <topic>` — interactive HTML diagram with zoom controls
+  - `/ck:preview --html --slides <topic>` — magazine-quality slide deck
+  - `/ck:preview --html --diff [ref]` — visual diff review
+  - `/ck:preview --html --plan-review` — plan vs codebase comparison
+  - `/ck:preview --html --recap [timeframe]` — project context snapshot
 - **Plan context:** Visuals save to plan folder from `## Plan Context` hook injection; if none, uses `plans/visuals/`
 - Auto-opens in browser via markdown-novel-viewer with Mermaid rendering
 - See `development-rules.md` → "Visual Aids" section for additional guidance
