@@ -1,6 +1,6 @@
 ---
 name: Adopt Superpowers Learnings into CKE
-status: pending
+status: completed
 priority: high
 branch: goon
 date: 2026-03-15
