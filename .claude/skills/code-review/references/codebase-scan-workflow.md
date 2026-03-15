@@ -18,7 +18,8 @@ Think harder to scan the codebase and analyze it follow the Orchestration Protoc
 ### Code Review
 * Use multiple `code-reviewer` subagents in parallel to review code
 * If issues found, ask main agent to improve and repeat until tests pass
-* When complete, report summary to user
+* When complete, run adversarial review (see `adversarial-review.md`) — always-on, no exceptions
+* Report combined quality + adversarial findings to user
 
 ### Plan
 * Use `planner` subagent to analyze reports and create improvement plan
