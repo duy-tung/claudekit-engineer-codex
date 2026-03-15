@@ -67,6 +67,8 @@ SITUATION?
 │   ├─ #PR / URL → fetch PR diff
 │   ├─ commit hash → git show
 │   ├─ --pending → git diff (staged + unstaged)
+│   ├─ codebase → full scan (references/codebase-scan-workflow.md)
+│   ├─ codebase parallel → parallel audit (references/parallel-review-workflow.md)
 │   └─ default → recent changes in context
 │
 ├─ Received feedback → STOP if unclear, verify if external, implement if human partner
@@ -99,22 +101,13 @@ SITUATION?
 - Spawn adversarial reviewer that actively tries to break the code
 - Find: security holes, false assumptions, failure modes, race conditions, data corruption paths
 - Mindset: "hired to tear apart the implementer's work"
-- Output: Accept (valid flaw, must fix) / Reject (false positive) verdicts per finding
+- Output: Accept (must fix) / Reject (false positive) / Defer (valid but low-risk, tracked) verdicts per finding
 - Critical findings block merge; Medium/Low tracked but non-blocking
 
 ## Receiving Feedback
 
 **Pattern:** READ → UNDERSTAND → VERIFY → EVALUATE → RESPOND → IMPLEMENT
-
-**Rules:**
-- No performative agreement: "You're absolutely right!", "Great point!"
-- No implementation before verification
-- Restate, ask questions, push back with reasoning, or just work
-- YAGNI check: grep for usage before implementing "proper" features
-
-**Source handling:**
-- Human partner: Trusted - implement after understanding
-- External reviewers: Verify technically, check breakage, push back if wrong
+No performative agreement. Verify before implementing. Push back if wrong.
 
 **Full protocol:** `references/code-review-reception.md`
 

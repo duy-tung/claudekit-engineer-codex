@@ -105,6 +105,14 @@ When no arguments and no recent context, use `AskUserQuestion`:
 
 For PR/commit options, follow up with second `AskUserQuestion` to get the number/hash.
 
+### Codebase Mode
+
+Codebase modes bypass diff resolution — they scan the full codebase instead.
+- `codebase` → hand off to `references/codebase-scan-workflow.md`
+- `codebase parallel` → hand off to `references/parallel-review-workflow.md`
+
+Both workflows include adversarial review (always-on).
+
 ## Pipeline Handoff
 
 After resolving the diff, pass to the review pipeline:
