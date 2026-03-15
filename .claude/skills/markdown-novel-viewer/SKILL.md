@@ -11,6 +11,8 @@ metadata:
 
 Background HTTP server rendering markdown files with calm, book-like reading experience.
 
+**Note:** HTML generation mode (`/ck:preview --html ...`) produces self-contained HTML files that open directly in the browser — they do not use this server.
+
 ## ⚠️ Installation Required
 
 **This skill requires npm dependencies.** Run one of the following:

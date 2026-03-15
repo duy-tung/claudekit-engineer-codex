@@ -143,6 +143,6 @@ Data: project identity, git log, git status, decision context, architecture scan
 Output: project identity, architecture snapshot (Mermaid), recent activity, decision log, state KPI cards, mental model essentials, cognitive debt hotspots, next steps.
 
 ### Style Strategy
-- Default: static anti-slop rules from `html-design-guidelines.md` (5-6 curated presets)
+- Default: static anti-slop rules from `html-design-guidelines.md` (6 curated presets)
 - For `--slides`: consider invoking `/ck:ui-ux-pro-max` for richer style selection
 - Agent must vary aesthetics between consecutive HTML outputs (different font pair, palette)
