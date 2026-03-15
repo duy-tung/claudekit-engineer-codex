@@ -96,13 +96,12 @@ SITUATION?
 - Only runs AFTER spec compliance passes
 - Standards, security, performance, edge cases
 
-**Stage 3 — Adversarial Review** (load `references/adversarial-review.md`) **[ALWAYS-ON]**
-- Runs AFTER Stage 2 passes — every review, no exceptions
-- Spawn adversarial reviewer that actively tries to break the code
-- Find: security holes, false assumptions, failure modes, race conditions, data corruption paths
-- Mindset: "hired to tear apart the implementer's work"
-- Output: Accept (must fix) / Reject (false positive) / Defer (valid but low-risk, tracked) verdicts per finding
-- Critical findings block merge; Medium/Low tracked but non-blocking
+**Stage 3 — Adversarial Review** (load `references/adversarial-review.md`)
+- Runs AFTER Stage 2 passes, subject to scope gate (skip if <=2 files, <=30 lines, no security files)
+- Spawn adversarial reviewer with context anchoring (runtime, framework, context files)
+- Find: security holes, false assumptions, resource exhaustion, race conditions, supply chain, observability gaps
+- Output: Accept (must fix) / Reject (false positive) / Defer (GitHub issue) verdicts per finding
+- Critical findings block merge; re-reviews use fix-diff-only optimization
 
 ## Receiving Feedback
 
