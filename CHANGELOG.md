@@ -1,3 +1,12 @@
+## [2.14.0-beta.18](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.17...v2.14.0-beta.18) (2026-03-15)
+
+
+### 🚀 Features
+
+* **plans:** add remaining Superpowers adoption plan (TDD, tests, multi-platform) ([f14bc87](https://github.com/claudekit/claudekit-engineer/commit/f14bc87b915c91d4ed1f0cf8e6698931940bfcb2))
+* **reports:** add post-adoption Superpowers vs CKE comparison ([a5690a3](https://github.com/claudekit/claudekit-engineer/commit/a5690a3dd3f74001d9a2a75d6e3fd180dc32dc04))
+* **skills:** adopt Superpowers discipline-enforcement into CKE ([f93d3cc](https://github.com/claudekit/claudekit-engineer/commit/f93d3cc0cb0c23b04ae701db0c56f5dd04b2c865))
+
 ## [2.14.0-beta.17](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.16...v2.14.0-beta.17) (2026-03-15)
 
 
