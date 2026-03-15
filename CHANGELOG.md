@@ -1,3 +1,25 @@
+## [2.14.0-beta.19](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.18...v2.14.0-beta.19) (2026-03-15)
+
+
+### 🚀 Features
+
+* **code-review:** add input modes and always-on adversarial review ([#556](https://github.com/claudekit/claudekit-engineer/issues/556)) ([d40c10f](https://github.com/claudekit/claudekit-engineer/commit/d40c10f30524c03dbce92c93b3bdcbdb52640cda))
+* **code-review:** improve adversarial review — scope gate, context anchoring, attack coverage ([b90c62a](https://github.com/claudekit/claudekit-engineer/commit/b90c62ad08d8e2f437e9499db5b3692c3592fca9))
+* **preview:** add --html flag with diff, plan-review, recap modes ([bdc96c1](https://github.com/claudekit/claudekit-engineer/commit/bdc96c120020582dde6f172f125bb2507fc14fe4))
+* **preview:** add HTML reference docs and templates from visual-explainer ([46c85bc](https://github.com/claudekit/claudekit-engineer/commit/46c85bcbb33315ccd29f54171f57d09324c7f0dc))
+
+
+### 🐞 Bug Fixes
+
+* **code-review:** address review findings — pipeline sync, decision tree, Defer verdict ([21a622f](https://github.com/claudekit/claudekit-engineer/commit/21a622fe0a355500ee8684db1d7bd9d63800ddea))
+* **preview:** address remaining review findings ([a5387a5](https://github.com/claudekit/claudekit-engineer/commit/a5387a54ef26307fd0b88f7923f192fba2fe2071))
+* **preview:** address review findings for HTML mode integration ([f519d84](https://github.com/claudekit/claudekit-engineer/commit/f519d8401b6366ab79d720504e4d4fa0b8d03b4d))
+
+
+### 📚 Documentation
+
+* **rules:** mention --html preview mode in workflow rules ([40674bc](https://github.com/claudekit/claudekit-engineer/commit/40674bcd577e22ccf1f14159944b34369119fe89))
+
 ## [2.14.0-beta.18](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.17...v2.14.0-beta.18) (2026-03-15)
 
 
