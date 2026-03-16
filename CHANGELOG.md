@@ -1,3 +1,10 @@
+## [2.14.0-beta.22](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.21...v2.14.0-beta.22) (2026-03-16)
+
+
+### 🐞 Bug Fixes
+
+* add root-level shell hook paths to metadata.json deletions ([b95b59a](https://github.com/claudekit/claudekit-engineer/commit/b95b59ad7f17bca1dab6af29dced2383c7fe4a97)), closes [#562](https://github.com/claudekit/claudekit-engineer/issues/562)
+
 ## [2.14.0-beta.21](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.20...v2.14.0-beta.21) (2026-03-15)
 
 
