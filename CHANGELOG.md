@@ -1,3 +1,10 @@
+## [2.14.0-beta.24](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.23...v2.14.0-beta.24) (2026-03-16)
+
+
+### 🐞 Bug Fixes
+
+* **manifest:** add windsurf global path migration for .codeium/windsurf/skills ([1f2cde9](https://github.com/claudekit/claudekit-engineer/commit/1f2cde9ddbe3cb9f24d67badcdb4a4f3d165e8a1)), closes [mrgoonie/claudekit-cli#477](https://github.com/mrgoonie/claudekit-cli/issues/477)
+
 ## [2.14.0-beta.23](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.22...v2.14.0-beta.23) (2026-03-16)
 
 
