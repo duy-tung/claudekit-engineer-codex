@@ -25,6 +25,13 @@
 			"since": "3.37.0"
 		},
 		{
+			"provider": "windsurf",
+			"type": "skill",
+			"from": ".codeium/windsurf/skills",
+			"to": ".agents/skills",
+			"since": "3.37.0"
+		},
+		{
 			"provider": "cursor",
 			"type": "skill",
 			"from": ".cursor/skills",
