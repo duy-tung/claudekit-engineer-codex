@@ -1,3 +1,10 @@
+## [2.14.0-beta.23](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.22...v2.14.0-beta.23) (2026-03-16)
+
+
+### 🐞 Bug Fixes
+
+* **manifest:** add provider path migrations for skills consolidation ([d91d059](https://github.com/claudekit/claudekit-engineer/commit/d91d059a98ad81f2db58816230d4ebf0aeaee270)), closes [mrgoonie/claudekit-cli#477](https://github.com/mrgoonie/claudekit-cli/issues/477)
+
 ## [2.14.0-beta.22](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.21...v2.14.0-beta.22) (2026-03-16)
 
 
