@@ -6,49 +6,89 @@ Reusable patterns for layout, connectors, theming, and visual effects in self-co
 
 Always define both light and dark palettes via custom properties. Start with whichever fits the chosen aesthetic, ensure both work.
 
+**Palette cohesion rule:** Background, text, and accent colors must belong to the same color family. A warm palette (terracotta, cream, sage) should have warm grays for text-dim and warm-tinted borders — never mix warm accents with cool GitHub-gray backgrounds. Each page should feel like one intentional color story, not a generic template with an accent color dropped on top.
+
+**Semantic color richness:** Define 5-6 semantic colors per palette, not just 3 node colors. Richer palettes give the page visual variety without clashing. Include status colors (--green, --red/danger, --amber) and secondary accents (--sage, --teal, --plum) so different sections can have distinct character while staying harmonious.
+
 ```css
 :root {
-  --font-body: 'Outfit', system-ui, sans-serif;
-  --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
 
-  --bg: #f8f9fa;
+  /* Warm cream base — higher readability than cool gray */
+  --bg: #faf7f5;
   --surface: #ffffff;
-  --surface-elevated: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-bright: rgba(0, 0, 0, 0.15);
-  --text: #1a1a2e;
-  --text-dim: #6b7280;
-  --accent: #0891b2;
-  --accent-dim: rgba(8, 145, 178, 0.1);
-  /* Semantic accents for diagram elements */
-  --node-a: #0891b2;
-  --node-a-dim: rgba(8, 145, 178, 0.1);
-  --node-b: #059669;
-  --node-b-dim: rgba(5, 150, 105, 0.1);
-  --node-c: #d97706;
-  --node-c-dim: rgba(217, 119, 6, 0.1);
+  --surface2: #f5f0ec;
+  --surface-elevated: #fff9f5;
+  --border: rgba(0, 0, 0, 0.07);
+  --border-bright: rgba(0, 0, 0, 0.14);
+  --text: #292017;
+  --text-dim: #8a7e72;
+  --text-bright: #1a1510;
+  --accent: #c2410c;
+  --accent-dim: rgba(194, 65, 12, 0.07);
+
+  /* Rich semantic palette — use these for variety across sections */
+  --node-a: #c2410c;
+  --node-a-dim: rgba(194, 65, 12, 0.07);
+  --node-b: #4d7c0f;
+  --node-b-dim: rgba(77, 124, 15, 0.07);
+  --node-c: #0f766e;
+  --node-c-dim: rgba(15, 118, 110, 0.07);
+
+  /* Status & secondary accents */
+  --green: #4d7c0f;
+  --green-dim: rgba(77, 124, 15, 0.07);
+  --red: #b91c1c;
+  --red-dim: rgba(185, 28, 28, 0.07);
+  --amber: #b45309;
+  --amber-dim: rgba(180, 83, 9, 0.07);
+  --sage: #65a30d;
+  --sage-dim: rgba(101, 163, 13, 0.07);
+  --teal: #0f766e;
+  --teal-dim: rgba(15, 118, 110, 0.07);
+  --plum: #9f1239;
+  --plum-dim: rgba(159, 18, 57, 0.07);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface-elevated: #1c2333;
+    --bg: #1a1412;
+    --surface: #231d1a;
+    --surface2: #2e2622;
+    --surface-elevated: #352d28;
     --border: rgba(255, 255, 255, 0.06);
     --border-bright: rgba(255, 255, 255, 0.12);
-    --text: #e6edf3;
-    --text-dim: #8b949e;
-    --accent: #22d3ee;
-    --accent-dim: rgba(34, 211, 238, 0.12);
-    --node-a: #22d3ee;
-    --node-a-dim: rgba(34, 211, 238, 0.12);
-    --node-b: #34d399;
-    --node-b-dim: rgba(52, 211, 153, 0.12);
-    --node-c: #fbbf24;
-    --node-c-dim: rgba(251, 191, 36, 0.12);
+    --text: #ede5dd;
+    --text-dim: #a69889;
+    --text-bright: #faf5f0;
+    --accent: #fb923c;
+    --accent-dim: rgba(251, 146, 60, 0.12);
+
+    --node-a: #fb923c;
+    --node-a-dim: rgba(251, 146, 60, 0.12);
+    --node-b: #a3e635;
+    --node-b-dim: rgba(163, 230, 53, 0.1);
+    --node-c: #5eead4;
+    --node-c-dim: rgba(94, 234, 212, 0.1);
+
+    --green: #a3e635;
+    --green-dim: rgba(163, 230, 53, 0.1);
+    --red: #fca5a5;
+    --red-dim: rgba(252, 165, 165, 0.1);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.1);
+    --sage: #bef264;
+    --sage-dim: rgba(190, 242, 100, 0.1);
+    --teal: #5eead4;
+    --teal-dim: rgba(94, 234, 212, 0.1);
+    --plum: #fda4af;
+    --plum-dim: rgba(253, 164, 175, 0.1);
   }
 }
 ```
+
+**Choosing a different palette:** The above is the warm default. For other aesthetics, pick a preset from `html-design-guidelines.md` and extend it with the same semantic color structure (--green, --red, --amber, --sage, --teal, --plum). Every preset in that file defines the core variables; add the semantic layer on top to maintain richness.
 
 ## Background Atmosphere
 
@@ -88,7 +128,7 @@ body {
 
 ## Link Styling
 
-**Never rely on browser default link colors.** The default blue (`#0000EE`) has poor contrast on dark backgrounds. Style links with `color: var(--accent)` and keep underlines for discoverability. On dark backgrounds, use bright accents (`#22d3ee`, `#34d399`, `#fbbf24`). On light backgrounds, use deeper tones (`#0891b2`, `#059669`, `#d97706`).
+**Never rely on browser default link colors.** The default blue (`#0000EE`) has poor contrast on dark backgrounds. Style links with `color: var(--accent)` and keep underlines for discoverability. On dark backgrounds, use bright accents from the palette (`--node-a`, `--teal`, `--sage`). On light backgrounds, use deeper tones (`--accent`, `--node-b`, `--node-c`). Always use palette variables — never hardcode hex values for links.
 
 ## Section / Card Components
 
