@@ -1,3 +1,12 @@
+## [2.14.0-beta.25](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.24...v2.14.0-beta.25) (2026-03-17)
+
+
+### 🚀 Features
+
+* **preview:** add theme toggle button pattern to HTML output ([1b1a5a6](https://github.com/claudekit/claudekit-engineer/commit/1b1a5a66e0945aaee2e5ba657d380ca81b751c8f))
+* **preview:** add typography floor and bump content font sizes ([ea5ac45](https://github.com/claudekit/claudekit-engineer/commit/ea5ac45805116daa27a9306e37409190d69e727f))
+* **preview:** improve HTML visualization palette and readability ([064ddec](https://github.com/claudekit/claudekit-engineer/commit/064ddecc7c50a853ec5bdf2b52ad9fdc0ab1fe90)), closes [#564](https://github.com/claudekit/claudekit-engineer/issues/564)
+
 ## [2.14.0-beta.24](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.23...v2.14.0-beta.24) (2026-03-16)
 
 
