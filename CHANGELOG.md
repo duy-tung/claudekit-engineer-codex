@@ -1,3 +1,10 @@
+## [2.14.0-beta.26](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.25...v2.14.0-beta.26) (2026-03-17)
+
+
+### 🚀 Features
+
+* **frontend-design:** integrate taste-skill design intelligence ([e625722](https://github.com/claudekit/claudekit-engineer/commit/e625722bc8d96b26e430dbe8dd691bfe74bb6552)), closes [#566](https://github.com/claudekit/claudekit-engineer/issues/566)
+
 ## [2.14.0-beta.25](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.24...v2.14.0-beta.25) (2026-03-17)
 
 
