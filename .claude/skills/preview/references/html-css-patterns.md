@@ -90,6 +90,25 @@ Always define both light and dark palettes via custom properties. Start with whi
 
 **Choosing a different palette:** The above is the warm default. For other aesthetics, pick a preset from `html-design-guidelines.md` and extend it with the same semantic color structure (--green, --red, --amber, --sage, --teal, --plum). Every preset in that file defines the core variables; add the semantic layer on top to maintain richness.
 
+## Typography Floor
+
+Minimum readable font sizes for generated HTML pages. Smaller sizes strain readability, especially on high-DPI screens.
+
+| Element | Minimum | Recommended |
+|---------|---------|-------------|
+| Body / card content | 15px | 15–16px |
+| Code blocks | 14px | 14px |
+| Table cells | 14px | 14–15px |
+| Table headers (mono uppercase) | 12px | 12px |
+| List items | 14px | 15px |
+| Section labels (mono uppercase) | 11px | 12px |
+| Card labels (mono uppercase) | 11px | 11px |
+| Status badges (mono) | 12px | 12px |
+| TOC links | 11px | 12px |
+| Callout body | 15px | 16px |
+
+Monospace uppercase labels are allowed at 11px because letter-spacing and uppercase improve legibility at small sizes. Body text and content must stay at 14px+.
+
 ## Background Atmosphere
 
 Flat backgrounds feel dead. Use subtle gradients or patterns.
@@ -180,10 +199,10 @@ The fundamental building block. A colored card representing a system component, 
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Section label (monospace, uppercase, small) */
+/* Section label (monospace, uppercase) */
 .ve-card__label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -213,7 +232,7 @@ Code blocks need explicit whitespace preservation and a max-height constraint. W
 ```css
 .code-block {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -262,7 +281,7 @@ function example() {
 
 .code-file__body {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   padding: 16px;
   background: var(--surface-elevated);
@@ -760,7 +779,7 @@ Use real `<table>` elements for tabular data. Wrap in a scrollable container for
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -774,7 +793,7 @@ Use real `<table>` elements for tabular data. Wrap in a scrollable container for
 .data-table th {
   background: var(--surface-elevated, var(--surface));
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -855,7 +874,7 @@ Styled spans for match/gap/warning states. Never use emoji.
   align-items: center;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 6px;
@@ -1145,7 +1164,7 @@ Include a single breakpoint for narrow viewports:
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -1265,7 +1284,7 @@ Include a single breakpoint for narrow viewports:
 .diff-panel__body {
   padding: 16px;
   background: var(--surface);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -1327,7 +1346,7 @@ details.collapsible[open] summary::before {
 details.collapsible .collapsible__body {
   padding: 16px 20px;
   border-top: 1px solid var(--border);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 ```
