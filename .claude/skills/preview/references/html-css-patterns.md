@@ -10,12 +10,14 @@ Always define both light and dark palettes via custom properties. Start with whi
 
 **Semantic color richness:** Define 5-6 semantic colors per palette, not just 3 node colors. Richer palettes give the page visual variety without clashing. Include status colors (--green, --red/danger, --amber) and secondary accents (--sage, --teal, --plum) so different sections can have distinct character while staying harmonious.
 
+Light is the default. Dark activates via OS preference (`@media`) OR manual toggle (`[data-theme="dark"]`). The `[data-theme]` selector has higher specificity, so a manual toggle always wins.
+
 ```css
+/* ── Light (default) ── */
 :root {
   --font-body: 'IBM Plex Sans', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
 
-  /* Warm cream base — higher readability than cool gray */
   --bg: #faf7f5;
   --surface: #ffffff;
   --surface2: #f5f0ec;
@@ -28,7 +30,6 @@ Always define both light and dark palettes via custom properties. Start with whi
   --accent: #c2410c;
   --accent-dim: rgba(194, 65, 12, 0.07);
 
-  /* Rich semantic palette — use these for variety across sections */
   --node-a: #c2410c;
   --node-a-dim: rgba(194, 65, 12, 0.07);
   --node-b: #4d7c0f;
@@ -36,7 +37,6 @@ Always define both light and dark palettes via custom properties. Start with whi
   --node-c: #0f766e;
   --node-c-dim: rgba(15, 118, 110, 0.07);
 
-  /* Status & secondary accents */
   --green: #4d7c0f;
   --green-dim: rgba(77, 124, 15, 0.07);
   --red: #b91c1c;
@@ -51,8 +51,9 @@ Always define both light and dark palettes via custom properties. Start with whi
   --plum-dim: rgba(159, 18, 57, 0.07);
 }
 
+/* ── Dark (OS preference fallback) ── */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #1a1412;
     --surface: #231d1a;
     --surface2: #2e2622;
@@ -86,9 +87,106 @@ Always define both light and dark palettes via custom properties. Start with whi
     --plum-dim: rgba(253, 164, 175, 0.1);
   }
 }
+
+/* ── Dark (manual toggle override) ── */
+[data-theme="dark"] {
+  --bg: #1a1412;
+  --surface: #231d1a;
+  --surface2: #2e2622;
+  --surface-elevated: #352d28;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-bright: rgba(255, 255, 255, 0.12);
+  --text: #ede5dd;
+  --text-dim: #a69889;
+  --text-bright: #faf5f0;
+  --accent: #fb923c;
+  --accent-dim: rgba(251, 146, 60, 0.12);
+
+  --node-a: #fb923c;
+  --node-a-dim: rgba(251, 146, 60, 0.12);
+  --node-b: #a3e635;
+  --node-b-dim: rgba(163, 230, 53, 0.1);
+  --node-c: #5eead4;
+  --node-c-dim: rgba(94, 234, 212, 0.1);
+
+  --green: #a3e635;
+  --green-dim: rgba(163, 230, 53, 0.1);
+  --red: #fca5a5;
+  --red-dim: rgba(252, 165, 165, 0.1);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.1);
+  --sage: #bef264;
+  --sage-dim: rgba(190, 242, 100, 0.1);
+  --teal: #5eead4;
+  --teal-dim: rgba(94, 234, 212, 0.1);
+  --plum: #fda4af;
+  --plum-dim: rgba(253, 164, 175, 0.1);
+}
 ```
 
-**Choosing a different palette:** The above is the warm default. For other aesthetics, pick a preset from `html-design-guidelines.md` and extend it with the same semantic color structure (--green, --red, --amber, --sage, --teal, --plum). Every preset in that file defines the core variables; add the semantic layer on top to maintain richness.
+**How it works:** `:root` = light default. `@media (prefers-color-scheme: dark)` with `:root:not([data-theme="light"])` respects OS preference unless user explicitly chose light. `[data-theme="dark"]` forces dark regardless of OS. No JS needed for the CSS — toggle button JS just sets the attribute.
+
+**Choosing a different palette:** The above is the warm default. For other aesthetics, pick a preset from `html-design-guidelines.md` and extend it with the same semantic color structure (--green, --red, --amber, --sage, --teal, --plum). Every preset in that file defines the core variables; add the semantic layer on top to maintain richness. When using a different preset, replicate the three-tier pattern above (`:root` light, `@media` dark with `:not([data-theme="light"])`, `[data-theme="dark"]` override).
+
+## Theme Toggle Button
+
+Always include a theme toggle button in every generated HTML page. Place it fixed in the top-right corner.
+
+### CSS
+
+```css
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 300;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.15s, color 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.theme-toggle:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+```
+
+### HTML + JS
+
+Place the button as the first child of `<body>`. The script detects OS preference on load and persists manual choice in `localStorage`.
+
+```html
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+
+<script>
+(function() {
+  var toggle = document.getElementById('themeToggle');
+  var saved = localStorage.getItem('theme');
+  var initial = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (saved) document.documentElement.setAttribute('data-theme', initial);
+  toggle.textContent = initial === 'dark' ? '\u2600' : '\u263E';
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    toggle.textContent = next === 'dark' ? '\u2600' : '\u263E';
+  });
+})();
+</script>
+```
+
+**Symbols:** `\u2600` = sun (shown in dark mode — click to go light), `\u263E` = moon (shown in light mode — click to go dark). No emoji — these are Unicode dingbats that render consistently across platforms.
 
 ## Typography Floor
 
