@@ -75,9 +75,27 @@ If two or more are present: regenerate with Blueprint, Editorial, Paper/ink, or 
 
 ---
 
+## Palette Cohesion Principles
+
+**Every generated page must feel like one intentional color story.** This is the single most important readability rule.
+
+1. **Background warmth must match accent warmth.** Terracotta accents need warm cream backgrounds (`#faf7f5`), not cool gray (`#f8f9fa`). Teal accents need cool-tinted backgrounds (`#f0fdfa`). Mixing warm accents on cool backgrounds (or vice versa) creates visual dissonance that makes pages feel generic.
+
+2. **Text-dim must belong to the same family.** On warm backgrounds, use warm grays (`#8a7e72`, `#a69889`). On cool backgrounds, use cool grays (`#5f8a85`, `#8b949e`). Never use GitHub-style `#6b7280` on warm cream.
+
+3. **Borders should be tinted, not neutral.** Use `rgba(0, 0, 0, 0.07)` or palette-tinted borders instead of flat `#e5e7eb`. Borders should be barely visible — felt, not seen.
+
+4. **Surface layers create depth without fighting.** Define `--surface`, `--surface2`, and `--surface-elevated` as gradations of the same hue, not different colors.
+
+5. **Extend every palette with semantic colors.** Every preset below should also define `--green`, `--red`, `--amber`, `--sage`, `--teal`, `--plum` (and their `*-dim` variants) that harmonize with the base palette. Richer semantic sets prevent monotony without clashing.
+
+---
+
 ## 6 Curated Style Presets
 
 Pick one and commit. The constrained presets (Blueprint, Editorial, Paper/Ink, Terminal Mono) are safer — they have specific requirements that prevent defaulting to generic patterns.
+
+**IMPORTANT:** After choosing a preset, extend it with semantic colors (`--green`, `--red`, `--amber`, `--sage`, `--teal`, `--plum` + `*-dim` variants) that harmonize with the base palette. The default palette in `html-css-patterns.md` shows the full semantic structure — replicate that structure for whichever preset you choose.
 
 ### Blueprint
 

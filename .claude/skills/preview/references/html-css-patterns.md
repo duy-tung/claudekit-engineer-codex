@@ -6,49 +6,206 @@ Reusable patterns for layout, connectors, theming, and visual effects in self-co
 
 Always define both light and dark palettes via custom properties. Start with whichever fits the chosen aesthetic, ensure both work.
 
-```css
-:root {
-  --font-body: 'Outfit', system-ui, sans-serif;
-  --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+**Palette cohesion rule:** Background, text, and accent colors must belong to the same color family. A warm palette (terracotta, cream, sage) should have warm grays for text-dim and warm-tinted borders — never mix warm accents with cool GitHub-gray backgrounds. Each page should feel like one intentional color story, not a generic template with an accent color dropped on top.
 
-  --bg: #f8f9fa;
+**Semantic color richness:** Define 5-6 semantic colors per palette, not just 3 node colors. Richer palettes give the page visual variety without clashing. Include status colors (--green, --red/danger, --amber) and secondary accents (--sage, --teal, --plum) so different sections can have distinct character while staying harmonious.
+
+Light is the default. Dark activates via OS preference (`@media`) OR manual toggle (`[data-theme="dark"]`). The `[data-theme]` selector has higher specificity, so a manual toggle always wins.
+
+```css
+/* ── Light (default) ── */
+:root {
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #faf7f5;
   --surface: #ffffff;
-  --surface-elevated: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-bright: rgba(0, 0, 0, 0.15);
-  --text: #1a1a2e;
-  --text-dim: #6b7280;
-  --accent: #0891b2;
-  --accent-dim: rgba(8, 145, 178, 0.1);
-  /* Semantic accents for diagram elements */
-  --node-a: #0891b2;
-  --node-a-dim: rgba(8, 145, 178, 0.1);
-  --node-b: #059669;
-  --node-b-dim: rgba(5, 150, 105, 0.1);
-  --node-c: #d97706;
-  --node-c-dim: rgba(217, 119, 6, 0.1);
+  --surface2: #f5f0ec;
+  --surface-elevated: #fff9f5;
+  --border: rgba(0, 0, 0, 0.07);
+  --border-bright: rgba(0, 0, 0, 0.14);
+  --text: #292017;
+  --text-dim: #8a7e72;
+  --text-bright: #1a1510;
+  --accent: #c2410c;
+  --accent-dim: rgba(194, 65, 12, 0.07);
+
+  --node-a: #c2410c;
+  --node-a-dim: rgba(194, 65, 12, 0.07);
+  --node-b: #4d7c0f;
+  --node-b-dim: rgba(77, 124, 15, 0.07);
+  --node-c: #0f766e;
+  --node-c-dim: rgba(15, 118, 110, 0.07);
+
+  --green: #4d7c0f;
+  --green-dim: rgba(77, 124, 15, 0.07);
+  --red: #b91c1c;
+  --red-dim: rgba(185, 28, 28, 0.07);
+  --amber: #b45309;
+  --amber-dim: rgba(180, 83, 9, 0.07);
+  --sage: #65a30d;
+  --sage-dim: rgba(101, 163, 13, 0.07);
+  --teal: #0f766e;
+  --teal-dim: rgba(15, 118, 110, 0.07);
+  --plum: #9f1239;
+  --plum-dim: rgba(159, 18, 57, 0.07);
 }
 
+/* ── Dark (OS preference fallback) ── */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface-elevated: #1c2333;
+  :root:not([data-theme="light"]) {
+    --bg: #1a1412;
+    --surface: #231d1a;
+    --surface2: #2e2622;
+    --surface-elevated: #352d28;
     --border: rgba(255, 255, 255, 0.06);
     --border-bright: rgba(255, 255, 255, 0.12);
-    --text: #e6edf3;
-    --text-dim: #8b949e;
-    --accent: #22d3ee;
-    --accent-dim: rgba(34, 211, 238, 0.12);
-    --node-a: #22d3ee;
-    --node-a-dim: rgba(34, 211, 238, 0.12);
-    --node-b: #34d399;
-    --node-b-dim: rgba(52, 211, 153, 0.12);
-    --node-c: #fbbf24;
-    --node-c-dim: rgba(251, 191, 36, 0.12);
+    --text: #ede5dd;
+    --text-dim: #a69889;
+    --text-bright: #faf5f0;
+    --accent: #fb923c;
+    --accent-dim: rgba(251, 146, 60, 0.12);
+
+    --node-a: #fb923c;
+    --node-a-dim: rgba(251, 146, 60, 0.12);
+    --node-b: #a3e635;
+    --node-b-dim: rgba(163, 230, 53, 0.1);
+    --node-c: #5eead4;
+    --node-c-dim: rgba(94, 234, 212, 0.1);
+
+    --green: #a3e635;
+    --green-dim: rgba(163, 230, 53, 0.1);
+    --red: #fca5a5;
+    --red-dim: rgba(252, 165, 165, 0.1);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.1);
+    --sage: #bef264;
+    --sage-dim: rgba(190, 242, 100, 0.1);
+    --teal: #5eead4;
+    --teal-dim: rgba(94, 234, 212, 0.1);
+    --plum: #fda4af;
+    --plum-dim: rgba(253, 164, 175, 0.1);
   }
 }
+
+/* ── Dark (manual toggle override) ── */
+[data-theme="dark"] {
+  --bg: #1a1412;
+  --surface: #231d1a;
+  --surface2: #2e2622;
+  --surface-elevated: #352d28;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-bright: rgba(255, 255, 255, 0.12);
+  --text: #ede5dd;
+  --text-dim: #a69889;
+  --text-bright: #faf5f0;
+  --accent: #fb923c;
+  --accent-dim: rgba(251, 146, 60, 0.12);
+
+  --node-a: #fb923c;
+  --node-a-dim: rgba(251, 146, 60, 0.12);
+  --node-b: #a3e635;
+  --node-b-dim: rgba(163, 230, 53, 0.1);
+  --node-c: #5eead4;
+  --node-c-dim: rgba(94, 234, 212, 0.1);
+
+  --green: #a3e635;
+  --green-dim: rgba(163, 230, 53, 0.1);
+  --red: #fca5a5;
+  --red-dim: rgba(252, 165, 165, 0.1);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.1);
+  --sage: #bef264;
+  --sage-dim: rgba(190, 242, 100, 0.1);
+  --teal: #5eead4;
+  --teal-dim: rgba(94, 234, 212, 0.1);
+  --plum: #fda4af;
+  --plum-dim: rgba(253, 164, 175, 0.1);
+}
 ```
+
+**How it works:** `:root` = light default. `@media (prefers-color-scheme: dark)` with `:root:not([data-theme="light"])` respects OS preference unless user explicitly chose light. `[data-theme="dark"]` forces dark regardless of OS. No JS needed for the CSS — toggle button JS just sets the attribute.
+
+**Choosing a different palette:** The above is the warm default. For other aesthetics, pick a preset from `html-design-guidelines.md` and extend it with the same semantic color structure (--green, --red, --amber, --sage, --teal, --plum). Every preset in that file defines the core variables; add the semantic layer on top to maintain richness. When using a different preset, replicate the three-tier pattern above (`:root` light, `@media` dark with `:not([data-theme="light"])`, `[data-theme="dark"]` override).
+
+## Theme Toggle Button
+
+Always include a theme toggle button in every generated HTML page. Place it fixed in the top-right corner.
+
+### CSS
+
+```css
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 300;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.15s, color 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.theme-toggle:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+```
+
+### HTML + JS
+
+Place the button as the first child of `<body>`. The script detects OS preference on load and persists manual choice in `localStorage`.
+
+```html
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+
+<script>
+(function() {
+  var toggle = document.getElementById('themeToggle');
+  var saved = localStorage.getItem('theme');
+  var initial = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (saved) document.documentElement.setAttribute('data-theme', initial);
+  toggle.textContent = initial === 'dark' ? '\u2600' : '\u263E';
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    toggle.textContent = next === 'dark' ? '\u2600' : '\u263E';
+  });
+})();
+</script>
+```
+
+**Symbols:** `\u2600` = sun (shown in dark mode — click to go light), `\u263E` = moon (shown in light mode — click to go dark). No emoji — these are Unicode dingbats that render consistently across platforms.
+
+## Typography Floor
+
+Minimum readable font sizes for generated HTML pages. Smaller sizes strain readability, especially on high-DPI screens.
+
+| Element | Minimum | Recommended |
+|---------|---------|-------------|
+| Body / card content | 15px | 15–16px |
+| Code blocks | 14px | 14px |
+| Table cells | 14px | 14–15px |
+| Table headers (mono uppercase) | 12px | 12px |
+| List items | 14px | 15px |
+| Section labels (mono uppercase) | 11px | 12px |
+| Card labels (mono uppercase) | 11px | 11px |
+| Status badges (mono) | 12px | 12px |
+| TOC links | 11px | 12px |
+| Callout body | 15px | 16px |
+
+Monospace uppercase labels are allowed at 11px because letter-spacing and uppercase improve legibility at small sizes. Body text and content must stay at 14px+.
 
 ## Background Atmosphere
 
@@ -88,7 +245,7 @@ body {
 
 ## Link Styling
 
-**Never rely on browser default link colors.** The default blue (`#0000EE`) has poor contrast on dark backgrounds. Style links with `color: var(--accent)` and keep underlines for discoverability. On dark backgrounds, use bright accents (`#22d3ee`, `#34d399`, `#fbbf24`). On light backgrounds, use deeper tones (`#0891b2`, `#059669`, `#d97706`).
+**Never rely on browser default link colors.** The default blue (`#0000EE`) has poor contrast on dark backgrounds. Style links with `color: var(--accent)` and keep underlines for discoverability. On dark backgrounds, use bright accents from the palette (`--node-a`, `--teal`, `--sage`). On light backgrounds, use deeper tones (`--accent`, `--node-b`, `--node-c`). Always use palette variables — never hardcode hex values for links.
 
 ## Section / Card Components
 
@@ -140,10 +297,10 @@ The fundamental building block. A colored card representing a system component, 
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Section label (monospace, uppercase, small) */
+/* Section label (monospace, uppercase) */
 .ve-card__label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -173,7 +330,7 @@ Code blocks need explicit whitespace preservation and a max-height constraint. W
 ```css
 .code-block {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -222,7 +379,7 @@ function example() {
 
 .code-file__body {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   padding: 16px;
   background: var(--surface-elevated);
@@ -720,7 +877,7 @@ Use real `<table>` elements for tabular data. Wrap in a scrollable container for
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -734,7 +891,7 @@ Use real `<table>` elements for tabular data. Wrap in a scrollable container for
 .data-table th {
   background: var(--surface-elevated, var(--surface));
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -815,7 +972,7 @@ Styled spans for match/gap/warning states. Never use emoji.
   align-items: center;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 6px;
@@ -1105,7 +1262,7 @@ Include a single breakpoint for narrow viewports:
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -1225,7 +1382,7 @@ Include a single breakpoint for narrow viewports:
 .diff-panel__body {
   padding: 16px;
   background: var(--surface);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -1287,7 +1444,7 @@ details.collapsible[open] summary::before {
 details.collapsible .collapsible__body {
   padding: 16px 20px;
   border-top: 1px solid var(--border);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 ```
