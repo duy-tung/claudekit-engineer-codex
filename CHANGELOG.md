@@ -1,3 +1,13 @@
+## Unreleased
+
+### 🚀 Features
+
+* **hooks:** add structured diagnostics logging for core hook outcomes and crashes
+
+### ✅ Tests
+
+* **hooks:** add hook logger coverage for structured fields and crash normalization
+
 ## [2.14.0-beta.26](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.25...v2.14.0-beta.26) (2026-03-17)
 
 

@@ -7,10 +7,13 @@
 
 'use strict';
 
+const { createHookTimer, logHookCrash } = require('./lib/hook-logger.cjs');
+
 let input = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => { input += chunk; });
 process.stdin.on('end', () => {
+  const timer = createHookTimer('plan-format-kanban', { event: 'PostToolUse' });
   try {
     const data = JSON.parse(input);
     const toolName = data.tool_name || '';
@@ -18,6 +21,7 @@ process.stdin.on('end', () => {
 
     // Only check plan.md files
     if (!filePath.endsWith('/plan.md')) {
+      timer.end({ tool: toolName, status: 'skip', exit: 0, note: 'non-plan-file' });
       process.stdout.write(JSON.stringify({ continue: true }));
       return;
     }
@@ -25,6 +29,7 @@ process.stdin.on('end', () => {
     // Read the file and check for filename-as-link-text pattern
     const fs = require('fs');
     if (!fs.existsSync(filePath)) {
+      timer.end({ tool: toolName, status: 'skip', exit: 0, note: 'file-missing' });
       process.stdout.write(JSON.stringify({ continue: true }));
       return;
     }
@@ -75,13 +80,22 @@ process.stdin.on('end', () => {
     }
 
     if (warnings.length > 0) {
+      timer.end({
+        tool: toolName,
+        status: 'warn',
+        exit: 0,
+        target: 'plan.md',
+        note: `${warnings.length}-warning(s)`
+      });
       process.stdout.write(JSON.stringify({ continue: true, additionalContext: warnings.join('\n') }));
       return;
     }
 
+    timer.end({ tool: toolName, status: 'ok', exit: 0, target: 'plan.md' });
     process.stdout.write(JSON.stringify({ continue: true }));
   } catch (_err) {
     // Fail-open: never block on hook errors
+    logHookCrash('plan-format-kanban', _err, { event: 'PostToolUse' });
     process.stdout.write(JSON.stringify({ continue: true }));
   }
 });

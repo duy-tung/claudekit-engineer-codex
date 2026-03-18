@@ -26,6 +26,7 @@ try {
     extractTaskListId,
     isHookEnabled
   } = require('./lib/ck-config-utils.cjs');
+  const { createHookTimer, logHookCrash } = require('./lib/hook-logger.cjs');
 
   // Early exit if hook disabled in config
   if (!isHookEnabled('session-init')) {
@@ -143,6 +144,7 @@ function detectAgentTeam() {
  * Main hook execution
  */
 async function main() {
+  const timer = createHookTimer('session-init', { event: 'SessionStart' });
   try {
     // Issue #422: One-time cleanup of orphaned .shadowed/ from disabled skill-dedup hook
     const shadowedCleanup = cleanupOrphanedShadowedSkills();
@@ -338,23 +340,20 @@ async function main() {
       });
     }
 
+    timer.end({ status: 'ok', exit: 0, note: source || 'session-start' });
     process.exit(0);
   } catch (error) {
     console.error(`SessionStart hook error: ${error.message}`);
+    logHookCrash('session-init', error, { event: 'SessionStart' });
     process.exit(0);
   }
   }
 
   main();
 } catch (e) {
-  // Minimal crash logging (zero deps — only Node builtins)
   try {
-    const fs = require('fs');
-    const p = require('path');
-    const logDir = p.join(__dirname, '.logs');
-    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
-    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
-      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+    const { logHookCrash } = require('./lib/hook-logger.cjs');
+    logHookCrash('session-init', e, { event: 'SessionStart' });
   } catch (_) {}
   process.exit(0); // fail-open
 }
