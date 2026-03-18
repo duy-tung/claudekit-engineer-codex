@@ -66,7 +66,7 @@ try {
     } catch (parseError) {
       // Fail-open for unparseable input
       console.error('WARN: JSON parse failed, allowing operation');
-      timer.end({ status: 'error', exit: 0, note: 'json-parse-failed', error: parseError.message });
+      timer.end({ status: 'warn', exit: 0, note: 'json-parse-failed', error: parseError.message });
       process.exit(0);
     }
 
@@ -74,7 +74,7 @@ try {
     if (!data.tool_input || typeof data.tool_input !== 'object') {
       // Fail-open for invalid structure
       console.error('WARN: Invalid JSON structure, allowing operation');
-      timer.end({ status: 'error', exit: 0, note: 'invalid-structure' });
+      timer.end({ status: 'warn', exit: 0, note: 'invalid-structure' });
       process.exit(0);
     }
 

@@ -83,4 +83,18 @@ describe('hook-logger', () => {
     assert.strictEqual(entry.status, 'crash');
     assert.strictEqual(entry.error, 'boom');
   });
+
+  it('rotates under lock and preserves the newest entries', () => {
+    const lines = [];
+    for (let i = 0; i < 1000; i++) {
+      lines.push(JSON.stringify({ ts: `2026-03-18T12:00:${String(i % 60).padStart(2, '0')}.000Z`, hook: 'seed', status: 'ok', note: String(i) }));
+    }
+    fs.writeFileSync(LOG_FILE, lines.join('\n') + '\n', 'utf8');
+
+    logHook('hook-logger', { status: 'ok', note: 'latest' });
+
+    const entries = readEntries();
+    assert.strictEqual(entries.length, 500);
+    assert.strictEqual(entries.at(-1).note, 'latest');
+  });
 });

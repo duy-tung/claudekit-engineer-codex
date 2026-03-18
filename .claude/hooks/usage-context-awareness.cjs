@@ -33,6 +33,9 @@ const CACHE_TTL_MS = 60000; // 60 seconds
 const FETCH_INTERVAL_MS = 300000; // 5 minutes for PostToolUse
 const FETCH_INTERVAL_PROMPT_MS = 60000; // 1 minute for UserPromptSubmit
 
+let lastHookEvent = "PostToolUse";
+let lastToolName = "";
+
 /**
  * Get Claude OAuth credentials (cross-platform)
  */
@@ -164,6 +167,8 @@ async function main() {
 				? input.hook_event_name
 				: "PostToolUse";
 		const tool = typeof input.tool_name === "string" ? input.tool_name : "";
+		lastHookEvent = event;
+		lastToolName = tool;
 
 		// Check if we should fetch (throttled)
 		if (shouldFetch(isUserPrompt)) {
@@ -185,7 +190,7 @@ async function main() {
 			});
 		}
 	} catch (error) {
-		logHookCrash('usage-context-awareness', error, { event: 'PostToolUse' });
+		logHookCrash('usage-context-awareness', error, { event: lastHookEvent, tool: lastToolName });
 	}
 
 	// Output result (no injection, just continue)
@@ -193,14 +198,14 @@ async function main() {
   }
 
   main().catch(() => {
-    logHookCrash('usage-context-awareness', 'main-catch', { event: 'PostToolUse' });
+    logHookCrash('usage-context-awareness', 'main-catch', { event: lastHookEvent, tool: lastToolName });
     console.log(JSON.stringify({ continue: true }));
     process.exit(0);
   });
 } catch (e) {
   try {
     const { logHookCrash } = require('./lib/hook-logger.cjs');
-    logHookCrash('usage-context-awareness', e, { event: 'PostToolUse' });
+    logHookCrash('usage-context-awareness', e, { event: lastHookEvent, tool: lastToolName });
   } catch (_) {}
   process.exit(0); // fail-open
 }

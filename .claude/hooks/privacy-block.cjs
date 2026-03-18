@@ -100,7 +100,7 @@ async function main() {
   try {
     hookData = JSON.parse(input);
   } catch (e) {
-    timer.end({ status: 'error', exit: 0, note: 'json-parse-failed', error: e.message });
+    timer.end({ status: 'warn', exit: 0, note: 'json-parse-failed', error: e.message });
     process.exit(0); // Invalid JSON, allow
   }
 
@@ -138,7 +138,7 @@ async function main() {
       status: 'warn',
       exit: 0,
       target: path.basename(result.filePath || ''),
-      note: result.reason || 'bash-sensitive-file'
+      note: 'bash-sensitive-file'
     });
     process.exit(0);
   }
@@ -179,10 +179,10 @@ async function main() {
         extractPaths,
       };
     }
-  } catch (e) {
-    try {
-      const { logHookCrash } = require('./lib/hook-logger.cjs');
-      logHookCrash('privacy-block', e, { event: 'PreToolUse' });
+} catch (e) {
+  try {
+    const { logHookCrash } = require('./lib/hook-logger.cjs');
+    logHookCrash('privacy-block', e, { event: 'PreToolUse' });
     } catch (_) {}
     process.exit(0); // fail-open
   }

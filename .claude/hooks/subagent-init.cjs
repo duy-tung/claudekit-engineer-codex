@@ -26,6 +26,7 @@ try {
     isHookEnabled
   } = require('./lib/ck-config-utils.cjs');
   const { resolveSkillsVenv } = require('./lib/context-builder.cjs');
+  const { createHookTimer, logHookCrash } = require('./lib/hook-logger.cjs');
 
   // Early exit if hook disabled in config
   if (!isHookEnabled('subagent-init')) {
@@ -77,12 +78,17 @@ function buildTrustVerification(config) {
  * Main hook execution
  */
 async function main() {
+  const timer = createHookTimer('subagent-init', { event: 'SubagentStart' });
+  let agentType = 'unknown';
   try {
     const stdin = fs.readFileSync(0, 'utf-8').trim();
-    if (!stdin) process.exit(0);
+    if (!stdin) {
+      timer.end({ status: 'skip', exit: 0, note: 'empty-input' });
+      process.exit(0);
+    }
 
     const payload = JSON.parse(stdin);
-    const agentType = payload.agent_type || 'unknown';
+    agentType = payload.agent_type || 'unknown';
     const agentId = payload.agent_id || 'unknown';
 
     // Load config for trust verification, naming, and agent-specific context
@@ -204,23 +210,20 @@ async function main() {
     };
 
     console.log(JSON.stringify(output));
+    timer.end({ status: 'ok', exit: 0, target: agentType, note: 'context-injected' });
     process.exit(0);
   } catch (error) {
     console.error(`SubagentStart hook error: ${error.message}`);
+    logHookCrash('subagent-init', error, { event: 'SubagentStart', target: agentType });
     process.exit(0); // Fail-open
   }
   }
 
   main();
 } catch (e) {
-  // Minimal crash logging (zero deps — only Node builtins)
   try {
-    const fs = require('fs');
-    const p = require('path');
-    const logDir = p.join(__dirname, '.logs');
-    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
-    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
-      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+    const { logHookCrash } = require('./lib/hook-logger.cjs');
+    logHookCrash('subagent-init', e, { event: 'SubagentStart' });
   } catch (_) {}
   process.exit(0); // fail-open
 }

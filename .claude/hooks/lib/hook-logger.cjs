@@ -13,8 +13,45 @@ const path = require('path');
 
 const LOG_DIR = path.join(__dirname, '..', '.logs');
 const LOG_FILE = path.join(LOG_DIR, 'hook-log.jsonl');
+const LOCK_FILE = path.join(LOG_DIR, 'hook-log.lock');
 const MAX_LINES = 1000;
 const TRUNCATE_TO = 500;
+const LOCK_TIMEOUT_MS = 250;
+const LOCK_RETRY_MS = 10;
+
+function sleep(ms) {
+  try {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+  } catch (_) {
+    const end = Date.now() + ms;
+    while (Date.now() < end) {}
+  }
+}
+
+function withLogLock(fn) {
+  ensureLogDir();
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < LOCK_TIMEOUT_MS) {
+    let fd;
+    try {
+      fd = fs.openSync(LOCK_FILE, 'wx');
+      try {
+        return fn();
+      } finally {
+        try { fs.closeSync(fd); } catch (_) {}
+        try { fs.unlinkSync(LOCK_FILE); } catch (_) {}
+      }
+    } catch (error) {
+      if (!error || error.code !== 'EEXIST') {
+        throw error;
+      }
+      sleep(LOCK_RETRY_MS);
+    }
+  }
+
+  return null;
+}
 
 /**
  * Ensure log directory exists
@@ -52,9 +89,6 @@ function rotateIfNeeded() {
  */
 function logHook(hookName, data) {
   try {
-    ensureLogDir();
-    rotateIfNeeded();
-
     const entry = {
       ts: new Date().toISOString(),
       hook: hookName,
@@ -68,7 +102,16 @@ function logHook(hookName, data) {
       error: data.error || ''
     };
 
-    fs.appendFileSync(LOG_FILE, JSON.stringify(entry) + '\n', 'utf-8');
+    const serialized = JSON.stringify(entry) + '\n';
+    const wroteWithLock = withLogLock(() => {
+      fs.appendFileSync(LOG_FILE, serialized, 'utf-8');
+      rotateIfNeeded();
+      return true;
+    });
+
+    if (wroteWithLock === null) {
+      fs.appendFileSync(LOG_FILE, serialized, 'utf-8');
+    }
   } catch (_) {
     // Never crash — fail silently
   }
