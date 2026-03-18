@@ -57,6 +57,20 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 - Command definitions (`.md` with embedded agent calls)
 - Skill modules (knowledge bases)
 - Workflow templates
+- Hook diagnostics logs (`.claude/hooks/.logs/hook-log.jsonl`)
+
+#### 1.4 Hook Runtime Diagnostics
+**Location**: `.claude/hooks/lib/hook-logger.cjs` and `.claude/hooks/.logs/hook-log.jsonl`
+**Responsibility**: Persist structured hook execution telemetry for local inspection and downstream dashboard consumption
+**Current Coverage**:
+- `PreToolUse`: `scout-block`, `privacy-block`, `descriptive-name`
+- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-context-awareness`
+- `UserPromptSubmit`: `dev-rules-reminder`, `usage-context-awareness`
+
+**Log Contract**:
+- One JSON object per line
+- Common fields: `ts`, `hook`, `event`, `tool`, `target`, `note`, `dur`, `status`, `exit`, `error`
+- Fail-open behavior preserved: diagnostics must never block normal hook execution
 
 ### 2. Agent Layer
 

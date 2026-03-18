@@ -5,7 +5,7 @@
  * Auto-creates .logs/ directory and handles rotation (1000 lines max → 500 last)
  * Uses only Node builtins (fs, path) — no external dependencies
  *
- * Export: logHook(hookName, data), createHookTimer(hookName)
+ * Export: logHook(hookName, data), createHookTimer(hookName, baseData), logHookCrash(hookName, error, data)
  */
 
 const fs = require('fs');
@@ -48,7 +48,7 @@ function rotateIfNeeded() {
 /**
  * Log a hook event
  * @param {string} hookName - Hook filename (e.g., 'scout-block')
- * @param {object} data - Log data { tool?, dur?, status, exit?, error? }
+ * @param {object} data - Log data { event?, tool?, target?, note?, dur?, status, exit?, error? }
  */
 function logHook(hookName, data) {
   try {
@@ -58,7 +58,10 @@ function logHook(hookName, data) {
     const entry = {
       ts: new Date().toISOString(),
       hook: hookName,
+      event: data.event || '',
       tool: data.tool || '',
+      target: data.target || '',
+      note: data.note || '',
       dur: data.dur || 0,
       status: data.status || 'ok',
       exit: data.exit !== undefined ? data.exit : 0,
@@ -74,19 +77,45 @@ function logHook(hookName, data) {
 /**
  * Create a duration timer for a hook
  * @param {string} hookName - Hook filename
+ * @param {object} [baseData] - Shared fields applied to every end() call
  * @returns {{ end: (data) => void }} Timer object with end() method
  */
-function createHookTimer(hookName) {
+function createHookTimer(hookName, baseData = {}) {
   const start = Date.now();
+  let ended = false;
   return {
     end(data = {}) {
+      if (ended) return;
+      ended = true;
       const dur = Date.now() - start;
-      logHook(hookName, { ...data, dur });
+      logHook(hookName, { ...baseData, ...data, dur });
     }
   };
 }
 
+/**
+ * Log a crash entry with normalized error handling.
+ * @param {string} hookName
+ * @param {unknown} error
+ * @param {object} [data]
+ */
+function logHookCrash(hookName, error, data = {}) {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === 'string'
+        ? error
+        : String(error || 'unknown error');
+  logHook(hookName, {
+    ...data,
+    status: 'crash',
+    exit: data.exit !== undefined ? data.exit : 0,
+    error: message
+  });
+}
+
 module.exports = {
   logHook,
-  createHookTimer
+  createHookTimer,
+  logHookCrash
 };

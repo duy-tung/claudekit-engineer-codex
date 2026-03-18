@@ -113,6 +113,7 @@ A comprehensive boilerplate template for building professional software projects
 │   ├── agents/             # Claude Code agents
 │   ├── command-archive/    # Archived legacy command definitions
 │   ├── hooks/              # Claude Code hooks
+│   │   ├── .logs/          # Structured hook diagnostics (hook-log.jsonl)
 │   │   └── notifications/  # Multi-provider notification system
 │   ├── skills/             # Claude Code skills
 │   └── CLAUDE.md           # Global development instructions

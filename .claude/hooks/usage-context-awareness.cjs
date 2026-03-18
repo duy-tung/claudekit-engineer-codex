@@ -20,6 +20,7 @@ try {
   const os = require("os");
   const { execSync } = require("child_process");
   const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
+  const { createHookTimer, logHookCrash } = require('./lib/hook-logger.cjs');
 
   // Early exit if hook disabled in config
   if (!isHookEnabled('usage-context-awareness')) {
@@ -109,7 +110,7 @@ async function fetchAndCacheUsageLimits() {
 	const token = getClaudeCredentials();
 	if (!token) {
 		writeCache("unavailable");
-		return false;
+		return { cacheStatus: "unavailable", note: "missing-credentials", ok: false };
 	}
 
 	try {
@@ -126,15 +127,15 @@ async function fetchAndCacheUsageLimits() {
 
 		if (!response.ok) {
 			writeCache("unavailable");
-			return false;
+			return { cacheStatus: "unavailable", note: `http-${response.status}`, ok: false };
 		}
 
 		const data = await response.json();
 		writeCache("available", data);
-		return true;
+		return { cacheStatus: "available", note: "fetched", ok: true };
 	} catch {
 		writeCache("unavailable");
-		return false;
+		return { cacheStatus: "unavailable", note: "fetch-failed", ok: false };
 	}
 }
 
@@ -144,6 +145,7 @@ async function fetchAndCacheUsageLimits() {
 async function main() {
 	// Always allow operation to continue
 	const result = { continue: true };
+	const timer = createHookTimer('usage-context-awareness');
 
 	try {
 		// Read hook input
@@ -156,30 +158,49 @@ async function main() {
 
 		// Detect hook type
 		const isUserPrompt = typeof input.prompt === "string";
+		const event = isUserPrompt
+			? "UserPromptSubmit"
+			: typeof input.hook_event_name === "string" && input.hook_event_name.length > 0
+				? input.hook_event_name
+				: "PostToolUse";
+		const tool = typeof input.tool_name === "string" ? input.tool_name : "";
 
 		// Check if we should fetch (throttled)
 		if (shouldFetch(isUserPrompt)) {
-			await fetchAndCacheUsageLimits();
+			const fetchResult = await fetchAndCacheUsageLimits();
+			timer.end({
+				event,
+				tool,
+				status: fetchResult.ok ? "ok" : "warn",
+				exit: 0,
+				note: fetchResult.note
+			});
+		} else {
+			timer.end({
+				event,
+				tool,
+				status: "skip",
+				exit: 0,
+				note: "throttled"
+			});
 		}
-	} catch {}
+	} catch (error) {
+		logHookCrash('usage-context-awareness', error, { event: 'PostToolUse' });
+	}
 
 	// Output result (no injection, just continue)
 	console.log(JSON.stringify(result));
   }
 
   main().catch(() => {
+    logHookCrash('usage-context-awareness', 'main-catch', { event: 'PostToolUse' });
     console.log(JSON.stringify({ continue: true }));
     process.exit(0);
   });
 } catch (e) {
-  // Minimal crash logging (zero deps — only Node builtins)
   try {
-    const fs = require('fs');
-    const p = require('path');
-    const logDir = p.join(__dirname, '.logs');
-    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
-    fs.appendFileSync(p.join(logDir, 'hook-log.jsonl'),
-      JSON.stringify({ ts: new Date().toISOString(), hook: p.basename(__filename, '.cjs'), status: 'crash', error: e.message }) + '\n');
+    const { logHookCrash } = require('./lib/hook-logger.cjs');
+    logHookCrash('usage-context-awareness', e, { event: 'PostToolUse' });
   } catch (_) {}
   process.exit(0); // fail-open
 }
