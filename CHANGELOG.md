@@ -1,3 +1,15 @@
+## [2.14.0-beta.27](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.26...v2.14.0-beta.27) (2026-03-18)
+
+
+### 🚀 Features
+
+* **hooks:** add structured hook diagnostics logging ([78b18eb](https://github.com/claudekit/claudekit-engineer/commit/78b18eb8d174c710903c953a71f0fe90269e041a))
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** harden structured hook diagnostics logging ([a30f4f3](https://github.com/claudekit/claudekit-engineer/commit/a30f4f351f4f5efc765708e752a33b32a64eda42))
+
 ## Unreleased
 
 ### 🚀 Features
