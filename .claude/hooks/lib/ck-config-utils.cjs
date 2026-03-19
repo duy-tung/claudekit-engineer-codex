@@ -61,6 +61,7 @@ const DEFAULT_CONFIG = {
   },
   assertions: [],
   statusline: 'full',
+  statuslineColors: true,
   hooks: {
     'session-init': true,
     'subagent-init': true,
@@ -523,6 +524,7 @@ function loadConfig(options = {}) {
     result.hooks = merged.hooks || DEFAULT_CONFIG.hooks;
     // Statusline mode
     result.statusline = merged.statusline || 'full';
+    result.statuslineColors = merged.statuslineColors ?? true;
 
     return sanitizeConfig(result, projectRoot);
   } catch (e) {
@@ -541,7 +543,8 @@ function getDefaultConfig(includeProject = true, includeAssertions = true, inclu
     codingLevel: -1,  // Default: disabled (no injection, saves tokens)
     skills: { ...DEFAULT_CONFIG.skills },
     hooks: { ...DEFAULT_CONFIG.hooks },
-    statusline: 'full'
+    statusline: 'full',
+    statuslineColors: true
   };
   if (includeLocale) {
     result.locale = { ...DEFAULT_CONFIG.locale };
