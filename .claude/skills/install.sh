@@ -853,7 +853,7 @@ setup_python_env() {
         fi
     done
 
-    # Install .claude/scripts requirements (contains pyyaml for generate_catalogs.py)
+    # Install .claude/scripts requirements (contains pyyaml for scan_skills.py)
     local SCRIPTS_REQ="$SCRIPT_DIR/../scripts/requirements.txt"
     if [ -f "$SCRIPTS_REQ" ]; then
         local SCRIPTS_LOG="$LOG_DIR/install-scripts.log"

@@ -987,7 +987,7 @@ User Project
 1. Create skill directory: `.claude/skills/my-command/`
 2. Define `SKILL.md` with YAML frontmatter and workflow instructions
 3. Add script/reference files under `scripts/` or `references/` as needed
-4. Register discoverability metadata so `/ck-help` can route users correctly
+4. Register discoverability metadata in SKILL.md frontmatter
 
 ### Adding New Skills
 
