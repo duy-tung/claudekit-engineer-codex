@@ -1,3 +1,11 @@
+## [2.14.0-beta.28](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.27...v2.14.0-beta.28) (2026-03-19)
+
+
+### 🚀 Features
+
+* add statuslineColors config toggle for ANSI color control ([8392b6f](https://github.com/claudekit/claudekit-engineer/commit/8392b6f1516a70bba6fd6263a9185cfa76affc25)), closes [#569](https://github.com/claudekit/claudekit-engineer/issues/569)
+* colorize statusline elements across all render modes ([b10f1a9](https://github.com/claudekit/claudekit-engineer/commit/b10f1a9fb9064210a86d719c4e700841c3cb2c0c))
+
 ## [2.14.0-beta.27](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.26...v2.14.0-beta.27) (2026-03-18)
 
 
