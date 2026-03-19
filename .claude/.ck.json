@@ -2,6 +2,7 @@
   "$schema": "./schemas/ck-config.schema.json",
   "codingLevel": -1,
   "statusline": "full",
+  "statuslineColors": true,
   "privacyBlock": true,
   "docs": {
     "maxLoc": 800

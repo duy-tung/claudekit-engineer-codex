@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Import modular components
-const { green, yellow, red, cyan, magenta, dim, coloredBar } = require('./hooks/lib/colors.cjs');
+const { green, yellow, red, cyan, magenta, dim, coloredBar, setColorEnabled } = require('./hooks/lib/colors.cjs');
 const { parseTranscript } = require('./hooks/lib/transcript-parser.cjs');
 const { countConfigs } = require('./hooks/lib/config-counter.cjs');
 const { loadConfig } = require('./hooks/lib/ck-config-utils.cjs');
@@ -590,6 +590,12 @@ async function main() {
     // Load config and get statusline mode
     const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
     const statuslineMode = config.statusline || 'full';
+
+    // Apply statuslineColors config: explicit false disables colors regardless of FORCE_COLOR
+    // NO_COLOR env var is checked inside isColorEnabled() and always wins
+    if (config.statuslineColors === false) {
+      setColorEnabled(false);
+    }
 
     // Render based on mode
     switch (statuslineMode) {
