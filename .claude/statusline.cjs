@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Import modular components
-const { green, yellow, red, cyan, magenta, dim, coloredBar, setColorEnabled } = require('./hooks/lib/colors.cjs');
+const { RESET, green, yellow, red, cyan, magenta, dim, coloredBar, getContextColor, setColorEnabled } = require('./hooks/lib/colors.cjs');
 const { parseTranscript } = require('./hooks/lib/transcript-parser.cjs');
 const { countConfigs } = require('./hooks/lib/config-counter.cjs');
 const { loadConfig } = require('./hooks/lib/ck-config-utils.cjs');
@@ -188,12 +188,12 @@ function renderSessionLines(ctx) {
   const termWidth = getTerminalWidth();
   const threshold = Math.floor(termWidth * 0.85);
 
-  // Build all atomic parts for flexible composition (no colors on static text)
-  const dirPart = `📁 ${ctx.currentDir}`;
+  // Build all atomic parts for flexible composition with colors
+  const dirPart = `📁 ${yellow(ctx.currentDir)}`;
 
   let branchPart = '';
   if (ctx.gitBranch) {
-    branchPart = `🌿 ${ctx.gitBranch}`;
+    branchPart = `🌿 ${magenta(ctx.gitBranch)}`;
     // Build git status indicators: (unstaged, +staged, ahead↑, behind↓)
     const gitIndicators = [];
     if (ctx.gitUnstaged > 0) gitIndicators.push(`${ctx.gitUnstaged}`);
@@ -214,14 +214,15 @@ function renderSessionLines(ctx) {
   if (planPart) locationPart += `  ${planPart}`;
 
   // Build session part: 🤖 model  contextBar%  ⌛ time left (usage%)
-  let sessionPart = `🤖 ${ctx.modelName}`;
+  let sessionPart = `🤖 ${cyan(ctx.modelName)}`;
   if (ctx.contextPercent > 0) {
-    sessionPart += `  ${coloredBar(ctx.contextPercent, 12)} ${ctx.contextPercent}%`;
+    const ctxColor = getContextColor(ctx.contextPercent);
+    sessionPart += `  ${coloredBar(ctx.contextPercent, 12)} ${ctxColor}${ctx.contextPercent}%${RESET}`;
   }
   // Keep usage/reset info close to model/context for quick scanning.
   const usageStr = buildUsageString(ctx);
   if (usageStr) {
-    sessionPart += `  ⌛ ${usageStr.replace(/\)$/, ' used)')}`;
+    sessionPart += `  ⌛ ${dim(usageStr.replace(/\)$/, ' used)'))}`;
   }
 
   // Build stats part (only lines changed now)
@@ -379,15 +380,15 @@ function renderTodosLine(transcript) {
  * Format: "🤖 opus 4.5  🔋 50%  ⏰ 2h 16m (38%)  🌿 branch  📁 ~/path"
  */
 function renderMinimal(ctx) {
-  const parts = [`🤖 ${ctx.modelName}`];
+  const parts = [`🤖 ${cyan(ctx.modelName)}`];
   if (ctx.contextPercent > 0) {
     const batteryIcon = ctx.contextPercent > 70 ? red('🔋') : '🔋';
     parts.push(`${batteryIcon} ${ctx.contextPercent}%`);
   }
   const usageStr = buildUsageString(ctx);
-  if (usageStr) parts.push(`⏰ ${usageStr}`);
-  if (ctx.gitBranch) parts.push(`🌿 ${ctx.gitBranch}`);
-  parts.push(`📁 ${ctx.currentDir}`);
+  if (usageStr) parts.push(`⏰ ${dim(usageStr)}`);
+  if (ctx.gitBranch) parts.push(`🌿 ${magenta(ctx.gitBranch)}`);
+  parts.push(`📁 ${yellow(ctx.currentDir)}`);
   console.log(parts.join('  '));
 }
 
@@ -396,17 +397,18 @@ function renderMinimal(ctx) {
  */
 function renderCompact(ctx) {
   // Line 1: Session info (model + context + usage)
-  let line1 = `🤖 ${ctx.modelName}`;
+  let line1 = `🤖 ${cyan(ctx.modelName)}`;
   if (ctx.contextPercent > 0) {
-    line1 += `  ${coloredBar(ctx.contextPercent, 12)} ${ctx.contextPercent}%`;
+    const ctxColor = getContextColor(ctx.contextPercent);
+    line1 += `  ${coloredBar(ctx.contextPercent, 12)} ${ctxColor}${ctx.contextPercent}%${RESET}`;
   }
   const usageStr = buildUsageString(ctx);
-  if (usageStr) line1 += `  ⌛ ${usageStr}`;
+  if (usageStr) line1 += `  ⌛ ${dim(usageStr)}`;
   console.log(line1);
 
   // Line 2: Location (branch + directory)
-  let line2 = `📁 ${ctx.currentDir}`;
-  if (ctx.gitBranch) line2 += `  🌿 ${ctx.gitBranch}`;
+  let line2 = `📁 ${yellow(ctx.currentDir)}`;
+  if (ctx.gitBranch) line2 += `  🌿 ${magenta(ctx.gitBranch)}`;
   console.log(line2);
 }
 
