@@ -1,3 +1,11 @@
+## [2.14.0-beta.29](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.28...v2.14.0-beta.29) (2026-03-20)
+
+
+### ♻️ Code Refactoring
+
+* clean ck-help and generate_catalogs references ([309fb8c](https://github.com/claudekit/claudekit-engineer/commit/309fb8c649bb0bd5b79e49a58a7da078e248d60b))
+* remove ck-help skill and generate_catalogs pipeline ([731049c](https://github.com/claudekit/claudekit-engineer/commit/731049c6823fd39657c244f989361d22b55708ad))
+
 ## [2.14.0-beta.28](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.27...v2.14.0-beta.28) (2026-03-19)
 
 
