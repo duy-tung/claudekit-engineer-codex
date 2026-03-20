@@ -1,3 +1,10 @@
+## [2.14.0-beta.30](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.29...v2.14.0-beta.30) (2026-03-20)
+
+
+### 🚀 Features
+
+* add JSON schema reference to settings.json ([f5fb498](https://github.com/claudekit/claudekit-engineer/commit/f5fb498b3f7cbf5611f851f92d628695910e8d77)), closes [#572](https://github.com/claudekit/claudekit-engineer/issues/572)
+
 ## [2.14.0-beta.29](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.28...v2.14.0-beta.29) (2026-03-20)
 
 
