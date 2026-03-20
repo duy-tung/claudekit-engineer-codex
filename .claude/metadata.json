@@ -106,7 +106,13 @@
     "hooks/tests/test-context-tracker.cjs",
     "scripts/fix-shebang-permissions.sh",
     "skills/debug",
-    "skills/plan"
+    "skills/plan",
+    "skills/ck-help",
+    "scripts/generate_catalogs.py",
+    "scripts/skills_data.yaml",
+    "scripts/commands_data.yaml",
+    "scripts/test_ck_help.py",
+    "scripts/test_ck_help_integration.py"
   ],
   "version": "2.14.0-beta.28",
   "name": "claudekit-engineer",

@@ -19,13 +19,6 @@ categories:
   skill: Skill Management
 commands:
   core:
-  - name: ck-help
-    path: ck-help.md
-    description: ClaudeKit usage guide - just type naturally
-    argument_hint:
-    - category|command|task
-    power_level: 1
-    category: core
   - name: ask
     path: ask.md
     description: Answer technical and architectural questions.
