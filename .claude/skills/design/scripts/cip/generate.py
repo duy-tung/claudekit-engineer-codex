@@ -3,10 +3,10 @@
 """
 CIP Design Generator - Generate corporate identity mockups using Gemini Nano Banana
 
-Uses Gemini's native image generation (Nano Banana Flash/Pro) for high-quality mockups.
+Uses Gemini's native image generation (Nano Banana 2/Pro) for high-quality mockups.
 Supports text-and-image-to-image generation for using actual brand logos.
 
-- gemini-2.5-flash-image: Fast generation, cost-effective (default)
+- gemini-3.1-flash-image-preview: Nano Banana 2, fastest, 95% Pro quality (default)
 - gemini-3-pro-image-preview: Pro quality, 4K text rendering
 
 Image Editing (text-and-image-to-image):
@@ -27,8 +27,8 @@ from core import search, get_cip_brief
 
 # Model options
 MODELS = {
-    "flash": "gemini-2.5-flash-image",      # Nano Banana Flash - fast, default
-    "pro": "gemini-3-pro-image-preview"      # Nano Banana Pro - quality, 4K text
+    "flash": "gemini-3.1-flash-image-preview",  # Nano Banana 2 - fastest, 95% Pro quality (default)
+    "pro": "gemini-3-pro-image-preview"          # Nano Banana Pro - quality, 4K text
 }
 DEFAULT_MODEL = "flash"
 
@@ -191,7 +191,7 @@ def generate_with_nano_banana(prompt_data, output_dir=None, model_key="flash", a
     2. Image editing: Text-and-image-to-image using provided logo (logo_image=PIL.Image)
 
     Models:
-    - flash: gemini-2.5-flash-image (fast, cost-effective) - DEFAULT
+    - flash: gemini-3.1-flash-image-preview (fast, cost-effective) - DEFAULT
     - pro: gemini-3-pro-image-preview (quality, 4K text rendering)
 
     Args:
@@ -389,7 +389,7 @@ Examples:
   python generate.py --brand "MyBrand" --logo logo.png --deliverable "vehicle" --output ./mockups --ratio 16:9
 
 Models:
-  flash (default): gemini-2.5-flash-image - Fast, cost-effective
+  flash (default): gemini-3.1-flash-image-preview - Fast, cost-effective
   pro: gemini-3-pro-image-preview - Quality, 4K text rendering
 
 Image Editing Mode:

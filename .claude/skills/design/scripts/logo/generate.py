@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Logo Generation Script using Gemini Nano Banana API
-Uses Gemini 2.5 Flash Image and Gemini 3 Pro Image Preview models
+Uses Gemini 3.1 Flash Image Preview and Gemini 3 Pro Image Preview models
 
 Models:
-- Nano Banana (default): gemini-2.5-flash-image - fast, high-volume, low-latency
+- Nano Banana 2 (default): gemini-3.1-flash-image-preview - fastest, 95% Pro quality, web grounding
 - Nano Banana Pro (--pro): gemini-3-pro-image-preview - professional quality, advanced reasoning
 
 Usage:
@@ -59,7 +59,7 @@ except ImportError:
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Gemini "Nano Banana" model configurations for image generation
-GEMINI_FLASH = "gemini-2.5-flash-image"  # Nano Banana: fast, high-volume, low-latency
+GEMINI_FLASH = "gemini-3.1-flash-image-preview"  # Nano Banana 2: fastest, 95% Pro quality, web grounding
 GEMINI_PRO = "gemini-3-pro-image-preview"  # Nano Banana Pro: professional quality, advanced reasoning
 
 # Supported aspect ratios
@@ -155,7 +155,7 @@ def generate_logo(prompt, style=None, industry=None, brand_name=None,
 
     # Select model
     model = GEMINI_PRO if use_pro else GEMINI_FLASH
-    model_label = "Nano Banana Pro (gemini-3-pro-image-preview)" if use_pro else "Nano Banana (gemini-2.5-flash-image)"
+    model_label = "Nano Banana Pro (gemini-3-pro-image-preview)" if use_pro else "Nano Banana 2 (gemini-3.1-flash-image-preview)"
 
     # Set aspect ratio (default to 1:1 for logos)
     ratio = aspect_ratio if aspect_ratio in ASPECT_RATIOS else DEFAULT_ASPECT_RATIO
