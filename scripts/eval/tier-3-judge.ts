@@ -1,7 +1,7 @@
 /**
  * Tier 3 — LLM Judge (~$0.15/run, on-demand)
  *
- * Sends each SKILL.md to Claude for quality scoring on:
+ * Sends each SKILL.md to AI CLI (claude or ccs glm via CK_EVAL_CMD) for scoring:
  *   clarity, specificity, completeness (1-10 each).
  * Flags skills scoring below 6. Results saved to results/judge-{date}.json
  */
@@ -9,7 +9,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { spawnSync } from "child_process";
-import { listSubdirs, readFileSafe, projectRoot } from "./eval-utils.ts";
+import { listSubdirs, readFileSafe, projectRoot, resolveEvalCli } from "./eval-utils.ts";
 
 const ROOT = projectRoot();
 const SKILLS_DIR = join(ROOT, ".claude/skills");
@@ -62,7 +62,7 @@ function allSkillNames(): string[] {
   );
 }
 
-// ── Claude invocation ─────────────────────────────────────────────────────────
+// ── AI CLI invocation (CK_EVAL_CMD="ccs glm" or default "claude") ────────────
 
 function judgeSkill(skillName: string, skillContent: string): JudgeResult {
   const prompt = [
@@ -80,7 +80,8 @@ function judgeSkill(skillName: string, skillContent: string): JudgeResult {
     `---`,
   ].join("\n");
 
-  const result = spawnSync("claude", ["-p", prompt], {
+  const { cmd, prefixArgs } = resolveEvalCli();
+  const result = spawnSync(cmd, [...prefixArgs, "-p", prompt], {
     cwd: ROOT,
     encoding: "utf8",
     timeout: JUDGE_TIMEOUT_MS,

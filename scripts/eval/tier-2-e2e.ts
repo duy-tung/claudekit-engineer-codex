@@ -1,7 +1,7 @@
 /**
  * Tier 2 — E2E Harness (~$3.85/run, on-demand)
  *
- * Spawns claude CLI to test each skill responds correctly.
+ * Spawns AI CLI (claude or ccs glm via CK_EVAL_CMD) to test skill responses.
  * Supports --diff (changed skills only), --skill <name>, --all.
  *
  * Results saved as NDJSON to scripts/eval/results/e2e-{date}.ndjson
@@ -10,7 +10,7 @@
 import { existsSync, mkdirSync, appendFileSync } from "fs";
 import { join } from "path";
 import { spawnSync, spawn } from "child_process";
-import { listSubdirs, readFileSafe, projectRoot } from "./eval-utils.ts";
+import { listSubdirs, readFileSafe, projectRoot, resolveEvalCli } from "./eval-utils.ts";
 
 const ROOT = projectRoot();
 const SKILLS_DIR = join(ROOT, ".claude/skills");
@@ -52,7 +52,7 @@ function allSkillNames(): string[] {
   );
 }
 
-// ── Claude invocation ─────────────────────────────────────────────────────────
+// ── AI CLI invocation (CK_EVAL_CMD="ccs glm" or default "claude") ────────────
 
 function testSkill(skillName: string): E2EResult {
   const prompt =
@@ -78,7 +78,8 @@ function testSkill(skillName: string): E2EResult {
       });
     };
 
-    const child = spawn("claude", ["-p", prompt], {
+    const { cmd, prefixArgs } = resolveEvalCli();
+    const child = spawn(cmd, [...prefixArgs, "-p", prompt], {
       cwd: ROOT,
       env: { ...process.env },
       stdio: ["ignore", "pipe", "pipe"],

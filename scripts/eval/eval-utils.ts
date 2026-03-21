@@ -97,3 +97,21 @@ export function readFileSafe(p: string): string | null {
 export function projectRoot(): string {
   return new URL("../../", import.meta.url).pathname.replace(/\/$/, "");
 }
+
+// ── CLI command resolution ──────────────────────────────────────────────────
+
+/**
+ * Resolve the AI CLI command + prefix args for eval invocations.
+ * Priority: CK_EVAL_CMD env var > default "claude"
+ *
+ * Examples:
+ *   CK_EVAL_CMD="ccs glm"  → cmd: "ccs",  prefixArgs: ["glm"]
+ *   CK_EVAL_CMD="claude"   → cmd: "claude", prefixArgs: []
+ *   (unset)                 → cmd: "claude", prefixArgs: []
+ */
+export function resolveEvalCli(): { cmd: string; prefixArgs: string[] } {
+  const raw = process.env.CK_EVAL_CMD?.trim();
+  if (!raw) return { cmd: "claude", prefixArgs: [] };
+  const parts = raw.split(/\s+/);
+  return { cmd: parts[0], prefixArgs: parts.slice(1) };
+}
