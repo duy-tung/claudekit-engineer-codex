@@ -1,3 +1,10 @@
+## [2.14.0-beta.31](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.30...v2.14.0-beta.31) (2026-03-21)
+
+
+### 🚀 Features
+
+* **skills:** upgrade default image generation model to Nano Banana 2 ([529a92c](https://github.com/claudekit/claudekit-engineer/commit/529a92cde08408bada106ab7867ef36c66d63ac8))
+
 ## [2.14.0-beta.30](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.29...v2.14.0-beta.30) (2026-03-20)
 
 
