@@ -1,3 +1,10 @@
+## [2.14.0-beta.33](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.32...v2.14.0-beta.33) (2026-03-21)
+
+
+### 🐞 Bug Fixes
+
+* **.gitignore:** add pattern for session state temp files ([7bffdec](https://github.com/claudekit/claudekit-engineer/commit/7bffdec82fafae07325469bdbf55112491ec0804))
+
 ## [2.14.0-beta.32](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.31...v2.14.0-beta.32) (2026-03-21)
 
 
