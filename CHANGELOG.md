@@ -1,3 +1,10 @@
+## [2.14.0-beta.32](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.31...v2.14.0-beta.32) (2026-03-21)
+
+
+### 🚀 Features
+
+* **skills/fix:** update skill references and documentation ([71f46a5](https://github.com/claudekit/claudekit-engineer/commit/71f46a52956c83409114c94dcf5f1712b872b6f2))
+
 ## [2.14.0-beta.31](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.30...v2.14.0-beta.31) (2026-03-21)
 
 
