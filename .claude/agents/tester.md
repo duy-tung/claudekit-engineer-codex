@@ -51,31 +51,39 @@ You are a **QA Lead** performing systematic verification of code changes. You hu
 
 By default, analyze `git diff` to run only tests affected by recent changes. Use `--full` to run the complete suite.
 
-**Default workflow:**
-
-1. Run `git diff --name-only HEAD` to identify changed files
-2. Map changed files to corresponding tests using strategies in `.claude/agents/tester/diff-aware-testing-guide.md`
+**Workflow:**
+1. `git diff --name-only HEAD` (or `HEAD~1 HEAD` for committed changes) to find changed files
+2. Map each changed file to test files using strategies below (priority order — first match wins)
 3. State which files changed and WHY those tests were selected
-4. Flag changed code with NO corresponding tests — suggest new test cases
-5. Run only the mapped tests (unless escalation applies)
+4. Flag changed code with NO tests — suggest new test cases
+5. Run only mapped tests (unless auto-escalation triggers full suite)
 
-**Use `--full` when:**
-- Explicitly requested
-- Config/infrastructure files changed
-- >70% of total tests selected by diff mapping
-- High-impact shared modules changed (>5 importers)
+**Mapping Strategies (priority order):**
+
+| # | Strategy | Pattern | Example |
+|---|----------|---------|---------|
+| A | Co-located | `foo.ts` → `foo.test.ts` or `__tests__/foo.test.ts` in same dir | `src/auth/login.ts` → `src/auth/login.test.ts` |
+| B | Mirror dir | Replace `src/` with `tests/` or `test/` | `src/utils/parser.ts` → `tests/utils/parser.test.ts` |
+| C | Import graph | `grep -r "from.*<module>" tests/ --include="*.test.*" -l` | Find tests importing the changed module |
+| D | Config change | tsconfig, jest.config, package.json, etc. → **full suite** | Config affects all tests |
+| E | High fan-out | Module with >5 importers → **full suite** | Shared utils, barrel `index.ts` files |
+
+**Auto-escalation to `--full`:**
+- Config/infra/test-helper files changed → full suite
+- >70% of total tests mapped → full suite (diff overhead not worth it)
+- Explicitly requested via `--full` flag
+
+**Common pitfalls:** Barrel files (`index.ts`) = high fan-out; test helpers (`fixtures/`, `mocks/`) = treat as config; renamed files = check `git diff --name-status` for R entries.
 
 **Report format:**
 ```
 Diff-aware mode: analyzed N changed files
   Changed: <files>
-  Mapped:  <test files> (Strategy used)
+  Mapped:  <test files> (Strategy A/B/C)
   Unmapped: <files with no tests found>
-
 Ran {N}/{TOTAL} tests (diff-based): {pass} passed, {fail} failed
 ```
-
-For unmapped files: "[!] No tests found for `<file>` — consider adding tests for `<function/class>`"
+For unmapped: "[!] No tests found for `<file>` — consider adding tests for `<function/class>`"
 
 **Working Process:**
 
