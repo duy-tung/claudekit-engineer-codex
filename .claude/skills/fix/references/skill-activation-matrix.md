@@ -28,6 +28,7 @@ Skip Tasks for Quick workflow (< 3 steps). See `references/task-orchestration.md
 | `ck:brainstorm` | Multiple valid approaches, architecture decision |
 | `ck:context-engineering` | Fixing AI/LLM/agent code, context window issues |
 | `ck:ai-multimodal` | UI issues, screenshots provided, visual bugs |
+| `ck:project-management` | Moderate+ workflows — task hydration, sync-back, progress tracking |
 
 ## Subagent Usage
 
@@ -62,9 +63,9 @@ See `references/parallel-exploration.md` for detailed patterns.
 | Workflow | Skills Activated |
 |----------|------------------|
 | Quick | `ck:debug`, `ck:code-review`, parallel `Bash` verification |
-| Standard | Above + Tasks, `ck:problem-solving`, `ck:sequential-thinking`, `tester`, parallel `Explore` |
-| Deep | All above + `ck:brainstorm`, `ck:context-engineering`, `researcher`, `planner` |
-| Parallel | Per-issue Task trees + `fullstack-developer` agents + coordination via `TaskList` |
+| Standard | Above + Tasks, `ck:problem-solving`, `ck:sequential-thinking`, `ck:project-management`, `tester`, parallel `Explore` |
+| Deep | All above + `ck:brainstorm`, `ck:context-engineering`, `ck:project-management`, `researcher`, `planner` |
+| Parallel | Per-issue Task trees + `ck:project-management` + `fullstack-developer` agents + coordination via `TaskList` |
 
 ## Detection Triggers
 

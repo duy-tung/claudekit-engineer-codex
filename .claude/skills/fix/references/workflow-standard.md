@@ -89,6 +89,7 @@ See `references/review-cycle.md` for mode-specific handling.
 ### Step 6: Finalize
 `TaskUpdate(T6, status="in_progress")`
 - Report summary to user
+- Activate `ck:project-management` for task sync-back and plan status updates
 - Ask to commit via `git-manager` subagent
 - Update docs if needed via `docs-manager`
 
@@ -104,7 +105,7 @@ See `references/review-cycle.md` for mode-specific handling.
 | 3 | `ck:problem-solving`, `ck:sequential-thinking`, parallel `Bash` for verification |
 | 4 | `tester` subagent |
 | 5 | `code-reviewer` subagent |
-| 6 | `git-manager`, `docs-manager` subagents |
+| 6 | `ck:project-management`, `git-manager`, `docs-manager` subagents |
 
 **Rules:** Don't skip steps. Validate before proceeding. One phase at a time.
 **Frontend:** Use `chrome`, `ck:chrome-devtools` or any relevant skills/tools to verify.

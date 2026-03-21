@@ -97,7 +97,7 @@ See `references/review-cycle.md` for mode-specific handling.
 
 ### Step 8: Finalize
 `TaskUpdate(T8, status="in_progress")`
-- Use `project-manager` subagent to update roadmap
+- Activate `ck:project-management` for task sync-back, plan status updates, and progress tracking
 - Use `docs-manager` subagent for documentation
 - Use `git-manager` subagent for commit
 
@@ -115,7 +115,7 @@ See `references/review-cycle.md` for mode-specific handling.
 | 5 | `ck:problem-solving`, `ck:sequential-thinking`, `ck:context-engineering`, parallel `Bash` |
 | 6 | `tester` |
 | 7 | `code-reviewer` |
-| 8 | `project-manager`, `docs-manager`, `Bash` |
+| 8 | `ck:project-management`, `docs-manager`, `Bash` |
 
 **Rules:** Don't skip steps. Validate before proceeding. One phase at a time.
 **Frontend:** Use `chrome`, `ck:chrome-devtools` or any relevant skills/tools to verify.
