@@ -1,3 +1,10 @@
+## [2.14.0-beta.35](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.34...v2.14.0-beta.35) (2026-03-22)
+
+
+### 🚀 Features
+
+* **settings:** migrate to attribution API from deprecated includeCoAuthoredBy ([72d9a44](https://github.com/claudekit/claudekit-engineer/commit/72d9a44c3a02f10289160fe016bcaf30d724b909)), closes [#4224](https://github.com/claudekit/claudekit-engineer/issues/4224) [#6848](https://github.com/claudekit/claudekit-engineer/issues/6848)
+
 ## [2.14.0-beta.34](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.33...v2.14.0-beta.34) (2026-03-22)
 
 
