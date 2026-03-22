@@ -1,3 +1,10 @@
+## [2.14.0-beta.34](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.33...v2.14.0-beta.34) (2026-03-22)
+
+
+### 🚀 Features
+
+* **skills/team:** update to v3.0.0 with current Claude Code Agent API ([513a247](https://github.com/claudekit/claudekit-engineer/commit/513a247d4b9f297900cb8f812f9e94bfb2b06bc4))
+
 ## [2.14.0-beta.33](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.32...v2.14.0-beta.33) (2026-03-21)
 
 
