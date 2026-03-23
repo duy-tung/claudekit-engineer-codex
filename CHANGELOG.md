@@ -1,3 +1,10 @@
+## [2.14.0-beta.36](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.35...v2.14.0-beta.36) (2026-03-23)
+
+
+### 🚀 Features
+
+* **skills:** add ck:stitch skill — Google Stitch AI design integration ([cbd6b1e](https://github.com/claudekit/claudekit-engineer/commit/cbd6b1ed256c0f11f718b16dd308bb593bf51466)), closes [#583](https://github.com/claudekit/claudekit-engineer/issues/583)
+
 ## [2.14.0-beta.35](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.34...v2.14.0-beta.35) (2026-03-22)
 
 
