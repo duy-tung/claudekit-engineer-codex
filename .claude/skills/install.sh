@@ -655,6 +655,16 @@ install_node_deps() {
         print_success "plans-kanban dependencies installed"
     fi
 
+    # stitch (@google/stitch-sdk)
+    if [ -d "$SCRIPT_DIR/stitch/scripts" ] && [ -f "$SCRIPT_DIR/stitch/scripts/package.json" ]; then
+        print_info "Installing Stitch SDK dependencies..."
+        if (cd "$SCRIPT_DIR/stitch/scripts" && npm install --quiet); then
+            print_success "Stitch SDK dependencies installed"
+        else
+            print_warning "Stitch SDK install failed (optional)"
+        fi
+    fi
+
     # Optional: Shopify CLI (ask user unless auto-confirming)
     if [ -d "$SCRIPT_DIR/shopify" ]; then
         if [[ "$SKIP_CONFIRM" == "true" ]]; then
