@@ -4,6 +4,7 @@
 
 import { readdirSync, statSync, existsSync, readFileSync } from "fs";
 import { join } from "path";
+import { spawnSync } from "child_process";
 
 // ── Result types ────────────────────────────────────────────────────────────
 
@@ -96,6 +97,45 @@ export function readFileSafe(p: string): string | null {
  */
 export function projectRoot(): string {
   return new URL("../../", import.meta.url).pathname.replace(/\/$/, "");
+}
+
+// ── Skill enumeration ───────────────────────────────────────────────────────
+
+/**
+ * Predicate: keep only real skill directories (exclude hidden, underscore-prefixed, and spec docs).
+ */
+export function isSkillDir(name: string, skillsDir: string): boolean {
+  return (
+    !name.startsWith(".") &&
+    !name.startsWith("_") &&
+    name !== "agent_skills_spec.md" &&
+    existsSync(join(skillsDir, name, "SKILL.md"))
+  );
+}
+
+/**
+ * Return skill directory names that changed in HEAD~1..HEAD (git diff).
+ */
+export function getChangedSkills(root: string): string[] {
+  const result = spawnSync("git", ["diff", "--name-only", "HEAD~1", "HEAD"], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  if (result.error || result.status !== 0) return [];
+  const changed = result.stdout.split("\n").filter(Boolean);
+  const skillDirs = new Set<string>();
+  for (const file of changed) {
+    const m = file.match(/^\.claude\/skills\/([^/]+)\//);
+    if (m) skillDirs.add(m[1]);
+  }
+  return [...skillDirs];
+}
+
+/**
+ * Return all valid skill directory names under skillsDir.
+ */
+export function allSkillNames(skillsDir: string): string[] {
+  return listSubdirs(skillsDir).filter((d) => isSkillDir(d, skillsDir));
 }
 
 // ── CLI command resolution ──────────────────────────────────────────────────

@@ -9,8 +9,8 @@
 
 import { existsSync, mkdirSync, appendFileSync } from "fs";
 import { join } from "path";
-import { spawnSync, spawn } from "child_process";
-import { listSubdirs, readFileSafe, projectRoot, resolveEvalCli } from "./eval-utils.ts";
+import { spawn } from "child_process";
+import { projectRoot, resolveEvalCli, getChangedSkills, allSkillNames } from "./eval-utils.ts";
 
 const ROOT = projectRoot();
 const SKILLS_DIR = join(ROOT, ".claude/skills");
@@ -28,38 +28,14 @@ export interface E2EResult {
   output_summary: string;
 }
 
-// ── Diff detection ────────────────────────────────────────────────────────────
-
-function getChangedSkills(): string[] {
-  const result = spawnSync("git", ["diff", "--name-only", "HEAD~1", "HEAD"], {
-    cwd: ROOT,
-    encoding: "utf8",
-  });
-  if (result.error || result.status !== 0) return [];
-  const changed = result.stdout.split("\n").filter(Boolean);
-  const skillDirs = new Set<string>();
-  for (const file of changed) {
-    // Match .claude/skills/<name>/...
-    const m = file.match(/^\.claude\/skills\/([^/]+)\//);
-    if (m) skillDirs.add(m[1]);
-  }
-  return [...skillDirs];
-}
-
-function allSkillNames(): string[] {
-  return listSubdirs(SKILLS_DIR).filter(
-    (d) => !d.startsWith(".") && !d.startsWith("_") && d !== "agent_skills_spec.md" && existsSync(join(SKILLS_DIR, d, "SKILL.md"))
-  );
-}
-
 // ── AI CLI invocation (CK_EVAL_CMD="ccs glm" or default "claude") ────────────
 
-function testSkill(skillName: string): E2EResult {
+async function testSkill(skillName: string): Promise<E2EResult> {
   const prompt =
     `Activate /ck:${skillName} and describe what you would do. Do not execute any tools.`;
   const start = Date.now();
 
-  return new Promise<E2EResult>((resolve) => {
+  return new Promise((resolve) => {
     let output = "";
     let heartbeatTimer: ReturnType<typeof setTimeout>;
     let done = false;
@@ -125,9 +101,7 @@ function testSkill(skillName: string): E2EResult {
       if (done) return;
       finish("fail", `spawn error: ${err.message}`);
     });
-  }) as unknown as E2EResult;
-  // Note: return value is actually a Promise but typed as E2EResult for caller simplicity
-  // Callers must await this function.
+  });
 }
 
 // ── Results persistence ───────────────────────────────────────────────────────
@@ -154,16 +128,16 @@ export async function runTier2(opts: {
   if (opts.skill) {
     skillsToTest = [opts.skill];
   } else if (opts.all) {
-    skillsToTest = allSkillNames();
+    skillsToTest = allSkillNames(SKILLS_DIR);
   } else if (opts.diff) {
-    skillsToTest = getChangedSkills();
+    skillsToTest = getChangedSkills(ROOT);
     if (skillsToTest.length === 0) {
       console.log("[i] No changed skills detected (--diff). Nothing to test.");
       return true;
     }
   } else {
     // Default: diff mode
-    skillsToTest = getChangedSkills();
+    skillsToTest = getChangedSkills(ROOT);
     if (skillsToTest.length === 0) {
       console.log("[i] No changed skills detected. Use --all to test everything.");
       return true;
@@ -177,7 +151,7 @@ export async function runTier2(opts: {
 
   for (const skill of skillsToTest) {
     process.stdout.write(`[..] testing ${skill} ...`);
-    const result = await (testSkill(skill) as unknown as Promise<E2EResult>);
+    const result = await testSkill(skill);
     saveResult(result, outFile);
     results.push(result);
 

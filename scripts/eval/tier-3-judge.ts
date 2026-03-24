@@ -9,7 +9,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { spawnSync } from "child_process";
-import { listSubdirs, readFileSafe, projectRoot, resolveEvalCli } from "./eval-utils.ts";
+import { readFileSafe, projectRoot, resolveEvalCli, getChangedSkills, allSkillNames } from "./eval-utils.ts";
 
 const ROOT = projectRoot();
 const SKILLS_DIR = join(ROOT, ".claude/skills");
@@ -33,33 +33,6 @@ export interface JudgeResult {
   status: "pass" | "fail" | "error";
   scores?: JudgeScore;
   error?: string;
-}
-
-// ── Diff detection (same logic as Tier 2) ────────────────────────────────────
-
-function getChangedSkills(): string[] {
-  const result = spawnSync("git", ["diff", "--name-only", "HEAD~1", "HEAD"], {
-    cwd: ROOT,
-    encoding: "utf8",
-  });
-  if (result.error || result.status !== 0) return [];
-  const changed = result.stdout.split("\n").filter(Boolean);
-  const skillDirs = new Set<string>();
-  for (const file of changed) {
-    const m = file.match(/^\.claude\/skills\/([^/]+)\//);
-    if (m) skillDirs.add(m[1]);
-  }
-  return [...skillDirs];
-}
-
-function allSkillNames(): string[] {
-  return listSubdirs(SKILLS_DIR).filter(
-    (d) =>
-      !d.startsWith(".") &&
-      !d.startsWith("_") &&
-      d !== "agent_skills_spec.md" &&
-      existsSync(join(SKILLS_DIR, d, "SKILL.md"))
-  );
 }
 
 // ── AI CLI invocation (CK_EVAL_CMD="ccs glm" or default "claude") ────────────
@@ -145,15 +118,15 @@ export async function runTier3(opts: {
   if (opts.skill) {
     skillsToTest = [opts.skill];
   } else if (opts.all) {
-    skillsToTest = allSkillNames();
+    skillsToTest = allSkillNames(SKILLS_DIR);
   } else if (opts.diff) {
-    skillsToTest = getChangedSkills();
+    skillsToTest = getChangedSkills(ROOT);
     if (skillsToTest.length === 0) {
       console.log("[i] No changed skills detected (--diff). Nothing to judge.");
       return true;
     }
   } else {
-    skillsToTest = getChangedSkills();
+    skillsToTest = getChangedSkills(ROOT);
     if (skillsToTest.length === 0) {
       console.log("[i] No changed skills detected. Use --all to judge everything.");
       return true;
