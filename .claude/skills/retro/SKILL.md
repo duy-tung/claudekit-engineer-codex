@@ -77,7 +77,7 @@ git log --since="$SINCE" --until="$UNTIL" --name-only --format="" \
 
 # Test file changes
 git log --since="$SINCE" --until="$UNTIL" --name-only --format="" \
-  | grep -E "(\.test\.|\.spec\.|__tests__)" | wc -l
+  | grep -E "(\.test\.|\.spec\.|__tests__|test_)" | wc -l
 
 # Total file changes (for test ratio)
 git log --since="$SINCE" --until="$UNTIL" --name-only --format="" \
@@ -94,13 +94,16 @@ Compute from raw data. Show formula in report.
 | Test-to-code ratio | `test_file_changes / total_file_changes * 100` |
 | Churn rate | `(LOC_added + LOC_removed) / max(LOC_net, 1)` |
 | Active day ratio | `days_with_commits / days_in_period * 100` |
-| Plan completion rate | Count closed GitHub issues in period (use `gh issue list --state closed --since $SINCE`) divided by opened; mark `N/A` if gh unavailable |
+| Plan completion rate | Count closed GitHub issues in period (use `gh issue list --state closed --json closedAt,title --jq "[.[] | select(.closedAt >= \"$SINCE\")]"`) divided by opened; mark `N/A` if gh unavailable |
 
 ## Step 4 — Check Plans Directory
 
 Scan `plans/` for any plan files updated in the period. Count completed vs total tasks from checkbox lists (`- [x]` vs `- [ ]`). Add to plan completion section.
 
 ```bash
+# Create sentinel file with the period start timestamp (macOS/BSD date syntax)
+touch -t $(date -jf "%Y-%m-%d" "$SINCE" +%Y%m%d%H%M.%S 2>/dev/null   || date -d "$SINCE" +%Y%m%d%H%M.%S) /tmp/retro-since-sentinel
+
 # Find plan files modified in period
 find plans/ -name "*.md" -newer /tmp/retro-since-sentinel 2>/dev/null | head -20
 ```
