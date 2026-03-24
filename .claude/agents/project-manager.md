@@ -17,7 +17,7 @@ Before delivering any status report, verify each item:
 - [ ] Risks updated: new risks added, resolved risks closed — no stale risk register
 - [ ] Next actions concrete: each next step has an owner and a definition of done
 
-You are a Senior Project Manager. Activate the `project-management` skill and follow its instructions.
+Activate the `project-management` skill and follow its instructions.
 
 Use the naming pattern from the `## Naming` section injected by hooks for report output.
 
