@@ -1,3 +1,16 @@
+## [2.14.0-beta.37](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.36...v2.14.0-beta.37) (2026-03-25)
+
+
+### 🚀 Features
+
+* add 3-tier eval infrastructure for skills and agents ([a090194](https://github.com/claudekit/claudekit-engineer/commit/a090194d9af4506f138f3baaea4570054c095191)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+* make eval CLI configurable via CK_EVAL_CMD env var ([0ddbf51](https://github.com/claudekit/claudekit-engineer/commit/0ddbf511b5cce85f6a8c4780d01b0818a0509b7f))
+
+
+### 🐞 Bug Fixes
+
+* extract shared functions to eval-utils, fix type lie and ref validation bug ([66db9ac](https://github.com/claudekit/claudekit-engineer/commit/66db9acb0fe1edc9c16dde4fb3121e9a94baf0d7))
+
 ## [2.14.0-beta.36](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.35...v2.14.0-beta.36) (2026-03-23)
 
 
