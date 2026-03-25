@@ -130,17 +130,6 @@ If `--format html` flag is set:
 - Save as `plans/reports/retro-{YYMMDD}-{slug}.html`
 - Output `[OK] Report saved: plans/reports/retro-{YYMMDD}-{slug}.html`
 
-## Output Rules
-
-- NO EMOJIS. Use `[OK]`, `[!]`, `[X]`, `[i]` as status indicators
-- ASCII box borders for error states: `╔═══╗ ║   ║ ╚═══╝`
-- Print progress markers to terminal as each step completes:
-  - `[i] Gathering git metrics for {SINCE} → {UNTIL}...`
-  - `[i] Computing derived metrics...`
-  - `[OK] Report saved: {path}`
-- If git repo not found: `[X] No git repository found in current directory. Run from a git project root.`
-- If period returns 0 commits: `[!] No commits found for {SINCE} → {UNTIL}. Verify timeframe or try a wider range.`
-
 ## Constraints
 
 - Read-only — never commit, push, or modify any source files
