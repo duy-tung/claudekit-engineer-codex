@@ -1,3 +1,17 @@
+## [2.14.0-beta.39](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.38...v2.14.0-beta.39) (2026-03-25)
+
+
+### 🚀 Features
+
+* enhance 9 agent prompts with cognitive framing personas ([81a3022](https://github.com/claudekit/claudekit-engineer/commit/81a3022f05da1d84b446695838e5d9df9d7b6e63)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+
+
+### 🐞 Bug Fixes
+
+* normalize docs-manager checklist heading to H2 ([4c23980](https://github.com/claudekit/claudekit-engineer/commit/4c239803499a648cacd2d9d3e523ea5117018b88))
+* remove duplicate role framing in project-manager.md ([6b655ec](https://github.com/claudekit/claudekit-engineer/commit/6b655ec7bc73c4671f73522a57487aa3216362f3))
+* restore docs-manager.md guidelines, add framing without gutting content ([2f11b7c](https://github.com/claudekit/claudekit-engineer/commit/2f11b7cec93887298760edd5725733451820f7ed))
+
 ## [2.14.0-beta.38](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.37...v2.14.0-beta.38) (2026-03-25)
 
 
