@@ -1,3 +1,15 @@
+## [2.14.0-beta.38](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.37...v2.14.0-beta.38) (2026-03-25)
+
+
+### 🚀 Features
+
+* enhance tester agent with diff-aware mode and QA Lead framing ([a7e02c1](https://github.com/claudekit/claudekit-engineer/commit/a7e02c165207547661ab6ff0081b4992f2171c0e)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+
+
+### 🐞 Bug Fixes
+
+* inline diff-aware guide into tester.md, remove orphan reference ([9be6474](https://github.com/claudekit/claudekit-engineer/commit/9be647483b83791312f619f5477801e002f1f622))
+
 ## [2.14.0-beta.37](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.36...v2.14.0-beta.37) (2026-03-25)
 
 
