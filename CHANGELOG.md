@@ -1,3 +1,20 @@
+## [2.14.0-beta.40](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.39...v2.14.0-beta.40) (2026-03-25)
+
+
+### 🚀 Features
+
+* add /ck:retro skill for data-driven retrospectives ([e5572d6](https://github.com/claudekit/claudekit-engineer/commit/e5572d6a23fa0f822bc3fdb4ccac6edfb50e5b72)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+
+
+### 🐞 Bug Fixes
+
+* add test_ pattern, create sentinel file, fix gh issue list flag ([bf9a47b](https://github.com/claudekit/claudekit-engineer/commit/bf9a47baa4c031d5bbcfb03dce0aca1938aed9ac))
+
+
+### ♻️ Code Refactoring
+
+* remove Output Rules section from retro skill ([8cd3979](https://github.com/claudekit/claudekit-engineer/commit/8cd3979e999419c77e06734b040e25e39a96e688))
+
 ## [2.14.0-beta.39](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.38...v2.14.0-beta.39) (2026-03-25)
 
 
