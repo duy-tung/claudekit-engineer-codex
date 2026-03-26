@@ -1,3 +1,10 @@
+## [2.14.0-beta.41](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.40...v2.14.0-beta.41) (2026-03-26)
+
+
+### 🚀 Features
+
+* **preview:** auto-expand wide code blocks to full available width ([681d7cb](https://github.com/claudekit/claudekit-engineer/commit/681d7cbf0a7885d78d1f4f65499b05e80f13c8c5))
+
 ## [2.14.0-beta.40](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.39...v2.14.0-beta.40) (2026-03-25)
 
 
