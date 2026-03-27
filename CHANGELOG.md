@@ -1,3 +1,10 @@
+## [2.14.0-beta.43](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.42...v2.14.0-beta.43) (2026-03-27)
+
+
+### 🚀 Features
+
+* **skills:** enforce mandatory theme toggle in preview HTML output ([9d37d4c](https://github.com/claudekit/claudekit-engineer/commit/9d37d4c742955db6b5c968c6527a21018bdef9a3))
+
 ## [2.14.0-beta.42](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.41...v2.14.0-beta.42) (2026-03-27)
 
 
