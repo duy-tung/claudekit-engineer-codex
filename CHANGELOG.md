@@ -1,3 +1,15 @@
+## [2.14.0-beta.42](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.41...v2.14.0-beta.42) (2026-03-27)
+
+
+### 🚀 Features
+
+* **skills:** add ck:loop, ck:scenario, ck:predict, ck:security skills ([245f6cb](https://github.com/claudekit/claudekit-engineer/commit/245f6cb4e01068ab0bb56b72a2bacfcc8ea7d171))
+
+
+### 🐞 Bug Fixes
+
+* **skills:** rename ck:loop to ck:autoresearch, fix review findings ([b99572a](https://github.com/claudekit/claudekit-engineer/commit/b99572ac6f382f5e0a778a23c9def1fde9cdd266))
+
 ## [2.14.0-beta.41](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.40...v2.14.0-beta.41) (2026-03-26)
 
 
