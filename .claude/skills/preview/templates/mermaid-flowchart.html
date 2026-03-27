@@ -44,7 +44,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --bg: #042f2e;
       --surface: #0a3d3a;
       --border: rgba(255, 255, 255, 0.08);
@@ -58,6 +58,32 @@
       --danger: #f87171;
     }
   }
+
+  /* ── Dark (manual toggle override) ── */
+  [data-theme="dark"] {
+    --bg: #042f2e;
+    --surface: #0a3d3a;
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #ccfbf1;
+    --text-dim: #5eead4;
+    --primary: #2dd4bf;
+    --primary-dim: rgba(45, 212, 191, 0.14);
+    --secondary: #38bdf8;
+    --tertiary: #fbbf24;
+    --danger: #f87171;
+  }
+
+  /* ============ THEME TOGGLE ============ */
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background 0.15s, color 0.15s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+  .theme-toggle:hover { background: var(--surface); color: var(--text); }
 
   /* ============ RESET + BASE ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -292,6 +318,24 @@
 </style>
 </head>
 <body>
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+<script>
+(function() {
+  var t = document.getElementById('themeToggle');
+  var s = localStorage.getItem('theme');
+  var i = s || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (s) document.documentElement.setAttribute('data-theme', i);
+  t.textContent = i === 'dark' ? '\u2600' : '\u263E';
+  t.addEventListener('click', function() {
+    var c = document.documentElement.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var n = c === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', n);
+    localStorage.setItem('theme', n);
+    t.textContent = n === 'dark' ? '\u2600' : '\u263E';
+  });
+})();
+</script>
 
 <div class="container">
 

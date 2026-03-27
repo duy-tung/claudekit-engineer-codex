@@ -314,7 +314,7 @@ Before delivering any HTML page:
 
 - **Squint test**: Blur your eyes. Can you still perceive hierarchy? Are sections visually distinct?
 - **Swap test**: Would replacing fonts and colors with a generic dark theme make this indistinguishable? If yes, push the aesthetic further.
-- **Theme toggle**: Switch OS between light and dark mode. Both should look intentional, not broken.
+- **Theme toggle (MANDATORY)**: Toggle button MUST be present (first child of `<body>`). Switch between light and dark using the button. Both themes should look intentional, not broken. See `html-css-patterns.md` → "Theme Toggle Button".
 - **Information completeness**: Does the page actually convey what was asked? Pretty but incomplete is a failure.
 - **No overflow**: Resize the browser. No content should clip or escape its container. Every grid/flex child needs `min-width: 0`. Side-by-side panels need `overflow-wrap: break-word`.
 - **Mermaid zoom controls**: Every `.mermaid-wrap` must have zoom controls (+/−/reset/expand), Ctrl/Cmd+scroll zoom, click-and-drag panning, and click-to-expand. See `html-css-patterns.md`.

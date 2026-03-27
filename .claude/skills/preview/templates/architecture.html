@@ -54,7 +54,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --bg: #1a1412;
       --surface: #231d1a;
       --surface2: #2e2622;
@@ -77,6 +77,42 @@
       --plum-dim: rgba(253, 164, 175, 0.1);
     }
   }
+
+  /* ── Dark (manual toggle override) ── */
+  [data-theme="dark"] {
+    --bg: #1a1412;
+    --surface: #231d1a;
+    --surface2: #2e2622;
+    --surface-elevated: #352d28;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-bright: rgba(255, 255, 255, 0.12);
+    --text: #ede5dd;
+    --text-dim: #a69889;
+    --accent: #fb923c;
+    --accent-dim: rgba(251, 146, 60, 0.12);
+    --green: #a3e635;
+    --green-dim: rgba(163, 230, 53, 0.1);
+    --orange: #fbbf24;
+    --orange-dim: rgba(251, 191, 36, 0.1);
+    --sage: #bef264;
+    --sage-dim: rgba(190, 242, 100, 0.1);
+    --teal: #5eead4;
+    --teal-dim: rgba(94, 234, 212, 0.1);
+    --plum: #fda4af;
+    --plum-dim: rgba(253, 164, 175, 0.1);
+  }
+
+  /* ============ THEME TOGGLE ============ */
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background 0.15s, color 0.15s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+  .theme-toggle:hover { background: var(--surface2); color: var(--text); }
 
   /* ============ RESET + BASE ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -439,6 +475,24 @@
 </style>
 </head>
 <body>
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+<script>
+(function() {
+  var t = document.getElementById('themeToggle');
+  var s = localStorage.getItem('theme');
+  var i = s || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (s) document.documentElement.setAttribute('data-theme', i);
+  t.textContent = i === 'dark' ? '\u2600' : '\u263E';
+  t.addEventListener('click', function() {
+    var c = document.documentElement.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var n = c === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', n);
+    localStorage.setItem('theme', n);
+    t.textContent = n === 'dark' ? '\u2600' : '\u263E';
+  });
+})();
+</script>
 
 <h1>System Architecture</h1>
 <p class="subtitle">reference template &mdash; architecture diagram pattern</p>

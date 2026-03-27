@@ -128,9 +128,9 @@ Light is the default. Dark activates via OS preference (`@media`) OR manual togg
 
 **Choosing a different palette:** The above is the warm default. For other aesthetics, pick a preset from `html-design-guidelines.md` and extend it with the same semantic color structure (--green, --red, --amber, --sage, --teal, --plum). Every preset in that file defines the core variables; add the semantic layer on top to maintain richness. When using a different preset, replicate the three-tier pattern above (`:root` light, `@media` dark with `:not([data-theme="light"])`, `[data-theme="dark"]` override).
 
-## Theme Toggle Button
+## Theme Toggle Button (MANDATORY)
 
-Always include a theme toggle button in every generated HTML page. Place it fixed in the top-right corner.
+**MUST include a theme toggle button in EVERY generated HTML page. This is non-negotiable — pages without the toggle are considered incomplete.** Place it fixed in the top-right corner.
 
 ### CSS
 

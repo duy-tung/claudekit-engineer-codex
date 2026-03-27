@@ -145,6 +145,8 @@ Follow the 4-phase workflow:
 
 **Deliver:** Write single self-contained `.html` file — all CSS and JavaScript inline. External resources: CDN only (Google Fonts, Mermaid.js v11, Chart.js, anime.js).
 
+**MANDATORY — Theme Toggle:** Every HTML page MUST include the light/dark theme toggle button from `html-css-patterns.md` → "Theme Toggle Button" section. This is non-negotiable. The toggle button (`<button class="theme-toggle">`) must be the first child of `<body>`, with its CSS and JS inlined. Pages without the toggle are considered incomplete.
+
 For `--slides`: recommend invoking `/ck:ui-ux-pro-max` for richer style selection.
 Must use `/ck:mermaidjs-v11` for any Mermaid diagrams.
 
@@ -184,7 +186,7 @@ Must use `/ck:mermaidjs-v11` for any Mermaid diagrams.
 Before delivering HTML output, verify:
 - [ ] **Squint test:** Visual hierarchy visible at arm's length?
 - [ ] **Swap test:** Would this look AI-generated? Check against forbidden patterns
-- [ ] **Theme toggle:** Works in both light and dark mode?
+- [ ] **Theme toggle (MANDATORY):** Toggle button present as first child of `<body>`? Both light and dark modes render correctly? See `html-css-patterns.md` → "Theme Toggle Button".
 - [ ] **Overflow:** No horizontal scroll on content (tables excepted, wrapped in scroll container)
 - [ ] **Mermaid:** Zoom controls present? ELK layout for 10+ nodes?
 - [ ] **Responsiveness:** Readable on mobile width?
