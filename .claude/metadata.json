@@ -114,10 +114,10 @@
     "scripts/test_ck_help.py",
     "scripts/test_ck_help_integration.py"
   ],
-  "version": "2.14.0-beta.43",
+  "version": "2.14.0-beta.44",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
-  "buildDate": "2026-03-27T15:11:37.042Z",
+  "buildDate": "2026-03-28T05:47:44.177Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"

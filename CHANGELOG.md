@@ -1,3 +1,10 @@
+## [2.14.0-beta.44](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.43...v2.14.0-beta.44) (2026-03-28)
+
+
+### 🚀 Features
+
+* **skills/fix:** rewrite fix skill v2.0 with structured diagnosis pipeline ([f575d3d](https://github.com/claudekit/claudekit-engineer/commit/f575d3dfb3904d3b39f417de7c2281849f1ea7cc))
+
 ## [2.14.0-beta.43](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.42...v2.14.0-beta.43) (2026-03-27)
 
 
