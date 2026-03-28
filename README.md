@@ -100,8 +100,8 @@ A comprehensive boilerplate template for building professional software projects
    # claude --dangerously-skip-permissions
 
    # now you can use these specific commands
-   /plan "implement user authentication"
-   /cook "add database integration"
+   /ck:plan "implement user authentication"
+   /ck:cook "add database integration"
    ```
 
 📖 **Learn more from our docs:** [https://docs.claudekit.cc](https://docs.claudekit.cc)
@@ -113,6 +113,7 @@ A comprehensive boilerplate template for building professional software projects
 │   ├── agents/             # Claude Code agents
 │   ├── command-archive/    # Archived legacy command definitions
 │   ├── hooks/              # Claude Code hooks
+│   │   ├── .logs/          # Structured hook diagnostics (hook-log.jsonl)
 │   │   └── notifications/  # Multi-provider notification system
 │   ├── skills/             # Claude Code skills
 │   └── CLAUDE.md           # Global development instructions
@@ -227,16 +228,16 @@ This boilerplate includes 17+ specialized AI agents that work together to delive
 Use when tasks have dependencies:
 ```bash
 # Planning → Implementation → Testing → Review
-/plan "implement user dashboard"
+/ck:plan "implement user dashboard"
 # Wait for plan completion, then:
-/code  # Executes the plan
+/ck:cook  # Executes the plan
 # After implementation:
-/test "validate dashboard functionality"
+/ck:test "validate dashboard functionality"
 # Finally:
-/code-review "ensure code quality standards"
+/ck:code-review "ensure code quality standards"
 
-# Alternative: Use /cook for standalone implementation (plans internally)
-/cook "implement user dashboard"
+# Alternative: Use /ck:cook for standalone implementation (plans internally)
+/ck:cook "implement user dashboard"
 ```
 
 ### Parallel Execution
@@ -261,50 +262,50 @@ planner agent spawns:
 ### 1. Feature Development
 ```bash
 # Start with planning
-/plan "add real-time notifications"
+/ck:plan "add real-time notifications"
 
 # Research phase (automatic)
 # Multiple researcher agents investigate approaches
 
 # Implementation
-/cook "implement notification system"
+/ck:cook "implement notification system"
 
 # Quality assurance
-/test
-/code-review
+/ck:test
+/ck:code-review
 
 # Documentation update
-/docs
+/ck:docs
 
 # Project tracking
-/watzup  # Check project status
+/ck:watzup  # Check project status
 ```
 
 ### 2. Bug Fixing
 ```bash
 # Analyze the issue
-/debug "investigate login failures"
+/ck:debug "investigate login failures"
 
 # Create fix plan
-/plan "resolve authentication bug"
+/ck:plan "resolve authentication bug"
 
 # Implement solution
-/fix "authentication issue"
+/ck:fix "authentication issue"
 
 # Validate fix
-/test
+/ck:test
 ```
 
 ### 3. Documentation Management
 ```bash
 # Update documentation
-/docs
+/ck:docs
 
 # Generate codebase summary
 repomix  # Creates ./docs/codebase-summary.md
 
 # Review project status
-/watzup
+/ck:watzup
 ```
 
 ## Configuration Files

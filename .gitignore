@@ -76,6 +76,10 @@ ck.md
 # Hook diagnostics logs
 .claude/hooks/.logs/
 
+# Session state (local only, keep .gitkeep)
+.claude/session-state/latest.md
+.claude/session-state/archive/
+
 # Gemini CLI settings (symlink to .claude/.mcp.json)
 .gemini/settings.json
 .claude/settings.bak.json
@@ -84,3 +88,6 @@ external/
 
 # Git worktrees (local development only)
 worktrees/
+
+# demo
+.claude/skills/ai-multimodal/assets/demo-*.claude/session-state/*.tmp

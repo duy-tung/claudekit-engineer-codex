@@ -695,27 +695,18 @@ Mistakes to avoid
 **File Organization**:
 ```
 .claude/hooks/
-├── scout-block.js        # Node.js dispatcher (cross-platform entry)
-├── scout-block.sh        # Bash implementation (Unix)
-├── scout-block.ps1       # PowerShell implementation (Windows)
-├── test-scout-block.sh   # Unix test suite
-└── test-scout-block.ps1  # Windows test suite
+└── scout-block.cjs       # Pure Node.js hook (cross-platform)
 ```
 
 **Implementation Requirements**:
-- **Node.js Dispatcher**:
-  - Read stdin synchronously
-  - Validate JSON structure before parsing
-  - Check platform via `process.platform`
-  - Execute platform-specific script with piped input
-  - Handle errors with exit codes (0 = success, 2 = error)
-
-- **Platform-Specific Scripts**:
-  - Parse JSON input (use Node.js for consistency, avoid jq dependency)
-  - Validate command structure and content
-  - Apply pattern matching for blocked paths
-  - Return appropriate exit codes
-  - Provide clear error messages
+- **Pure Node.js** (`scout-block.cjs`):
+  - Read stdin synchronously, validate JSON structure
+  - Modular internals in `scout-block/` directory
+  - Pattern matching via `pattern-matcher.cjs` with `.ckignore` support
+  - Path extraction via `path-extractor.cjs`
+  - Rich error messages via `error-formatter.cjs`
+  - Broad pattern detection via `broad-pattern-detector.cjs`
+  - Exit codes: 0 = allow, 2 = block/error
 
 **Security Standards**:
 ```javascript

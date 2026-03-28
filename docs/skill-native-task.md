@@ -72,12 +72,12 @@ pending → in_progress → completed
 
 ## Skills sử dụng Task Management
 
-### 1. Plan Skill (`/plan`)
+### 1. Plan Skill (`/ck:plan`)
 
 **Khi nào tạo tasks:**
 - Multi-phase feature (3+ phases)
 - Dependencies phức tạp giữa phases
-- Plan sẽ được execute bởi `/cook`
+- Plan sẽ được execute bởi `/ck:cook`
 
 **Task Schema cho Phase:**
 
@@ -128,7 +128,7 @@ Step 3.4 (addBlockedBy: [P2-id])   ← critical steps share phase dependency
 
 ---
 
-### 2. Cook Skill (`/cook`)
+### 2. Cook Skill (`/ck:cook`)
 
 **Workflow Integration:**
 
@@ -155,7 +155,7 @@ new session → TaskList() empty → read plan files → re-hydrate from uncheck
 
 ---
 
-### 3. Fix Skill (`/fix`)
+### 3. Fix Skill (`/ck:fix`)
 
 **Task Schemas theo Complexity:**
 
@@ -202,7 +202,7 @@ TaskCreate(subject="Integration verify", addBlockedBy=[A-step3, B-step3])
 
 ---
 
-### 4. Debug Skill (`/debug`)
+### 4. Debug Skill (`/ck:debug`)
 
 **Investigation Pipeline as Tasks:**
 
@@ -264,7 +264,7 @@ TaskCreate(subject="Re-review after fixes",
 
 ---
 
-### 6. Scout Skill (`/scout`)
+### 6. Scout Skill (`/ck:scout`)
 
 **Khi nào tạo tasks:**
 - ≤ 2 agents: Không tạo (overhead > benefit)
@@ -301,7 +301,7 @@ Step 5: Agent times out (3m)     → Keep in_progress, add error metadata
 
 ---
 
-### 7. Team Skill (`/team`) — Agent Teams
+### 7. Team Skill (`/ck:team`) — Agent Teams
 
 **Tools API Surface:**
 

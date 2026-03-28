@@ -74,14 +74,14 @@ claudekit-engineer/
 ### 2. Slash Commands System (Skill-Backed)
 
 **Core Development Commands**:
-- `/plan` - Research and planning
-- `/cook` - Feature implementation
-- `/test` - Test execution
-- `/ask` - Technical consultation
-- `/bootstrap` - Project initialization
-- `/brainstorm` - Solution ideation
-- `/debug` - Issue debugging
-- `/fix` - Bug fixes
+- `/ck:plan` - Research and planning
+- `/ck:cook` - Feature implementation
+- `/ck:test` - Test execution
+- `/ck:ask` - Technical consultation
+- `/ck:bootstrap` - Project initialization
+- `/ck:brainstorm` - Solution ideation
+- `/ck:debug` - Issue debugging
+- `/ck:fix` - Bug fixes
 
 **Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
@@ -114,7 +114,7 @@ claudekit-engineer/
 - shopify, skill-creator, template-skill, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
 
-### 4. Hook System (8 Core Hooks)
+### 4. Hook System (9+ Core Hooks)
 
 **Location**: `.claude/hooks/`
 
@@ -139,22 +139,28 @@ claudekit-engineer/
 
 4. **scout-block.cjs** - Cross-Platform Performance Optimization
    - Blocks access to heavy directories (node_modules, .git, __pycache__, dist/, build/)
-   - Node.js dispatcher with platform-specific implementations
-   - Unix (Bash): scout-block.sh
-   - Windows (PowerShell): scout-block.ps1
-   - Automatic platform detection via `process.platform`
+   - Pure Node.js implementation (`scout-block.cjs`) — cross-platform
+   - Modular internals: `scout-block/` (pattern-matcher, path-extractor, error-formatter, broad-pattern-detector)
    - Improves AI response time and token efficiency
 
-5. **privacy-block.cjs** - Sensitive File Access Control
-6. **descriptive-name.cjs** - Naming conventions enforcement
-7. **post-edit-simplify-reminder.cjs** - Post-edit optimization hints
-8. **usage-context-awareness.cjs** - Context-aware usage patterns
+5. **session-state.cjs** - Session State Persistence
+   - Persists session progress across sessions and context compactions
+   - Loads previous state on SessionStart (startup and post-compaction recovery)
+   - Archives old states with rotation (keeps 5)
+   - Extracts todos, modified files, branch, and plan info
+   - 7-day auto-expiry, atomic writes, fail-safe
+   - Post-compaction: Injects last saved state with guidance to resume without re-doing work
+
+6. **privacy-block.cjs** - Sensitive File Access Control
+7. **descriptive-name.cjs** - Naming conventions enforcement
+8. **post-edit-simplify-reminder.cjs** - Post-edit optimization hints
+9. **usage-context-awareness.cjs** - Context-aware usage patterns
 
 **Hook Features:**
 - Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation
 - Performance: Optimized token consumption
 - Cross-Platform: Windows (PowerShell) & Unix (Bash) via Node.js dispatcher
-- Comprehensive Test Coverage: test-scout-block.sh (11 tests), test-scout-block.ps1 (7 tests)
+- Comprehensive Test Coverage: scout-block hook validated via Node.js test suite
 
 ### 5. Workflows
 
@@ -313,7 +319,7 @@ None (template project)
 ## Integration Capabilities
 
 ### Discord Notifications
-Script: `.claude/hooks/send-discord.sh`
+Script: `.claude/hooks/notifications/notify.cjs` + `providers/discord.cjs`
 Purpose: Send project updates to Discord channels
 
 ### GitHub Actions

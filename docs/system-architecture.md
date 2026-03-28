@@ -57,6 +57,20 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 - Command definitions (`.md` with embedded agent calls)
 - Skill modules (knowledge bases)
 - Workflow templates
+- Hook diagnostics logs (`.claude/hooks/.logs/hook-log.jsonl`)
+
+#### 1.4 Hook Runtime Diagnostics
+**Location**: `.claude/hooks/lib/hook-logger.cjs` and `.claude/hooks/.logs/hook-log.jsonl`
+**Responsibility**: Persist structured hook execution telemetry for local inspection and downstream dashboard consumption
+**Current Coverage**:
+- `PreToolUse`: `scout-block`, `privacy-block`, `descriptive-name`
+- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-context-awareness`
+- `UserPromptSubmit`: `dev-rules-reminder`, `usage-context-awareness`
+
+**Log Contract**:
+- One JSON object per line
+- Common fields: `ts`, `hook`, `event`, `tool`, `target`, `note`, `dur`, `status`, `exit`, `error`
+- Fail-open behavior preserved: diagnostics must never block normal hook execution
 
 ### 2. Agent Layer
 
@@ -152,13 +166,13 @@ Issues, blockers, or questions
 #### 3.1 Command Categories
 
 **Core Development**:
-- `/plan` - Research and planning
-- `/cook` - Feature implementation
-- `/test` - Test execution
-- `/ask` - Technical consultation
-- `/bootstrap` - Project initialization
-- `/brainstorm` - Solution ideation
-- `/debug` - Deep analysis
+- `/ck:plan` - Research and planning
+- `/ck:cook` - Feature implementation
+- `/ck:test` - Test execution
+- `/ck:ask` - Technical consultation
+- `/ck:bootstrap` - Project initialization
+- `/ck:brainstorm` - Solution ideation
+- `/ck:debug` - Deep analysis
 
 **Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
@@ -214,7 +228,7 @@ Explore different approaches simultaneously
 #### 4.2 Standard Workflows
 
 **Feature Development Workflow**:
-1. User: `/cook "add user authentication"`
+1. User: `/ck:cook "add user authentication"`
 2. Planner: Create implementation plan
 3. Researchers: Explore auth solutions (parallel)
 4. Planner: Synthesize research, create detailed plan
@@ -227,7 +241,7 @@ Explore different approaches simultaneously
 11. Git Manager: Commit with conventional message
 
 **Bug Fix Workflow**:
-1. User: `/debug "API timeout errors"`
+1. User: `/ck:debug "API timeout errors"`
 2. Debugger: Analyze logs and system
 3. Debugger: Identify root cause
 4. Planner: Create fix plan
@@ -237,7 +251,7 @@ Explore different approaches simultaneously
 8. Git Manager: Commit fix
 
 **Documentation Update Workflow**:
-1. User: `/docs update`
+1. User: `/ck:docs update`
 2. Docs Manager: Check doc freshness
 3. (If >1 day old): Run `repomix` for codebase summary
 4. Docs Manager: Analyze codebase changes
@@ -342,10 +356,8 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - **Trigger**: Before bash/command execution
 - **Purpose**: Block access to heavy directories for performance
 - **Architecture**:
-  - Node.js dispatcher with platform-specific implementations
-  - Windows: PowerShell implementation (`scout-block.ps1`)
-  - Unix (Linux/macOS/WSL): Bash implementation (`scout-block.sh`)
-  - Platform Detection: Automatic via `process.platform`
+  - Pure Node.js implementation (`scout-block.cjs`) — cross-platform
+  - Modular internals in `scout-block/` directory (pattern-matcher, path-extractor, error-formatter, broad-pattern-detector)
   - Zero-config setup
 
 **Functionality**:
@@ -356,24 +368,50 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - Performance: Reduces AI token usage and improves response time
 
 **Testing**:
-- Cross-platform test suites (`test-scout-block.sh`, `test-scout-block.ps1`)
-- Comprehensive coverage (11 Unix tests, 7 Windows tests)
 - Validates: blocked/allowed patterns, error handling, edge cases, JSON validation
+
+**5. Session-State Hook** (`session-state.cjs`)
+
+- **Trigger**: SessionStart (on startup and context compaction), Stop (persist), SubagentStop (append)
+- **Purpose**: Persist and restore session progress across sessions and context compactions
+- **Functionality**:
+  - **SessionStart (Startup)**: Loads previous session state from `.claude/session-state/latest.md` and displays it for context recovery
+  - **SessionStart (Post-Compaction)**: Restores last saved state after context compaction with special guidance to resume without re-doing completed work
+  - **Stop**: Finalizes and archives current session state (keeps last 5 archives)
+  - **SubagentStop**: Appends subagent completion results to ongoing session state
+  - Extracts todos from transcript, branch info, active plan, and modified files
+  - Structured markdown output with completed/pending tasks separation
+  - Auto-expiry: States older than 7 days are not loaded
+  - Atomic writes: Safe concurrent access with temp-file-then-rename pattern
+  - Storage: Project-level (`.claude/session-state/`) with global fallback for non-CK projects
+
+**Storage & Archival**:
+
+- Primary: `.claude/session-state/latest.md` (current session state)
+- Archive: `.claude/session-state/archive/` (timestamped backups with rotation)
+- Archive Format: `YYYYMMDD-HHMM.md` timestamps
+- Rotation: Keeps 5 most recent archives, auto-deletes older ones
+- Fallback: `~/.claude/session-states/{hash}/` for non-CK projects (path-based hash)
 
 **Hook Configuration** (`.claude/settings.json`):
 ```json
 {
   "hooks": {
-    "SubagentStart": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "node ${CLAUDE_PROJECT_DIR}/.claude/hooks/subagent-init.cjs"
-      }]
+    "SessionStart": [{
+      "matcher": "startup|resume|clear|compact",
+      "hooks": [
+        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+      ]
     }],
-    "BeforeBash": [{
-      "type": "command",
-      "command": "node ${CLAUDE_PROJECT_DIR}/.claude/hooks/scout-block.js"
+    "SubagentStop": [{
+      "hooks": [
+        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+      ]
+    }],
+    "Stop": [{
+      "hooks": [
+        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+      ]
     }]
   }
 }
@@ -386,6 +424,7 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - Context Cascade: Environment variables flow from session to agents
 - Smart Dedup: Prevent redundant context injection
 - Comprehensive Testing: Cross-platform test coverage
+- Session Continuity: Enables context preservation across session boundaries
 
 #### 6.2 MCP (Model Context Protocol) Integration
 
@@ -580,7 +619,7 @@ Remote Repository (GitHub)
 ┌─────────────┐
 │    User     │
 └──────┬──────┘
-       │ /cook "add auth"
+       │ /ck:cook "add auth"
        ↓
 ┌─────────────────────┐
 │   Command Parser    │
@@ -948,7 +987,7 @@ User Project
 1. Create skill directory: `.claude/skills/my-command/`
 2. Define `SKILL.md` with YAML frontmatter and workflow instructions
 3. Add script/reference files under `scripts/` or `references/` as needed
-4. Register discoverability metadata so `/ck-help` can route users correctly
+4. Register discoverability metadata in SKILL.md frontmatter
 
 ### Adding New Skills
 

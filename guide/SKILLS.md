@@ -79,6 +79,12 @@ Manage Model Context Protocol (MCP) servers - discover, analyze, and execute too
 
 **Location**: `.claude/skills/mcp-management/SKILL.md`
 
+### 📦 📚 `preview`
+
+View files/directories OR generate visual explanations, slides, diagrams (Markdown or self-contained HTML). Use with `[path] OR [--html] --explain|--slides|--diagram|--ascii [topic] OR --html --diff|--plan-review|--recap`.
+
+**Location**: `.claude/skills/preview/SKILL.md`
+
 ### 📦 📚 `repomix`
 
 Package entire code repositories into single AI-friendly files using Repomix. Capabilities include pack codebases with customizable include/exclude patterns, generate multiple output formats (XML, Markdown, plain text), preserve file structure and context, optimize for AI consumption with token counting, filter by file types and directories, add custom headers and summaries. Use when packaging codebases for AI analysis, creating repository snapshots for LLM context, analyzing third-party libraries, preparing for security audits, generating documentation context, or evaluating unfamiliar codebases.
