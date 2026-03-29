@@ -17,8 +17,8 @@ jobs:
   release-beta:
     name: Beta Release
     runs-on: ubuntu-latest
-    # Skip release commits to avoid infinite loop
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    # Skip release commits to avoid infinite loop (null-safe for workflow_dispatch)
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message || '', '[skip ci]')
 
     steps:
       - name: Checkout
@@ -49,8 +49,8 @@ jobs:
       - name: Compute beta version
         id: version
         run: |
-          # Get latest stable tag (exclude beta tags)
-          STABLE_TAG=$(git tag -l 'v*' --sort=-v:refname | grep -v 'beta' | head -1)
+          # Get latest stable tag (only pure semver, exclude all prereleases)
+          STABLE_TAG=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
           STABLE_VERSION=${STABLE_TAG#v}
 
           if [ -z "$STABLE_VERSION" ]; then
@@ -58,9 +58,9 @@ jobs:
             STABLE_VERSION="0.0.0"
           fi
 
-          # Count existing beta tags for this stable version to determine next number
-          BETA_COUNT=$(git tag -l "v${STABLE_VERSION}-beta.*" | wc -l | tr -d ' ')
-          NEXT_BETA=$((BETA_COUNT + 1))
+          # Find highest existing beta number (not count — avoids collision if tags deleted)
+          LAST_BETA=$(git tag -l "v${STABLE_VERSION}-beta.*" | sed 's/.*beta\.//' | sort -n | tail -1)
+          NEXT_BETA=$(( ${LAST_BETA:-0} + 1 ))
 
           BETA_VERSION="${STABLE_VERSION}-beta.${NEXT_BETA}"
           echo "version=${BETA_VERSION}" >> "$GITHUB_OUTPUT"
@@ -81,7 +81,9 @@ jobs:
 
       - name: Commit and tag
         run: |
-          git add -A
+          git add package.json package-lock.json .claude/metadata.json
+          # Stage release assets if they exist
+          [ -f CHANGELOG.md ] && git add CHANGELOG.md
           git commit -m "chore(release): ${{ steps.version.outputs.version }} [skip ci]"
           git tag "v${{ steps.version.outputs.version }}"
           git push origin dev
@@ -96,12 +98,12 @@ jobs:
             ASSETS="dist/claudekit-engineer.zip"
           fi
 
-          gh release create "v${{ steps.version.outputs.version }}" \
-            --title "v${{ steps.version.outputs.version }}" \
-            --prerelease \
-            --generate-notes \
-            --target dev \
-            $ASSETS
+          RELEASE_ARGS="--title v${{ steps.version.outputs.version }} --prerelease --generate-notes --target dev"
+          if [ -n "$ASSETS" ]; then
+            gh release create "v${{ steps.version.outputs.version }}" $RELEASE_ARGS "$ASSETS"
+          else
+            gh release create "v${{ steps.version.outputs.version }}" $RELEASE_ARGS
+          fi
 
       - name: Send beta release notification to Discord
         if: success()
