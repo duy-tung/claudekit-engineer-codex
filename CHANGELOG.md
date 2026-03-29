@@ -1,3 +1,126 @@
+## [2.14.0](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0...v2.14.0) (2026-03-28)
+
+
+### 🚀 Features
+
+* add /ck:retro skill for data-driven retrospectives ([e5572d6](https://github.com/claudekit/claudekit-engineer/commit/e5572d6a23fa0f822bc3fdb4ccac6edfb50e5b72)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+* add 3-tier eval infrastructure for skills and agents ([a090194](https://github.com/claudekit/claudekit-engineer/commit/a090194d9af4506f138f3baaea4570054c095191)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+* add JSON schema reference to settings.json ([f5fb498](https://github.com/claudekit/claudekit-engineer/commit/f5fb498b3f7cbf5611f851f92d628695910e8d77)), closes [#572](https://github.com/claudekit/claudekit-engineer/issues/572)
+* add statuslineColors config toggle for ANSI color control ([8392b6f](https://github.com/claudekit/claudekit-engineer/commit/8392b6f1516a70bba6fd6263a9185cfa76affc25)), closes [#569](https://github.com/claudekit/claudekit-engineer/issues/569)
+* **code-review:** add input modes and always-on adversarial review ([#556](https://github.com/claudekit/claudekit-engineer/issues/556)) ([d40c10f](https://github.com/claudekit/claudekit-engineer/commit/d40c10f30524c03dbce92c93b3bdcbdb52640cda))
+* **code-review:** improve adversarial review — scope gate, context anchoring, attack coverage ([b90c62a](https://github.com/claudekit/claudekit-engineer/commit/b90c62ad08d8e2f437e9499db5b3692c3592fca9))
+* colorize statusline elements across all render modes ([b10f1a9](https://github.com/claudekit/claudekit-engineer/commit/b10f1a9fb9064210a86d719c4e700841c3cb2c0c))
+* enhance 9 agent prompts with cognitive framing personas ([81a3022](https://github.com/claudekit/claudekit-engineer/commit/81a3022f05da1d84b446695838e5d9df9d7b6e63)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+* enhance tester agent with diff-aware mode and QA Lead framing ([a7e02c1](https://github.com/claudekit/claudekit-engineer/commit/a7e02c165207547661ab6ff0081b4992f2171c0e)), closes [#574](https://github.com/claudekit/claudekit-engineer/issues/574)
+* **frontend-design:** integrate taste-skill design intelligence ([e625722](https://github.com/claudekit/claudekit-engineer/commit/e625722bc8d96b26e430dbe8dd691bfe74bb6552)), closes [#566](https://github.com/claudekit/claudekit-engineer/issues/566)
+* **hooks:** add session-state persistence hook for cross-session state management ([506638b](https://github.com/claudekit/claudekit-engineer/commit/506638b53260bb5a3fe0a55015f92158a1f5b646))
+* **hooks:** add strategic compaction support to session-state hook ([cd3648b](https://github.com/claudekit/claudekit-engineer/commit/cd3648b75c645d7609ba132eff9d84aad64d8422))
+* **hooks:** add structured hook diagnostics logging ([78b18eb](https://github.com/claudekit/claudekit-engineer/commit/78b18eb8d174c710903c953a71f0fe90269e041a))
+* **hooks:** inject ck plan CLI commands into plan-aware subagents ([#540](https://github.com/claudekit/claudekit-engineer/issues/540)) ([584e607](https://github.com/claudekit/claudekit-engineer/commit/584e6072d9f99075506c70c5fd8327b61de7449d))
+* make eval CLI configurable via CK_EVAL_CMD env var ([0ddbf51](https://github.com/claudekit/claudekit-engineer/commit/0ddbf511b5cce85f6a8c4780d01b0818a0509b7f))
+* **plans:** add remaining Superpowers adoption plan (TDD, tests, multi-platform) ([f14bc87](https://github.com/claudekit/claudekit-engineer/commit/f14bc87b915c91d4ed1f0cf8e6698931940bfcb2))
+* **preview:** add --html flag with diff, plan-review, recap modes ([bdc96c1](https://github.com/claudekit/claudekit-engineer/commit/bdc96c120020582dde6f172f125bb2507fc14fe4))
+* **preview:** add HTML reference docs and templates from visual-explainer ([46c85bc](https://github.com/claudekit/claudekit-engineer/commit/46c85bcbb33315ccd29f54171f57d09324c7f0dc))
+* **preview:** add theme toggle button pattern to HTML output ([1b1a5a6](https://github.com/claudekit/claudekit-engineer/commit/1b1a5a66e0945aaee2e5ba657d380ca81b751c8f))
+* **preview:** add typography floor and bump content font sizes ([ea5ac45](https://github.com/claudekit/claudekit-engineer/commit/ea5ac45805116daa27a9306e37409190d69e727f))
+* **preview:** auto-expand wide code blocks to full available width ([681d7cb](https://github.com/claudekit/claudekit-engineer/commit/681d7cbf0a7885d78d1f4f65499b05e80f13c8c5))
+* **preview:** improve HTML visualization palette and readability ([064ddec](https://github.com/claudekit/claudekit-engineer/commit/064ddecc7c50a853ec5bdf2b52ad9fdc0ab1fe90)), closes [#564](https://github.com/claudekit/claudekit-engineer/issues/564)
+* **reports:** add post-adoption Superpowers vs CKE comparison ([a5690a3](https://github.com/claudekit/claudekit-engineer/commit/a5690a3dd3f74001d9a2a75d6e3fd180dc32dc04))
+* **settings:** migrate to attribution API from deprecated includeCoAuthoredBy ([72d9a44](https://github.com/claudekit/claudekit-engineer/commit/72d9a44c3a02f10289160fe016bcaf30d724b909)), closes [#4224](https://github.com/claudekit/claudekit-engineer/issues/4224) [#6848](https://github.com/claudekit/claudekit-engineer/issues/6848)
+* **skills/fix:** rewrite fix skill v2.0 with structured diagnosis pipeline ([f575d3d](https://github.com/claudekit/claudekit-engineer/commit/f575d3dfb3904d3b39f417de7c2281849f1ea7cc))
+* **skills/fix:** update skill references and documentation ([71f46a5](https://github.com/claudekit/claudekit-engineer/commit/71f46a52956c83409114c94dcf5f1712b872b6f2))
+* **skills/team:** update to v3.0.0 with current Claude Code Agent API ([513a247](https://github.com/claudekit/claudekit-engineer/commit/513a247d4b9f297900cb8f812f9e94bfb2b06bc4))
+* **skills:** add /ck:llms skill to generate llms.txt ([b359128](https://github.com/claudekit/claudekit-engineer/commit/b3591282f4ce633aad52ec4cab0f65b03024b075))
+* **skills:** add `deploy` skills support popular PaaS & cloud providers ([e136d0c](https://github.com/claudekit/claudekit-engineer/commit/e136d0caa58b4c192c2867094ed31e64d3b488cd))
+* **skills:** add `project-organization` skill with file structure, naming and standards ([87377bd](https://github.com/claudekit/claudekit-engineer/commit/87377bd381998f47061d16b8c4e9c6b32520113e))
+* **skills:** add ck:loop, ck:scenario, ck:predict, ck:security skills ([245f6cb](https://github.com/claudekit/claudekit-engineer/commit/245f6cb4e01068ab0bb56b72a2bacfcc8ea7d171))
+* **skills:** add ck:stitch skill — Google Stitch AI design integration ([cbd6b1e](https://github.com/claudekit/claudekit-engineer/commit/cbd6b1ed256c0f11f718b16dd308bb593bf51466)), closes [#583](https://github.com/claudekit/claudekit-engineer/issues/583)
+* **skills:** add CLI-first plan creation and status sync references ([0f78a03](https://github.com/claudekit/claudekit-engineer/commit/0f78a03f8311e8bc1289fed6dd26366e8bd7fd15))
+* **skills:** add consolidated design skill with logo, CIP, slides, banner, icon ([01d0038](https://github.com/claudekit/claudekit-engineer/commit/01d0038009dd91cc1cc1724e9822e49092c503c1))
+* **skills:** add journal step to brainstorm, bootstrap, cook, fix, plan, team skills ([79a9c48](https://github.com/claudekit/claudekit-engineer/commit/79a9c483efae2002b97eeb217528430b6e24baae))
+* **skills:** add security-scan skill for secret and vulnerability detection ([1a09c99](https://github.com/claudekit/claudekit-engineer/commit/1a09c99cf6702363b280441d6a688c6e828c0548))
+* **skills:** add ship pipeline, review checklists, scope challenge ([99db560](https://github.com/claudekit/claudekit-engineer/commit/99db5609a63ccc5b915923d1dc5dd520853cad96)), closes [#287](https://github.com/claudekit/claudekit-engineer/issues/287) [#250](https://github.com/claudekit/claudekit-engineer/issues/250)
+* **skills:** adopt Superpowers discipline-enforcement into CKE ([f93d3cc](https://github.com/claudekit/claudekit-engineer/commit/f93d3cc0cb0c23b04ae701db0c56f5dd04b2c865))
+* **skills:** enforce mandatory theme toggle in preview HTML output ([9d37d4c](https://github.com/claudekit/claudekit-engineer/commit/9d37d4c742955db6b5c968c6527a21018bdef9a3))
+* **skills:** upgrade default image generation model to Nano Banana 2 ([529a92c](https://github.com/claudekit/claudekit-engineer/commit/529a92cde08408bada106ab7867ef36c66d63ac8))
+
+
+### 🐞 Bug Fixes
+
+* **.gitignore:** add pattern for session state temp files ([7bffdec](https://github.com/claudekit/claudekit-engineer/commit/7bffdec82fafae07325469bdbf55112491ec0804))
+* add deprecated shell hooks to metadata.json deletions ([bad5ab2](https://github.com/claudekit/claudekit-engineer/commit/bad5ab2b58fe08af98b09d83174243eec61ab943)), closes [#548](https://github.com/claudekit/claudekit-engineer/issues/548)
+* add orphaned hook files to metadata.json deletions ([94a1800](https://github.com/claudekit/claudekit-engineer/commit/94a18006b4969fc4a30da025fa3c89824954bce8)), closes [#550](https://github.com/claudekit/claudekit-engineer/issues/550)
+* add root-level shell hook paths to metadata.json deletions ([b95b59a](https://github.com/claudekit/claudekit-engineer/commit/b95b59ad7f17bca1dab6af29dced2383c7fe4a97)), closes [#562](https://github.com/claudekit/claudekit-engineer/issues/562)
+* add test_ pattern, create sentinel file, fix gh issue list flag ([bf9a47b](https://github.com/claudekit/claudekit-engineer/commit/bf9a47baa4c031d5bbcfb03dce0aca1938aed9ac))
+* change shipped statusline default from minimal to full ([e726acf](https://github.com/claudekit/claudekit-engineer/commit/e726acf755129bbfe3db3900b1c2b739f0f21dc9))
+* **code-review:** address review findings — pipeline sync, decision tree, Defer verdict ([21a622f](https://github.com/claudekit/claudekit-engineer/commit/21a622fe0a355500ee8684db1d7bd9d63800ddea))
+* complete ck: namespace migration in agents, rules, and hooks ([c14c072](https://github.com/claudekit/claudekit-engineer/commit/c14c072b1a08c095b17274ce9840715de31d4189)), closes [#531](https://github.com/claudekit/claudekit-engineer/issues/531)
+* complete ck: namespace migration in README, ck-help, tests, and docs ([06c4e90](https://github.com/claudekit/claudekit-engineer/commit/06c4e905cb4ca26c770b882e70ed9a52aeec9206)), closes [#532](https://github.com/claudekit/claudekit-engineer/issues/532)
+* consolidate plan-table-parser into shared module with 7-format support ([#523](https://github.com/claudekit/claudekit-engineer/issues/523), [#528](https://github.com/claudekit/claudekit-engineer/issues/528)) ([1f694d1](https://github.com/claudekit/claudekit-engineer/commit/1f694d1fc01fb486b98bdf149891a2310103249a))
+* escape HTML in plan navigator, add null guard and acronym handling to parser ([bbb9484](https://github.com/claudekit/claudekit-engineer/commit/bbb948479b50b0a132fbe8b2f69f47a2415a1884))
+* extract shared functions to eval-utils, fix type lie and ref validation bug ([66db9ac](https://github.com/claudekit/claudekit-engineer/commit/66db9acb0fe1edc9c16dde4fb3121e9a94baf0d7))
+* fix additional statusline rendering issues ([530eb72](https://github.com/claudekit/claudekit-engineer/commit/530eb72f3f4d59acd9031850817b7c9f1d7131f3))
+* fix statusline display corruption from NBSP and ANSI reset ([612ad50](https://github.com/claudekit/claudekit-engineer/commit/612ad503051f54e942712b515d3cba79c3c0ce90)), closes [#515](https://github.com/claudekit/claudekit-engineer/issues/515)
+* **hooks:** add fullstack-developer to plan-aware agents ([#540](https://github.com/claudekit/claudekit-engineer/issues/540)) ([9a5faeb](https://github.com/claudekit/claudekit-engineer/commit/9a5faeb0fb8568051559b6c183463a975d583e25))
+* **hooks:** disable context and usage sections in reminder injection ([bc29fe7](https://github.com/claudekit/claudekit-engineer/commit/bc29fe797edc88353bc9ffc5921a29501c3cc0a8))
+* **hooks:** harden structured hook diagnostics logging ([a30f4f3](https://github.com/claudekit/claudekit-engineer/commit/a30f4f351f4f5efc765708e752a33b32a64eda42))
+* inline diff-aware guide into tester.md, remove orphan reference ([9be6474](https://github.com/claudekit/claudekit-engineer/commit/9be647483b83791312f619f5477801e002f1f622))
+* **manifest:** add provider path migrations for skills consolidation ([d91d059](https://github.com/claudekit/claudekit-engineer/commit/d91d059a98ad81f2db58816230d4ebf0aeaee270)), closes [mrgoonie/claudekit-cli#477](https://github.com/mrgoonie/claudekit-cli/issues/477)
+* **manifest:** add windsurf global path migration for .codeium/windsurf/skills ([1f2cde9](https://github.com/claudekit/claudekit-engineer/commit/1f2cde9ddbe3cb9f24d67badcdb4a4f3d165e8a1)), closes [mrgoonie/claudekit-cli#477](https://github.com/mrgoonie/claudekit-cli/issues/477)
+* normalize docs-manager checklist heading to H2 ([4c23980](https://github.com/claudekit/claudekit-engineer/commit/4c239803499a648cacd2d9d3e523ea5117018b88))
+* **parser:** address all review findings for parity, security, and test quality ([45dbf9a](https://github.com/claudekit/claudekit-engineer/commit/45dbf9a67bd0d58e455b1e30fbc3998e2e534b91))
+* prevent doubled report path when planPath is absolute ([c6a94fb](https://github.com/claudekit/claudekit-engineer/commit/c6a94fb475b6f1f4b89a774fe76dbf007076a562)), closes [#335](https://github.com/claudekit/claudekit-engineer/issues/335)
+* **preview:** address remaining review findings ([a5387a5](https://github.com/claudekit/claudekit-engineer/commit/a5387a54ef26307fd0b88f7923f192fba2fe2071))
+* **preview:** address review findings for HTML mode integration ([f519d84](https://github.com/claudekit/claudekit-engineer/commit/f519d8401b6366ab79d720504e4d4fa0b8d03b4d))
+* remove duplicate role framing in project-manager.md ([6b655ec](https://github.com/claudekit/claudekit-engineer/commit/6b655ec7bc73c4671f73522a57487aa3216362f3))
+* rename debug/plan skill dirs to ck-debug/ck-plan to avoid CC built-in collision ([84ef112](https://github.com/claudekit/claudekit-engineer/commit/84ef1129138a8de9d8fcc21caa1a520d1bce8481)), closes [#559](https://github.com/claudekit/claudekit-engineer/issues/559)
+* restore ck: prefix in name field for ck-debug and ck-plan skills ([034022d](https://github.com/claudekit/claudekit-engineer/commit/034022d334de3a4b7491e916ebe49f2c9b9d7f75)), closes [#559](https://github.com/claudekit/claudekit-engineer/issues/559)
+* restore docs-manager.md guidelines, add framing without gutting content ([2f11b7c](https://github.com/claudekit/claudekit-engineer/commit/2f11b7cec93887298760edd5725733451820f7ed))
+* **schema:** sync codingLevel range with ck-help levels ([515a711](https://github.com/claudekit/claudekit-engineer/commit/515a71196037e4dcae3eda701b067a4eb8c8f942))
+* **skills:** `plan` should detect cross-plan dependency ([c7575b5](https://github.com/claudekit/claudekit-engineer/commit/c7575b54f0dec8d5532295ad8bc2dae48c2fb544))
+* **skills:** correct \`version\` metadata in skill's frontmatter ([bf4e728](https://github.com/claudekit/claudekit-engineer/commit/bf4e7282dff2a02965af9b0ab0bf41d1bcfbc957))
+* **skills:** correct `ai-artist` metadata ([f2ebb11](https://github.com/claudekit/claudekit-engineer/commit/f2ebb113b4c4bbba41e0398e6cda194c0cc4b9af))
+* **skills:** normalize Claude slash invocation references ([620a126](https://github.com/claudekit/claudekit-engineer/commit/620a12683439e78d80b323f688909c1f6ee47a25))
+* **skills:** rename ck:loop to ck:autoresearch, fix review findings ([b99572a](https://github.com/claudekit/claudekit-engineer/commit/b99572ac6f382f5e0a778a23c9def1fde9cdd266))
+* **statusline:** harden task mapping and timeout/cache handling ([496510e](https://github.com/claudekit/claudekit-engineer/commit/496510e56772f87f7f1fe138343a81a3d125e0bc))
+* use pre-calculated context percentage for model-agnostic window sizing ([cd4f11c](https://github.com/claudekit/claudekit-engineer/commit/cd4f11cd2e0e19c1a00bc7b37789f2b0d1d5c5c4))
+
+
+### 📚 Documentation
+
+* **rules:** mention --html preview mode in workflow rules ([40674bc](https://github.com/claudekit/claudekit-engineer/commit/40674bcd577e22ccf1f14159944b34369119fe89))
+* **skills:** add CLI-first status update section to progress-tracking ([b6f3400](https://github.com/claudekit/claudekit-engineer/commit/b6f34004917b993b7d23d085151c7e2eff8bc0f9))
+* **skills:** add Task tool availability fallback notes across skills ([64e213a](https://github.com/claudekit/claudekit-engineer/commit/64e213ade07cb50e6c68f6e787cd375cc2d39909))
+* update claude rules ([af0d601](https://github.com/claudekit/claudekit-engineer/commit/af0d6016b4ebc5a94134216460bfa3e0a13e181c))
+* update references to removed shell scripts ([f918319](https://github.com/claudekit/claudekit-engineer/commit/f918319c6278a6ed969e56f0c7a2534ac359d687))
+
+
+### ♻️ Code Refactoring
+
+* clean ck-help and generate_catalogs references ([309fb8c](https://github.com/claudekit/claudekit-engineer/commit/309fb8c649bb0bd5b79e49a58a7da078e248d60b))
+* **parser:** DRY normalizeStatus via shared module import ([99e4b99](https://github.com/claudekit/claudekit-engineer/commit/99e4b994c84273db02ed83dd63f5d17ffd6f1d67))
+* remove ck-help skill and generate_catalogs pipeline ([731049c](https://github.com/claudekit/claudekit-engineer/commit/731049c6823fd39657c244f989361d22b55708ad))
+* remove Output Rules section from retro skill ([8cd3979](https://github.com/claudekit/claudekit-engineer/commit/8cd3979e999419c77e06734b040e25e39a96e688))
+
+
+### ⚡ Performance Improvements
+
+* **skills:** `plan` skill should update relevant unfinished plans if needed ([7a99c73](https://github.com/claudekit/claudekit-engineer/commit/7a99c73f44f6e1262cf14f01d2ca057f2e39e6ee))
+* **skills:** add `magicui` reference to `frontend-design` skill ([337ea5a](https://github.com/claudekit/claudekit-engineer/commit/337ea5aa3510195a04f4e953f6db459c51467377))
+* **skills:** add MiniMax models to `ai-multimodal` skill ([ba78a99](https://github.com/claudekit/claudekit-engineer/commit/ba78a99e7061968763d5f357aec89048b63a3cf0))
+* **skills:** enhance `/ck:ship` skill with official/beta flags & docs update workflows ([fac188f](https://github.com/claudekit/claudekit-engineer/commit/fac188f5b1454459a886bdaf640767581d361a05))
+* **skills:** enhance `skill-creator` based on anthropic official skill with new eval & factors ([55ca25a](https://github.com/claudekit/claudekit-engineer/commit/55ca25aac53cb1866fbdd7a279b225654a240559))
+* **skills:** update `design` skill ([369f6dc](https://github.com/claudekit/claudekit-engineer/commit/369f6dc05dc3bc430fc843d54cd073f08f1cf3bb))
+* **skills:** update `ui-ux-pro-max` skill ([81ee183](https://github.com/claudekit/claudekit-engineer/commit/81ee1839c19f32d343f551a6350aa06d5fba5761))
+* **skills:** update nano banana 2 model to ai-multimodal and ai-artist skills ([c408a1c](https://github.com/claudekit/claudekit-engineer/commit/c408a1c9fc2918e8322a97cfa027de2ac7051c1b))
+* **skills:** update new nano banana 2 model to `ai-multimodal` skill ([a08e019](https://github.com/claudekit/claudekit-engineer/commit/a08e01911ab0d9a94d1f5b7693fbed80b0992282))
+
+
+### ✅ Tests
+
+* add plan-format-kanban hook tests and strengthen subagent-init assertions ([a35637c](https://github.com/claudekit/claudekit-engineer/commit/a35637c09d05c8744b96f63f7a648ff3e8e9634c))
+* **statusline:** add cross-platform scenario suite and harden assertions ([517b842](https://github.com/claudekit/claudekit-engineer/commit/517b8420288358524dd4d737d04d9acfb72c02ed))
+
 ## [2.14.0-beta.44](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0-beta.43...v2.14.0-beta.44) (2026-03-28)
 
 
