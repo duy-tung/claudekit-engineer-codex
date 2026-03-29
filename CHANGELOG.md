@@ -1,3 +1,12 @@
+## [2.15.1](https://github.com/claudekit/claudekit-engineer/compare/v2.15.0...v2.15.1) (2026-03-29)
+
+
+### 🐞 Bug Fixes
+
+* **release:** address code review findings for beta workflow ([42d3786](https://github.com/claudekit/claudekit-engineer/commit/42d378642efe4e9cde998eb017d54161fc226d2f))
+* **release:** decouple beta from semantic-release version prediction ([fae427c](https://github.com/claudekit/claudekit-engineer/commit/fae427cfa1862ae3712426e9e4d2ab2a9770c26a)), closes [#593](https://github.com/claudekit/claudekit-engineer/issues/593)
+* **release:** support Discord notification for beta releases without CHANGELOG ([9aa6ffd](https://github.com/claudekit/claudekit-engineer/commit/9aa6ffd8a70e07974770f6f8d5f7c24ad2802e6c))
+
 ## [2.15.0](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0...v2.15.0) (2026-03-29)
 
 
