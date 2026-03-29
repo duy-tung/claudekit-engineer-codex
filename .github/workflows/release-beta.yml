@@ -7,19 +7,18 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write # to be able to publish a GitHub release
-  issues: write # to be able to comment on released issues
-  pull-requests: write # to be able to comment on released pull requests
-  id-token: write # to enable use of OIDC for npm provenance
+  contents: write
 
 concurrency:
-  group: release-${{ github.repository }}
+  group: release-beta-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
   release-beta:
     name: Beta Release
     runs-on: ubuntu-latest
+    # Skip release commits to avoid infinite loop
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     steps:
       - name: Checkout
@@ -41,20 +40,68 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: npm audit signatures
-
       - name: Run tests
         run: npm test
 
       - name: Run linting
         run: npm run lint
 
-      - name: Beta Release
+      - name: Compute beta version
+        id: version
+        run: |
+          # Get latest stable tag (exclude beta tags)
+          STABLE_TAG=$(git tag -l 'v*' --sort=-v:refname | grep -v 'beta' | head -1)
+          STABLE_VERSION=${STABLE_TAG#v}
+
+          if [ -z "$STABLE_VERSION" ]; then
+            echo "No stable tag found, using 0.0.0"
+            STABLE_VERSION="0.0.0"
+          fi
+
+          # Count existing beta tags for this stable version to determine next number
+          BETA_COUNT=$(git tag -l "v${STABLE_VERSION}-beta.*" | wc -l | tr -d ' ')
+          NEXT_BETA=$((BETA_COUNT + 1))
+
+          BETA_VERSION="${STABLE_VERSION}-beta.${NEXT_BETA}"
+          echo "version=${BETA_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "stable=${STABLE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "[i] Stable: v${STABLE_VERSION} | Beta: v${BETA_VERSION}"
+
+      - name: Update package version
+        run: |
+          npm version "${{ steps.version.outputs.version }}" --no-git-tag-version
+
+      - name: Prepare release assets
+        run: node scripts/prepare-release-assets.cjs "${{ steps.version.outputs.version }}"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and tag
+        run: |
+          git add -A
+          git commit -m "chore(release): ${{ steps.version.outputs.version }} [skip ci]"
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin dev
+          git push origin "v${{ steps.version.outputs.version }}"
+
+      - name: Create GitHub prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: |
+          ASSETS=""
+          if [ -f "dist/claudekit-engineer.zip" ]; then
+            ASSETS="dist/claudekit-engineer.zip"
+          fi
+
+          gh release create "v${{ steps.version.outputs.version }}" \
+            --title "v${{ steps.version.outputs.version }}" \
+            --prerelease \
+            --generate-notes \
+            --target dev \
+            $ASSETS
 
       - name: Send beta release notification to Discord
         if: success()
