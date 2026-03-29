@@ -1,3 +1,10 @@
+## [2.15.0-beta.1](https://github.com/claudekit/claudekit-engineer/compare/v2.14.0...v2.15.0-beta.1) (2026-03-29)
+
+
+### 🚀 Features
+
+* **worktree:** add --no-prefix flag to skip branch prefix and preserve case ([d52f55c](https://github.com/claudekit/claudekit-engineer/commit/d52f55c47de37332de9d3586550f5d694915fb49)), closes [#590](https://github.com/claudekit/claudekit-engineer/issues/590)
+
 ## [2.14.0](https://github.com/claudekit/claudekit-engineer/compare/v2.13.0...v2.14.0) (2026-03-28)
 
 
