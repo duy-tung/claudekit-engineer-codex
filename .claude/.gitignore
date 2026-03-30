@@ -58,5 +58,6 @@ GoogleService-Info.plist
 .gemini/*
 commands/**/meta/*
 commands/git/release
+skills/ai-multimodal/assets/demo-*
 settings.local.json
 
