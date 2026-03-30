@@ -901,8 +901,35 @@ function cmdRemove() {
   });
 }
 
+function showHelp() {
+  const help = `Git Worktree Manager for ClaudeKit
+
+Usage: node worktree.cjs <command> [options]
+
+Commands:
+  create <project> <feature>  Create a new worktree (project optional for standalone)
+  remove <name-or-path>       Remove a worktree and its branch
+  info                        Get repo info (type, projects, env files)
+  list                        List existing worktrees
+
+Options:
+  --prefix <type>        Branch prefix (feat|fix|refactor|docs|test|chore|perf)
+  --worktree-root <path> Explicit worktree directory
+  --json                 Output in JSON format for LLM consumption
+  --env <files>          Comma-separated list of .env files to copy (legacy)
+  --dry-run              Show what would be done without executing
+  --no-prefix            Skip branch prefix and preserve original case
+  --help, -h             Show this help message`;
+  console.log(help);
+}
+
 // Main
 function main() {
+  if (command === '--help' || command === '-h' || command === 'help') {
+    showHelp();
+    return;
+  }
+
   switch (command) {
     case 'create':
       cmdCreate();
@@ -918,7 +945,7 @@ function main() {
       break;
     default:
       outputError('UNKNOWN_COMMAND', `Unknown command: ${command || '(none)'}`, {
-        suggestion: 'Available commands: create, remove, info, list'
+        suggestion: 'Available commands: create, remove, info, list. Use --help for usage.'
       });
   }
 }
