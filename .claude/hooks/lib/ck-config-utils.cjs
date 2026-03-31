@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { execFileSync } = require('child_process');
 
 const LOCAL_CONFIG_PATH = '.claude/.ck.json';
 const GLOBAL_CONFIG_PATH = path.join(os.homedir(), '.claude', '.ck.json');
@@ -180,6 +181,23 @@ function writeSessionState(sessionId, state) {
 }
 
 /**
+ * Update session state by merging or transforming the existing value.
+ * @param {string} sessionId - Session identifier
+ * @param {Object|Function} updater - Partial state or transform function
+ * @returns {boolean} Success status
+ */
+function updateSessionState(sessionId, updater) {
+  if (!sessionId) return false;
+  const current = readSessionState(sessionId) || {};
+  const next = typeof updater === 'function'
+    ? updater({ ...current })
+    : { ...current, ...(updater || {}) };
+
+  if (!next || typeof next !== 'object') return false;
+  return writeSessionState(sessionId, next);
+}
+
+/**
  * Characters invalid in filenames across Windows, macOS, Linux
  * Windows: < > : " / \ | ? *
  * macOS/Linux: / and null byte
@@ -267,27 +285,27 @@ const DEFAULT_EXEC_TIMEOUT_MS = 5000;
  * @returns {string|null} Command output or null
  */
 function execSafe(cmd, options = {}) {
-  // Whitelist of safe read-only commands
-  const allowedCommands = [
-    'git branch --show-current',
-    'git rev-parse --abbrev-ref HEAD',
-    'git rev-parse --show-toplevel'
-  ];
-  if (!allowedCommands.includes(cmd)) {
+  const allowedCommands = {
+    'git branch --show-current': ['git', ['branch', '--show-current']],
+    'git rev-parse --abbrev-ref HEAD': ['git', ['rev-parse', '--abbrev-ref', 'HEAD']],
+    'git rev-parse --show-toplevel': ['git', ['rev-parse', '--show-toplevel']]
+  };
+  const commandSpec = allowedCommands[cmd];
+  if (!commandSpec) {
     return null;
   }
 
   const { cwd = undefined, timeout = DEFAULT_EXEC_TIMEOUT_MS } = options;
+  const [file, args] = commandSpec;
 
   try {
-    return require('child_process')
-      .execSync(cmd, {
-        encoding: 'utf8',
-        timeout,
-        cwd,
-        stdio: ['pipe', 'pipe', 'pipe']
-      })
-      .trim();
+    return execFileSync(file, args, {
+      encoding: 'utf8',
+      timeout,
+      cwd,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      windowsHide: true
+    }).trim();
   } catch (e) {
     return null;
   }
@@ -821,6 +839,7 @@ module.exports = {
   getSessionTempPath,
   readSessionState,
   writeSessionState,
+  updateSessionState,
   resolvePlanPath,
   extractSlugFromBranch,
   findMostRecentPlan,

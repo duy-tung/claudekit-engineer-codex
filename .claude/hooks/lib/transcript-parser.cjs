@@ -82,7 +82,8 @@ async function parseTranscript(transcriptPath) {
     tools: [],
     agents: [],
     todos: [],
-    sessionStart: null
+    sessionStart: null,
+    statuslineActivityCount: 0
   };
 
   if (!transcriptPath || !fs.existsSync(transcriptPath)) {
@@ -146,6 +147,7 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
     // Handle tool_use blocks
     if (block.type === 'tool_use' && block.id && block.name) {
       if (block.name === 'Task') {
+        result.statuslineActivityCount += 1;
         // Agent spawn
         agentMap.set(block.id, {
           id: block.id,
@@ -157,6 +159,7 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
           endTime: null
         });
       } else if (block.name === 'TodoWrite') {
+        result.statuslineActivityCount += 1;
         // Legacy: Replace todo array (deprecated, kept for backwards compatibility)
         if (block.input?.todos && Array.isArray(block.input.todos)) {
           latestTodos.length = 0;
@@ -168,6 +171,7 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
           );
         }
       } else if (block.name === 'TaskCreate') {
+        result.statuslineActivityCount += 1;
         // Native Task API: add new task.
         // Track by tool_use id first; hydrate real task id from matching tool_result when present.
         if (block.input?.subject) {
@@ -181,6 +185,7 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
           });
         }
       } else if (block.name === 'TaskUpdate') {
+        result.statuslineActivityCount += 1;
         // Native Task API: Update existing task status
         // Match by taskId against native-task ids first.
         // Numeric fallback maps to native-task creation order only (not legacy TodoWrite items).
@@ -223,6 +228,7 @@ function processEntry(entry, toolMap, agentMap, latestTodos, result) {
 
       const agent = agentMap.get(block.tool_use_id);
       if (agent) {
+        result.statuslineActivityCount += 1;
         agent.status = 'completed';
         agent.endTime = timestamp;
       }

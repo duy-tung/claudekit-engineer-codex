@@ -179,6 +179,12 @@ function mkTranscript(lines) {
   return p;
 }
 
+function writeSessionStateFile(sessionId, state) {
+  const sessionPath = path.join(os.tmpdir(), `ck-session-${sessionId}.json`);
+  fs.writeFileSync(sessionPath, JSON.stringify(state, null, 2));
+  return sessionPath;
+}
+
 async function main() {
   console.log('\n==============================================');
   console.log('STATUSLINE SCENARIO SUITE');
@@ -385,114 +391,67 @@ async function main() {
   });
 
   await test('Native TaskCreate/TaskUpdate flow is rendered', async () => {
-    const transcriptPath = mkTranscript([
-      {
-        timestamp: new Date(Date.now() - 120000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-create-1',
-            name: 'TaskCreate',
-            input: { subject: 'Implement auth flow' }
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 110000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_result',
-            tool_use_id: 'task-create-1',
-            is_error: false,
-            content: '{"taskId":"task-001"}'
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 100000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-update-1',
-            name: 'TaskUpdate',
-            input: {
-              taskId: 'task-001',
-              status: 'in_progress',
-              activeForm: 'Implementing auth flow'
-            }
-          }]
-        }
+    const sessionId = `native-task-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: [
+          {
+            id: 'task-001',
+            content: 'Implement auth flow',
+            status: 'in_progress',
+            activeForm: 'Implementing auth flow'
+          }
+        ]
       }
-    ]);
+    });
 
     try {
       const payload = {
+        session_id: sessionId,
         model: { display_name: 'Claude' },
         workspace: { current_dir: '/tmp/project' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } },
-        transcript_path: transcriptPath
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
       };
       const result = runStatuslineSync({ payload });
       assertSuccessfulRun(result, 'Native TaskCreate/TaskUpdate scenario');
       const { stdout } = result;
       assertContains(stdout, 'Implementing auth flow', 'Native task activeForm should be shown');
     } finally {
-      try { fs.unlinkSync(transcriptPath); } catch {}
+      try { fs.unlinkSync(sessionPath); } catch {}
     }
   });
 
   await test('Mixed TodoWrite + Native TaskUpdate keeps legacy todo unchanged', async () => {
-    const transcriptPath = mkTranscript([
-      {
-        timestamp: new Date(Date.now() - 120000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'todo-write-1',
-            name: 'TodoWrite',
-            input: {
-              todos: [
-                { content: 'Legacy first', status: 'pending' },
-                { content: 'Legacy second', status: 'pending' }
-              ]
-            }
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 110000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-create-1',
-            name: 'TaskCreate',
-            input: { subject: 'Native first' }
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 100000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-update-1',
-            name: 'TaskUpdate',
-            input: {
-              taskId: '1',
-              status: 'in_progress',
-              activeForm: 'Working native first'
-            }
-          }]
-        }
+    const sessionId = `mixed-task-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: [
+          { content: 'Legacy first', status: 'pending' },
+          { content: 'Legacy second', status: 'pending' },
+          {
+            id: 'task-001',
+            content: 'Native first',
+            status: 'in_progress',
+            activeForm: 'Working native first'
+          }
+        ]
       }
-    ]);
+    });
 
     try {
       const payload = {
+        session_id: sessionId,
         model: { display_name: 'Claude' },
         workspace: { current_dir: '/tmp/project' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } },
-        transcript_path: transcriptPath
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
       };
       const result = runStatuslineSync({ payload });
       assertSuccessfulRun(result, 'Mixed native/legacy transcript scenario');
@@ -501,7 +460,7 @@ async function main() {
       assertTrue(!stdout.includes('Legacy first'), 'Legacy TodoWrite item should not be promoted to active task');
       assertTrue(!stdout.includes('Legacy second'), 'Legacy TodoWrite list should not leak into native active line');
     } finally {
-      try { fs.unlinkSync(transcriptPath); } catch {}
+      try { fs.unlinkSync(sessionPath); } catch {}
     }
   });
 

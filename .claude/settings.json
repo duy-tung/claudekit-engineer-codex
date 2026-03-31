@@ -17,10 +17,6 @@
           {
             "type": "command",
             "command": "node .claude/hooks/session-init.cjs"
-          },
-          {
-            "type": "command",
-            "command": "node .claude/hooks/session-state.cjs"
           }
         ]
       }
@@ -109,6 +105,15 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Task|TaskCreate|TaskUpdate|TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-state.cjs"
+          }
+        ]
+      },
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [

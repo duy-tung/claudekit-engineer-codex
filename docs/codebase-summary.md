@@ -145,11 +145,12 @@ claudekit-engineer/
 
 5. **session-state.cjs** - Session State Persistence
    - Persists session progress across sessions and context compactions
-   - Loads previous state on SessionStart (startup and post-compaction recovery)
+   - Refreshes cached statusline activity on task/todo `PostToolUse` events
+   - Finalizes and archives session state on `Stop`, appends subagent results on `SubagentStop`
    - Archives old states with rotation (keeps 5)
    - Extracts todos, modified files, branch, and plan info
    - 7-day auto-expiry, atomic writes, fail-safe
-   - Post-compaction: Injects last saved state with guidance to resume without re-doing work
+   - Startup and post-compaction recovery messaging is handled by `session-init.cjs`
 
 6. **privacy-block.cjs** - Sensitive File Access Control
 7. **descriptive-name.cjs** - Naming conventions enforcement

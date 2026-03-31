@@ -15,10 +15,9 @@ const path = require('path');
 
 // Import modular components
 const { RESET, green, yellow, red, cyan, magenta, dim, coloredBar, getContextColor, setColorEnabled } = require('./hooks/lib/colors.cjs');
-const { parseTranscript } = require('./hooks/lib/transcript-parser.cjs');
-const { countConfigs } = require('./hooks/lib/config-counter.cjs');
-const { loadConfig } = require('./hooks/lib/ck-config-utils.cjs');
+const { loadConfig, readSessionState } = require('./hooks/lib/ck-config-utils.cjs');
 const { getGitInfo } = require('./hooks/lib/git-info-cache.cjs');
+const { readActivitySnapshot } = require('./hooks/lib/statusline-session-cache.cjs');
 
 // Buffer constant for fallback context calculation
 const AUTOCOMPACT_BUFFER = 40000;
@@ -468,21 +467,19 @@ async function main() {
     const gitAhead = gitInfo?.ahead || 0;
     const gitBehind = gitInfo?.behind || 0;
 
-    // Active plan detection - read from session temp file
+    // Session metadata is cached in the session temp file.
     let activePlan = '';
+    let transcript = { agents: [], todos: [], sessionStart: null };
     try {
       const sessionId = data.session_id;
       if (sessionId) {
-        const sessionPath = path.join(os.tmpdir(), `ck-session-${sessionId}.json`);
-        if (fs.existsSync(sessionPath)) {
-          const session = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
-          const planPath = session.activePlan?.trim();
-          if (planPath) {
-            // Extract slug from path like "plans/260106-1554-statusline-visual"
-            const match = planPath.match(/plans\/\d+-\d+-(.+?)(?:\/|$)/);
-            activePlan = match ? match[1] : planPath.split('/').pop();
-          }
+        const session = readSessionState(sessionId);
+        const planPath = session?.activePlan?.trim();
+        if (planPath) {
+          const match = planPath.match(/plans\/\d+-\d+-(.+?)(?:\/|$)/);
+          activePlan = match ? match[1] : planPath.split('/').pop();
         }
+        transcript = readActivitySnapshot(sessionId, readSessionState) || transcript;
       }
     } catch {}
 
@@ -525,10 +522,6 @@ async function main() {
 
     // Session timer - read actual reset time from usage limits cache
     let sessionText = '';
-    const transcriptPath = data.transcript_path;
-
-    // Parse transcript for tools/agents/todos
-    const transcript = transcriptPath ? await parseTranscript(transcriptPath) : { tools: [], agents: [], todos: [], sessionStart: null };
 
     // Read actual reset time and utilization from usage limits cache (written by usage-context-awareness hook)
     let usagePercent = null;
@@ -566,9 +559,6 @@ async function main() {
     const linesAdded = data.cost?.total_lines_added || 0;
     const linesRemoved = data.cost?.total_lines_removed || 0;
 
-    // Config counts
-    const configs = countConfigs(rawDir);
-
     // Build render context
     const ctx = {
       modelName,
@@ -585,7 +575,6 @@ async function main() {
       costText,
       linesAdded,
       linesRemoved,
-      configs,
       transcript
     };
 
