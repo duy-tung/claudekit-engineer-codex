@@ -464,11 +464,29 @@ function sanitizeFeatureName(name, preserveCase = false) {
   // When preserveCase is true (--no-prefix), keep original casing
   if (!preserveCase) ascii = ascii.toLowerCase();
 
+  // preserveCase (--no-prefix): preserve `/` for multi-segment branch names (e.g. kai/feat/foo)
+  // Security: reject `..` path components to prevent directory traversal
+  if (preserveCase && ascii.split('/').some(seg => seg === '..')) {
+    return '';
+  }
+
   ascii = ascii
-    .replace(preserveCase ? /[^a-zA-Z0-9-]/g : /[^a-z0-9-]/g, '-')
+    .replace(preserveCase ? /[^a-zA-Z0-9/.-]/g : /[^a-z0-9-]/g, '-')
     .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-    .slice(0, 50); // Limit length
+    .replace(/^-|-$/g, '');
+
+  if (preserveCase) {
+    // Clean up slash sequences: collapse consecutive, trim leading/trailing
+    ascii = ascii
+      .replace(/\/+/g, '/')
+      .replace(/^\/|\/$/g, '');
+    // Remove dashes adjacent to slashes (e.g. -/- becomes /)
+    ascii = ascii
+      .replace(/-?\/-?/g, '/');
+  }
+
+  // Multi-segment names need longer limit to accommodate user/type/feature patterns
+  ascii = ascii.slice(0, preserveCase ? 80 : 50);
 
   if (ascii) return ascii;
 
@@ -479,6 +497,11 @@ function sanitizeFeatureName(name, preserveCase = false) {
   }
 
   return '';
+}
+
+// Flatten branch name segments for filesystem-safe directory naming
+function flattenForDirectoryName(branchSegment) {
+  return branchSegment.replace(/\//g, '-');
 }
 
 // COMMANDS
@@ -644,7 +667,8 @@ function cmdCreate() {
       suggestion: 'Use letters/numbers in feature name (example: "login-validation")'
     });
   }
-  if (sanitizedFeature !== feature.toLowerCase().replace(/\s+/g, '-')) {
+  const expectedFeature = noPrefix ? feature.replace(/\s+/g, '-') : feature.toLowerCase().replace(/\s+/g, '-');
+  if (sanitizedFeature !== expectedFeature) {
     warnings.push(`Feature name sanitized: "${feature}" → "${sanitizedFeature}"`);
   }
 
@@ -667,10 +691,12 @@ function cmdCreate() {
   const worktreesDir = worktreeRoot.dir;
 
   // Build worktree name: always include repo name for clarity
+  // Flatten slashes to dashes for filesystem-safe directory names
   const repoName = path.basename(gitRoot);
+  const flatFeature = flattenForDirectoryName(sanitizedFeature);
   const worktreeName = isMonorepo
-    ? `${projectName}-${sanitizedFeature}`
-    : `${repoName}-${sanitizedFeature}`;
+    ? `${projectName}-${flatFeature}`
+    : `${repoName}-${flatFeature}`;
 
   const worktreePath = path.join(worktreesDir, worktreeName);
 
