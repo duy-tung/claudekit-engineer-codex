@@ -24,9 +24,11 @@ Parse JSON response for: `repoType`, `baseBranch`, `projects`, `worktreeRoot`, `
 ### Step 2: Detect Branch Naming Mode
 
 **Check for exact branch name first:**
-If caller provides a pre-formed branch name (contains uppercase letters, issue tracker keys like `ABC-1234`, or explicitly says "use this exact branch name"):
+If caller provides a pre-formed branch name (contains uppercase letters, issue tracker keys like `ABC-1234`, forward slashes for multi-segment conventions like `user/type/feature`, or explicitly says "use this exact branch name"):
 → Use `--no-prefix` flag — skip Step 3, pass name directly as slug.
-Example: `"ND-1377-cleanup-docs"` → `--no-prefix` → branch `ND-1377-cleanup-docs`
+Examples:
+- `"ND-1377-cleanup-docs"` → `--no-prefix` → branch `ND-1377-cleanup-docs`
+- `"kai/feat/604-startup-option"` → `--no-prefix` → branch `kai/feat/604-startup-option`
 
 **Otherwise, detect prefix from description:**
 - "fix", "bug", "error", "issue" → `fix`
@@ -73,7 +75,7 @@ node .claude/skills/worktree/scripts/worktree.cjs create "<SLUG>" --prefix <TYPE
 
 **Options:**
 - `--prefix` - Branch type: feat|fix|refactor|docs|test|chore|perf
-- `--no-prefix` - Skip branch prefix and preserve original case (for Jira keys, etc.)
+- `--no-prefix` - Skip branch prefix and preserve original case and slashes (for Jira keys, multi-segment branches like `user/type/feature`)
 - `--worktree-root <path>` - Override default location (only if needed)
 - `--json` - JSON output
 - `--dry-run` - Preview
