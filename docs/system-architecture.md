@@ -64,8 +64,9 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 **Responsibility**: Persist structured hook execution telemetry for local inspection and downstream dashboard consumption
 **Current Coverage**:
 - `PreToolUse`: `scout-block`, `privacy-block`, `descriptive-name`
-- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-context-awareness`
-- `UserPromptSubmit`: `dev-rules-reminder`, `usage-context-awareness`
+- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-quota-cache-refresh`
+- `UserPromptSubmit`: `dev-rules-reminder`, `usage-quota-cache-refresh`
+- `SessionStart`: `session-init`, `usage-quota-cache-refresh`
 
 **Log Contract**:
 - One JSON object per line
@@ -320,7 +321,8 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - `privacy-block.cjs` - Sensitive file access control
 - `descriptive-name.cjs` - Naming conventions enforcement
 - `post-edit-simplify-reminder.cjs` - Post-edit optimization hints
-- `usage-context-awareness.cjs` - Context-aware usage patterns
+- `usage-context-awareness.cjs` - Gated prompt-awareness wrapper for usage-based injection
+- `usage-quota-cache-refresh.cjs` - Cosmetic 5h / wk statusline cache warming
 
 **1. Session-Init Hook** (`session-init.cjs`)
 - **Trigger**: Session startup

@@ -33,22 +33,25 @@ Requires OAuth Bearer token with proper scopes.
 ```
 
 ### Response Format
+
+> Live verification on 2026-03-31 against `GET https://api.anthropic.com/api/oauth/usage` returned whole-number percentages such as `37` and `19`, not `0.37` / `0.19`. Consumers should accept both encodings, but treat whole-number percentages as the current source-of-truth behavior.
+
 ```json
 {
   "five_hour": {
-    "utilization": 0.45,
+    "utilization": 37,
     "resets_at": "2025-01-15T18:00:00Z"
   },
   "seven_day": {
-    "utilization": 0.32,
+    "utilization": 19,
     "resets_at": "2025-01-22T00:00:00Z"
   },
   "seven_day_opus": {
-    "utilization": 0.15,
+    "utilization": 12,
     "resets_at": "2025-01-22T00:00:00Z"
   },
   "seven_day_sonnet": {
-    "utilization": 0.28,
+    "utilization": 21,
     "resets_at": "2025-01-22T00:00:00Z"
   }
 }
@@ -58,13 +61,14 @@ Requires OAuth Bearer token with proper scopes.
 
 ```typescript
 interface UsagePeriod {
-  utilization: number    // Percentage 0-1 (multiply by 100 for display)
+  utilization: number    // Current live payloads return whole percentages; handle 0-1 defensively too
   resetsAt: string | null // ISO 8601 timestamp
 }
 
 interface UsageLimits {
   fiveHour: UsagePeriod       // 5-hour rolling window
   sevenDay: UsagePeriod       // 7-day rolling window
+  sevenDayOauthApps: UsagePeriod | null // May be null even when the key exists
   sevenDayOpus: UsagePeriod | null   // Model-specific (Pro plans)
   sevenDaySonnet: UsagePeriod | null // Model-specific (Pro plans)
 }

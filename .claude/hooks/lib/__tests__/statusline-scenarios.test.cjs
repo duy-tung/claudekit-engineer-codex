@@ -145,13 +145,13 @@ function runStatuslineWithDelayedChunks({ chunks, delaysMs, cwd = TEST_ROOT, env
   });
 }
 
-function createTempConfigProject(mode) {
+function createTempConfigProject(mode, extraConfig = {}) {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), `statusline-mode-${mode}-`));
   const ckDir = path.join(tmpDir, '.claude');
   fs.mkdirSync(ckDir, { recursive: true });
   fs.writeFileSync(
     path.join(ckDir, '.ck.json'),
-    JSON.stringify({ statusline: mode }, null, 2)
+    JSON.stringify({ statusline: mode, ...extraConfig }, null, 2)
   );
   return tmpDir;
 }
@@ -366,14 +366,24 @@ async function main() {
     });
   });
 
-  await test('Usage cache available shows reset countdown and utilization', async () => {
+  await test('Usage cache available shows 5h and wk cosmetic chips', async () => {
     withUsageCache({
       timestamp: Date.now(),
       status: 'available',
+      snapshot: {
+        sourceVersion: 1,
+        fetchedAt: new Date().toISOString(),
+        fiveHourPercent: 38,
+        weekPercent: 19
+      },
       data: {
         five_hour: {
-          utilization: 38.2,
+          utilization: 38,
           resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 15 * 60 * 1000).toISOString()
+        },
+        seven_day: {
+          utilization: 19,
+          resets_at: new Date(Date.now() + 6 * 24 * 3600 * 1000 + 5 * 3600 * 1000).toISOString()
         }
       }
     }, () => {
@@ -385,9 +395,80 @@ async function main() {
       const result = runStatuslineSync({ payload });
       assertSuccessfulRun(result, 'Usage available scenario');
       const { stdout } = result;
-      assertTrue(/\d+h \d+m/.test(stdout), 'Available usage should show reset countdown');
-      assertTrue(/\(38%/.test(stdout) || /\(38 used\)/.test(stdout) || /\(38/.test(stdout), 'Should include rounded utilization');
+      assertContains(stdout, '5h 38%', 'Available usage should show the 5h utilization');
+      assertContains(stdout, 'wk 19%', 'Available usage should show the weekly utilization');
+      assertTrue(!stdout.includes('('), 'Cosmetic usage chips should not show countdown/session timer text');
     });
+  });
+
+  await test('Usage cache falls back to legacy raw payload when snapshot is absent', async () => {
+    withUsageCache({
+      timestamp: Date.now(),
+      status: 'available',
+      data: {
+        five_hour: {
+          utilization: 36,
+          resets_at: new Date(Date.now() + 90 * 60 * 1000).toISOString()
+        },
+        seven_day: {
+          utilization: 18,
+          resets_at: new Date(Date.now() + 4 * 24 * 3600 * 1000).toISOString()
+        }
+      }
+    }, () => {
+      const payload = {
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: '/tmp' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload });
+      assertSuccessfulRun(result, 'Legacy usage fallback scenario');
+      assertContains(result.stdout, '5h 36%', 'Legacy raw cache should still render the 5h chip');
+      assertContains(result.stdout, 'wk 18%', 'Legacy raw cache should still render the weekly chip');
+    });
+  });
+
+  await test('Usage display is decoupled from usage-context-awareness config gating', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      hooks: {
+        'usage-context-awareness': false
+      }
+    });
+
+    try {
+      withUsageCache({
+        timestamp: Date.now(),
+        status: 'available',
+        snapshot: {
+          sourceVersion: 1,
+          fetchedAt: new Date().toISOString(),
+          fiveHourPercent: 37,
+          weekPercent: 19
+        },
+        data: {
+          five_hour: {
+            utilization: 37,
+            resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 10 * 60 * 1000).toISOString()
+          },
+          seven_day: {
+            utilization: 19,
+            resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000 + 12 * 3600 * 1000).toISOString()
+          }
+        }
+      }, () => {
+        const payload = {
+          model: { display_name: 'Claude' },
+          workspace: { current_dir: tmpDir },
+          context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+        };
+        const result = runStatuslineSync({ payload, cwd: tmpDir });
+        assertSuccessfulRun(result, 'Usage decoupling scenario');
+        assertContains(result.stdout, '5h 37%', 'Statusline should keep cosmetic 5h display even when the hook is disabled');
+        assertContains(result.stdout, 'wk 19%', 'Statusline should keep cosmetic weekly display even when the hook is disabled');
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   await test('Native TaskCreate/TaskUpdate flow is rendered', async () => {

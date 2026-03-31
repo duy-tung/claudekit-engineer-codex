@@ -155,7 +155,8 @@ claudekit-engineer/
 6. **privacy-block.cjs** - Sensitive File Access Control
 7. **descriptive-name.cjs** - Naming conventions enforcement
 8. **post-edit-simplify-reminder.cjs** - Post-edit optimization hints
-9. **usage-context-awareness.cjs** - Context-aware usage patterns
+9. **usage-context-awareness.cjs** - Gated prompt-awareness wrapper for usage-based injection
+10. **usage-quota-cache-refresh.cjs** - Cosmetic 5h / wk cache warmer for the statusline
 
 **Hook Features:**
 - Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation
