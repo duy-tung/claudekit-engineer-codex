@@ -50,7 +50,7 @@ jobs:
         id: version
         run: |
           # Get latest stable tag (only pure semver, exclude all prereleases)
-          STABLE_TAG=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          STABLE_TAG=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)
           STABLE_VERSION=${STABLE_TAG#v}
 
           if [ -z "$STABLE_VERSION" ]; then
