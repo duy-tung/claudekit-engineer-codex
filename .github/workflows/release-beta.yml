@@ -95,7 +95,7 @@ jobs:
           # Find previous tag — aligned with send-discord-release.cjs logic:
           # sort ALL v* tags by version, skip current release tag, pick next.
           CURRENT_TAG="v${{ steps.version.outputs.version }}"
-          PREV_TAG=$(git tag --sort=-v:refname -l "v*" | grep -v "^${CURRENT_TAG}$" | head -1)
+          PREV_TAG=$(git tag --sort=-v:refname -l "v*" | grep -v "^${CURRENT_TAG}$" | head -1 || true)
           if [ -z "$PREV_TAG" ]; then
             echo "[i] No previous tag found, using last 20 commits"
             RANGE=""
@@ -115,9 +115,13 @@ jobs:
             GIT_CMD="git log -20 --no-merges --format=%h %s"
           fi
 
+          # Regex stored in variable to prevent bash from misinterpreting
+          # parentheses/brackets inside [[ =~ ]] (fails on bash 5.x/Ubuntu 24.04)
+          COMMIT_RE='^([a-f0-9]+) ([a-zA-Z]+)(\(([^)]*)\))?!?: (.+)'
+
           while IFS= read -r line; do
             [[ -z "$line" || "$line" == *"[skip ci]"* ]] && continue
-            if [[ "$line" =~ ^([a-f0-9]+)\ ([a-zA-Z]+)(\(([^)]*)\))?!?:\ (.+) ]]; then
+            if [[ "$line" =~ $COMMIT_RE ]]; then
               hash="${BASH_REMATCH[1]}"
               type="${BASH_REMATCH[2],,}"
               scope="${BASH_REMATCH[4]}"
