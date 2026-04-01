@@ -16,7 +16,8 @@ import os from "os";
 
 const QUOTA_DIR = path.join(os.homedir(), ".claudekit");
 const QUOTA_FILE = path.join(QUOTA_DIR, ".stitch-quota.json");
-const DEFAULT_LIMIT = parseInt(process.env.STITCH_QUOTA_LIMIT || "200", 10);
+// Stitch free tier: 400 daily credits. No API to fetch real usage.
+const DEFAULT_LIMIT = parseInt(process.env.STITCH_QUOTA_LIMIT || "400", 10);
 
 interface QuotaState { date: string; count: number; limit: number; }
 
@@ -164,7 +165,11 @@ async function main() {
   } catch (error: unknown) {
     const err = error as { code?: string; message?: string };
     if (err.code === "RATE_LIMITED") {
-      console.error("[X] Daily quota exceeded. Try again tomorrow or use ck:ui-ux-pro-max fallback.");
+      // Auto-sync local tracker — API is the source of truth
+      const q = loadQuota();
+      q.count = q.limit;
+      saveQuota(q);
+      console.error("[X] Daily quota exceeded (local tracker synced). Try tomorrow or use ck:ui-ux-pro-max.");
     } else if (err.code === "AUTH_FAILED") {
       console.error("[X] Authentication failed. Check STITCH_API_KEY env var.");
     } else {

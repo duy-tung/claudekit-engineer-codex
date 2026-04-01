@@ -17,7 +17,7 @@ metadata:
 
 Generate high-fidelity UI designs from text prompts via Google Stitch. Export Tailwind/HTML, orchestrate design-to-code pipelines with existing UI skills.
 
-**Free tier:** 200 credits/day (standard), 50/day (experimental). Resets at midnight UTC.
+**Free tier:** 400 credits/day + 15 redesign credits/day. Resets at midnight UTC.
 
 ## Setup
 
@@ -145,7 +145,7 @@ See `references/design-to-code-pipeline.md` for detailed patterns and examples.
 
 ## Quota Management
 
-- 200 credits/day (standard mode), resets at midnight UTC
+- 400 credits/day + 15 redesign/day, resets at midnight UTC
 - Local tracking via `~/.claudekit/.stitch-quota.json`
 - Warns when remaining credits < 20%
 - **Fallback:** When exhausted, use `ck:ui-ux-pro-max` for text-based design generation
