@@ -18,7 +18,12 @@ const { RESET, green, yellow, red, cyan, magenta, dim, coloredBar, getContextCol
 const { loadConfig, readSessionState } = require('./hooks/lib/ck-config-utils.cjs');
 const { getGitInfo } = require('./hooks/lib/git-info-cache.cjs');
 const { readActivitySnapshot } = require('./hooks/lib/statusline-session-cache.cjs');
-const { readUsageCache, normalizeUtilization, isUsageCacheFresh } = require('./hooks/lib/usage-limits-cache.cjs');
+const {
+  readUsageCache,
+  normalizeUtilization,
+  isUsageCacheFresh,
+  resolveQuotaDisplayEligibility
+} = require('./hooks/lib/usage-limits-cache.cjs');
 
 // Buffer constant for fallback context calculation
 const AUTOCOMPACT_BUFFER = 40000;
@@ -549,7 +554,9 @@ async function main() {
     const statuslineMode = config.statusline || 'full';
     const usageWindows = config.statuslineQuota === false
       ? []
-      : buildUsageWindows(readUsageCache());
+      : (resolveQuotaDisplayEligibility({ useCache: true }).eligible
+          ? buildUsageWindows(readUsageCache())
+          : []);
 
     // Cost and lines changed
     const billingMode = env.CLAUDE_BILLING_MODE || 'api';
