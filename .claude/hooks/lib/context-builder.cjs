@@ -11,6 +11,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Usage cache file path (written by usage-context-awareness.cjs hook)
 const USAGE_CACHE_FILE = path.join(os.tmpdir(), 'ck-usage-limits-cache.json');
@@ -24,6 +25,14 @@ const {
   normalizePath,
   getGitBranch
 } = require('./ck-config-utils.cjs');
+
+function execSafe(cmd) {
+  try {
+    return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Resolve rules file path (local or global) with backward compat

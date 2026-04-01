@@ -302,6 +302,88 @@ describe('session-state.cjs', () => {
     assert.strictEqual(sessionState.statusline.todos[0].activeForm, 'Keeping fresher cached task', 'Truncated tail should preserve the fresher cached active form');
   });
 
+  it('does not let a slower stale transcript overwrite a fresher cached snapshot', async () => {
+    const sessionId = `session-state-race-${Date.now()}`;
+    const sessionPath = track(path.join(os.tmpdir(), `ck-session-${sessionId}.json`));
+    const olderTranscriptPath = track(path.join(os.tmpdir(), `${sessionId}-older.jsonl`));
+    const newerTranscriptPath = track(path.join(os.tmpdir(), `${sessionId}-newer.jsonl`));
+    const olderTs = new Date(Date.now() - 120000).toISOString();
+    const newerTs = new Date(Date.now() - 10000).toISOString();
+    const parserPath = require.resolve('../lib/transcript-parser.cjs');
+    const managerPath = require.resolve('../lib/session-state-manager.cjs');
+
+    fs.writeFileSync(olderTranscriptPath, '{}\n');
+    fs.writeFileSync(newerTranscriptPath, '{}\n');
+    fs.writeFileSync(sessionPath, JSON.stringify({
+      statusline: {
+        sessionStart: olderTs,
+        updatedAt: olderTs,
+        warmed: true,
+        agents: [],
+        todos: [{ id: 'task-base', content: 'Base task', status: 'pending', activeForm: 'Base task' }]
+      }
+    }, null, 2));
+
+    const parserModule = require(parserPath);
+    const originalParseTranscript = parserModule.parseTranscript;
+    parserModule.parseTranscript = async (transcriptPath) => {
+      if (transcriptPath === olderTranscriptPath) {
+        await new Promise((resolve) => setTimeout(resolve, 120));
+        return {
+          sessionStart: olderTs,
+          agents: [],
+          todos: [{ id: 'task-old', content: 'Older task', status: 'pending', activeForm: 'Older task' }],
+          invalidLineCount: 0,
+          statuslineActivityCount: 1,
+          lastActivityAt: olderTs,
+          lastValidEntryAt: olderTs
+        };
+      }
+
+      if (transcriptPath === newerTranscriptPath) {
+        return {
+          sessionStart: olderTs,
+          agents: [],
+          todos: [{ id: 'task-new', content: 'Newer task', status: 'in_progress', activeForm: 'Newer task' }],
+          invalidLineCount: 0,
+          statuslineActivityCount: 1,
+          lastActivityAt: newerTs,
+          lastValidEntryAt: newerTs
+        };
+      }
+
+      return originalParseTranscript(transcriptPath);
+    };
+
+    delete require.cache[managerPath];
+    const { refreshStatuslineSnapshot } = require('../lib/session-state-manager.cjs');
+
+    try {
+      const olderRefresh = refreshStatuslineSnapshot({
+        session_id: sessionId,
+        transcript_path: olderTranscriptPath
+      });
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      const newerRefresh = refreshStatuslineSnapshot({
+        session_id: sessionId,
+        transcript_path: newerTranscriptPath
+      });
+
+      const [olderResult, newerResult] = await Promise.all([olderRefresh, newerRefresh]);
+      assert.strictEqual(olderResult.success, true, 'Older refresh should still succeed');
+      assert.strictEqual(newerResult.success, true, 'Newer refresh should succeed');
+
+      const sessionState = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
+      assert.strictEqual(sessionState.statusline.todos.length, 1, 'Should keep a single current todo snapshot');
+      assert.strictEqual(sessionState.statusline.todos[0].id, 'task-new', 'Slower stale refresh should not overwrite the newer todo');
+      assert.strictEqual(sessionState.statusline.todos[0].activeForm, 'Newer task', 'Slower stale refresh should preserve the fresher active form');
+      assert.strictEqual(sessionState.lastTranscriptPath, newerTranscriptPath, 'Slower stale refresh should not regress the cached transcript path');
+    } finally {
+      parserModule.parseTranscript = originalParseTranscript;
+      delete require.cache[managerPath];
+    }
+  });
+
   it('does not truncate todo snapshots', () => {
     const todos = Array.from({ length: 30 }, (_, index) => ({
       id: `task-${index + 1}`,

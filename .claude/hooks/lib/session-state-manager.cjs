@@ -13,7 +13,7 @@ const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 const { parseTranscript } = require('./transcript-parser.cjs');
 const { readSessionState, updateSessionState } = require('./ck-config-utils.cjs');
-const { createEmptyActivitySnapshot, sanitizeActivitySnapshot, writeActivitySnapshot } = require('./statusline-session-cache.cjs');
+const { createEmptyActivitySnapshot, sanitizeActivitySnapshot } = require('./statusline-session-cache.cjs');
 
 const MAX_ARCHIVES = 5;
 const EXPIRY_DAYS = 7;
@@ -132,40 +132,56 @@ async function refreshStatuslineSnapshot(stdinData) {
     const sessionId = stdinData.session_id || process.env.CK_SESSION_ID || '';
     if (!sessionId) return { success: false, reason: 'missing-session-id' };
 
-    const existingState = readSessionState(sessionId) || {};
-    const existingSnapshot = existingState.statusline || createEmptyActivitySnapshot();
     const now = new Date().toISOString();
+    const existingState = readSessionState(sessionId) || {};
     const transcriptPath = resolveTranscriptPath(stdinData, existingState);
 
     if (!transcriptPath) {
-      const snapshot = applyStatuslineEvent(existingSnapshot, stdinData, now);
-      return writeActivitySnapshot(sessionId, snapshot, updateSessionState)
-        ? { success: true, warmed: Boolean(existingSnapshot.warmed) }
+      const success = updateSessionState(sessionId, (state) => {
+        const currentSnapshot = state.statusline || createEmptyActivitySnapshot();
+        return {
+          ...state,
+          statusline: sanitizeActivitySnapshot(applyStatuslineEvent(currentSnapshot, stdinData, now))
+        };
+      });
+
+      return success
+        ? { success: true, warmed: Boolean(existingState.statusline?.warmed) }
         : { success: false, reason: 'write-failed' };
     }
 
     const transcript = await parseTranscript(transcriptPath);
-    const parsedSnapshot = applyStatuslineEvent({
-      sessionStart: transcript.sessionStart
-        ? new Date(transcript.sessionStart).toISOString()
-        : existingSnapshot.sessionStart || now,
-      updatedAt: now,
-      warmed: true,
-      agents: transcript.agents || [],
-      todos: transcript.todos || []
-    }, stdinData, now);
-    const snapshot = shouldPreserveExistingSnapshot(existingSnapshot, parsedSnapshot, transcript)
-      ? applyStatuslineEvent(existingSnapshot, stdinData, now)
-      : parsedSnapshot;
+    const success = updateSessionState(sessionId, (state) => {
+      const currentSnapshot = state.statusline || createEmptyActivitySnapshot();
+      const parsedSnapshot = applyStatuslineEvent({
+        sessionStart: transcript.sessionStart
+          ? new Date(transcript.sessionStart).toISOString()
+          : currentSnapshot.sessionStart || now,
+        updatedAt: now,
+        warmed: true,
+        agents: transcript.agents || [],
+        todos: transcript.todos || []
+      }, stdinData, now);
+      const preserveCurrent = shouldPreserveExistingSnapshot(currentSnapshot, parsedSnapshot, transcript);
+      const nextSnapshot = preserveCurrent
+        ? applyStatuslineEvent(currentSnapshot, stdinData, now)
+        : parsedSnapshot;
+      const currentTranscriptPath = typeof state.lastTranscriptPath === 'string'
+        ? state.lastTranscriptPath
+        : '';
 
-    if (!writeActivitySnapshot(sessionId, snapshot, updateSessionState)) {
+      return {
+        ...state,
+        statusline: sanitizeActivitySnapshot(nextSnapshot),
+        lastTranscriptPath: preserveCurrent && currentTranscriptPath
+          ? currentTranscriptPath
+          : transcriptPath
+      };
+    });
+
+    if (!success) {
       return { success: false, reason: 'write-failed' };
     }
-
-    updateSessionState(sessionId, state => ({
-      ...state,
-      lastTranscriptPath: transcriptPath
-    }));
 
     return { success: true, warmed: true };
   } catch {
@@ -227,6 +243,13 @@ function applyStatuslineEvent(snapshot, stdinData, now) {
 function shouldPreserveExistingSnapshot(existingSnapshot, parsedSnapshot, transcript) {
   if (!hasSnapshotActivity(existingSnapshot)) return false;
   if (!existingSnapshot || existingSnapshot.warmed !== true) return false;
+  const existingUpdatedAt = Date.parse(existingSnapshot.updatedAt || '');
+  const transcriptUpdatedAt = Date.parse(transcript?.lastActivityAt || transcript?.lastValidEntryAt || '');
+
+  if (Number.isFinite(existingUpdatedAt) && Number.isFinite(transcriptUpdatedAt) && existingUpdatedAt >= transcriptUpdatedAt) {
+    return true;
+  }
+
   const transcriptIsIncomplete = Boolean(transcript && transcript.invalidLineCount > 0);
 
   if (!transcriptIsIncomplete) {
@@ -234,8 +257,6 @@ function shouldPreserveExistingSnapshot(existingSnapshot, parsedSnapshot, transc
     return !transcript || transcript.statuslineActivityCount === 0;
   }
 
-  const existingUpdatedAt = Date.parse(existingSnapshot.updatedAt || '');
-  const transcriptUpdatedAt = Date.parse(transcript.lastActivityAt || transcript.lastValidEntryAt || '');
   if (!Number.isFinite(existingUpdatedAt) || !Number.isFinite(transcriptUpdatedAt)) {
     return true;
   }

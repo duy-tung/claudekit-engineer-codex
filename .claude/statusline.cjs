@@ -545,7 +545,11 @@ async function main() {
       } catch {}
     }
 
-    const usageWindows = buildUsageWindows(readUsageCache());
+    const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
+    const statuslineMode = config.statusline || 'full';
+    const usageWindows = config.statuslineQuota === false
+      ? []
+      : buildUsageWindows(readUsageCache());
 
     // Cost and lines changed
     const billingMode = env.CLAUDE_BILLING_MODE || 'api';
@@ -573,10 +577,6 @@ async function main() {
       linesRemoved,
       transcript
     };
-
-    // Load config and get statusline mode
-    const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
-    const statuslineMode = config.statusline || 'full';
 
     // Apply statuslineColors config: explicit false disables colors regardless of FORCE_COLOR
     // NO_COLOR env var is checked inside isColorEnabled() and always wins

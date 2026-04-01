@@ -158,6 +158,7 @@ async function main() {
     const existingSession = sessionId ? readSessionState(sessionId) : null;
 
     const config = loadConfig();
+    const sessionStateEnabled = config.hooks?.['session-state'] !== false;
 
     const detections = {
       type: detectProjectType(config.project?.type),
@@ -180,7 +181,7 @@ async function main() {
       }));
     }
 
-    if (sessionId && shouldWarmStatuslineCache(source, existingSession?.statusline)) {
+    if (sessionStateEnabled && sessionId && shouldWarmStatuslineCache(source, existingSession?.statusline)) {
       await refreshStatuslineSnapshot(data);
     }
 
@@ -303,7 +304,7 @@ async function main() {
       }
     }
 
-    if (source === 'startup' || source === 'compact') {
+    if (sessionStateEnabled && (source === 'startup' || source === 'compact')) {
       const previousState = loadState(process.cwd());
       if (previousState) {
         if (source === 'compact') {

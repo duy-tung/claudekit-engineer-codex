@@ -504,6 +504,48 @@ async function main() {
     }
   });
 
+  await test('statuslineQuota=false hides cosmetic usage chips without changing the rest of the statusline', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineQuota: false
+    });
+
+    try {
+      withUsageCache({
+        timestamp: Date.now(),
+        status: 'available',
+        snapshot: {
+          sourceVersion: 1,
+          fetchedAt: new Date().toISOString(),
+          fiveHourPercent: 37,
+          weekPercent: 19
+        },
+        data: {
+          five_hour: {
+            utilization: 37,
+            resets_at: new Date(Date.now() + 2 * 3600 * 1000).toISOString()
+          },
+          seven_day: {
+            utilization: 19,
+            resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString()
+          }
+        }
+      }, () => {
+        const payload = {
+          model: { display_name: 'Claude' },
+          workspace: { current_dir: tmpDir },
+          context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+        };
+        const result = runStatuslineSync({ payload, cwd: tmpDir });
+        assertSuccessfulRun(result, 'statuslineQuota=false scenario');
+        assertTrue(!result.stdout.includes('5h 37%'), 'Quota toggle should hide the 5h chip');
+        assertTrue(!result.stdout.includes('wk 19%'), 'Quota toggle should hide the weekly chip');
+        assertContains(result.stdout, '🤖', 'Other statusline content should still render');
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   await test('Native TaskCreate/TaskUpdate flow is rendered', async () => {
     const sessionId = `native-task-${Date.now()}`;
     const sessionPath = writeSessionStateFile(sessionId, {

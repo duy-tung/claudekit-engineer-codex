@@ -240,6 +240,43 @@ describe('session-init.cjs', () => {
       fs.rmSync(tempDir, { recursive: true, force: true });
     });
 
+    it('respects hooks.session-state=false during startup recovery', async () => {
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'session-init-disabled-'));
+      const stateDir = path.join(tempDir, '.claude', 'session-state');
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(tempDir, '.claude', '.ck.json'),
+        JSON.stringify({ hooks: { 'session-state': false } }, null, 2)
+      );
+      fs.writeFileSync(
+        path.join(stateDir, 'latest.md'),
+        '# Session State\n<!-- Generated: 2026-03-31T12:00:00.000Z -->\n\n## What Worked (Verified)\n- Cached work\n'
+      );
+
+      const result = await new Promise((resolve, reject) => {
+        const proc = spawn('node', [HOOK_PATH], {
+          cwd: tempDir,
+          env: { ...process.env, CLAUDE_ENV_FILE: '' }
+        });
+        let stdout = '';
+        let stderr = '';
+        proc.stdout.on('data', (data) => { stdout += data.toString(); });
+        proc.stderr.on('data', (data) => { stderr += data.toString(); });
+        proc.stdin.write(JSON.stringify({ source: 'startup' }));
+        proc.stdin.end();
+        proc.on('close', (code) => { resolve({ stdout, stderr, exitCode: code }); });
+        proc.on('error', reject);
+        setTimeout(() => { proc.kill('SIGTERM'); reject(new Error('timeout')); }, 5000);
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Hook should exit with code 0');
+      assert.ok(
+        !result.stdout.includes('--- Previous Session State ---'),
+        'Startup should not print previous session state when hooks.session-state is disabled'
+      );
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    });
+
     it('warms the statusline cache from transcript on resume when the temp session cache is missing', async () => {
       const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'session-init-resume-'));
       const sessionId = `session-init-${Date.now()}`;
