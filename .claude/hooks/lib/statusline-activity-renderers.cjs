@@ -107,7 +107,8 @@ function renderTodosLine(transcript, truncation) {
     return null;
   }
 
-  const displayText = inProgress.activeForm || inProgress.content;
+  const displayText = inProgress.activeForm || inProgress.content || '';
+  if (!displayText || displayText.length === 0) return null;
   const display     = displayText.length > limit ? displayText.slice(0, limit - 3) + '...' : displayText;
   return `${yellow('▸')} ${display} ${dim(`(${completedCount} done, ${pendingCount} pending)`)}`;
 }

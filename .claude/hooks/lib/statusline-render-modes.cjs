@@ -102,7 +102,8 @@ function render(ctx, layout, singleLineMode) {
   const lines = [...renderSessionLines(ctx, layout)];
 
   if (!singleLineMode) {
-    const isEnabled = id => layout.sections.some(s => s.id === id && s.enabled !== false);
+    const effectiveSectionsForEnabled = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
+    const isEnabled = id => effectiveSectionsForEnabled.some(s => s.id === id && s.enabled !== false);
 
     if (isEnabled('agents')) {
       lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows));

@@ -610,6 +610,7 @@ function loadConfig(options = {}) {
     result.statusline = merged.statusline || 'full';
     result.statuslineColors = merged.statuslineColors ?? true;
     result.statuslineQuota = merged.statuslineQuota ?? true;
+    result.statuslineLayout = merged.statuslineLayout || undefined;
 
     return sanitizeConfig(result, projectRoot);
   } catch (e) {
@@ -922,3 +923,4 @@ module.exports = {
   extractTaskListId,
   isHookEnabled
 };
+

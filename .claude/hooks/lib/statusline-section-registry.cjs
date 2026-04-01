@@ -18,7 +18,7 @@ const DEFAULT_SECTIONS = [
   { id: 'quota',     enabled: true, order: 2, icon: '⌛' },
   { id: 'directory', enabled: true, order: 3, icon: '📁' },
   { id: 'git',       enabled: true, order: 4, icon: '🌿' },
-  { id: 'cost',      enabled: true, order: 5, icon: '💰' },
+  { id: 'cost',      enabled: false, order: 5, icon: '💰' },
   { id: 'changes',   enabled: true, order: 6, icon: '📝' },
   { id: 'agents',    enabled: true, order: 7, icon: '🔄' },
   { id: 'todos',     enabled: true, order: 8, icon: '✅' },
@@ -130,9 +130,12 @@ function resolveLayout(statuslineLayout) {
     .filter(s => s.id)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
+  // Guard: if theme is a string (e.g. "dark"), spread produces garbage {0:"d",1:"a",...}
+  const themeInput = statuslineLayout.theme;
+  const themeOverride = (themeInput && typeof themeInput === 'object' && !Array.isArray(themeInput)) ? themeInput : {};
   return {
     sections,
-    theme: { ...DEFAULT_THEME, ...(statuslineLayout.theme || {}) },
+    theme: { ...DEFAULT_THEME, ...themeOverride },
     responsiveBreakpoint: typeof statuslineLayout.responsiveBreakpoint === 'number'
       ? Math.max(0.5, Math.min(1.0, statuslineLayout.responsiveBreakpoint)) : 0.85,
     maxAgentRows: typeof statuslineLayout.maxAgentRows === 'number'
