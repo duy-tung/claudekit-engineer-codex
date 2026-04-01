@@ -308,6 +308,63 @@ describe('context-builder.cjs', () => {
 
   });
 
+  describe('Session-scoped dedup markers', () => {
+    const sessionId = `context-builder-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const sessionStatePath = path.join(os.tmpdir(), `ck-session-${sessionId}.json`);
+
+    after(() => {
+      fs.rmSync(sessionStatePath, { force: true });
+    });
+
+    it('marks and detects recent injections without a transcript path', () => {
+      fs.rmSync(sessionStatePath, { force: true });
+
+      assert.strictEqual(contextBuilder.wasRecentlyInjected(null, sessionId), false,
+        'Session should start without a recent injection marker');
+      assert.strictEqual(contextBuilder.markRecentlyInjected(sessionId), true,
+        'Should persist a session-scoped dedup marker');
+      assert.strictEqual(contextBuilder.wasRecentlyInjected(null, sessionId), true,
+        'Session marker should dedupe repeated injections even without transcript access');
+    });
+
+    it('ignores expired session markers', () => {
+      fs.writeFileSync(sessionStatePath, JSON.stringify({
+        devRulesReminder: {
+          lastInjectedAt: new Date(Date.now() - (6 * 60 * 1000)).toISOString()
+        }
+      }));
+
+      assert.strictEqual(contextBuilder.wasRecentlyInjected(null, sessionId), false,
+        'Expired markers should allow reminder reinjection');
+    });
+
+    it('fails open when the session marker is corrupt', () => {
+      fs.writeFileSync(sessionStatePath, '{not-json');
+
+      assert.strictEqual(contextBuilder.wasRecentlyInjected(null, sessionId), false,
+        'Corrupt session state should not suppress reminders');
+    });
+
+    it('tracks pending reservations per scope', () => {
+      fs.rmSync(sessionStatePath, { force: true });
+
+      assert.deepStrictEqual(
+        contextBuilder.reserveInjectionScope(sessionId, 'scope-a', null),
+        { shouldInject: true, reserved: true }
+      );
+      assert.deepStrictEqual(
+        contextBuilder.reserveInjectionScope(sessionId, 'scope-a', null),
+        { shouldInject: false, reserved: false }
+      );
+      assert.deepStrictEqual(
+        contextBuilder.reserveInjectionScope(sessionId, 'scope-b', null),
+        { shouldInject: true, reserved: true }
+      );
+      assert.strictEqual(contextBuilder.clearPendingInjection(sessionId, 'scope-a'), true,
+        'Should clear the pending reservation for the matched scope');
+    });
+  });
+
   describe('Hooks config behavior (Issue #413)', () => {
     let tempDir;
     let originalCwd;
@@ -403,7 +460,11 @@ describe('context-builder.cjs', () => {
         'resolveScriptPath',
         'resolveSkillsVenv',
         'buildPlanContext',
+        'buildInjectionScopeKey',
         'wasRecentlyInjected',
+        'reserveInjectionScope',
+        'markRecentlyInjected',
+        'clearPendingInjection',
         'resolveWorkflowPath' // Backward compat alias
       ];
 
