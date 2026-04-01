@@ -105,6 +105,28 @@ function coloredBar(percent, width = 12) {
   return `${color}${'▰'.repeat(filled)}${DIM}${'▱'.repeat(empty)}${RESET}`;
 }
 
+/**
+ * Resolve a color name from theme config to its color function.
+ * Used by section renderers to apply theme-configurable colors.
+ * Falls back to identity function (no color) for unknown names.
+ * @param {string} colorName - Color name (e.g. "green", "yellow", "dim")
+ * @returns {Function} Color function (string) => string
+ */
+function resolveColor(colorName) {
+  const colorMap = {
+    green,
+    yellow,
+    red,
+    cyan,
+    magenta,
+    dim,
+    white: (s) => String(s),
+    none:  (s) => String(s),
+  };
+  // Falls back to identity (no color) for unknown names — intentional graceful degradation
+  return colorMap[colorName] || ((s) => String(s));
+}
+
 module.exports = {
   RESET,
   green,
@@ -118,5 +140,6 @@ module.exports = {
   shouldUseColor,
   has256Color,
   setColorEnabled,
-  isColorEnabled
+  isColorEnabled,
+  resolveColor,
 };
