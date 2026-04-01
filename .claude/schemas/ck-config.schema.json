@@ -327,7 +327,7 @@
     "statuslineQuota": {
       "type": "boolean",
       "default": true,
-      "description": "Show the cosmetic 5h / wk quota chips in the statusline. Disable to keep the layout without usage-window percentages."
+      "description": "Show the cosmetic 5h / wk quota chips in the statusline for native Claude subscription sessions. Disable to keep the layout without usage-window percentages."
     },
     "watch": {
       "type": "object",

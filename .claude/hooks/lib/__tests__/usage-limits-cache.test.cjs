@@ -8,10 +8,13 @@ const path = require('path');
 const {
   buildUsageSnapshot,
   getCacheAgeMs,
+  hasAnthropicRuntimeOverride,
+  hasSupportedClaudeSubscription,
   isUsageCacheFresh,
   normalizeUtilization,
   readUsageCache,
-  refreshUsageCache
+  refreshUsageCache,
+  resolveQuotaDisplayEligibility
 } = require('../usage-limits-cache.cjs');
 
 let passed = 0;
@@ -65,6 +68,66 @@ async function main() {
     assertEqual(snapshot?.fiveHourPercent, 37, '5h should preserve current whole-number percentages');
     assertEqual(snapshot?.weekPercent, 19, 'Weekly should still normalize fractional payloads defensively');
     assertTrue(!('sevenDayOpus' in snapshot), 'Cosmetic snapshot should ignore model-specific buckets');
+  });
+
+  await test('runtime override detection hides quota for third-party Claude launches', async () => {
+    assertTrue(
+      hasAnthropicRuntimeOverride({
+        ANTHROPIC_BASE_URL: 'http://127.0.0.1:8317/api/provider/gemini',
+        ANTHROPIC_AUTH_TOKEN: 'ccs-managed'
+      }),
+      'Anthropic-compatible runtime overrides should disable native quota display'
+    );
+    assertTrue(
+      !hasAnthropicRuntimeOverride({ ANTHROPIC_MODEL: 'claude-sonnet-4' }),
+      'Model-only overrides should not disable quota display'
+    );
+  });
+
+  await test('supported subscription detection accepts native Claude plans and rejects free/non-sub auth', async () => {
+    assertTrue(
+      hasSupportedClaudeSubscription({ claudeAiOauth: { subscriptionType: 'max' } }),
+      'Native paid subscription types should be eligible'
+    );
+    assertTrue(
+      hasSupportedClaudeSubscription({ claudeAiOauth: { rateLimitTier: 'default_claude_max_5x' } }),
+      'Rate-limit tier should provide a defensive fallback for native Claude plans'
+    );
+    assertTrue(
+      !hasSupportedClaudeSubscription({ claudeAiOauth: { subscriptionType: 'free' } }),
+      'Free/native-non-subscription auth should not show quota chips'
+    );
+  });
+
+  await test('resolveQuotaDisplayEligibility prioritizes runtime overrides and native subscription checks', async () => {
+    const nativeSubCredentials = {
+      claudeAiOauth: {
+        accessToken: 'native-token',
+        subscriptionType: 'max'
+      }
+    };
+
+    const overridden = resolveQuotaDisplayEligibility({
+      env: {
+        ANTHROPIC_BASE_URL: 'http://127.0.0.1:8317/api/provider/gemini',
+        ANTHROPIC_AUTH_TOKEN: 'ccs-managed'
+      },
+      credentials: nativeSubCredentials
+    });
+    assertEqual(overridden.eligible, false, 'Third-party runtime override should win over local native credentials');
+    assertEqual(overridden.note, 'runtime-override', 'Third-party runtime override should be reported clearly');
+
+    const freeTier = resolveQuotaDisplayEligibility({
+      env: {},
+      credentials: {
+        claudeAiOauth: {
+          accessToken: 'native-token',
+          subscriptionType: 'free'
+        }
+      }
+    });
+    assertEqual(freeTier.eligible, false, 'Non-subscription auth should not be eligible');
+    assertEqual(freeTier.note, 'non-subscription-auth', 'Non-subscription auth should be reported clearly');
   });
 
   await test('refreshUsageCache writes available cache from the OAuth usage payload', async () => {
@@ -121,6 +184,40 @@ async function main() {
       assertTrue(!result.ok, 'Expected refreshUsageCache to fail for non-OK responses');
       const cache = readUsageCache(cachePath);
       assertEqual(cache?.status, 'unavailable', 'Cache should be marked unavailable on failure');
+    } finally {
+      try { fs.unlinkSync(cachePath); } catch {}
+    }
+  });
+
+  await test('refreshUsageCache skips network fetch when runtime is not eligible for native quota', async () => {
+    const cachePath = tempCachePath('runtime-override');
+    let fetchCalled = false;
+
+    try {
+      const result = await refreshUsageCache({
+        cachePath,
+        env: {
+          ANTHROPIC_BASE_URL: 'http://127.0.0.1:8317/api/provider/gemini',
+          ANTHROPIC_AUTH_TOKEN: 'ccs-managed'
+        },
+        credentials: {
+          claudeAiOauth: {
+            accessToken: 'native-token',
+            subscriptionType: 'max'
+          }
+        },
+        fetchImpl: async () => {
+          fetchCalled = true;
+          return { ok: true, json: async () => ({}) };
+        }
+      });
+
+      assertTrue(!result.ok, 'Unsupported runtime should not fetch native quota');
+      assertEqual(result.note, 'runtime-override', 'Unsupported runtime should explain why quota is hidden');
+      assertTrue(!fetchCalled, 'Unsupported runtime should not call the remote usage endpoint');
+
+      const cache = readUsageCache(cachePath);
+      assertEqual(cache?.status, 'unavailable', 'Unsupported runtime should persist an unavailable cache state');
     } finally {
       try { fs.unlinkSync(cachePath); } catch {}
     }

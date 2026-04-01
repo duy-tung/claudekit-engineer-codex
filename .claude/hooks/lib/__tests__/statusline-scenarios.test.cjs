@@ -83,12 +83,19 @@ function assertSuccessfulRun(result, messagePrefix) {
 
 function runStatuslineSync({ payload, cwd = TEST_ROOT, env = {}, inputRaw = null, timeoutMs = 20000 }) {
   const input = inputRaw == null ? JSON.stringify(payload || {}) : inputRaw;
+  const eligibilityCachePath = env.CK_USAGE_ELIGIBILITY_CACHE_PATH
+    || path.join(os.tmpdir(), `ck-usage-eligibility-statusline-test-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.json`);
   const result = spawnSync('node', [STATUSLINE_PATH], {
     cwd,
     encoding: 'utf8',
     input,
     timeout: timeoutMs,
-    env: { ...process.env, CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH, ...env }
+    env: {
+      ...process.env,
+      CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH,
+      CK_USAGE_ELIGIBILITY_CACHE_PATH: eligibilityCachePath,
+      ...env
+    }
   });
   if (result.error) {
     throw result.error;
@@ -102,9 +109,16 @@ function runStatuslineSync({ payload, cwd = TEST_ROOT, env = {}, inputRaw = null
 
 function runStatuslineWithDelayedChunks({ chunks, delaysMs, cwd = TEST_ROOT, env = {}, timeoutMs = 30000 }) {
   return new Promise((resolve, reject) => {
+    const eligibilityCachePath = env.CK_USAGE_ELIGIBILITY_CACHE_PATH
+      || path.join(os.tmpdir(), `ck-usage-eligibility-statusline-test-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.json`);
     const child = spawn('node', [STATUSLINE_PATH], {
       cwd,
-      env: { ...process.env, CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH, ...env },
+      env: {
+        ...process.env,
+        CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH,
+        CK_USAGE_ELIGIBILITY_CACHE_PATH: eligibilityCachePath,
+        ...env
+      },
       stdio: ['pipe', 'pipe', 'pipe']
     });
 
@@ -151,9 +165,18 @@ function createTempConfigProject(mode, extraConfig = {}) {
   fs.mkdirSync(ckDir, { recursive: true });
   fs.writeFileSync(
     path.join(ckDir, '.ck.json'),
-    JSON.stringify({ statusline: mode, ...extraConfig }, null, 2)
+    JSON.stringify({ statusline: mode, statuslineQuota: true, ...extraConfig }, null, 2)
   );
   return tmpDir;
+}
+
+function withTempConfigProject(mode, extraConfig, fn) {
+  const tmpDir = createTempConfigProject(mode, extraConfig);
+  try {
+    return fn(tmpDir);
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
 }
 
 function withUsageCache(payload, fn) {
@@ -170,6 +193,20 @@ function withUsageCache(payload, fn) {
     } else {
       fs.writeFileSync(USAGE_CACHE_PATH, backup);
     }
+  }
+}
+
+function withQuotaEligibilityCache(payload, fn) {
+  const cachePath = path.join(
+    os.tmpdir(),
+    `ck-usage-eligibility-statusline-test-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.json`
+  );
+
+  try {
+    fs.writeFileSync(cachePath, JSON.stringify(payload));
+    return fn({ CK_USAGE_ELIGIBILITY_CACHE_PATH: cachePath });
+  } finally {
+    try { fs.unlinkSync(cachePath); } catch {}
   }
 }
 
@@ -367,97 +404,109 @@ async function main() {
   });
 
   await test('Usage cache available shows 5h and wk cosmetic chips', async () => {
-    withUsageCache({
-      timestamp: Date.now(),
-      status: 'available',
-      snapshot: {
-        sourceVersion: 1,
-        fetchedAt: new Date().toISOString(),
-        fiveHourPercent: 38,
-        weekPercent: 19
-      },
-      data: {
-        five_hour: {
-          utilization: 38,
-          resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 15 * 60 * 1000).toISOString()
-        },
-        seven_day: {
-          utilization: 19,
-          resets_at: new Date(Date.now() + 6 * 24 * 3600 * 1000 + 5 * 3600 * 1000).toISOString()
-        }
-      }
-    }, () => {
-      const payload = {
-        model: { display_name: 'Claude' },
-        workspace: { current_dir: '/tmp' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
-      };
-      const result = runStatuslineSync({ payload });
-      assertSuccessfulRun(result, 'Usage available scenario');
-      const { stdout } = result;
-      assertContains(stdout, '5h 38%', 'Available usage should show the 5h utilization');
-      assertContains(stdout, 'wk 19%', 'Available usage should show the weekly utilization');
-      assertTrue(!stdout.includes('('), 'Cosmetic usage chips should not show countdown/session timer text');
+    withTempConfigProject('full', {}, (tmpDir) => {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 38,
+            weekPercent: 19
+          },
+          data: {
+            five_hour: {
+              utilization: 38,
+              resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 15 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 19,
+              resets_at: new Date(Date.now() + 6 * 24 * 3600 * 1000 + 5 * 3600 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Usage available scenario');
+          const { stdout } = result;
+          assertContains(stdout, '5h 38%', 'Available usage should show the 5h utilization');
+          assertContains(stdout, 'wk 19%', 'Available usage should show the weekly utilization');
+          assertTrue(!stdout.includes('('), 'Cosmetic usage chips should not show countdown/session timer text');
+        });
+      });
     });
   });
 
   await test('Usage cache falls back to legacy raw payload when snapshot is absent', async () => {
-    withUsageCache({
-      timestamp: Date.now(),
-      status: 'available',
-      data: {
-        five_hour: {
-          utilization: 36,
-          resets_at: new Date(Date.now() + 90 * 60 * 1000).toISOString()
-        },
-        seven_day: {
-          utilization: 18,
-          resets_at: new Date(Date.now() + 4 * 24 * 3600 * 1000).toISOString()
-        }
-      }
-    }, () => {
-      const payload = {
-        model: { display_name: 'Claude' },
-        workspace: { current_dir: '/tmp' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
-      };
-      const result = runStatuslineSync({ payload });
-      assertSuccessfulRun(result, 'Legacy usage fallback scenario');
-      assertContains(result.stdout, '5h 36%', 'Legacy raw cache should still render the 5h chip');
-      assertContains(result.stdout, 'wk 18%', 'Legacy raw cache should still render the weekly chip');
+    withTempConfigProject('full', {}, (tmpDir) => {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          data: {
+            five_hour: {
+              utilization: 36,
+              resets_at: new Date(Date.now() + 90 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 18,
+              resets_at: new Date(Date.now() + 4 * 24 * 3600 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Legacy usage fallback scenario');
+          assertContains(result.stdout, '5h 36%', 'Legacy raw cache should still render the 5h chip');
+          assertContains(result.stdout, 'wk 18%', 'Legacy raw cache should still render the weekly chip');
+        });
+      });
     });
   });
 
   await test('Stale usage cache hides cosmetic chips instead of rendering old percentages forever', async () => {
-    withUsageCache({
-      timestamp: Date.now() - 10 * 60 * 1000,
-      status: 'available',
-      snapshot: {
-        sourceVersion: 1,
-        fetchedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
-        fiveHourPercent: 41,
-        weekPercent: 22
-      },
-      data: {
-        five_hour: {
-          utilization: 41,
-          resets_at: new Date(Date.now() + 60 * 60 * 1000).toISOString()
-        },
-        seven_day: {
-          utilization: 22,
-          resets_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      }
-    }, () => {
-      const payload = {
-        model: { display_name: 'Claude' },
-        workspace: { current_dir: '/tmp' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
-      };
-      const result = runStatuslineSync({ payload });
-      assertSuccessfulRun(result, 'Stale usage cache scenario');
-      assertTrue(!result.stdout.includes('5h 41%'), 'Stale cache should suppress the 5h chip');
-      assertTrue(!result.stdout.includes('wk 22%'), 'Stale cache should suppress the weekly chip');
+    withTempConfigProject('full', {}, (tmpDir) => {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now() - 10 * 60 * 1000,
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+            fiveHourPercent: 41,
+            weekPercent: 22
+          },
+          data: {
+            five_hour: {
+              utilization: 41,
+              resets_at: new Date(Date.now() + 60 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 22,
+              resets_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Stale usage cache scenario');
+          assertTrue(!result.stdout.includes('5h 41%'), 'Stale cache should suppress the 5h chip');
+          assertTrue(!result.stdout.includes('wk 22%'), 'Stale cache should suppress the weekly chip');
+        });
+      });
     });
   });
 
@@ -469,35 +518,37 @@ async function main() {
     });
 
     try {
-      withUsageCache({
-        timestamp: Date.now(),
-        status: 'available',
-        snapshot: {
-          sourceVersion: 1,
-          fetchedAt: new Date().toISOString(),
-          fiveHourPercent: 37,
-          weekPercent: 19
-        },
-        data: {
-          five_hour: {
-            utilization: 37,
-            resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 10 * 60 * 1000).toISOString()
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 37,
+            weekPercent: 19
           },
-          seven_day: {
-            utilization: 19,
-            resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000 + 12 * 3600 * 1000).toISOString()
+          data: {
+            five_hour: {
+              utilization: 37,
+              resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 10 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 19,
+              resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000 + 12 * 3600 * 1000).toISOString()
+            }
           }
-        }
-      }, () => {
-        const payload = {
-          model: { display_name: 'Claude' },
-          workspace: { current_dir: tmpDir },
-          context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
-        };
-        const result = runStatuslineSync({ payload, cwd: tmpDir });
-        assertSuccessfulRun(result, 'Usage decoupling scenario');
-        assertContains(result.stdout, '5h 37%', 'Statusline should keep cosmetic 5h display even when the hook is disabled');
-        assertContains(result.stdout, 'wk 19%', 'Statusline should keep cosmetic weekly display even when the hook is disabled');
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Usage decoupling scenario');
+          assertContains(result.stdout, '5h 37%', 'Statusline should keep cosmetic 5h display even when the hook is disabled');
+          assertContains(result.stdout, 'wk 19%', 'Statusline should keep cosmetic weekly display even when the hook is disabled');
+        });
       });
     } finally {
       fs.rmSync(tmpDir, { recursive: true, force: true });
@@ -510,40 +561,88 @@ async function main() {
     });
 
     try {
-      withUsageCache({
-        timestamp: Date.now(),
-        status: 'available',
-        snapshot: {
-          sourceVersion: 1,
-          fetchedAt: new Date().toISOString(),
-          fiveHourPercent: 37,
-          weekPercent: 19
-        },
-        data: {
-          five_hour: {
-            utilization: 37,
-            resets_at: new Date(Date.now() + 2 * 3600 * 1000).toISOString()
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 37,
+            weekPercent: 19
           },
-          seven_day: {
-            utilization: 19,
-            resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString()
+          data: {
+            five_hour: {
+              utilization: 37,
+              resets_at: new Date(Date.now() + 2 * 3600 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 19,
+              resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString()
+            }
           }
-        }
-      }, () => {
-        const payload = {
-          model: { display_name: 'Claude' },
-          workspace: { current_dir: tmpDir },
-          context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
-        };
-        const result = runStatuslineSync({ payload, cwd: tmpDir });
-        assertSuccessfulRun(result, 'statuslineQuota=false scenario');
-        assertTrue(!result.stdout.includes('5h 37%'), 'Quota toggle should hide the 5h chip');
-        assertTrue(!result.stdout.includes('wk 19%'), 'Quota toggle should hide the weekly chip');
-        assertContains(result.stdout, '🤖', 'Other statusline content should still render');
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'statuslineQuota=false scenario');
+          assertTrue(!result.stdout.includes('5h 37%'), 'Quota toggle should hide the 5h chip');
+          assertTrue(!result.stdout.includes('wk 19%'), 'Quota toggle should hide the weekly chip');
+          assertContains(result.stdout, '🤖', 'Other statusline content should still render');
+        });
       });
     } finally {
       fs.rmSync(tmpDir, { recursive: true, force: true });
     }
+  });
+
+  await test('third-party Anthropic runtime override hides quota chips even with a fresh native cache', async () => {
+    withTempConfigProject('full', {}, (tmpDir) => {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 52,
+            weekPercent: 18
+          },
+          data: {
+            five_hour: {
+              utilization: 52,
+              resets_at: new Date(Date.now() + 2 * 3600 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 18,
+              resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+          };
+          const result = runStatuslineSync({
+            payload,
+            cwd: tmpDir,
+            env: {
+              ...env,
+              ANTHROPIC_BASE_URL: 'http://127.0.0.1:8317/api/provider/gemini',
+              ANTHROPIC_AUTH_TOKEN: 'ccs-managed'
+            }
+          });
+          assertSuccessfulRun(result, 'Third-party runtime override scenario');
+          assertTrue(!result.stdout.includes('5h 52%'), 'Third-party runtime should auto-hide the 5h chip');
+          assertTrue(!result.stdout.includes('wk 18%'), 'Third-party runtime should auto-hide the weekly chip');
+          assertContains(result.stdout, '🤖', 'Other statusline content should still render');
+        });
+      });
+    });
   });
 
   await test('Native TaskCreate/TaskUpdate flow is rendered', async () => {
