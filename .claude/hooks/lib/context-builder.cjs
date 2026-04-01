@@ -136,19 +136,11 @@ function buildPlanContext(sessionId, config) {
  * Build a scope key for reminder dedup so cwd-sensitive output can re-inject when needed.
  * @param {Object} params
  * @param {string} [params.baseDir] - Working directory for the hook invocation
- * @param {string|null} [params.transcriptPath] - Transcript path from the hook payload
  * @returns {string} Stable scope key
  */
-function buildInjectionScopeKey({ baseDir, transcriptPath } = {}) {
+function buildInjectionScopeKey({ baseDir } = {}) {
   const cwdKey = normalizePath(path.resolve(baseDir || process.cwd())) || process.cwd();
-  const transcriptKey = typeof transcriptPath === 'string' && transcriptPath.trim()
-    ? normalizePath(path.resolve(transcriptPath)) || transcriptPath
-    : null;
-
-  return JSON.stringify({
-    cwd: cwdKey,
-    transcriptPath: transcriptKey
-  });
+  return cwdKey;
 }
 
 function parseTimestamp(value) {
@@ -185,12 +177,17 @@ function pruneReminderScopes(scopes, now = Date.now()) {
   return nextScopes;
 }
 
-function wasTranscriptRecentlyInjected(transcriptPath) {
+function wasTranscriptRecentlyInjected(transcriptPath, scopeKey = null) {
   try {
     if (!transcriptPath || !fs.existsSync(transcriptPath)) return false;
-    const transcript = fs.readFileSync(transcriptPath, 'utf-8');
-    // Check last 150 lines (hook output is ~30 lines, so this covers ~5 user prompts)
-    return transcript.split('\n').slice(-150).some(line => line.includes('[IMPORTANT] Consider Modularization'));
+    const tail = fs.readFileSync(transcriptPath, 'utf-8').split('\n').slice(-150);
+    const hasReminderMarker = tail.some(line => line.includes('[IMPORTANT] Consider Modularization'));
+    if (!hasReminderMarker) return false;
+    if (!scopeKey) return true;
+
+    // The reminder output is cwd-sensitive; only treat transcript fallback as a match
+    // when the same cwd-specific session lines were already injected recently.
+    return tail.some(line => line === `- CWD: ${scopeKey}` || line === `- Working directory: ${scopeKey}`);
   } catch {
     return false;
   }
@@ -208,10 +205,12 @@ function wasRecentlyInjected(transcriptPath, sessionId = null, scopeKey = 'sessi
   try {
     if (sessionId) {
       const reminderState = readSessionState(sessionId)?.devRulesReminder;
-      return hasRecentInjection(getReminderScopeState(reminderState, scopeKey));
+      if (hasRecentInjection(getReminderScopeState(reminderState, scopeKey))) {
+        return true;
+      }
     }
 
-    return wasTranscriptRecentlyInjected(transcriptPath);
+    return wasTranscriptRecentlyInjected(transcriptPath, scopeKey);
   } catch {
     return false;
   }
@@ -225,9 +224,11 @@ function wasRecentlyInjected(transcriptPath, sessionId = null, scopeKey = 'sessi
  * @returns {{ shouldInject: boolean, reserved: boolean }} Whether to inject and whether a pending reservation was written
  */
 function reserveInjectionScope(sessionId, scopeKey = 'session', transcriptPath = null) {
+  const transcriptAlreadyInjected = wasTranscriptRecentlyInjected(transcriptPath, scopeKey);
+
   if (!sessionId) {
     return {
-      shouldInject: !wasTranscriptRecentlyInjected(transcriptPath),
+      shouldInject: !transcriptAlreadyInjected,
       reserved: false
     };
   }
@@ -244,6 +245,21 @@ function reserveInjectionScope(sessionId, scopeKey = 'session', transcriptPath =
 
       if (hasRecentInjection(scopeState, now) || hasPendingInjection(scopeState, now)) {
         return state;
+      }
+
+      if (transcriptAlreadyInjected) {
+        scopes[scopeKey] = {
+          ...scopeState,
+          lastInjectedAt: new Date(now).toISOString()
+        };
+
+        return {
+          ...state,
+          devRulesReminder: {
+            ...reminderState,
+            scopes
+          }
+        };
       }
 
       shouldInject = true;
@@ -263,7 +279,7 @@ function reserveInjectionScope(sessionId, scopeKey = 'session', transcriptPath =
 
     if (!updated) {
       return {
-        shouldInject: !wasTranscriptRecentlyInjected(transcriptPath),
+        shouldInject: !transcriptAlreadyInjected,
         reserved: false
       };
     }
@@ -271,7 +287,7 @@ function reserveInjectionScope(sessionId, scopeKey = 'session', transcriptPath =
     return { shouldInject, reserved: shouldInject };
   } catch {
     return {
-      shouldInject: !wasTranscriptRecentlyInjected(transcriptPath),
+      shouldInject: !transcriptAlreadyInjected,
       reserved: false
     };
   }

@@ -381,6 +381,41 @@ describe('dev-rules-reminder.cjs', () => {
       }
     });
 
+    it('does not reinject when transcript_path appears later but cwd stays the same', async () => {
+      const tempDir = path.join(os.tmpdir(), 'dev-rules-test-same-cwd-transcript-' + Date.now());
+      const sessionId = `issue-603-same-cwd-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const sessionStatePath = getSessionStatePath(sessionId);
+      const transcriptPath = path.join(tempDir, 'transcript.txt');
+      fs.mkdirSync(tempDir, { recursive: true });
+
+      try {
+        fs.rmSync(sessionStatePath, { force: true });
+        fs.writeFileSync(transcriptPath, '');
+
+        const firstRun = await runHook({
+          user_prompt: 'test',
+          session_id: sessionId,
+          transcript_path: null
+        }, { cwd: tempDir });
+
+        const secondRun = await runHook({
+          user_prompt: 'test',
+          session_id: sessionId,
+          transcript_path: transcriptPath
+        }, { cwd: tempDir });
+
+        assert.strictEqual(firstRun.exitCode, 0);
+        assert.strictEqual(secondRun.exitCode, 0);
+        assert.ok(firstRun.stdout.includes('[IMPORTANT] Consider Modularization'),
+          'First run should inject the reminder content');
+        assert.strictEqual(secondRun.stdout, '',
+          'Changing only transcript_path should not re-inject for the same cwd');
+      } finally {
+        fs.rmSync(sessionStatePath, { force: true });
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      }
+    });
+
     it('deduplicates concurrent injections for the same session scope', async () => {
       const tempDir = path.join(os.tmpdir(), 'dev-rules-test-concurrent-' + Date.now());
       const sessionId = `issue-603-concurrent-${Date.now()}-${Math.random().toString(36).slice(2)}`;

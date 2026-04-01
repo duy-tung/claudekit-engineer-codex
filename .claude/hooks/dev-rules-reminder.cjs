@@ -54,10 +54,7 @@ async function main() {
     // Issue #327: Use CWD as base for subdirectory workflow support
     // The baseDir is passed to buildReminderContext for absolute path resolution
     const baseDir = process.cwd();
-    scopeKey = buildInjectionScopeKey({
-      baseDir,
-      transcriptPath: payload.transcript_path || null
-    });
+    scopeKey = buildInjectionScopeKey({ baseDir });
 
     const reservation = reserveInjectionScope(sessionId, scopeKey, payload.transcript_path || null);
     reservedScope = reservation.reserved;

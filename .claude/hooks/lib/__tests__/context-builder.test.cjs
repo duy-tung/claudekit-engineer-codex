@@ -367,6 +367,37 @@ describe('context-builder.cjs', () => {
       assert.strictEqual(contextBuilder.clearPendingInjection(sessionId, 'scope-a'), true,
         'Should clear the pending reservation for the matched scope');
     });
+
+    it('falls back to transcript evidence for the same cwd after marker expiry', () => {
+      const tempDir = createTempDir();
+      const transcriptPath = path.join(tempDir, 'transcript.txt');
+      const scopeKey = contextBuilder.buildInjectionScopeKey({ baseDir: tempDir });
+
+      try {
+        const lines = Array(200).fill('x');
+        lines[170] = `- CWD: ${scopeKey}`;
+        lines[180] = '[IMPORTANT] Consider Modularization';
+        fs.writeFileSync(transcriptPath, lines.join('\n'));
+        fs.writeFileSync(sessionStatePath, JSON.stringify({
+          devRulesReminder: {
+            scopes: {
+              [scopeKey]: {
+                lastInjectedAt: new Date(Date.now() - (6 * 60 * 1000)).toISOString()
+              }
+            }
+          }
+        }));
+
+        assert.strictEqual(contextBuilder.wasRecentlyInjected(transcriptPath, sessionId, scopeKey), true,
+          'Transcript fallback should still dedupe the same cwd after marker expiry');
+        assert.deepStrictEqual(
+          contextBuilder.reserveInjectionScope(sessionId, scopeKey, transcriptPath),
+          { shouldInject: false, reserved: false }
+        );
+      } finally {
+        cleanupTempDir(tempDir);
+      }
+    });
   });
 
   describe('Hooks config behavior (Issue #413)', () => {
