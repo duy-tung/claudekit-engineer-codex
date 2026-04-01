@@ -22,22 +22,14 @@ const {
   resolvePlanPath,
   getReportsPath,
   resolveNamingPattern,
-  normalizePath
+  normalizePath,
+  getGitBranch
 } = require('./ck-config-utils.cjs');
 
-// ═══════════════════════════════════════════════════════════════════════════
-// HELPER FUNCTIONS
-// ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Safely execute a command with timeout
- * @param {string} cmd - Command to execute
- * @returns {string|null} Output or null on error
- */
 function execSafe(cmd) {
   try {
     return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -114,7 +106,7 @@ function resolveSkillsVenv(configDirName = '.claude') {
  */
 function buildPlanContext(sessionId, config) {
   const { plan, paths } = config;
-  const gitBranch = execSafe('git branch --show-current');
+  const gitBranch = getGitBranch();
   const resolved = resolvePlanPath(sessionId, config);
   const reportsPath = getReportsPath(resolved.path, resolved.resolvedBy, plan, paths);
 

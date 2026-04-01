@@ -4,7 +4,7 @@
 /**
  * Custom Claude Code statusline for Node.js - Multi-line Edition
  * Cross-platform support: Windows, macOS, Linux
- * Features: ANSI colors, tool/agent/todo tracking, context window, session timer
+ * Features: ANSI colors, tool/agent/todo tracking, context window, usage windows
  * No external dependencies - uses only Node.js built-in modules
  */
 
@@ -15,13 +15,14 @@ const path = require('path');
 
 // Import modular components
 const { RESET, green, yellow, red, cyan, magenta, dim, coloredBar, getContextColor, setColorEnabled } = require('./hooks/lib/colors.cjs');
-const { parseTranscript } = require('./hooks/lib/transcript-parser.cjs');
-const { countConfigs } = require('./hooks/lib/config-counter.cjs');
-const { loadConfig } = require('./hooks/lib/ck-config-utils.cjs');
+const { loadConfig, readSessionState } = require('./hooks/lib/ck-config-utils.cjs');
 const { getGitInfo } = require('./hooks/lib/git-info-cache.cjs');
+const { readActivitySnapshot } = require('./hooks/lib/statusline-session-cache.cjs');
+const { readUsageCache, normalizeUtilization, isUsageCacheFresh } = require('./hooks/lib/usage-limits-cache.cjs');
 
 // Buffer constant for fallback context calculation
 const AUTOCOMPACT_BUFFER = 40000;
+const USAGE_CACHE_RENDER_TTL_MS = 300000;
 const GRAPHEME_SEGMENTER = (
   typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
 )
@@ -168,14 +169,38 @@ async function readStdin() {
 // ============================================================================
 
 /**
- * Build usage time string with optional percentage
+ * Build a compact usage window string for the cosmetic statusline.
  * @returns {string|null} Formatted usage string or null if unavailable
  */
 function buildUsageString(ctx) {
-  if (!ctx.sessionText || ctx.sessionText === 'N/A') return null;
-  let str = ctx.sessionText.replace(' until reset', ' left');
-  if (ctx.usagePercent != null) str += ` (${Math.round(ctx.usagePercent)}%)`;
-  return str;
+  if (!ctx.usageWindows || ctx.usageWindows.length === 0) return null;
+  return ctx.usageWindows.join('  ');
+}
+
+function buildUsageWindows(cache) {
+  if (!cache || cache.status !== 'available') return [];
+  if (!isUsageCacheFresh(cache, USAGE_CACHE_RENDER_TTL_MS)) return [];
+
+  const snapshotWindows = [
+    { label: '5h', percent: cache.snapshot?.fiveHourPercent },
+    { label: 'wk', percent: cache.snapshot?.weekPercent }
+  ]
+    .map(({ label, percent }) => (percent == null ? null : `${label} ${percent}%`))
+    .filter(Boolean);
+
+  if (snapshotWindows.length > 0) {
+    return snapshotWindows;
+  }
+
+  return [
+    { label: '5h', value: cache.data?.five_hour?.utilization },
+    { label: 'wk', value: cache.data?.seven_day?.utilization }
+  ]
+    .map(({ label, value }) => {
+      const percent = normalizeUtilization(value);
+      return percent == null ? null : `${label} ${percent}%`;
+    })
+    .filter(Boolean);
 }
 
 /**
@@ -213,7 +238,7 @@ function renderSessionLines(ctx) {
   let locationPart = branchPart ? `${dirPart}  ${branchPart}` : dirPart;
   if (planPart) locationPart += `  ${planPart}`;
 
-  // Build session part: 🤖 model  contextBar%  ⌛ time left (usage%)
+  // Build session part: 🤖 model  contextBar%  ⌛ 5h/wk usage
   let sessionPart = `🤖 ${cyan(ctx.modelName)}`;
   if (ctx.contextPercent > 0) {
     const ctxColor = getContextColor(ctx.contextPercent);
@@ -222,7 +247,7 @@ function renderSessionLines(ctx) {
   // Keep usage/reset info close to model/context for quick scanning.
   const usageStr = buildUsageString(ctx);
   if (usageStr) {
-    sessionPart += `  ⌛ ${dim(usageStr.replace(/\)$/, ' used)'))}`;
+    sessionPart += `  ⌛ ${dim(usageStr)}`;
   }
 
   // Build stats part (only lines changed now)
@@ -376,8 +401,7 @@ function renderTodosLine(transcript) {
 }
 
 /**
- * Render minimal mode - single line with emojis, no progress bar
- * Format: "🤖 opus 4.5  🔋 50%  ⏰ 2h 16m (38%)  🌿 branch  📁 ~/path"
+ * Render minimal mode - single line with emojis, no progress bar.
  */
 function renderMinimal(ctx) {
   const parts = [`🤖 ${cyan(ctx.modelName)}`];
@@ -468,21 +492,19 @@ async function main() {
     const gitAhead = gitInfo?.ahead || 0;
     const gitBehind = gitInfo?.behind || 0;
 
-    // Active plan detection - read from session temp file
+    // Session metadata is cached in the session temp file.
     let activePlan = '';
+    let transcript = { agents: [], todos: [], sessionStart: null };
     try {
       const sessionId = data.session_id;
       if (sessionId) {
-        const sessionPath = path.join(os.tmpdir(), `ck-session-${sessionId}.json`);
-        if (fs.existsSync(sessionPath)) {
-          const session = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
-          const planPath = session.activePlan?.trim();
-          if (planPath) {
-            // Extract slug from path like "plans/260106-1554-statusline-visual"
-            const match = planPath.match(/plans\/\d+-\d+-(.+?)(?:\/|$)/);
-            activePlan = match ? match[1] : planPath.split('/').pop();
-          }
+        const session = readSessionState(sessionId);
+        const planPath = session?.activePlan?.trim();
+        if (planPath) {
+          const match = planPath.match(/plans\/\d+-\d+-(.+?)(?:\/|$)/);
+          activePlan = match ? match[1] : planPath.split('/').pop();
         }
+        transcript = readActivitySnapshot(sessionId, readSessionState) || transcript;
       }
     } catch {}
 
@@ -523,39 +545,11 @@ async function main() {
       } catch {}
     }
 
-    // Session timer - read actual reset time from usage limits cache
-    let sessionText = '';
-    const transcriptPath = data.transcript_path;
-
-    // Parse transcript for tools/agents/todos
-    const transcript = transcriptPath ? await parseTranscript(transcriptPath) : { tools: [], agents: [], todos: [], sessionStart: null };
-
-    // Read actual reset time and utilization from usage limits cache (written by usage-context-awareness hook)
-    let usagePercent = null;
-    try {
-      const usageCachePath = env.CK_USAGE_CACHE_PATH || path.join(os.tmpdir(), 'ck-usage-limits-cache.json');
-      if (fs.existsSync(usageCachePath)) {
-        const cache = JSON.parse(fs.readFileSync(usageCachePath, 'utf8'));
-
-        // Check status flag for fallback (non-OAuth scenarios)
-        if (cache.status === 'unavailable') {
-          sessionText = 'N/A';
-        } else {
-          const fiveHour = cache.data?.five_hour;
-          usagePercent = fiveHour?.utilization ?? null;
-          const resetAt = fiveHour?.resets_at;
-          if (resetAt) {
-            const resetTime = new Date(resetAt);
-            const remaining = Math.floor(resetTime.getTime() / 1000) - Math.floor(Date.now() / 1000);
-            if (remaining > 0 && remaining < 18000) {
-              const rh = Math.floor(remaining / 3600);
-              const rm = Math.floor((remaining % 3600) / 60);
-              sessionText = `${rh}h ${rm}m until reset`;
-            }
-          }
-        }
-      }
-    } catch {}
+    const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
+    const statuslineMode = config.statusline || 'full';
+    const usageWindows = config.statuslineQuota === false
+      ? []
+      : buildUsageWindows(readUsageCache());
 
     // Cost and lines changed
     const billingMode = env.CLAUDE_BILLING_MODE || 'api';
@@ -565,9 +559,6 @@ async function main() {
       : null;
     const linesAdded = data.cost?.total_lines_added || 0;
     const linesRemoved = data.cost?.total_lines_removed || 0;
-
-    // Config counts
-    const configs = countConfigs(rawDir);
 
     // Build render context
     const ctx = {
@@ -580,18 +571,12 @@ async function main() {
       gitBehind,
       activePlan,
       contextPercent,
-      sessionText,
-      usagePercent,
+      usageWindows,
       costText,
       linesAdded,
       linesRemoved,
-      configs,
       transcript
     };
-
-    // Load config and get statusline mode
-    const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
-    const statuslineMode = config.statusline || 'full';
 
     // Apply statuslineColors config: explicit false disables colors regardless of FORCE_COLOR
     // NO_COLOR env var is checked inside isColorEnabled() and always wins

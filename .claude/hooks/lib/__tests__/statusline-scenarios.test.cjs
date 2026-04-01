@@ -145,13 +145,13 @@ function runStatuslineWithDelayedChunks({ chunks, delaysMs, cwd = TEST_ROOT, env
   });
 }
 
-function createTempConfigProject(mode) {
+function createTempConfigProject(mode, extraConfig = {}) {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), `statusline-mode-${mode}-`));
   const ckDir = path.join(tmpDir, '.claude');
   fs.mkdirSync(ckDir, { recursive: true });
   fs.writeFileSync(
     path.join(ckDir, '.ck.json'),
-    JSON.stringify({ statusline: mode }, null, 2)
+    JSON.stringify({ statusline: mode, ...extraConfig }, null, 2)
   );
   return tmpDir;
 }
@@ -177,6 +177,12 @@ function mkTranscript(lines) {
   const p = path.join(os.tmpdir(), `statusline-scenario-transcript-${Date.now()}-${Math.random().toString(16).slice(2)}.jsonl`);
   fs.writeFileSync(p, lines.map((line) => JSON.stringify(line)).join('\n'));
   return p;
+}
+
+function writeSessionStateFile(sessionId, state) {
+  const sessionPath = path.join(os.tmpdir(), `ck-session-${sessionId}.json`);
+  fs.writeFileSync(sessionPath, JSON.stringify(state, null, 2));
+  return sessionPath;
 }
 
 async function main() {
@@ -360,14 +366,24 @@ async function main() {
     });
   });
 
-  await test('Usage cache available shows reset countdown and utilization', async () => {
+  await test('Usage cache available shows 5h and wk cosmetic chips', async () => {
     withUsageCache({
       timestamp: Date.now(),
       status: 'available',
+      snapshot: {
+        sourceVersion: 1,
+        fetchedAt: new Date().toISOString(),
+        fiveHourPercent: 38,
+        weekPercent: 19
+      },
       data: {
         five_hour: {
-          utilization: 38.2,
+          utilization: 38,
           resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 15 * 60 * 1000).toISOString()
+        },
+        seven_day: {
+          utilization: 19,
+          resets_at: new Date(Date.now() + 6 * 24 * 3600 * 1000 + 5 * 3600 * 1000).toISOString()
         }
       }
     }, () => {
@@ -379,120 +395,219 @@ async function main() {
       const result = runStatuslineSync({ payload });
       assertSuccessfulRun(result, 'Usage available scenario');
       const { stdout } = result;
-      assertTrue(/\d+h \d+m/.test(stdout), 'Available usage should show reset countdown');
-      assertTrue(/\(38%/.test(stdout) || /\(38 used\)/.test(stdout) || /\(38/.test(stdout), 'Should include rounded utilization');
+      assertContains(stdout, '5h 38%', 'Available usage should show the 5h utilization');
+      assertContains(stdout, 'wk 19%', 'Available usage should show the weekly utilization');
+      assertTrue(!stdout.includes('('), 'Cosmetic usage chips should not show countdown/session timer text');
     });
   });
 
-  await test('Native TaskCreate/TaskUpdate flow is rendered', async () => {
-    const transcriptPath = mkTranscript([
-      {
-        timestamp: new Date(Date.now() - 120000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-create-1',
-            name: 'TaskCreate',
-            input: { subject: 'Implement auth flow' }
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 110000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_result',
-            tool_use_id: 'task-create-1',
-            is_error: false,
-            content: '{"taskId":"task-001"}'
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 100000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-update-1',
-            name: 'TaskUpdate',
-            input: {
-              taskId: 'task-001',
-              status: 'in_progress',
-              activeForm: 'Implementing auth flow'
-            }
-          }]
+  await test('Usage cache falls back to legacy raw payload when snapshot is absent', async () => {
+    withUsageCache({
+      timestamp: Date.now(),
+      status: 'available',
+      data: {
+        five_hour: {
+          utilization: 36,
+          resets_at: new Date(Date.now() + 90 * 60 * 1000).toISOString()
+        },
+        seven_day: {
+          utilization: 18,
+          resets_at: new Date(Date.now() + 4 * 24 * 3600 * 1000).toISOString()
         }
       }
-    ]);
+    }, () => {
+      const payload = {
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: '/tmp' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload });
+      assertSuccessfulRun(result, 'Legacy usage fallback scenario');
+      assertContains(result.stdout, '5h 36%', 'Legacy raw cache should still render the 5h chip');
+      assertContains(result.stdout, 'wk 18%', 'Legacy raw cache should still render the weekly chip');
+    });
+  });
+
+  await test('Stale usage cache hides cosmetic chips instead of rendering old percentages forever', async () => {
+    withUsageCache({
+      timestamp: Date.now() - 10 * 60 * 1000,
+      status: 'available',
+      snapshot: {
+        sourceVersion: 1,
+        fetchedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+        fiveHourPercent: 41,
+        weekPercent: 22
+      },
+      data: {
+        five_hour: {
+          utilization: 41,
+          resets_at: new Date(Date.now() + 60 * 60 * 1000).toISOString()
+        },
+        seven_day: {
+          utilization: 22,
+          resets_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      }
+    }, () => {
+      const payload = {
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: '/tmp' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload });
+      assertSuccessfulRun(result, 'Stale usage cache scenario');
+      assertTrue(!result.stdout.includes('5h 41%'), 'Stale cache should suppress the 5h chip');
+      assertTrue(!result.stdout.includes('wk 22%'), 'Stale cache should suppress the weekly chip');
+    });
+  });
+
+  await test('Usage display is decoupled from usage-context-awareness config gating', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      hooks: {
+        'usage-context-awareness': false
+      }
+    });
+
+    try {
+      withUsageCache({
+        timestamp: Date.now(),
+        status: 'available',
+        snapshot: {
+          sourceVersion: 1,
+          fetchedAt: new Date().toISOString(),
+          fiveHourPercent: 37,
+          weekPercent: 19
+        },
+        data: {
+          five_hour: {
+            utilization: 37,
+            resets_at: new Date(Date.now() + 2 * 3600 * 1000 + 10 * 60 * 1000).toISOString()
+          },
+          seven_day: {
+            utilization: 19,
+            resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000 + 12 * 3600 * 1000).toISOString()
+          }
+        }
+      }, () => {
+        const payload = {
+          model: { display_name: 'Claude' },
+          workspace: { current_dir: tmpDir },
+          context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+        };
+        const result = runStatuslineSync({ payload, cwd: tmpDir });
+        assertSuccessfulRun(result, 'Usage decoupling scenario');
+        assertContains(result.stdout, '5h 37%', 'Statusline should keep cosmetic 5h display even when the hook is disabled');
+        assertContains(result.stdout, 'wk 19%', 'Statusline should keep cosmetic weekly display even when the hook is disabled');
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('statuslineQuota=false hides cosmetic usage chips without changing the rest of the statusline', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineQuota: false
+    });
+
+    try {
+      withUsageCache({
+        timestamp: Date.now(),
+        status: 'available',
+        snapshot: {
+          sourceVersion: 1,
+          fetchedAt: new Date().toISOString(),
+          fiveHourPercent: 37,
+          weekPercent: 19
+        },
+        data: {
+          five_hour: {
+            utilization: 37,
+            resets_at: new Date(Date.now() + 2 * 3600 * 1000).toISOString()
+          },
+          seven_day: {
+            utilization: 19,
+            resets_at: new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString()
+          }
+        }
+      }, () => {
+        const payload = {
+          model: { display_name: 'Claude' },
+          workspace: { current_dir: tmpDir },
+          context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+        };
+        const result = runStatuslineSync({ payload, cwd: tmpDir });
+        assertSuccessfulRun(result, 'statuslineQuota=false scenario');
+        assertTrue(!result.stdout.includes('5h 37%'), 'Quota toggle should hide the 5h chip');
+        assertTrue(!result.stdout.includes('wk 19%'), 'Quota toggle should hide the weekly chip');
+        assertContains(result.stdout, '🤖', 'Other statusline content should still render');
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Native TaskCreate/TaskUpdate flow is rendered', async () => {
+    const sessionId = `native-task-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: [
+          {
+            id: 'task-001',
+            content: 'Implement auth flow',
+            status: 'in_progress',
+            activeForm: 'Implementing auth flow'
+          }
+        ]
+      }
+    });
 
     try {
       const payload = {
+        session_id: sessionId,
         model: { display_name: 'Claude' },
         workspace: { current_dir: '/tmp/project' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } },
-        transcript_path: transcriptPath
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
       };
       const result = runStatuslineSync({ payload });
       assertSuccessfulRun(result, 'Native TaskCreate/TaskUpdate scenario');
       const { stdout } = result;
       assertContains(stdout, 'Implementing auth flow', 'Native task activeForm should be shown');
     } finally {
-      try { fs.unlinkSync(transcriptPath); } catch {}
+      try { fs.unlinkSync(sessionPath); } catch {}
     }
   });
 
   await test('Mixed TodoWrite + Native TaskUpdate keeps legacy todo unchanged', async () => {
-    const transcriptPath = mkTranscript([
-      {
-        timestamp: new Date(Date.now() - 120000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'todo-write-1',
-            name: 'TodoWrite',
-            input: {
-              todos: [
-                { content: 'Legacy first', status: 'pending' },
-                { content: 'Legacy second', status: 'pending' }
-              ]
-            }
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 110000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-create-1',
-            name: 'TaskCreate',
-            input: { subject: 'Native first' }
-          }]
-        }
-      },
-      {
-        timestamp: new Date(Date.now() - 100000).toISOString(),
-        message: {
-          content: [{
-            type: 'tool_use',
-            id: 'task-update-1',
-            name: 'TaskUpdate',
-            input: {
-              taskId: '1',
-              status: 'in_progress',
-              activeForm: 'Working native first'
-            }
-          }]
-        }
+    const sessionId = `mixed-task-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: [
+          { content: 'Legacy first', status: 'pending' },
+          { content: 'Legacy second', status: 'pending' },
+          {
+            id: 'task-001',
+            content: 'Native first',
+            status: 'in_progress',
+            activeForm: 'Working native first'
+          }
+        ]
       }
-    ]);
+    });
 
     try {
       const payload = {
+        session_id: sessionId,
         model: { display_name: 'Claude' },
         workspace: { current_dir: '/tmp/project' },
-        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } },
-        transcript_path: transcriptPath
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
       };
       const result = runStatuslineSync({ payload });
       assertSuccessfulRun(result, 'Mixed native/legacy transcript scenario');
@@ -501,7 +616,7 @@ async function main() {
       assertTrue(!stdout.includes('Legacy first'), 'Legacy TodoWrite item should not be promoted to active task');
       assertTrue(!stdout.includes('Legacy second'), 'Legacy TodoWrite list should not leak into native active line');
     } finally {
-      try { fs.unlinkSync(transcriptPath); } catch {}
+      try { fs.unlinkSync(sessionPath); } catch {}
     }
   });
 

@@ -64,8 +64,9 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 **Responsibility**: Persist structured hook execution telemetry for local inspection and downstream dashboard consumption
 **Current Coverage**:
 - `PreToolUse`: `scout-block`, `privacy-block`, `descriptive-name`
-- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-context-awareness`
-- `UserPromptSubmit`: `dev-rules-reminder`, `usage-context-awareness`
+- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-quota-cache-refresh`
+- `UserPromptSubmit`: `dev-rules-reminder`, `usage-quota-cache-refresh`
+- `SessionStart`: `session-init`, `usage-quota-cache-refresh`
 
 **Log Contract**:
 - One JSON object per line
@@ -320,7 +321,8 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 - `privacy-block.cjs` - Sensitive file access control
 - `descriptive-name.cjs` - Naming conventions enforcement
 - `post-edit-simplify-reminder.cjs` - Post-edit optimization hints
-- `usage-context-awareness.cjs` - Context-aware usage patterns
+- `usage-context-awareness.cjs` - Gated prompt-awareness wrapper for usage-based injection
+- `usage-quota-cache-refresh.cjs` - Cosmetic 5h / wk statusline cache warming
 
 **1. Session-Init Hook** (`session-init.cjs`)
 - **Trigger**: Session startup
@@ -372,18 +374,24 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 
 **5. Session-State Hook** (`session-state.cjs`)
 
-- **Trigger**: SessionStart (on startup and context compaction), Stop (persist), SubagentStop (append)
-- **Purpose**: Persist and restore session progress across sessions and context compactions
+- **Trigger**: PostToolUse (`Task|TaskCreate|TaskUpdate|TodoWrite`), Stop (persist), SubagentStop (append)
+- **Purpose**: Persist session progress and keep the statusline cache current off the startup path
 - **Functionality**:
-  - **SessionStart (Startup)**: Loads previous session state from `.claude/session-state/latest.md` and displays it for context recovery
-  - **SessionStart (Post-Compaction)**: Restores last saved state after context compaction with special guidance to resume without re-doing completed work
+  - **PostToolUse**: Refreshes cached todo/agent activity from the latest transcript after task/todo mutations
   - **Stop**: Finalizes and archives current session state (keeps last 5 archives)
   - **SubagentStop**: Appends subagent completion results to ongoing session state
-  - Extracts todos from transcript, branch info, active plan, and modified files
+  - Falls back to cached transcript paths and event metadata when hook payloads omit `transcript_path`
+  - Extracts todos from cached session state first, then transcript, plus branch info, active plan, and modified files
   - Structured markdown output with completed/pending tasks separation
   - Auto-expiry: States older than 7 days are not loaded
   - Atomic writes: Safe concurrent access with temp-file-then-rename pattern
   - Storage: Project-level (`.claude/session-state/`) with global fallback for non-CK projects
+
+**SessionStart Recovery** (`session-init.cjs`):
+
+- Loads previous markdown session state on `startup` and `compact`
+- Rehydrates the statusline cache on `startup`, `resume`, or `compact` when the temp session cache is missing or cold
+- Keeps startup limited to env wiring, cheap context output, and one-shot orphaned `.shadowed` skill recovery
 
 **Storage & Archival**:
 
@@ -397,8 +405,8 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 ```json
 {
   "hooks": {
-    "SessionStart": [{
-      "matcher": "startup|resume|clear|compact",
+    "PostToolUse": [{
+      "matcher": "Task|TaskCreate|TaskUpdate|TodoWrite",
       "hooks": [
         {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
       ]

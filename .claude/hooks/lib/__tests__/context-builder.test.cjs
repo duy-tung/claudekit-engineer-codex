@@ -89,11 +89,12 @@ describe('context-builder.cjs', () => {
 
     it('falls back to workflows/ when rules/ does not exist', () => {
       tempDir = createTempDir(['.claude/workflows']);
-      createTestFile(path.join(tempDir, '.claude/workflows'), 'development-rules.md');
+      const uniqueFilename = `legacy-workflow-${Date.now()}-${Math.random().toString(36).slice(2)}.md`;
+      createTestFile(path.join(tempDir, '.claude/workflows'), uniqueFilename);
       process.chdir(tempDir);
 
-      const result = contextBuilder.resolveRulesPath('development-rules.md');
-      assert.strictEqual(result, '.claude/workflows/development-rules.md',
+      const result = contextBuilder.resolveRulesPath(uniqueFilename);
+      assert.strictEqual(result, `.claude/workflows/${uniqueFilename}`,
         'Should fall back to workflows/ directory');
     });
 
@@ -455,10 +456,11 @@ describe('context-builder.cjs', () => {
     it('resolves legacy @workflows/ references via fallback', () => {
       // Test that legacy references still work
       tempDir = createTempDir(['.claude/workflows']);
-      createTestFile(path.join(tempDir, '.claude/workflows'), 'primary-workflow.md');
+      const uniqueFilename = `legacy-primary-${Date.now()}-${Math.random().toString(36).slice(2)}.md`;
+      createTestFile(path.join(tempDir, '.claude/workflows'), uniqueFilename);
       process.chdir(tempDir);
 
-      const result = contextBuilder.resolveRulesPath('primary-workflow.md');
+      const result = contextBuilder.resolveRulesPath(uniqueFilename);
       assert.ok(result !== null, 'Should resolve legacy workflow file');
       assert.ok(result.includes('workflows/'), 'Should find in workflows/');
     });
