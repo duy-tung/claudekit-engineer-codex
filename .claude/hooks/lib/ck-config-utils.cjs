@@ -12,6 +12,9 @@ const { execFileSync } = require('child_process');
 
 const LOCAL_CONFIG_PATH = '.claude/.ck.json';
 const GLOBAL_CONFIG_PATH = path.join(os.homedir(), '.claude', '.ck.json');
+const SESSION_STATE_LOCK_TIMEOUT_MS = 500;
+const SESSION_STATE_LOCK_RETRY_MS = 10;
+const SESSION_STATE_LOCK_STALE_MS = 5000;
 
 // Legacy export for backward compatibility
 const CONFIG_PATH = LOCAL_CONFIG_PATH;
@@ -180,6 +183,61 @@ function writeSessionState(sessionId, state) {
   }
 }
 
+function sleepSync(ms) {
+  if (ms <= 0) return;
+
+  if (typeof SharedArrayBuffer === 'function' && typeof Atomics === 'object' && typeof Atomics.wait === 'function') {
+    const signal = new Int32Array(new SharedArrayBuffer(4));
+    Atomics.wait(signal, 0, 0, ms);
+    return;
+  }
+
+  const end = Date.now() + ms;
+  while (Date.now() < end) {
+    // Busy wait is a last-resort fallback when Atomics.wait is unavailable.
+  }
+}
+
+function getSessionStateLockPath(sessionId) {
+  return `${getSessionTempPath(sessionId)}.lock`;
+}
+
+function removeStaleSessionStateLock(lockPath, now = Date.now()) {
+  try {
+    const stats = fs.statSync(lockPath);
+    if (now - stats.mtimeMs < SESSION_STATE_LOCK_STALE_MS) return false;
+    fs.unlinkSync(lockPath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function acquireSessionStateLock(sessionId) {
+  const lockPath = getSessionStateLockPath(sessionId);
+  const deadline = Date.now() + SESSION_STATE_LOCK_TIMEOUT_MS;
+
+  while (Date.now() <= deadline) {
+    try {
+      const fd = fs.openSync(lockPath, 'wx');
+      fs.writeFileSync(fd, String(process.pid));
+      return { fd, lockPath };
+    } catch (error) {
+      if (error?.code !== 'EEXIST') return null;
+      removeStaleSessionStateLock(lockPath);
+      sleepSync(SESSION_STATE_LOCK_RETRY_MS);
+    }
+  }
+
+  return null;
+}
+
+function releaseSessionStateLock(lock) {
+  if (!lock) return;
+  try { fs.closeSync(lock.fd); } catch (_) { /* ignore */ }
+  try { fs.unlinkSync(lock.lockPath); } catch (_) { /* ignore */ }
+}
+
 /**
  * Update session state by merging or transforming the existing value.
  * @param {string} sessionId - Session identifier
@@ -188,13 +246,20 @@ function writeSessionState(sessionId, state) {
  */
 function updateSessionState(sessionId, updater) {
   if (!sessionId) return false;
-  const current = readSessionState(sessionId) || {};
-  const next = typeof updater === 'function'
-    ? updater({ ...current })
-    : { ...current, ...(updater || {}) };
+  const lock = acquireSessionStateLock(sessionId);
+  if (!lock) return false;
 
-  if (!next || typeof next !== 'object') return false;
-  return writeSessionState(sessionId, next);
+  try {
+    const current = readSessionState(sessionId) || {};
+    const next = typeof updater === 'function'
+      ? updater({ ...current })
+      : { ...current, ...(updater || {}) };
+
+    if (!next || typeof next !== 'object') return false;
+    return writeSessionState(sessionId, next);
+  } finally {
+    releaseSessionStateLock(lock);
+  }
 }
 
 /**

@@ -428,6 +428,39 @@ async function main() {
     });
   });
 
+  await test('Stale usage cache hides cosmetic chips instead of rendering old percentages forever', async () => {
+    withUsageCache({
+      timestamp: Date.now() - 10 * 60 * 1000,
+      status: 'available',
+      snapshot: {
+        sourceVersion: 1,
+        fetchedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+        fiveHourPercent: 41,
+        weekPercent: 22
+      },
+      data: {
+        five_hour: {
+          utilization: 41,
+          resets_at: new Date(Date.now() + 60 * 60 * 1000).toISOString()
+        },
+        seven_day: {
+          utilization: 22,
+          resets_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      }
+    }, () => {
+      const payload = {
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: '/tmp' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload });
+      assertSuccessfulRun(result, 'Stale usage cache scenario');
+      assertTrue(!result.stdout.includes('5h 41%'), 'Stale cache should suppress the 5h chip');
+      assertTrue(!result.stdout.includes('wk 22%'), 'Stale cache should suppress the weekly chip');
+    });
+  });
+
   await test('Usage display is decoupled from usage-context-awareness config gating', async () => {
     const tmpDir = createTempConfigProject('full', {
       hooks: {

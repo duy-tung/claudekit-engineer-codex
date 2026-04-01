@@ -25,6 +25,19 @@ function shouldFetch(isPromptLike = false) {
   return getCacheAgeMs(cache) >= interval;
 }
 
+function getUsageQuotaRefreshContext(input = {}) {
+  const eventName = typeof input.hook_event_name === 'string' ? input.hook_event_name : '';
+  const source = input.source === 'startup' || input.source === 'resume' ? input.source : '';
+  const tool = typeof input.tool_name === 'string' ? input.tool_name : '';
+  const isSessionStart = source !== '' || eventName === 'SessionStart';
+  const isPromptLike = typeof input.prompt === 'string' || eventName === 'UserPromptSubmit' || isSessionStart;
+  const event = isSessionStart
+    ? 'SessionStart'
+    : eventName || (typeof input.prompt === 'string' ? 'UserPromptSubmit' : 'PostToolUse');
+
+  return { event, isPromptLike, source, tool };
+}
+
 async function runUsageQuotaCacheRefreshHook({
   hookName = 'usage-quota-cache-refresh',
   userAgent = 'claudekit-engineer/usage-quota-cache-refresh'
@@ -41,32 +54,26 @@ async function runUsageQuotaCacheRefreshHook({
     } catch {}
 
     const input = JSON.parse(inputStr || '{}');
-    const isPromptLike = typeof input.prompt === 'string' || input.hook_event_name === 'SessionStart';
-    const event = isPromptLike
-      ? (input.hook_event_name || 'UserPromptSubmit')
-      : typeof input.hook_event_name === 'string' && input.hook_event_name.length > 0
-        ? input.hook_event_name
-        : 'PostToolUse';
-    const tool = typeof input.tool_name === 'string' ? input.tool_name : '';
-    lastHookEvent = event;
-    lastToolName = tool;
+    const context = getUsageQuotaRefreshContext(input);
+    lastHookEvent = context.event;
+    lastToolName = context.tool;
 
-    if (shouldFetch(isPromptLike)) {
+    if (shouldFetch(context.isPromptLike)) {
       const fetchResult = await refreshUsageCache({
         fetchTimeoutMs: 5000,
         userAgent
       });
       timer.end({
-        event,
-        tool,
+        event: context.event,
+        tool: context.tool,
         status: fetchResult.ok ? 'ok' : 'warn',
         exit: 0,
         note: fetchResult.note
       });
     } else {
       timer.end({
-        event,
-        tool,
+        event: context.event,
+        tool: context.tool,
         status: 'skip',
         exit: 0,
         note: 'throttled'
@@ -88,5 +95,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  runUsageQuotaCacheRefreshHook
+  runUsageQuotaCacheRefreshHook,
+  getUsageQuotaRefreshContext
 };

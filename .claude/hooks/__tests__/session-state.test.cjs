@@ -244,6 +244,64 @@ describe('session-state.cjs', () => {
     assert.strictEqual(sessionState.statusline.todos[0].activeForm, 'Keeping current task', 'Malformed transcript should preserve the existing active task');
   });
 
+  it('preserves a fresher warmed snapshot when the transcript ends with a truncated stale tail', async () => {
+    const sessionId = `session-state-truncated-tail-${Date.now()}`;
+    const transcriptPath = track(path.join(os.tmpdir(), `${sessionId}.jsonl`));
+    const sessionPath = track(path.join(os.tmpdir(), `ck-session-${sessionId}.json`));
+    const olderTs = new Date(Date.now() - 120000).toISOString();
+    const newerTs = new Date(Date.now() - 30000).toISOString();
+
+    fs.writeFileSync(transcriptPath, [
+      JSON.stringify({
+        timestamp: olderTs,
+        message: {
+          content: [{
+            type: 'tool_use',
+            id: 'task-create-1',
+            name: 'TaskCreate',
+            input: { subject: 'Keep fresher cached task' }
+          }]
+        }
+      }),
+      JSON.stringify({
+        timestamp: olderTs,
+        message: {
+          content: [{
+            type: 'tool_result',
+            tool_use_id: 'task-create-1',
+            is_error: false,
+            content: '{"taskId":"task-fresh"}'
+          }]
+        }
+      }),
+      '{"timestamp":"2026-03-31T12:00:00.000Z",'
+    ].join('\n'));
+
+    fs.writeFileSync(sessionPath, JSON.stringify({
+      statusline: {
+        sessionStart: olderTs,
+        updatedAt: newerTs,
+        warmed: true,
+        agents: [],
+        todos: [{ id: 'task-fresh', content: 'Keep fresher cached task', status: 'in_progress', activeForm: 'Keeping fresher cached task' }]
+      }
+    }, null, 2));
+
+    const result = await runHook({
+      hook_event_name: 'PostToolUse',
+      tool_name: 'TaskUpdate',
+      session_id: sessionId,
+      cwd: process.cwd(),
+      transcript_path: transcriptPath
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Hook should exit with code 0');
+    const sessionState = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
+    assert.strictEqual(sessionState.statusline.todos.length, 1, 'Truncated tail should not replace the fresher cached todo');
+    assert.strictEqual(sessionState.statusline.todos[0].status, 'in_progress', 'Truncated tail should preserve the fresher cached status');
+    assert.strictEqual(sessionState.statusline.todos[0].activeForm, 'Keeping fresher cached task', 'Truncated tail should preserve the fresher cached active form');
+  });
+
   it('does not truncate todo snapshots', () => {
     const todos = Array.from({ length: 30 }, (_, index) => ({
       id: `task-${index + 1}`,

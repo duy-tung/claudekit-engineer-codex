@@ -51,6 +51,8 @@ async function main() {
   await test('normalizeUtilization accepts live whole-number percentages and 0..1 fractions', async () => {
     assertEqual(normalizeUtilization(37), 37, 'Live payload percentages should be preserved');
     assertEqual(normalizeUtilization(0.37), 37, 'Fractional payloads should still render as percentages');
+    assertEqual(normalizeUtilization(1), 1, 'Whole-number 1 should remain 1%, not 100%');
+    assertEqual(normalizeUtilization(0), 0, 'Zero utilization should remain zero');
   });
 
   await test('buildUsageSnapshot normalizes just the cosmetic 5h and wk chips', async () => {

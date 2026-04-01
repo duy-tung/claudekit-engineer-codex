@@ -35,7 +35,7 @@ function isUsageCacheFresh(cache, maxAgeMs, now = Date.now()) {
 
 function normalizeUtilization(utilization) {
   if (typeof utilization !== 'number' || !Number.isFinite(utilization)) return null;
-  if (utilization <= 1) return Math.round(utilization * 100);
+  if (utilization > 0 && utilization < 1) return Math.round(utilization * 100);
   return Math.max(0, Math.round(utilization));
 }
 

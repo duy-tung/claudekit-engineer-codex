@@ -227,8 +227,20 @@ function applyStatuslineEvent(snapshot, stdinData, now) {
 function shouldPreserveExistingSnapshot(existingSnapshot, parsedSnapshot, transcript) {
   if (!hasSnapshotActivity(existingSnapshot)) return false;
   if (!existingSnapshot || existingSnapshot.warmed !== true) return false;
-  if (hasSnapshotActivity(parsedSnapshot)) return false;
-  return !transcript || transcript.statuslineActivityCount === 0;
+  const transcriptIsIncomplete = Boolean(transcript && transcript.invalidLineCount > 0);
+
+  if (!transcriptIsIncomplete) {
+    if (hasSnapshotActivity(parsedSnapshot)) return false;
+    return !transcript || transcript.statuslineActivityCount === 0;
+  }
+
+  const existingUpdatedAt = Date.parse(existingSnapshot.updatedAt || '');
+  const transcriptUpdatedAt = Date.parse(transcript.lastActivityAt || transcript.lastValidEntryAt || '');
+  if (!Number.isFinite(existingUpdatedAt) || !Number.isFinite(transcriptUpdatedAt)) {
+    return true;
+  }
+
+  return existingUpdatedAt >= transcriptUpdatedAt;
 }
 
 function hasSnapshotActivity(snapshot) {

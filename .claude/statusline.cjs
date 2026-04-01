@@ -18,10 +18,11 @@ const { RESET, green, yellow, red, cyan, magenta, dim, coloredBar, getContextCol
 const { loadConfig, readSessionState } = require('./hooks/lib/ck-config-utils.cjs');
 const { getGitInfo } = require('./hooks/lib/git-info-cache.cjs');
 const { readActivitySnapshot } = require('./hooks/lib/statusline-session-cache.cjs');
-const { readUsageCache, normalizeUtilization } = require('./hooks/lib/usage-limits-cache.cjs');
+const { readUsageCache, normalizeUtilization, isUsageCacheFresh } = require('./hooks/lib/usage-limits-cache.cjs');
 
 // Buffer constant for fallback context calculation
 const AUTOCOMPACT_BUFFER = 40000;
+const USAGE_CACHE_RENDER_TTL_MS = 300000;
 const GRAPHEME_SEGMENTER = (
   typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
 )
@@ -178,6 +179,7 @@ function buildUsageString(ctx) {
 
 function buildUsageWindows(cache) {
   if (!cache || cache.status !== 'available') return [];
+  if (!isUsageCacheFresh(cache, USAGE_CACHE_RENDER_TTL_MS)) return [];
 
   const snapshotWindows = [
     { label: '5h', percent: cache.snapshot?.fiveHourPercent },
