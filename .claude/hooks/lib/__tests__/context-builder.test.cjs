@@ -330,7 +330,11 @@ describe('context-builder.cjs', () => {
     it('ignores expired session markers', () => {
       fs.writeFileSync(sessionStatePath, JSON.stringify({
         devRulesReminder: {
-          lastInjectedAt: new Date(Date.now() - (6 * 60 * 1000)).toISOString()
+          scopes: {
+            session: {
+              lastInjectedAt: new Date(Date.now() - (6 * 60 * 1000)).toISOString()
+            }
+          }
         }
       }));
 
