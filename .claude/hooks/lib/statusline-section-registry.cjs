@@ -152,8 +152,12 @@ function resolveLayout(statuslineLayout) {
   // Guard: if theme is a string (e.g. "dark"), spread produces garbage {0:"d",1:"a",...}
   const themeInput = statuslineLayout.theme;
   const themeOverride = (themeInput && typeof themeInput === 'object' && !Array.isArray(themeInput)) ? themeInput : {};
+  // Pass through the original lines config for the render modes to use
+  const configLines = Array.isArray(statuslineLayout.lines) ? statuslineLayout.lines : null;
+
   return {
     sections,
+    configLines,
     theme: { ...DEFAULT_THEME, ...themeOverride },
     responsiveBreakpoint: typeof statuslineLayout.responsiveBreakpoint === 'number'
       ? Math.max(0.5, Math.min(1.0, statuslineLayout.responsiveBreakpoint)) : 0.85,
