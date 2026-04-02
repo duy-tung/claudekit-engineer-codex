@@ -27,8 +27,6 @@ const DEFAULT_THEME = {
   contextLow:  'green',
   contextMid:  'yellow',
   contextHigh: 'red',
-  quotaLow:    'green',
-  quotaHigh:   'yellow',
   accent:      'cyan',
   muted:       'dim',
   separator:   'dim',
@@ -49,6 +47,7 @@ function getQuotaColorName(usageWindows, theme) {
       })
       .filter((percent) => Number.isFinite(percent))
     : [];
+  if (!theme.quotaLow && !theme.quotaHigh) return theme.muted;
   return percents.some((percent) => percent >= 85)
     ? (theme.quotaHigh || theme.quotaLow || theme.muted)
     : (theme.quotaLow || theme.muted);
@@ -165,7 +164,10 @@ function resolveLayout(statuslineLayout) {
   } else if (Array.isArray(statuslineLayout.sections)) {
     // Legacy sections[] format (backward compat)
     sections = statuslineLayout.sections
-      .map(cs => ({ ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...cs }))
+      .map((cs) => {
+        const cfg = sectionConfig[cs.id] || {};
+        return { ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...cfg, ...cs };
+      })
       .filter(s => s.id)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
   } else {
@@ -182,6 +184,7 @@ function resolveLayout(statuslineLayout) {
     sections,
     configLines,
     theme: { ...DEFAULT_THEME, ...themeOverride },
+    themeOverrides: { ...themeOverride },
     responsiveBreakpoint: typeof statuslineLayout.responsiveBreakpoint === 'number'
       ? Math.max(0.5, Math.min(1.0, statuslineLayout.responsiveBreakpoint)) : 0.85,
     maxAgentRows: typeof statuslineLayout.maxAgentRows === 'number'
@@ -194,6 +197,8 @@ function resolveLayout(statuslineLayout) {
 module.exports = {
   DEFAULT_SECTIONS,
   DEFAULT_THEME,
+  getContextColorName,
   getSectionRenderer,
+  getQuotaColorName,
   resolveLayout,
 };

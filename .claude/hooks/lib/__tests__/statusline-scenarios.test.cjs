@@ -335,6 +335,57 @@ async function main() {
     }
   });
 
+  await test('Minimal mode honors explicit context and quota theme overrides', async () => {
+    const tmpDir = createTempConfigProject('minimal', {
+      statuslineLayout: {
+        theme: {
+          contextLow: 'brightGreen',
+          contextMid: 'brightYellow',
+          contextHigh: 'brightMagenta',
+          quotaLow: 'yellow',
+          quotaHigh: 'brightRed'
+        }
+      }
+    });
+
+    try {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 91,
+            weekPercent: 38
+          },
+          data: {
+            five_hour: {
+              utilization: 91,
+              resets_at: new Date(Date.now() + 20 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 38,
+              resets_at: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 180000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Minimal theme override scenario');
+          assertContains(result.stdout, '\x1b[95m🔋', 'Minimal context indicator should honor the explicit high-usage theme color');
+          assertContains(result.stdout, '\x1b[91m5h 91%', 'Minimal quota text should honor the explicit high-usage theme color');
+        });
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   await test('Mode compact keeps output to two lines', async () => {
     const tmpDir = createTempConfigProject('compact');
     try {
@@ -416,6 +467,50 @@ async function main() {
     }
   });
 
+  await test('Quota stays dim when no explicit quota palette is configured', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['quota']]
+      }
+    });
+
+    try {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 91,
+            weekPercent: 38
+          },
+          data: {
+            five_hour: {
+              utilization: 91,
+              resets_at: new Date(Date.now() + 20 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 38,
+              resets_at: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 8000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Default quota tint scenario');
+          assertContains(result.stdout, '\x1b[2m5h 91%', 'Quota should stay muted unless the user explicitly overrides its palette');
+        });
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   await test('Configured todo icon and color are applied to activity lines', async () => {
     const tmpDir = createTempConfigProject('full', {
       statuslineLayout: {
@@ -455,6 +550,52 @@ async function main() {
       assertContains(result.stdout, '✅', 'Todo line should use the configured icon');
       assertContains(result.stdout, '\x1b[92m', 'Todo line should use the configured brightGreen color');
       assertContains(result.stdout, 'Working on second task', 'Todo line should show the in-progress task');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Legacy sections[] still picks up top-level todo sectionConfig overrides', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        sections: [
+          { id: 'todos', enabled: true, order: 0 }
+        ],
+        sectionConfig: {
+          todos: {
+            icon: '✅',
+            color: 'brightGreen'
+          }
+        }
+      }
+    });
+    const sessionId = `statusline-legacy-todo-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: [
+          { content: 'First task', status: 'completed', activeForm: 'First task done' },
+          { content: 'Second task', status: 'in_progress', activeForm: 'Working on second task' }
+        ]
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: tmpDir },
+        context_window: { context_window_size: 200000 }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Legacy todo override scenario');
+      assertContains(result.stdout, '✅', 'Legacy sections[] config should still honor the configured todo icon');
+      assertContains(result.stdout, '\x1b[92m', 'Legacy sections[] config should still honor the configured todo color');
+      assertContains(result.stdout, 'Working on second task', 'Legacy sections[] config should still render the active todo');
     } finally {
       try { fs.unlinkSync(sessionPath); } catch {}
       fs.rmSync(tmpDir, { recursive: true, force: true });
