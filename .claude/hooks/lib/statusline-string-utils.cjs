@@ -109,4 +109,23 @@ function safeGetTime(dateValue) {
   return isNaN(time) ? 0 : time;
 }
 
-module.exports = { visibleLength, formatElapsed, getTerminalWidth, safeGetTime };
+/**
+ * Format milliseconds remaining as a compact countdown string.
+ * Returns empty string when msLeft <= 0 (already elapsed).
+ * Examples: 45000 → "45m", 5400000 → "1h30m", 259200000 → "3d"
+ * @param {number} msLeft
+ * @returns {string}
+ */
+function formatCountdown(msLeft) {
+  if (msLeft <= 0) return '';
+  const mins = Math.floor(msLeft / 60000);
+  if (mins < 60) return `${mins}m`;
+  if (mins < 1440) {
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return m > 0 ? `${h}h${m}m` : `${h}h`;
+  }
+  return `${Math.floor(mins / 1440)}d`;
+}
+
+module.exports = { visibleLength, formatElapsed, getTerminalWidth, safeGetTime, formatCountdown };

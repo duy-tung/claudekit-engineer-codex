@@ -24,6 +24,7 @@ const {
 } = require('./hooks/lib/usage-limits-cache.cjs');
 const { resolveLayout } = require('./hooks/lib/statusline-section-registry.cjs');
 const { render, renderCompact, renderMinimal } = require('./hooks/lib/statusline-render-modes.cjs');
+const { formatCountdown } = require('./hooks/lib/statusline-string-utils.cjs');
 
 const AUTOCOMPACT_BUFFER = 40000;
 const USAGE_CACHE_RENDER_TTL_MS = 300000;
@@ -58,17 +59,26 @@ async function readStdin() {
   });
 }
 
-// Build usage window strings from cache (e.g. ["5h 20%", "wk 45%"])
+// Build usage window strings from cache (e.g. ["5h 20% (1h30m)", "wk 45% (4d)"])
 function buildUsageWindows(cache) {
   if (!cache || cache.status !== 'available') return [];
   if (!isUsageCacheFresh(cache, USAGE_CACHE_RENDER_TTL_MS)) return [];
-  // Prefer pre-calculated snapshot percentages
+  const now = Date.now();
+  // Prefer pre-calculated snapshot percentages (with reset countdown when available)
   const snap = [
-    { label: '5h', percent: cache.snapshot?.fiveHourPercent },
-    { label: 'wk', percent: cache.snapshot?.weekPercent }
-  ].map(({ label, percent }) => percent == null ? null : `${label} ${percent}%`).filter(Boolean);
+    { label: '5h', percent: cache.snapshot?.fiveHourPercent, resetsAt: cache.data?.five_hour?.resets_at },
+    { label: 'wk', percent: cache.snapshot?.weekPercent,     resetsAt: cache.data?.seven_day?.resets_at }
+  ].map(({ label, percent, resetsAt }) => {
+    if (percent == null) return null;
+    let countdown = '';
+    if (resetsAt) {
+      const cd = formatCountdown(new Date(resetsAt).getTime() - now);
+      if (cd) countdown = ` (${cd})`;
+    }
+    return `${label} ${percent}%${countdown}`;
+  }).filter(Boolean);
   if (snap.length > 0) return snap;
-  // Fall back to raw utilization values
+  // Fall back to raw utilization values (no resets_at countdown in fallback path)
   return [
     { label: '5h', value: cache.data?.five_hour?.utilization },
     { label: 'wk', value: cache.data?.seven_day?.utilization }
