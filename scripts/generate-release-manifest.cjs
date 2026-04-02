@@ -12,8 +12,6 @@ const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
 
-// Directories to include in release
-const INCLUDE_DIRS = ['.claude', '.opencode', 'plans/templates'];
 const INCLUDE_FILES = ['.gitignore', '.repomixignore', '.mcp.json', 'CLAUDE.md', 'AGENTS.md'];
 
 // Directories to skip
@@ -26,6 +24,16 @@ const SKIP_DIRS = [
 
 // Hidden files to include
 const INCLUDE_HIDDEN = ['.gitignore', '.repomixignore', '.mcp.json'];
+
+function readClaudeLayout(projectRoot) {
+  const packageJsonPath = path.join(projectRoot, 'package.json');
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+  return {
+    sourceDir: packageJson.claudekit?.sourceDir || 'claude',
+    runtimeDir: packageJson.claudekit?.runtimeDir || '.claude',
+  };
+}
 
 /**
  * Calculate SHA-256 checksum of a file
@@ -111,15 +119,19 @@ function scanDirectory(dir, baseDir, visitedInodes = new Set()) {
 function main() {
   const version = process.argv[2] || process.env.npm_package_version || 'unknown';
   const projectRoot = process.cwd();
+  const { sourceDir, runtimeDir } = readClaudeLayout(projectRoot);
   const outputPath = path.join(projectRoot, 'release-manifest.json');
   const tempPath = path.join(projectRoot, 'release-manifest.json.tmp');
+  const sourceClaudeDir = path.join(projectRoot, sourceDir);
+  const sourceClaudePrefix = path.relative(projectRoot, sourceClaudeDir).replace(/\\/g, '/');
+  const includeDirs = [sourceClaudePrefix, '.opencode', 'plans/templates'];
 
   console.log(`Generating release manifest v${version}...`);
 
   const allFiles = [];
 
   // Scan included directories
-  for (const dir of INCLUDE_DIRS) {
+  for (const dir of includeDirs) {
     const dirPath = path.join(projectRoot, dir);
     if (fs.existsSync(dirPath)) {
       const files = scanDirectory(dirPath, projectRoot);
@@ -157,10 +169,12 @@ function main() {
 
       let relativePath = path.relative(projectRoot, file).replace(/\\/g, '/');
 
-      // Strip .claude/ prefix for files inside .claude directory
-      // CLI tracks files relative to .claude/, not project root
-      if (relativePath.startsWith('.claude/')) {
-        relativePath = relativePath.slice('.claude/'.length);
+      // Release manifests track Claude payload paths relative to the runtime root,
+      // even though repo source may live under claude/.
+      if (relativePath.startsWith(`${sourceClaudePrefix}/`)) {
+        relativePath = relativePath.slice(sourceClaudePrefix.length + 1);
+      } else if (relativePath.startsWith(`${runtimeDir}/`)) {
+        relativePath = relativePath.slice(runtimeDir.length + 1);
       }
 
       const stats = fs.statSync(file);

@@ -70,24 +70,21 @@ __pycache__
 prompt.md
 ck.md
 
-# Agent memory (project scope)
-.claude/agent-memory/
+# Generated runtime layout for release/install smoke tests
+/.claude/
 
-# Hook diagnostics logs
-.claude/hooks/.logs/
+# Local-only state inside tracked claude source
+claude/agent-memory/
+claude/hooks/.logs/
+claude/session-state/latest.md
+claude/session-state/archive/
+claude/settings.bak.json
+claude/skills/ai-multimodal/assets/demo-*.claude/session-state/*.tmp
 
-# Session state (local only, keep .gitkeep)
-.claude/session-state/latest.md
-.claude/session-state/archive/
-
-# Gemini CLI settings (symlink to .claude/.mcp.json)
+# Gemini CLI settings (symlink to staged .claude/.mcp.json)
 .gemini/settings.json
-.claude/settings.bak.json
 # External repos for study/reference
 external/
 
 # Git worktrees (local development only)
 worktrees/
-
-# demo
-.claude/skills/ai-multimodal/assets/demo-*.claude/session-state/*.tmp

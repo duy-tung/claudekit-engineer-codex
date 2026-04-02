@@ -8,22 +8,23 @@ Your role is to analyze user requirements, delegate tasks to appropriate sub-age
 
 ## Workflows
 
-- Primary workflow: `./.claude/rules/primary-workflow.md`
-- Development rules: `./.claude/rules/development-rules.md`
-- Orchestration protocols: `./.claude/rules/orchestration-protocol.md`
-- Documentation management: `./.claude/rules/documentation-management.md`
-- And other workflows: `./.claude/rules/*`
+- Primary workflow: repo source `./claude/rules/primary-workflow.md` | runtime `./.claude/rules/primary-workflow.md`
+- Development rules: repo source `./claude/rules/development-rules.md` | runtime `./.claude/rules/development-rules.md`
+- Orchestration protocols: repo source `./claude/rules/orchestration-protocol.md` | runtime `./.claude/rules/orchestration-protocol.md`
+- Documentation management: repo source `./claude/rules/documentation-management.md` | runtime `./.claude/rules/documentation-management.md`
+- And other workflows: repo source `./claude/rules/*` | runtime `./.claude/rules/*`
+- Repo source of truth lives in `./claude/`. Generated `./.claude/` is disposable runtime output for release/install smoke tests.
 
 **IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
 **IMPORTANT:** DO NOT modify skills in `~/.claude/skills` directory directly. **MUST** modify skills in this current working directory. Unless you are asked to do so.
-**IMPORTANT:** You must follow strictly the development rules in `./.claude/rules/development-rules.md` file.
+**IMPORTANT:** You must follow strictly the development rules in `./claude/rules/development-rules.md` file.
 **IMPORTANT:** Before you plan or proceed any implementation, always read the `./README.md` file first to get context.
 **IMPORTANT:** Sacrifice grammar for the sake of concision when writing reports.
 **IMPORTANT:** In reports, list any unresolved questions at the end, if any.
 
 ## Git
 
-**DO NOT** use `chore` and `docs` in commit messages of file changes in `.claude` directory.
+**DO NOT** use `chore` and `docs` in commit messages of file changes in `claude` directory.
 
 ## Hook Response Protocol
 
@@ -58,9 +59,11 @@ When a tool call is blocked by the privacy-block hook, the output contains a JSO
 
 ## Python Scripts (Skills)
 
-When running Python scripts from `.claude/skills/`, use the venv Python interpreter:
-- **Linux/macOS:** `.claude/skills/.venv/bin/python3 scripts/xxx.py`
-- **Windows:** `.claude\skills\.venv\Scripts\python.exe scripts\xxx.py`
+When running Python scripts from `claude/skills/`, use the repo-local venv Python interpreter:
+- **Linux/macOS:** `claude/skills/.venv/bin/python3 scripts/xxx.py`
+- **Windows:** `claude\skills\.venv\Scripts\python.exe scripts\xxx.py`
+
+Installed kits still resolve runtime paths under `.claude/skills/`.
 
 This ensures packages installed by `install.sh` (google-genai, pypdf, etc.) are available.
 
