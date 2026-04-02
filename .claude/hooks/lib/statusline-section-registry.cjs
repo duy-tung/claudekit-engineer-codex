@@ -40,8 +40,8 @@ const DEFAULT_THEME = {
 /** Renders model name: "🤖 claude-opus-4" */
 function renderModelSection(ctx, sectionConfig, theme) {
   const icon = sectionConfig.icon || '🤖';
-  const accentFn = resolveColor(theme.accent);
-  return `${icon} ${accentFn(ctx.modelName)}`;
+  const colorFn = resolveColor(sectionConfig.color || theme.accent);
+  return `${icon} ${colorFn(ctx.modelName)}`;
 }
 
 // "▰▰▱▱▱ 40%" — returns null when context is 0
@@ -50,21 +50,22 @@ function renderContextSection(ctx, sectionConfig, theme) {
   return `${coloredBar(ctx.contextPercent, 12)} ${getContextColor(ctx.contextPercent)}${ctx.contextPercent}%${RESET}`;
 }
 
-// "⌛ 5h 20% wk 45%" — returns null when no usage windows
+// "⌛ 5h 20% (1h30m)  wk 45% (4d)" — returns null when no usage windows
 function renderQuotaSection(ctx, sectionConfig, theme) {
   if (!ctx.usageWindows || ctx.usageWindows.length === 0) return null;
-  return `${sectionConfig.icon || '⌛'} ${resolveColor(theme.muted)(ctx.usageWindows.join('  '))}`;
+  return `${sectionConfig.icon || '⌛'} ${resolveColor(sectionConfig.color || theme.muted)(ctx.usageWindows.join('  '))}`;
 }
 
 // "📁 ~/project"
 function renderDirectorySection(ctx, sectionConfig, theme) {
-  return `${sectionConfig.icon || '📁'} ${resolveColor('yellow')(ctx.currentDir)}`;
+  return `${sectionConfig.icon || '📁'} ${resolveColor(sectionConfig.color || 'yellow')(ctx.currentDir)}`;
 }
 
 // "🌿 main (2, +1, 3↑)" — returns null outside git repos
 function renderGitSection(ctx, sectionConfig, theme) {
   if (!ctx.gitBranch) return null;
-  let part = `${sectionConfig.icon || '🌿'} ${magenta(ctx.gitBranch)}`;
+  const gitColorFn = resolveColor(sectionConfig.color || 'magenta');
+  let part = `${sectionConfig.icon || '🌿'} ${gitColorFn(ctx.gitBranch)}`;
   const indicators = [];
   if (ctx.gitUnstaged > 0) indicators.push(`${ctx.gitUnstaged}`);
   if (ctx.gitStaged > 0)   indicators.push(`+${ctx.gitStaged}`);
@@ -77,12 +78,16 @@ function renderGitSection(ctx, sectionConfig, theme) {
 // "💰 $0.42" — returns null when no cost data
 function renderCostSection(ctx, sectionConfig, theme) {
   if (!ctx.costText) return null;
-  return `${sectionConfig.icon || '💰'} ${ctx.costText}`;
+  return `${sectionConfig.icon || '💰'} ${resolveColor(sectionConfig.color || 'dim')(ctx.costText)}`;
 }
 
-// "📝 +10 -5" — returns null when no lines changed
+// "📝 +10 -5" — returns null when no lines changed; if sectionConfig.color set, applies uniform color
 function renderChangesSection(ctx, sectionConfig, theme) {
   if (ctx.linesAdded <= 0 && ctx.linesRemoved <= 0) return null;
+  if (sectionConfig.color) {
+    const changeFn = resolveColor(sectionConfig.color);
+    return `${sectionConfig.icon || '📝'} ${changeFn(`+${ctx.linesAdded} -${ctx.linesRemoved}`)}`;
+  }
   return `${sectionConfig.icon || '📝'} ${green(`+${ctx.linesAdded}`)} ${red(`-${ctx.linesRemoved}`)}`;
 }
 
