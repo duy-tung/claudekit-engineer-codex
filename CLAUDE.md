@@ -8,16 +8,16 @@ Your role is to analyze user requirements, delegate tasks to appropriate sub-age
 
 ## Workflows
 
-- Primary workflow: repo source `./claude/rules/primary-workflow.md` | runtime `./.claude/rules/primary-workflow.md`
-- Development rules: repo source `./claude/rules/development-rules.md` | runtime `./.claude/rules/development-rules.md`
-- Orchestration protocols: repo source `./claude/rules/orchestration-protocol.md` | runtime `./.claude/rules/orchestration-protocol.md`
-- Documentation management: repo source `./claude/rules/documentation-management.md` | runtime `./.claude/rules/documentation-management.md`
-- And other workflows: repo source `./claude/rules/*` | runtime `./.claude/rules/*`
-- Repo source of truth lives in `./claude/`. Generated `./.claude/` is disposable runtime output for release/install smoke tests.
+- Installed/runtime primary workflow: `./.claude/rules/primary-workflow.md`
+- Installed/runtime development rules: `./.claude/rules/development-rules.md`
+- Installed/runtime orchestration protocols: `./.claude/rules/orchestration-protocol.md`
+- Installed/runtime documentation management: `./.claude/rules/documentation-management.md`
+- Installed/runtime workflow directory: `./.claude/rules/*`
+- Repo maintainers edit the tracked source under `./claude/rules/*`, which release tooling stages into runtime `./.claude/rules/*`.
 
 **IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
 **IMPORTANT:** DO NOT modify skills in `~/.claude/skills` directory directly. **MUST** modify skills in this current working directory. Unless you are asked to do so.
-**IMPORTANT:** You must follow strictly the development rules in `./claude/rules/development-rules.md` file.
+**IMPORTANT:** In installed kits, follow `./.claude/rules/development-rules.md`. In this repo, maintainers edit the source file at `./claude/rules/development-rules.md`.
 **IMPORTANT:** Before you plan or proceed any implementation, always read the `./README.md` file first to get context.
 **IMPORTANT:** Sacrifice grammar for the sake of concision when writing reports.
 **IMPORTANT:** In reports, list any unresolved questions at the end, if any.

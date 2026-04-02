@@ -81,7 +81,7 @@ jobs:
 
       - name: Commit and tag
         run: |
-          git add package.json package-lock.json .claude/metadata.json
+          git add package.json package-lock.json claude/metadata.json
           # Stage release assets if they exist
           [ -f CHANGELOG.md ] && git add CHANGELOG.md
           git commit -m "chore(release): ${{ steps.version.outputs.version }} [skip ci]"
