@@ -143,6 +143,13 @@ function render(ctx, layout, singleLineMode) {
  * @param {Object} layout
  */
 function renderCompact(ctx, layout) {
+  if (layout.configLines && layout.configLines.length > 0) {
+    // Use configured lines — show first 2 lines only (compact)
+    const lines = renderConfiguredLines(ctx, layout);
+    for (const line of lines.slice(0, 2)) console.log(line);
+    return;
+  }
+  // Legacy fallback
   const effectiveSections = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
   const enabledSections = effectiveSections.filter(s => s.enabled !== false);
   const rs = (id) => renderSection(enabledSections, id, ctx, layout.theme);
@@ -158,6 +165,13 @@ function renderCompact(ctx, layout) {
  * @param {Object} layout
  */
 function renderMinimal(ctx, layout) {
+  if (layout.configLines && layout.configLines.length > 0) {
+    // Use configured lines — show first line only (minimal)
+    const lines = renderConfiguredLines(ctx, layout);
+    if (lines.length > 0) console.log(lines[0]);
+    return;
+  }
+  // Legacy fallback
   const effectiveSections = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
   const enabledSections = effectiveSections.filter(s => s.enabled !== false);
   const isEnabled = id => enabledSections.some(s => s.id === id);
