@@ -104,6 +104,7 @@ function getSectionRenderer(id) {
 
 /**
  * Resolve effective layout from statuslineLayout config, falling back to defaults.
+ * Supports both new lines[][] format and legacy sections[] format.
  * When statuslineLayout is undefined/null, returns defaults — identical pre-refactor behavior.
  * @param {Object|undefined} statuslineLayout - From .ck.json config
  * @returns {{ sections, theme, responsiveBreakpoint, maxAgentRows, todoTruncation }}
@@ -121,14 +122,32 @@ function resolveLayout(statuslineLayout) {
 
   const defaultById = {};
   for (const s of DEFAULT_SECTIONS) defaultById[s.id] = s;
+  const sectionConfig = (statuslineLayout.sectionConfig && typeof statuslineLayout.sectionConfig === 'object')
+    ? statuslineLayout.sectionConfig : {};
 
-  const configSections = Array.isArray(statuslineLayout.sections)
-    ? statuslineLayout.sections : DEFAULT_SECTIONS;
+  let sections;
 
-  const sections = configSections
-    .map(cs => ({ ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...cs }))
-    .filter(s => s.id)
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  if (Array.isArray(statuslineLayout.lines)) {
+    // New lines[][] format: convert to flat sections array with order + per-section config
+    let order = 0;
+    sections = [];
+    for (const line of statuslineLayout.lines) {
+      if (!Array.isArray(line)) continue;
+      for (const id of line) {
+        const base = defaultById[id] || { id, enabled: true, order: 99 };
+        const cfg = sectionConfig[id] || {};
+        sections.push({ ...base, ...cfg, id, enabled: true, order: order++ });
+      }
+    }
+  } else if (Array.isArray(statuslineLayout.sections)) {
+    // Legacy sections[] format (backward compat)
+    sections = statuslineLayout.sections
+      .map(cs => ({ ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...cs }))
+      .filter(s => s.id)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  } else {
+    sections = DEFAULT_SECTIONS.slice();
+  }
 
   // Guard: if theme is a string (e.g. "dark"), spread produces garbage {0:"d",1:"a",...}
   const themeInput = statuslineLayout.theme;
