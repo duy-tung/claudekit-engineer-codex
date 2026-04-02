@@ -10,6 +10,8 @@
 // ANSI escape codes (standard + bright palette)
 const RESET = '\x1b[0m';
 const DIM = '\x1b[2m';
+const CLEAR_INTENSITY = '\x1b[22m';
+const CLEAR_FOREGROUND = '\x1b[39m';
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const YELLOW = '\x1b[33m';
@@ -23,6 +25,24 @@ const BRIGHT_BLUE = '\x1b[94m';
 const BRIGHT_MAGENTA = '\x1b[95m';
 const BRIGHT_CYAN = '\x1b[96m';
 const BRIGHT_WHITE = '\x1b[97m';
+const STABLE_PREFIX = `${CLEAR_INTENSITY}${CLEAR_FOREGROUND}`;
+const STABLE_SUFFIX = `${RESET}${CLEAR_INTENSITY}${CLEAR_FOREGROUND}`;
+const COLOR_CODES = {
+  green: GREEN,
+  yellow: YELLOW,
+  red: RED,
+  blue: BLUE,
+  cyan: CYAN,
+  magenta: MAGENTA,
+  dim: DIM,
+  brightRed: BRIGHT_RED,
+  brightGreen: BRIGHT_GREEN,
+  brightYellow: BRIGHT_YELLOW,
+  brightBlue: BRIGHT_BLUE,
+  brightMagenta: BRIGHT_MAGENTA,
+  brightCyan: BRIGHT_CYAN,
+  brightWhite: BRIGHT_WHITE,
+};
 
 // Detect color support at module load (cached)
 // Claude Code statusline runs via pipe but output displays in TTY - default to true
@@ -71,8 +91,8 @@ const has256Color = (() => {
  * @returns {string} Colorized text or plain text if colors disabled
  */
 function colorize(text, code) {
-  if (!isColorEnabled()) return String(text);
-  return `${code}${text}${RESET}`;
+  if (!isColorEnabled() || !code) return String(text);
+  return `${STABLE_PREFIX}${code}${text}${STABLE_SUFFIX}`;
 }
 
 function green(text) { return colorize(text, GREEN); }
@@ -95,10 +115,18 @@ function brightWhite(text) { return colorize(text, BRIGHT_WHITE); }
  * @param {number} percent - Context usage percentage (0-100)
  * @returns {string} ANSI color code
  */
-function getContextColor(percent) {
-  if (percent >= 85) return RED;
-  if (percent >= 70) return YELLOW;
-  return GREEN;
+function resolveColorCode(colorName) {
+  if (colorName === 'white' || colorName === 'none' || colorName === 'default') return '';
+  return COLOR_CODES[colorName] || '';
+}
+
+function getContextColor(percent, palette = {}) {
+  const high = resolveColorCode(palette.high || 'red') || RED;
+  const mid = resolveColorCode(palette.mid || 'yellow') || YELLOW;
+  const low = resolveColorCode(palette.low || 'green') || GREEN;
+  if (percent >= 85) return high;
+  if (percent >= 70) return mid;
+  return low;
 }
 
 /**
@@ -108,7 +136,7 @@ function getContextColor(percent) {
  * @param {number} width - Bar width in characters (default 12)
  * @returns {string} Unicode progress bar with threshold-based colors
  */
-function coloredBar(percent, width = 12) {
+function coloredBar(percent, width = 12, palette = {}) {
   const clamped = Math.max(0, Math.min(100, percent));
   const filled = Math.round((clamped / 100) * width);
   const empty = width - filled;
@@ -117,8 +145,8 @@ function coloredBar(percent, width = 12) {
     return '▰'.repeat(filled) + '▱'.repeat(empty);
   }
 
-  const color = getContextColor(percent);
-  return `${color}${'▰'.repeat(filled)}${DIM}${'▱'.repeat(empty)}${RESET}`;
+  const color = getContextColor(percent, palette);
+  return `${STABLE_PREFIX}${color}${'▰'.repeat(filled)}${STABLE_PREFIX}${DIM}${'▱'.repeat(empty)}${STABLE_SUFFIX}`;
 }
 
 /**
@@ -129,16 +157,8 @@ function coloredBar(percent, width = 12) {
  * @returns {Function} Color function (string) => string
  */
 function resolveColor(colorName) {
-  const colorMap = {
-    green, yellow, red, blue, cyan, magenta, dim,
-    brightRed, brightGreen, brightYellow,
-    brightBlue, brightMagenta, brightCyan, brightWhite,
-    white: (s) => String(s),
-    none:  (s) => String(s),
-    default: (s) => String(s),
-  };
-  // Falls back to identity (no color) for unknown names — intentional graceful degradation
-  return colorMap[colorName] || ((s) => String(s));
+  const code = resolveColorCode(colorName);
+  return code ? (s) => colorize(s, code) : (s) => String(s);
 }
 
 module.exports = {
@@ -155,5 +175,6 @@ module.exports = {
   has256Color,
   setColorEnabled,
   isColorEnabled,
+  resolveColorCode,
   resolveColor,
 };

@@ -10,8 +10,13 @@
  * Mode function signatures: (ctx, layout) => void  (writes via console.log)
  */
 
-const { red, magenta, dim } = require('./colors.cjs');
-const { DEFAULT_SECTIONS, getSectionRenderer } = require('./statusline-section-registry.cjs');
+const { red, dim, resolveColor } = require('./colors.cjs');
+const {
+  DEFAULT_SECTIONS,
+  getContextColorName,
+  getQuotaColorName,
+  getSectionRenderer
+} = require('./statusline-section-registry.cjs');
 const { visibleLength, getTerminalWidth } = require('./statusline-string-utils.cjs');
 const { renderAgentsLines, renderTodosLine } = require('./statusline-activity-renderers.cjs');
 
@@ -29,10 +34,6 @@ function renderSection(enabledSections, id, ctx, theme) {
   const fn = getSectionRenderer(id);
   return (fn && fn(ctx, sec, theme)) || '';
 }
-
-// ============================================================================
-// SESSION LINES (shared by full mode)
-// ============================================================================
 
 /**
  * Render configured lines from layout.configLines (user's lines[][] config).
@@ -108,10 +109,6 @@ function renderSessionLines(ctx, layout) {
   return lines;
 }
 
-// ============================================================================
-// RENDER MODES
-// ============================================================================
-
 /**
  * Full render: session lines + optional agents + optional todos.
  * @param {Object}  ctx
@@ -124,12 +121,13 @@ function render(ctx, layout, singleLineMode) {
   if (!singleLineMode) {
     const effectiveSectionsForEnabled = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
     const isEnabled = id => effectiveSectionsForEnabled.some(s => s.id === id && s.enabled !== false);
+    const getSectionConfig = id => effectiveSectionsForEnabled.find(s => s.id === id && s.enabled !== false) || {};
 
     if (isEnabled('agents')) {
-      lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows));
+      lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows, getSectionConfig('agents')));
     }
     if (isEnabled('todos')) {
-      const todosLine = renderTodosLine(ctx.transcript, layout.todoTruncation);
+      const todosLine = renderTodosLine(ctx.transcript, layout.todoTruncation, getSectionConfig('todos'));
       if (todosLine) lines.push(todosLine);
     }
   }
@@ -176,6 +174,8 @@ function renderMinimal(ctx, layout) {
   const enabledSections = effectiveSections.filter(s => s.enabled !== false);
   const isEnabled = id => enabledSections.some(s => s.id === id);
   const rs = (id) => renderSection(enabledSections, id, ctx, layout.theme);
+  const getSectionConfig = (id) => enabledSections.find(s => s.id === id) || {};
+  const themeOverrides = layout.themeOverrides || {};
 
   const parts = [];
 
@@ -183,16 +183,27 @@ function renderMinimal(ctx, layout) {
 
   // Minimal mode: battery icon instead of progress bar
   if (ctx.contextPercent > 0 && isEnabled('context')) {
-    const batteryIcon = ctx.contextPercent > 70 ? red('🔋') : '🔋';
+    const batteryConfig = getSectionConfig('context');
+    const batteryGlyph = batteryConfig.icon || '🔋';
+    const hasCustomContextTheme = ['contextLow', 'contextMid', 'contextHigh']
+      .some((key) => Object.prototype.hasOwnProperty.call(themeOverrides, key));
+    const batteryIcon = hasCustomContextTheme
+      ? resolveColor(getContextColorName(ctx.contextPercent, layout.theme))(batteryGlyph)
+      : (ctx.contextPercent > 70 ? red(batteryGlyph) : batteryGlyph);
     parts.push(`${batteryIcon} ${ctx.contextPercent}%`);
   }
 
   if (ctx.usageWindows?.length > 0 && isEnabled('quota')) {
-    parts.push(`⏰ ${dim(ctx.usageWindows.join('  '))}`);
+    const quotaConfig = getSectionConfig('quota');
+    const hasCustomQuotaTheme = Object.prototype.hasOwnProperty.call(themeOverrides, 'quotaLow')
+      || Object.prototype.hasOwnProperty.call(themeOverrides, 'quotaHigh');
+    const quotaText = ctx.usageWindows.join('  ');
+    const quotaColor = quotaConfig.color || (hasCustomQuotaTheme ? getQuotaColorName(ctx.usageWindows, layout.theme) : null);
+    parts.push(`${quotaConfig.icon || '⏰'} ${quotaColor ? resolveColor(quotaColor)(quotaText) : dim(quotaText)}`);
   }
 
   if (ctx.gitBranch && isEnabled('git')) {
-    parts.push(`🌿 ${magenta(ctx.gitBranch)}`);
+    parts.push(rs('git'));
   }
 
   if (isEnabled('directory')) parts.push(rs('directory'));

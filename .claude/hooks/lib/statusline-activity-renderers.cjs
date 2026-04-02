@@ -9,8 +9,12 @@
  * Separated from statusline-render-modes.cjs to keep files under 200 lines.
  */
 
-const { yellow, red, green, dim } = require('./colors.cjs');
+const { yellow, green, dim, resolveColor } = require('./colors.cjs');
 const { formatElapsed, safeGetTime } = require('./statusline-string-utils.cjs');
+
+function getActivityTint(sectionConfig, fallback) {
+  return sectionConfig?.color ? resolveColor(sectionConfig.color) : fallback;
+}
 
 /**
  * Render agent flow lines as compact chronological flow with duplicate collapsing.
@@ -22,7 +26,7 @@ const { formatElapsed, safeGetTime } = require('./statusline-string-utils.cjs');
  * @param {number} maxRows - Max collapsed groups to show (from layout.maxAgentRows)
  * @returns {string[]} 0–2 lines
  */
-function renderAgentsLines(transcript, maxRows) {
+function renderAgentsLines(transcript, maxRows, sectionConfig = {}) {
   const { agents } = transcript;
   if (!agents || agents.length === 0) return [];
 
@@ -50,16 +54,19 @@ function renderAgentsLines(transcript, maxRows) {
   if (typeof maxRows === 'number' && maxRows <= 0) return [];
   const limit  = typeof maxRows === 'number' && maxRows > 0 ? maxRows : 4;
   const toShow = collapsed.slice(-limit);
+  const tint = getActivityTint(sectionConfig, yellow);
+  const completedTint = sectionConfig.color ? tint : dim;
 
   const flowParts = toShow.map(group => {
-    const icon   = group.status === 'running' ? yellow('●') : dim('○');
+    const renderTone = group.status === 'running' ? tint : completedTint;
+    const icon   = renderTone(group.status === 'running' ? '●' : '○');
     const suffix = group.count > 1 ? ` ×${group.count}` : '';
-    return `${icon} ${group.type}${suffix}`;
+    return `${icon} ${renderTone(`${group.type}${suffix}`)}`;
   });
 
   const lines = [];
   const completedCount = agents.filter(a => a.status === 'completed').length;
-  const flowSuffix = completedCount > 2 ? ` ${dim(`(${completedCount} done)`)}` : '';
+  const flowSuffix = completedCount > 2 ? ` ${completedTint(`(${completedCount} done)`)}` : '';
   lines.push(flowParts.join(' → ') + flowSuffix);
 
   // Detail line: running agent (or last completed) description + elapsed
@@ -69,8 +76,9 @@ function renderAgentsLines(transcript, maxRows) {
       ? detailAgent.description.slice(0, 47) + '...'
       : detailAgent.description;
     const elapsed = formatElapsed(detailAgent.startTime, detailAgent.endTime);
-    const icon    = detailAgent.status === 'running' ? yellow('▸') : dim('▸');
-    lines.push(`   ${icon} ${desc} ${dim(`(${elapsed})`)}`);
+    const renderTone = detailAgent.status === 'running' ? tint : completedTint;
+    const icon = renderTone(sectionConfig.icon || '▸');
+    lines.push(`   ${icon} ${renderTone(desc)} ${completedTint(`(${elapsed})`)}`);
   }
 
   return lines;
@@ -84,7 +92,7 @@ function renderAgentsLines(transcript, maxRows) {
  * @param {number} truncation - Max chars for task text (from layout.todoTruncation)
  * @returns {string|null} Rendered line or null when nothing to show
  */
-function renderTodosLine(transcript, truncation) {
+function renderTodosLine(transcript, truncation, sectionConfig = {}) {
   const { todos } = transcript;
   if (!todos || todos.length === 0) return null;
 
@@ -93,16 +101,19 @@ function renderTodosLine(transcript, truncation) {
   const completedCount = todos.filter(t => t.status === 'completed').length;
   const pendingCount   = todos.filter(t => t.status === 'pending').length;
   const total          = todos.length;
+  const tint = getActivityTint(sectionConfig, yellow);
+  const successTint = getActivityTint(sectionConfig, green);
+  const mutedTint = sectionConfig.color ? tint : dim;
 
   if (!inProgress) {
     if (completedCount === total && total > 0) {
-      return `${green('✓')} All ${total} todos complete`;
+      return `${successTint(sectionConfig.icon || '✓')} ${successTint(`All ${total} todos complete`)}`;
     }
     if (pendingCount > 0) {
       const nextPending = todos.find(t => t.status === 'pending');
       const nextTask    = nextPending?.content || 'Next task';
       const display     = nextTask.length > 40 ? nextTask.slice(0, 37) + '...' : nextTask;
-      return `${dim('○')} Next: ${display} ${dim(`(${completedCount} done, ${pendingCount} pending)`)}`;
+      return `${mutedTint(sectionConfig.icon || '○')} ${mutedTint(`Next: ${display}`)} ${mutedTint(`(${completedCount} done, ${pendingCount} pending)`)}`;
     }
     return null;
   }
@@ -110,7 +121,7 @@ function renderTodosLine(transcript, truncation) {
   const displayText = inProgress.activeForm || inProgress.content || '';
   if (!displayText || displayText.length === 0) return null;
   const display     = displayText.length > limit ? displayText.slice(0, limit - 3) + '...' : displayText;
-  return `${yellow('▸')} ${display} ${dim(`(${completedCount} done, ${pendingCount} pending)`)}`;
+  return `${tint(sectionConfig.icon || '▸')} ${tint(display)} ${mutedTint(`(${completedCount} done, ${pendingCount} pending)`)}`;
 }
 
 module.exports = { renderAgentsLines, renderTodosLine };
