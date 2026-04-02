@@ -22,8 +22,17 @@ const SKIP_DIRS = [
   'statsig', '.anthropic',
 ];
 
-// Hidden files to include
-const INCLUDE_HIDDEN = ['.gitignore', '.repomixignore', '.mcp.json'];
+// Hidden files to include in release manifests, both at the root and inside kit payload directories.
+const INCLUDE_HIDDEN = [
+  '.gitignore',
+  '.repomixignore',
+  '.mcp.json',
+  '.ck.json',
+  '.ckignore',
+  '.env.example',
+  '.mcp.json.example',
+  '.gitkeep',
+];
 
 function readClaudeLayout(projectRoot) {
   const packageJsonPath = path.join(projectRoot, 'package.json');
