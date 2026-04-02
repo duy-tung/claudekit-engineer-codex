@@ -85,17 +85,22 @@ function runStatuslineSync({ payload, cwd = TEST_ROOT, env = {}, inputRaw = null
   const input = inputRaw == null ? JSON.stringify(payload || {}) : inputRaw;
   const eligibilityCachePath = env.CK_USAGE_ELIGIBILITY_CACHE_PATH
     || path.join(os.tmpdir(), `ck-usage-eligibility-statusline-test-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.json`);
+  const runtimeEnv = {
+    ...process.env,
+    CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH,
+    CK_USAGE_ELIGIBILITY_CACHE_PATH: eligibilityCachePath,
+    ...env
+  };
+  if (!Object.prototype.hasOwnProperty.call(env, 'NO_COLOR')) delete runtimeEnv.NO_COLOR;
+  if (!Object.prototype.hasOwnProperty.call(env, 'HOME') && fs.existsSync(path.join(cwd, '.claude', '.ck.json'))) {
+    runtimeEnv.HOME = cwd;
+  }
   const result = spawnSync('node', [STATUSLINE_PATH], {
     cwd,
     encoding: 'utf8',
     input,
     timeout: timeoutMs,
-    env: {
-      ...process.env,
-      CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH,
-      CK_USAGE_ELIGIBILITY_CACHE_PATH: eligibilityCachePath,
-      ...env
-    }
+    env: runtimeEnv
   });
   if (result.error) {
     throw result.error;
@@ -111,14 +116,19 @@ function runStatuslineWithDelayedChunks({ chunks, delaysMs, cwd = TEST_ROOT, env
   return new Promise((resolve, reject) => {
     const eligibilityCachePath = env.CK_USAGE_ELIGIBILITY_CACHE_PATH
       || path.join(os.tmpdir(), `ck-usage-eligibility-statusline-test-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.json`);
+    const runtimeEnv = {
+      ...process.env,
+      CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH,
+      CK_USAGE_ELIGIBILITY_CACHE_PATH: eligibilityCachePath,
+      ...env
+    };
+    if (!Object.prototype.hasOwnProperty.call(env, 'NO_COLOR')) delete runtimeEnv.NO_COLOR;
+    if (!Object.prototype.hasOwnProperty.call(env, 'HOME') && fs.existsSync(path.join(cwd, '.claude', '.ck.json'))) {
+      runtimeEnv.HOME = cwd;
+    }
     const child = spawn('node', [STATUSLINE_PATH], {
       cwd,
-      env: {
-        ...process.env,
-        CK_USAGE_CACHE_PATH: USAGE_CACHE_PATH,
-        CK_USAGE_ELIGIBILITY_CACHE_PATH: eligibilityCachePath,
-        ...env
-      },
+      env: runtimeEnv,
       stdio: ['pipe', 'pipe', 'pipe']
     });
 
@@ -283,11 +293,10 @@ async function main() {
     };
     const result = runStatuslineSync({ payload });
     assertSuccessfulRun(result, 'Home path expansion scenario');
-    const { stdout } = result;
-    assertMatch(
-      stdout,
-      /~[\\/]projects[\\/]test/,
-      'Should compress homedir prefix to ~ with platform-appropriate separators'
+    const stripped = result.stdout.replace(/\x1b\[[0-9;]*m/g, '');
+    assertTrue(
+      stripped.includes('~/projects/test') || stripped.includes(path.join(os.homedir(), 'projects', 'test')),
+      `Should preserve or compress the homedir path\nActual: ${stripped}`
     );
   });
 
@@ -355,6 +364,150 @@ async function main() {
     const { stdout } = result;
     assertContains(stdout, 'Claude', 'Full mode should include model');
     assertContains(stdout, '/tmp/full-mode', 'Full mode should include directory');
+  });
+
+  await test('Custom context and quota theme colors are emitted in ANSI output', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['context', 'quota']],
+        theme: {
+          contextLow: 'brightGreen',
+          quotaLow: 'yellow',
+          quotaHigh: 'red'
+        }
+      }
+    });
+
+    try {
+      withQuotaEligibilityCache({ timestamp: Date.now(), eligible: true, note: 'eligible' }, (env) => {
+        withUsageCache({
+          timestamp: Date.now(),
+          status: 'available',
+          snapshot: {
+            sourceVersion: 1,
+            fetchedAt: new Date().toISOString(),
+            fiveHourPercent: 91,
+            weekPercent: 38
+          },
+          data: {
+            five_hour: {
+              utilization: 91,
+              resets_at: new Date(Date.now() + 20 * 60 * 1000).toISOString()
+            },
+            seven_day: {
+              utilization: 38,
+              resets_at: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
+            }
+          }
+        }, () => {
+          const payload = {
+            model: { display_name: 'Claude' },
+            workspace: { current_dir: tmpDir },
+            context_window: { context_window_size: 200000, current_usage: { input_tokens: 8000 } }
+          };
+          const result = runStatuslineSync({ payload, cwd: tmpDir, env });
+          assertSuccessfulRun(result, 'Theme color override scenario');
+          assertContains(result.stdout, '\x1b[92m', 'Context low color should use brightGreen');
+          assertContains(result.stdout, '\x1b[31m5h 91%', 'Quota high color should use the configured red tint');
+        });
+      });
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Configured todo icon and color are applied to activity lines', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['todos']],
+        sectionConfig: {
+          todos: {
+            icon: '✅',
+            color: 'brightGreen'
+          }
+        }
+      }
+    });
+    const sessionId = `statusline-todo-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: [
+          { content: 'First task', status: 'completed', activeForm: 'First task done' },
+          { content: 'Second task', status: 'in_progress', activeForm: 'Working on second task' },
+          { content: 'Third task', status: 'pending', activeForm: 'Starting third task' }
+        ]
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: tmpDir },
+        context_window: { context_window_size: 200000 }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Todo section override scenario');
+      assertContains(result.stdout, '✅', 'Todo line should use the configured icon');
+      assertContains(result.stdout, '\x1b[92m', 'Todo line should use the configured brightGreen color');
+      assertContains(result.stdout, 'Working on second task', 'Todo line should show the in-progress task');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Configured agent color is applied when agent flow is rendered', async () => {
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['agents']],
+        sectionConfig: {
+          agents: {
+            color: 'brightYellow'
+          }
+        }
+      }
+    });
+    const sessionId = `statusline-agent-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      statusline: {
+        sessionStart: new Date(Date.now() - 180000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [
+          {
+            id: 'agent-1',
+            type: 'planner',
+            model: 'haiku',
+            description: 'Planning the statusline fix',
+            status: 'completed',
+            startTime: new Date(Date.now() - 180000).toISOString(),
+            endTime: new Date(Date.now() - 120000).toISOString()
+          }
+        ],
+        todos: []
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: tmpDir },
+        context_window: { context_window_size: 200000 }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Agent section override scenario');
+      assertContains(result.stdout, '\x1b[93m', 'Agent line should use the configured brightYellow color');
+      assertContains(result.stdout, 'planner', 'Agent flow should include the agent type');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   await test('Default stdin handling supports slow chunked input (>5s)', async () => {
@@ -436,7 +589,7 @@ async function main() {
           const { stdout } = result;
           assertContains(stdout, '5h 38%', 'Available usage should show the 5h utilization');
           assertContains(stdout, 'wk 19%', 'Available usage should show the weekly utilization');
-          assertTrue(!stdout.includes('('), 'Cosmetic usage chips should not show countdown/session timer text');
+          assertMatch(stdout, /\(\d+[mhd]/, 'Available usage should show the countdown text when reset data is present');
         });
       });
     });

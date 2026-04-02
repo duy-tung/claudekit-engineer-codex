@@ -7,8 +7,7 @@
  */
 
 const {
-  RESET, green, yellow, red, cyan, magenta, dim,
-  coloredBar, getContextColor, resolveColor
+  green, yellow, red, coloredBar, resolveColor
 } = require('./colors.cjs');
 
 // Default section config (order matches visual left-to-right / top-to-bottom)
@@ -28,16 +27,34 @@ const DEFAULT_THEME = {
   contextLow:  'green',
   contextMid:  'yellow',
   contextHigh: 'red',
+  quotaLow:    'green',
+  quotaHigh:   'yellow',
   accent:      'cyan',
   muted:       'dim',
   separator:   'dim',
 };
 
-// ============================================================================
-// SECTION RENDERERS
-// ============================================================================
+function getContextColorName(percent, theme) {
+  if (percent >= 85) return theme.contextHigh || 'red';
+  if (percent >= 70) return theme.contextMid || 'yellow';
+  return theme.contextLow || 'green';
+}
 
-/** Renders model name: "🤖 claude-opus-4" */
+function getQuotaColorName(usageWindows, theme) {
+  const percents = Array.isArray(usageWindows)
+    ? usageWindows
+      .map((windowText) => {
+        const match = String(windowText).match(/(\d+)%/);
+        return match ? Number(match[1]) : null;
+      })
+      .filter((percent) => Number.isFinite(percent))
+    : [];
+  return percents.some((percent) => percent >= 85)
+    ? (theme.quotaHigh || theme.quotaLow || theme.muted)
+    : (theme.quotaLow || theme.muted);
+}
+
+// SECTION RENDERERS
 function renderModelSection(ctx, sectionConfig, theme) {
   const icon = sectionConfig.icon || '🤖';
   const colorFn = resolveColor(sectionConfig.color || theme.accent);
@@ -47,13 +64,16 @@ function renderModelSection(ctx, sectionConfig, theme) {
 // "▰▰▱▱▱ 40%" — returns null when context is 0
 function renderContextSection(ctx, sectionConfig, theme) {
   if (ctx.contextPercent <= 0) return null;
-  return `${coloredBar(ctx.contextPercent, 12)} ${getContextColor(ctx.contextPercent)}${ctx.contextPercent}%${RESET}`;
+  const palette = { low: theme.contextLow, mid: theme.contextMid, high: theme.contextHigh };
+  const percentColor = resolveColor(getContextColorName(ctx.contextPercent, theme));
+  return `${coloredBar(ctx.contextPercent, 12, palette)} ${percentColor(`${ctx.contextPercent}%`)}`;
 }
 
 // "⌛ 5h 20% (1h30m)  wk 45% (4d)" — returns null when no usage windows
 function renderQuotaSection(ctx, sectionConfig, theme) {
   if (!ctx.usageWindows || ctx.usageWindows.length === 0) return null;
-  return `${sectionConfig.icon || '⌛'} ${resolveColor(sectionConfig.color || theme.muted)(ctx.usageWindows.join('  '))}`;
+  const quotaColor = sectionConfig.color || getQuotaColorName(ctx.usageWindows, theme);
+  return `${sectionConfig.icon || '⌛'} ${resolveColor(quotaColor)(ctx.usageWindows.join('  '))}`;
 }
 
 // "📁 ~/project"
@@ -91,7 +111,6 @@ function renderChangesSection(ctx, sectionConfig, theme) {
   return `${sectionConfig.icon || '📝'} ${green(`+${ctx.linesAdded}`)} ${red(`-${ctx.linesRemoved}`)}`;
 }
 
-// Map section ID → render function (agents/todos handled by statusline-activity-renderers.cjs)
 const SECTION_RENDERERS = {
   model:     renderModelSection,
   context:   renderContextSection,
@@ -102,7 +121,6 @@ const SECTION_RENDERERS = {
   changes:   renderChangesSection,
 };
 
-/** Look up the render function for a section ID. Returns null if not registered. */
 function getSectionRenderer(id) {
   return SECTION_RENDERERS[id] || null;
 }

@@ -30,10 +30,6 @@ function renderSection(enabledSections, id, ctx, theme) {
   return (fn && fn(ctx, sec, theme)) || '';
 }
 
-// ============================================================================
-// SESSION LINES (shared by full mode)
-// ============================================================================
-
 /**
  * Render configured lines from layout.configLines (user's lines[][] config).
  * Each configured line renders its sections in order, separated by spaces.
@@ -108,10 +104,6 @@ function renderSessionLines(ctx, layout) {
   return lines;
 }
 
-// ============================================================================
-// RENDER MODES
-// ============================================================================
-
 /**
  * Full render: session lines + optional agents + optional todos.
  * @param {Object}  ctx
@@ -124,12 +116,13 @@ function render(ctx, layout, singleLineMode) {
   if (!singleLineMode) {
     const effectiveSectionsForEnabled = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
     const isEnabled = id => effectiveSectionsForEnabled.some(s => s.id === id && s.enabled !== false);
+    const getSectionConfig = id => effectiveSectionsForEnabled.find(s => s.id === id && s.enabled !== false) || {};
 
     if (isEnabled('agents')) {
-      lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows));
+      lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows, getSectionConfig('agents')));
     }
     if (isEnabled('todos')) {
-      const todosLine = renderTodosLine(ctx.transcript, layout.todoTruncation);
+      const todosLine = renderTodosLine(ctx.transcript, layout.todoTruncation, getSectionConfig('todos'));
       if (todosLine) lines.push(todosLine);
     }
   }
