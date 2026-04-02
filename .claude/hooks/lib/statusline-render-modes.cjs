@@ -35,21 +35,41 @@ function renderSection(enabledSections, id, ctx, theme) {
 // ============================================================================
 
 /**
- * Build session lines using registry-driven section rendering.
- * Applies the same responsive wrapping algorithm as the original renderer:
- *   ultra-wide  → everything on one line
- *   wide        → session+location | stats
- *   medium      → session | location | stats
- *   narrow      → session | dir | branch | stats
- *
+ * Render configured lines from layout.configLines (user's lines[][] config).
+ * Each configured line renders its sections in order, separated by spaces.
+ * Agents and todos are excluded — handled separately by render().
+ */
+function renderConfiguredLines(ctx, layout) {
+  const effectiveSections = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
+  const enabledSections = effectiveSections.filter(s => s.enabled !== false);
+  const rs = (id) => renderSection(enabledSections, id, ctx, layout.theme);
+
+  const lines = [];
+  for (const configLine of layout.configLines) {
+    // Skip agents/todos — they're handled as multi-line sections by render()
+    const ids = configLine.filter(id => id !== 'agents' && id !== 'todos');
+    if (ids.length === 0) continue;
+    const rendered = ids.map(rs).filter(Boolean).join('  ');
+    if (rendered) lines.push(rendered);
+  }
+  return lines;
+}
+
+/**
+ * Build session lines using responsive wrapping (legacy, when no lines config).
  * @param {Object} ctx    - Render context
  * @param {Object} layout - Resolved layout from resolveLayout()
  * @returns {string[]}
  */
 function renderSessionLines(ctx, layout) {
+  // If user configured lines via dashboard, render them directly
+  if (layout.configLines && layout.configLines.length > 0) {
+    return renderConfiguredLines(ctx, layout);
+  }
+
+  // Legacy responsive wrapping for backward compat (no lines config)
   const termWidth = getTerminalWidth();
   const threshold = Math.floor(termWidth * (layout.responsiveBreakpoint || 0.85));
-  // Fall back to defaults if sections array is empty (H1 fix)
   const effectiveSections = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
   const enabledSections = effectiveSections.filter(s => s.enabled !== false);
 
@@ -123,6 +143,13 @@ function render(ctx, layout, singleLineMode) {
  * @param {Object} layout
  */
 function renderCompact(ctx, layout) {
+  if (layout.configLines && layout.configLines.length > 0) {
+    // Use configured lines — show first 2 lines only (compact)
+    const lines = renderConfiguredLines(ctx, layout);
+    for (const line of lines.slice(0, 2)) console.log(line);
+    return;
+  }
+  // Legacy fallback
   const effectiveSections = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
   const enabledSections = effectiveSections.filter(s => s.enabled !== false);
   const rs = (id) => renderSection(enabledSections, id, ctx, layout.theme);
@@ -138,6 +165,13 @@ function renderCompact(ctx, layout) {
  * @param {Object} layout
  */
 function renderMinimal(ctx, layout) {
+  if (layout.configLines && layout.configLines.length > 0) {
+    // Use configured lines — show first line only (minimal)
+    const lines = renderConfiguredLines(ctx, layout);
+    if (lines.length > 0) console.log(lines[0]);
+    return;
+  }
+  // Legacy fallback
   const effectiveSections = layout.sections.length > 0 ? layout.sections : DEFAULT_SECTIONS;
   const enabledSections = effectiveSections.filter(s => s.enabled !== false);
   const isEnabled = id => enabledSections.some(s => s.id === id);
