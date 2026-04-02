@@ -7,14 +7,22 @@
  * @module colors
  */
 
-// ANSI escape codes (8-color basic palette)
+// ANSI escape codes (standard + bright palette)
 const RESET = '\x1b[0m';
 const DIM = '\x1b[2m';
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const YELLOW = '\x1b[33m';
+const BLUE = '\x1b[34m';
 const MAGENTA = '\x1b[35m';
 const CYAN = '\x1b[36m';
+const BRIGHT_RED = '\x1b[91m';
+const BRIGHT_GREEN = '\x1b[92m';
+const BRIGHT_YELLOW = '\x1b[93m';
+const BRIGHT_BLUE = '\x1b[94m';
+const BRIGHT_MAGENTA = '\x1b[95m';
+const BRIGHT_CYAN = '\x1b[96m';
+const BRIGHT_WHITE = '\x1b[97m';
 
 // Detect color support at module load (cached)
 // Claude Code statusline runs via pipe but output displays in TTY - default to true
@@ -70,9 +78,17 @@ function colorize(text, code) {
 function green(text) { return colorize(text, GREEN); }
 function yellow(text) { return colorize(text, YELLOW); }
 function red(text) { return colorize(text, RED); }
+function blue(text) { return colorize(text, BLUE); }
 function cyan(text) { return colorize(text, CYAN); }
 function magenta(text) { return colorize(text, MAGENTA); }
 function dim(text) { return colorize(text, DIM); }
+function brightRed(text) { return colorize(text, BRIGHT_RED); }
+function brightGreen(text) { return colorize(text, BRIGHT_GREEN); }
+function brightYellow(text) { return colorize(text, BRIGHT_YELLOW); }
+function brightBlue(text) { return colorize(text, BRIGHT_BLUE); }
+function brightMagenta(text) { return colorize(text, BRIGHT_MAGENTA); }
+function brightCyan(text) { return colorize(text, BRIGHT_CYAN); }
+function brightWhite(text) { return colorize(text, BRIGHT_WHITE); }
 
 /**
  * Get color code based on context percentage threshold
@@ -114,14 +130,12 @@ function coloredBar(percent, width = 12) {
  */
 function resolveColor(colorName) {
   const colorMap = {
-    green,
-    yellow,
-    red,
-    cyan,
-    magenta,
-    dim,
+    green, yellow, red, blue, cyan, magenta, dim,
+    brightRed, brightGreen, brightYellow,
+    brightBlue, brightMagenta, brightCyan, brightWhite,
     white: (s) => String(s),
     none:  (s) => String(s),
+    default: (s) => String(s),
   };
   // Falls back to identity (no color) for unknown names — intentional graceful degradation
   return colorMap[colorName] || ((s) => String(s));
