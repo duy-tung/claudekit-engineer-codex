@@ -9,10 +9,10 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { spawnSync } from "child_process";
-import { readFileSafe, projectRoot, resolveEvalCli, getChangedSkills, allSkillNames } from "./eval-utils.ts";
+import { readFileSafe, projectRoot, resolveEvalCli, getChangedSkills, allSkillNames, sourceClaudeDir } from "./eval-utils.ts";
 
 const ROOT = projectRoot();
-const SKILLS_DIR = join(ROOT, ".claude/skills");
+const SKILLS_DIR = join(sourceClaudeDir(ROOT), "skills");
 const RESULTS_DIR = join(ROOT, "scripts/eval/results");
 
 const LOW_SCORE_THRESHOLD = 6;

@@ -23,12 +23,12 @@ Options:
 import os
 import sys
 import re
+import json
 import shutil
 import argparse
 from pathlib import Path
 from datetime import datetime
 from typing import Optional
-
 
 def find_project_root() -> Path:
     """Find project root by looking for .git or CLAUDE.md."""
@@ -37,6 +37,21 @@ def find_project_root() -> Path:
         if (parent / ".git").exists() or (parent / "CLAUDE.md").exists():
             return parent
     return current
+
+
+def get_source_claude_dir(project_root: Path) -> Path:
+    """Resolve tracked Claude source from package.json layout metadata."""
+    package_json = project_root / "package.json"
+    if not package_json.exists():
+        return project_root / "claude"
+
+    try:
+        package_data = json.loads(package_json.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return project_root / "claude"
+
+    source_dir = package_data.get("claudekit", {}).get("sourceDir", "claude")
+    return project_root / source_dir
 
 
 def replace_claude_paths_in_file(file_path: Path) -> None:
@@ -266,9 +281,16 @@ def generate_agents_md(project_root: Path) -> str:
     """Generate AGENTS.md content from project context."""
     readme_path = project_root / "README.md"
     claude_md_path = project_root / "CLAUDE.md"
+    package_json_path = project_root / "package.json"
 
-    # Get project name from directory
+    # Prefer package.json name so worktree folder names do not leak into generated docs.
     project_name = project_root.name
+    if package_json_path.exists():
+        try:
+            package_json = json.loads(package_json_path.read_text(encoding="utf-8"))
+            project_name = package_json.get("name", project_name)
+        except json.JSONDecodeError:
+            pass
 
     # Try to extract description from README
     project_desc = ""
@@ -423,10 +445,16 @@ export const ScoutBlockPlugin: Plugin = async ({ directory }) => {
       const result = checkScoutBlock({
         toolName: input.tool,
         toolInput: output.args,
-        options: { ckignorePath, claudeDir }
+        options: {
+          ckignorePath,
+          claudeDir,
+          cwd: directory,
+          projectConfigDirName: `.opencode`
+        }
       });
 
       if (result.blocked) {
+        const configPath = result.configPath || `.opencode/.ckignore`;
         let errorMsg = `[Scout Block] Access to '${result.path}' blocked.\\n`;
         errorMsg += `Pattern: ${result.pattern}\\n`;
 
@@ -435,7 +463,7 @@ export const ScoutBlockPlugin: Plugin = async ({ directory }) => {
           result.suggestions.forEach((s: string) => errorMsg += `  - ${s}\\n`);
         }
 
-        errorMsg += `\\nTo allow, add '!${result.pattern}' to .opencode/.ckignore`;
+        errorMsg += `\\nTo allow, add '!${result.pattern}' to ${configPath}`;
 
         throw new Error(errorMsg);
       }
@@ -554,7 +582,7 @@ def generate_opencode_plugins(
     hooks_lib_dir = claude_dir / "hooks" / "lib"
     if not hooks_lib_dir.exists():
         if args.verbose:
-            print("\nSkipped plugins: .claude/hooks/lib/ not found")
+            print(f"\nSkipped plugins: {claude_dir.name}/hooks/lib/ not found")
         return
 
     print("\nGenerating plugins...")
@@ -669,9 +697,10 @@ def main():
 
     project_root = find_project_root()
     opencode_dir = project_root / ".opencode"
-    claude_dir = project_root / ".claude"
+    claude_dir = get_source_claude_dir(project_root)
 
     print(f"Project root: {project_root}")
+    print(f"Claude source dir: {claude_dir}")
     print(f"OpenCode dir: {opencode_dir}")
     print()
 
@@ -794,7 +823,7 @@ def main():
 
         print(f"  Converted {converted_count} commands")
 
-    # Copy skills from .claude/skills/ to .opencode/skills/
+    # Copy skills from the tracked Claude source to .opencode/skills/
     claude_skills_dir = claude_dir / "skills"
     opencode_skills_dir = opencode_dir / "skills"
     if claude_skills_dir.exists():
@@ -823,7 +852,7 @@ def main():
                 skill_count += 1
         print(f"  Copied {skill_count} skills")
 
-    # Copy workflows from .claude/workflows/ to .opencode/workflow/
+    # Copy workflows from the tracked Claude source to .opencode/workflow/
     claude_workflows_dir = claude_dir / "workflows"
     opencode_workflows_dir = opencode_dir / "workflows"
     if claude_workflows_dir.exists():
@@ -855,7 +884,7 @@ def main():
             workflow_count += 1
         print(f"  Copied {workflow_count} workflows")
 
-    # Copy scripts from .claude/scripts/ to .opencode/scripts/
+    # Copy scripts from the tracked Claude source to .opencode/scripts/
     claude_scripts_dir = claude_dir / "scripts"
     opencode_scripts_dir = opencode_dir / "scripts"
     if claude_scripts_dir.exists():

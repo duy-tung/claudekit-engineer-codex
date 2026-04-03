@@ -4,6 +4,24 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+function readClaudeLayout(packageJson) {
+  return {
+    sourceDir: packageJson.claudekit?.sourceDir || 'claude',
+    runtimeDir: packageJson.claudekit?.runtimeDir || '.claude',
+  };
+}
+
+function stageRuntimeClaudeDir(sourceClaudeDir, runtimeClaudeDir, runtimeDirLabel) {
+  if (path.resolve(sourceClaudeDir) === path.resolve(runtimeClaudeDir)) {
+    console.log(`✓ Reusing ${runtimeDirLabel} as the tracked source/runtime directory`);
+    return;
+  }
+
+  fs.rmSync(runtimeClaudeDir, { recursive: true, force: true });
+  fs.cpSync(sourceClaudeDir, runtimeClaudeDir, { recursive: true });
+  console.log(`✓ Staged runtime ${runtimeDirLabel} from ${path.basename(sourceClaudeDir)}`);
+}
+
 /**
  * Generate metadata.json aligned with the package version and
  * bundle the release archive ahead of the semantic-release publish step.
@@ -18,14 +36,9 @@ const { execSync } = require('child_process');
 
   const projectRoot = process.cwd();
   const packageJsonPath = path.join(projectRoot, 'package.json');
-  const claudeDir = path.join(projectRoot, '.claude');
-  const metadataPath = path.join(claudeDir, 'metadata.json');
   const distDir = path.join(projectRoot, 'dist');
   const archivePath = path.join(distDir, 'claudekit-engineer.zip');
   const manifestPath = path.join(projectRoot, 'release-manifest.json');
-
-  // Critical files that MUST be present in release
-  const CRITICAL_TARGETS = ['.claude', '.opencode', 'release-manifest.json'];
 
   try {
     if (!fs.existsSync(packageJsonPath)) {
@@ -53,8 +66,13 @@ const { execSync } = require('child_process');
       throw new Error(`Missing required fields in package.json: ${missingFields.join(', ')}`);
     }
 
-    if (!fs.existsSync(claudeDir)) {
-      fs.mkdirSync(claudeDir, { recursive: true });
+    const { sourceDir, runtimeDir } = readClaudeLayout(packageJson);
+    const sourceClaudeDir = path.join(projectRoot, sourceDir);
+    const runtimeClaudeDir = path.join(projectRoot, runtimeDir);
+    const metadataPath = path.join(sourceClaudeDir, 'metadata.json');
+
+    if (!fs.existsSync(sourceClaudeDir)) {
+      throw new Error(`Claude source directory not found: ${sourceClaudeDir}`);
     }
 
     // Read existing metadata to preserve ALL custom fields
@@ -86,12 +104,12 @@ const { execSync } = require('child_process');
     fs.writeFileSync(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
     console.log(`✓ Generated metadata.json with version ${metadata.version}`);
 
-    // Generate OpenCode configuration from Claude Code setup
+    // Generate OpenCode configuration from the tracked Claude source.
     console.log('Generating OpenCode configuration...');
-    execSync('python scripts/generate-opencode.py --force', { stdio: 'inherit' });
+    execSync('python3 scripts/generate-opencode.py --force', { stdio: 'inherit' });
     console.log('✓ Generated .opencode directory and AGENTS.md');
 
-    // Generate release manifest with file timestamps
+    // Generate release manifest against the tracked Claude source tree.
     console.log('Generating release manifest with timestamps...');
     execSync(`node scripts/generate-release-manifest.cjs "${version}"`, { stdio: 'inherit' });
 
@@ -108,6 +126,8 @@ const { execSync } = require('child_process');
     }
     console.log('✓ Validated release-manifest.json');
 
+    stageRuntimeClaudeDir(sourceClaudeDir, runtimeClaudeDir, runtimeDir);
+
     if (!fs.existsSync(distDir)) {
       fs.mkdirSync(distDir, { recursive: true });
     }
@@ -122,7 +142,7 @@ const { execSync } = require('child_process');
     }
 
     const archiveTargets = [
-      '.claude',
+      runtimeDir,
       '.opencode',
       'plans/templates',
       '.gitignore',
@@ -136,7 +156,7 @@ const { execSync } = require('child_process');
     const existingTargets = archiveTargets.filter((target) => fs.existsSync(path.join(projectRoot, target)));
 
     // Validate critical files are present
-    const missingCritical = CRITICAL_TARGETS.filter(
+    const missingCritical = [runtimeDir, '.opencode', 'release-manifest.json'].filter(
       (target) => !fs.existsSync(path.join(projectRoot, target))
     );
 
