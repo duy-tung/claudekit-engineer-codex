@@ -6,21 +6,19 @@ Read model from `.claude/.ck.json`: `gemini.model` (default: `gemini-3-flash-pre
 
 ## ⚠️ CRITICAL: Stdin Piping for MCP Tasks
 
-For **MCP tool execution**, use stdin piping — the `--prompt`/`-p` flag runs in headless mode which may not fully initialize MCP server connections:
+For **MCP tool execution**, use stdin piping — `--prompt`/`-p` has historically been reported to have issues with MCP server initialization in headless mode:
 
 ```bash
-# ❌ WRONG for MCP tasks - headless mode may skip MCP server init
+# ❌ AVOID for MCP tasks - historically reported MCP init issues in headless mode
 gemini -y -m <gemini.model> -p "Take a screenshot"
-# Also wrong for MCP tasks
-gemini -y -p "Take a screenshot" --model gemini-3-flash-preview
 
-# ✅ CORRECT for MCP tasks - stdin triggers full interactive mode with MCP
+# ✅ RECOMMENDED for MCP tasks - stdin piping as safer default
 echo "Take a screenshot" | gemini -y -m <gemini.model>
 ```
 
-**Why**: For MCP tool execution, stdin piping ensures MCP servers are fully initialized. Always use stdin piping (echo + pipe) for MCP tasks.
+**Why**: Stdin piping has been more reliable for MCP tool execution in practice. Use it as the safer default for MCP tasks.
 
-**Note**: The `-p`/`--prompt` flag is NOT deprecated — it is the official headless mode flag. However, for MCP tool execution specifically, stdin piping ensures MCP servers are fully initialized. For non-MCP tasks (research, analysis), `--prompt` works fine.
+**Note**: The `-p`/`--prompt` flag is NOT deprecated — it is the official headless mode flag and works correctly for non-MCP tasks (research, analysis). The MCP init concern is based on observed behavior, not official documentation.
 
 ## Overview
 
@@ -77,7 +75,7 @@ echo "<prompt>" | gemini [flags]
 - `-y`: Skip confirmation prompts (auto-approve tool execution)
 - `-m <model>`: Model selection
   - `gemini-2.5-flash` (stable, works on all account tiers)
-  - `gemini-3-flash-preview` (fast, requires Google AI Pro/Ultra account)
+  - `gemini-3-flash-preview` (fast, may require Google AI Pro/Ultra for CLI)
   - `gemini-2.5-pro` (quality, may hit capacity limits)
 
 ### Examples
@@ -109,11 +107,11 @@ echo "Navigate to https://example.com, click the signup button, and take a scree
 
 ## Error Handling
 
-When gemini CLI fails, check exit code and output:
+When gemini CLI fails, check exit code and output for known error markers:
 ```bash
 RESULT=$(echo "task" | gemini -y -m <gemini.model> 2>&1)
 EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ] || echo "$RESULT" | grep -q "GaxiosError\|RESOURCE_EXHAUSTED\|MODEL_CAPACITY_EXHAUSTED"; then
+if [ $EXIT_CODE -ne 0 ] || echo "$RESULT" | grep -q "GaxiosError\|RESOURCE_EXHAUSTED\|MODEL_CAPACITY_EXHAUSTED\|PERMISSION_DENIED\|UNAUTHENTICATED"; then
   echo "[GEMINI_UNAVAILABLE] Falling back to script execution."
   # Use Pattern 2 (direct scripts) or Pattern 3 (mcp-manager subagent)
 else
@@ -124,8 +122,12 @@ fi
 Common failure modes:
 - **429 `MODEL_CAPACITY_EXHAUSTED`**: Model overloaded. Try `gemini-2.5-flash` as fallback.
 - **429 `RESOURCE_EXHAUSTED`**: Rate limit. Wait and retry or switch to script execution.
+- **403 `PERMISSION_DENIED`**: Account tier doesn't support the model, or auth token expired.
+- **401 `UNAUTHENTICATED`**: OAuth token invalid or expired. Re-authenticate with `gemini` interactive login.
 - **Exit 142 (SIGALRM)**: Timeout from retry loop. Reduce prompt complexity or switch model.
+- **Exit 1**: Generic API error (including 429 after internal retries exhaust). No dedicated exit code for quota errors.
 - **Keychain error**: Cosmetic warning (`Cannot find module keytar.node`), does not affect functionality.
+- **YOLO mode warning**: Cosmetic stderr noise, safe to ignore.
 
 ## How It Works
 

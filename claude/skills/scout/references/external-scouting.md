@@ -136,7 +136,7 @@ Spawn all in single message for parallel execution.
 
 - Wrap all gemini calls: `timeout 120 gemini -y -m <model> --prompt "[prompt]" 2>&1`
 - Check exit code: non-zero means failure
-- Check output for error markers: `GaxiosError`, `RESOURCE_EXHAUSTED`, `MODEL_CAPACITY_EXHAUSTED`
+- Check output for error markers: `GaxiosError`, `RESOURCE_EXHAUSTED`, `MODEL_CAPACITY_EXHAUSTED`, `PERMISSION_DENIED`, `UNAUTHENTICATED`
 - On failure: skip that agent's result, do NOT retry
 - On persistent failures (2+ agents fail): fall back to internal scouting
 - **Model fallback**: If `gemini-3-flash-preview` fails with 429, try `gemini-2.5-flash` before giving up

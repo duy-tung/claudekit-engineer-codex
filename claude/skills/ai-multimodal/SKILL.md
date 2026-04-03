@@ -37,7 +37,7 @@ export GEMINI_API_KEY_2="key2"  # auto-rotates on rate limit
 
 **Verify setup**: `python scripts/check_setup.py`
 **Analyze media**: `python scripts/gemini_batch_process.py --files <file> --task <analyze|transcribe|extract>`
-  - TIP: When you're asked to analyze an image, check if `gemini` command is available, then use `echo "<prompt to analyze image>" | gemini -y -m <gemini.model>` command (read model from `$HOME/.claude/.ck.json`: `gemini.model`). If gemini fails (exit code != 0, or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`) OR is not available, fall back to `python scripts/gemini_batch_process.py --files <file> --task analyze`.
+  - TIP: When you're asked to analyze an image, check if `gemini` command is available, then use `echo "<prompt to analyze image>" | gemini -y -m <gemini.model>` command (read model from `$HOME/.claude/.ck.json`: `gemini.model`). If gemini fails (exit code != 0, or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`) OR is not available, fall back to `python scripts/gemini_batch_process.py --files <file> --task analyze`.
 **Generate (Gemini)**: `python scripts/gemini_batch_process.py --task <generate|generate-video> --prompt "desc"`
 **Generate (MiniMax)**: `python scripts/minimax_cli.py --task <generate|generate-video|generate-speech|generate-music> --prompt "desc"`
 

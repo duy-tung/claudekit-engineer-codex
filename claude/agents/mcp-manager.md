@@ -20,7 +20,7 @@ Read model from `.claude/.ck.json`: `gemini.model` (default: `gemini-3-flash-pre
 ## Execution Strategy
 
 **Priority Order**:
-1. **Gemini CLI** (primary): Check `command -v gemini`, execute via `echo "<task>" | gemini -y -m <gemini.model>`. If exit code != 0 or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`, fall through to scripts.
+1. **Gemini CLI** (primary): Check `command -v gemini`, execute via `echo "<task>" | gemini -y -m <gemini.model>`. If exit code != 0 or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`, fall through to scripts.
 2. **Direct Scripts** (secondary): Use `npx tsx scripts/cli.ts call-tool`
 3. **Report Failure**: If both fail, report error to main agent
 
@@ -56,8 +56,8 @@ command -v gemini >/dev/null 2>&1 || exit 1
 
 # Execute task (use stdin piping for MCP operations)
 RESULT=$(echo "<task description>" | gemini -y -m <gemini.model> 2>&1)
-# Check for errors before using output
-if [ $? -ne 0 ] || echo "$RESULT" | grep -q "GaxiosError\|RESOURCE_EXHAUSTED"; then
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ] || echo "$RESULT" | grep -q "GaxiosError\|RESOURCE_EXHAUSTED\|MODEL_CAPACITY_EXHAUSTED\|PERMISSION_DENIED"; then
   echo "[GEMINI_FAILED] Falling back to script execution"
   exit 1
 fi
