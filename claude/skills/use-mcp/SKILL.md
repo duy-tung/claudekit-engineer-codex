@@ -15,7 +15,7 @@ Execute MCP operations via **Gemini CLI** to preserve context budget.
 
 1. **Execute task via Gemini CLI** (using stdin pipe for MCP support):
    ```bash
-   # IMPORTANT: Use stdin piping, NOT -p flag (deprecated, skips MCP init)
+   # IMPORTANT: Use stdin piping for MCP tasks (headless --prompt mode may skip MCP server init)
    # Read model from .claude/.ck.json: gemini.model (default: gemini-3-flash-preview)
    echo "$ARGUMENTS. Return JSON only per GEMINI.md instructions." | gemini -y -m <gemini.model>
    ```
@@ -29,17 +29,20 @@ Execute MCP operations via **Gemini CLI** to preserve context budget.
 
 ## Important Notes
 
-- **MUST use stdin piping** - the deprecated `-p` flag skips MCP initialization
+- **MUST use stdin piping for MCP tasks** — headless `--prompt` mode may not fully initialize MCP server connections
 - Use `-y` flag to auto-approve tool execution
 - **GEMINI.md auto-loaded**: Gemini CLI automatically loads `GEMINI.md` from project root, enforcing JSON-only response format
 - **Parseable output**: Responses are structured JSON: `{"server":"name","tool":"name","success":true,"result":<data>,"error":null}`
+- **Error handling**: Check gemini exit code — if non-zero or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`, fall back to mcp-manager subagent
 
-## Anti-Pattern (DO NOT USE)
+## Anti-Pattern for MCP Tasks
 
 ```bash
-# BROKEN - deprecated -p flag skips MCP server connections!
-gemini -y -m <gemini.model> -p "..."
+# WRONG for MCP tasks - headless mode may skip MCP server init
+gemini -y -m <gemini.model> --prompt "..."
 
-# ALSO BROKEN - --model flag with -p
-gemini -y -p "..." --model gemini-3-flash-preview
+# Use stdin piping instead for MCP tool execution
+echo "..." | gemini -y -m <gemini.model>
 ```
+
+**Note**: `--prompt` is fine for non-MCP tasks (research, analysis). Only MCP tool execution requires stdin piping.
