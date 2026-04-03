@@ -58,11 +58,9 @@ When a tool call is blocked by the privacy-block hook, the output contains a JSO
 
 ## Python Scripts (Skills)
 
-When running Python scripts from `claude/skills/`, use the repo-local venv Python interpreter:
-- **Linux/macOS:** `claude/skills/.venv/bin/python3 scripts/xxx.py`
-- **Windows:** `claude\skills\.venv\Scripts\python.exe scripts\xxx.py`
-
-Installed kits still resolve runtime paths under `.claude/skills/`.
+When running Python scripts from `.claude/skills/`, use the venv Python interpreter:
+- **Linux/macOS:** `.claude/skills/.venv/bin/python3 scripts/xxx.py`
+- **Windows:** `.claude\skills\.venv\Scripts\python.exe scripts\xxx.py`
 
 This ensures packages installed by `install.sh` (google-genai, pypdf, etc.) are available.
 

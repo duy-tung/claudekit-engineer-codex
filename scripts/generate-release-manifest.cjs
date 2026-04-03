@@ -60,7 +60,7 @@ function calculateChecksum(filePath) {
 function getGitTimestamp(filePath) {
   try {
     const result = execSync(
-      `git log -1 --format="%cI" -- "${filePath}"`,
+      `git log -1 --follow --format="%cI" -- "${filePath}"`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
     ).trim();
     return result || null;
