@@ -60,7 +60,7 @@ const DEFAULT_CONFIG = {
   },
   skills: {
     research: {
-      useGemini: true  // Toggle Gemini CLI usage in research skill
+      useGemini: false  // Opt-in: set true only with working Gemini CLI
     }
   },
   assertions: [],

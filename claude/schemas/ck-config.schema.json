@@ -284,8 +284,8 @@
           "properties": {
             "useGemini": {
               "type": "boolean",
-              "default": true,
-              "description": "Use Gemini CLI for research (false=use WebSearch)"
+              "default": false,
+              "description": "Use Gemini CLI for research (default: false, opt-in). Set to true only if you have a working Gemini CLI."
             }
           },
           "additionalProperties": true
