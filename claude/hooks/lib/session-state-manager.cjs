@@ -1,6 +1,6 @@
 /**
  * Session State Manager - Persist/restore session progress across sessions
- * Storage: project .claude/session-state/ → fallback ~/.claude/session-states/{hash}/
+ * Storage: always global ~/.claude/session-states/{hash}/ to avoid project dir pollution
  * Safety: Zero deps, fail-open, atomic writes, 7-day auto-expire
  * @module session-state-manager
  */
@@ -35,14 +35,9 @@ function execGit(args, cwd) {
   }
 }
 
-/** Resolve state dir: project-level preferred, global fallback for non-CK projects */
+/** Resolve state dir: always global ~/.claude/session-states/{hash}/ to avoid project pollution */
 function getStateDir(cwd) {
   try {
-    const projectDir = path.join(cwd, '.claude', 'session-state');
-    if (fs.existsSync(path.join(cwd, '.claude'))) {
-      if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir, { recursive: true });
-      return projectDir;
-    }
     const hash = crypto.createHash('md5').update(cwd).digest('hex').slice(0, 12);
     const globalDir = path.join(os.homedir(), '.claude', 'session-states', hash);
     if (!fs.existsSync(globalDir)) fs.mkdirSync(globalDir, { recursive: true });
