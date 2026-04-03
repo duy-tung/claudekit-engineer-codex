@@ -12,6 +12,7 @@ import {
   CheckResult,
   ScanResult,
   projectRoot,
+  sourceClaudeDir,
   printLine,
   printSummary,
   icon,
@@ -26,10 +27,11 @@ import {
 } from "./tier-1-validators.ts";
 
 const ROOT = projectRoot();
-const SKILLS_DIR = join(ROOT, ".claude/skills");
-const AGENTS_DIR = join(ROOT, ".claude/agents");
-const HOOKS_DIR = join(ROOT, ".claude/hooks");
-const CK_JSON = join(ROOT, ".claude/.ck.json");
+const CLAUDE_SOURCE_DIR = sourceClaudeDir(ROOT);
+const SKILLS_DIR = join(CLAUDE_SOURCE_DIR, "skills");
+const AGENTS_DIR = join(CLAUDE_SOURCE_DIR, "agents");
+const HOOKS_DIR = join(CLAUDE_SOURCE_DIR, "hooks");
+const CK_JSON = join(CLAUDE_SOURCE_DIR, ".ck.json");
 const MANIFEST = join(ROOT, "portable-manifest.json");
 
 // ── Print helpers ─────────────────────────────────────────────────────────────

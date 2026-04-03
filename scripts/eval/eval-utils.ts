@@ -99,6 +99,16 @@ export function projectRoot(): string {
   return new URL("../../", import.meta.url).pathname.replace(/\/$/, "");
 }
 
+export function sourceClaudeDir(root: string): string {
+  const preferred = join(root, "claude");
+  if (existsSync(preferred)) return preferred;
+
+  const legacy = join(root, ".claude");
+  if (existsSync(legacy)) return legacy;
+
+  return preferred;
+}
+
 // ── Skill enumeration ───────────────────────────────────────────────────────
 
 /**
@@ -125,7 +135,7 @@ export function getChangedSkills(root: string): string[] {
   const changed = result.stdout.split("\n").filter(Boolean);
   const skillDirs = new Set<string>();
   for (const file of changed) {
-    const m = file.match(/^\.claude\/skills\/([^/]+)\//);
+    const m = file.match(/^(?:claude|\.claude)\/skills\/([^/]+)\//);
     if (m) skillDirs.add(m[1]);
   }
   return [...skillDirs];
