@@ -8,8 +8,10 @@
  * Run: node --test .claude/hooks/tests/scout-block/scout-checker.test.cjs
  */
 
-const { describe, it } = require('node:test');
+const { after, describe, it } = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 const {
@@ -33,6 +35,23 @@ const DEFAULT_OPTS = {
   ckignorePath: path.join(FIXTURES_DIR, 'ckignore-default.txt'),
   checkBroadPatterns: true
 };
+const TEMP_DIRS = [];
+
+function createProjectRoot(projectPatterns) {
+  const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'scout-block-'));
+  TEMP_DIRS.push(repoRoot);
+  fs.writeFileSync(path.join(repoRoot, '.git'), 'gitdir: ./.git/worktrees/test\n');
+  if (projectPatterns) {
+    fs.writeFileSync(path.join(repoRoot, '.ckignore'), `${projectPatterns.join('\n')}\n`);
+  }
+  return repoRoot;
+}
+
+after(() => {
+  for (const dir of TEMP_DIRS) {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
 
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -496,6 +515,39 @@ describe('checkScoutBlock - negation .ckignore', () => {
     // dist/public is still blocked — gitignore limitation
     const r2 = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: 'dist/public/index.html' }, options: negOpts });
     assert.ok(r2.blocked);
+  });
+});
+
+describe('checkScoutBlock - project-root .ckignore discovery', () => {
+  it('allows build paths via a project override discovered from cwd', () => {
+    const projectRoot = createProjectRoot(['!build']);
+    const r = checkScoutBlock({
+      toolName: 'Read',
+      toolInput: { file_path: 'src/commands/build/run.rb' },
+      options: { ...DEFAULT_OPTS, cwd: projectRoot }
+    });
+    assert.ok(!r.blocked);
+  });
+
+  it('still blocks node_modules and points to the project override file', () => {
+    const projectRoot = createProjectRoot(['!build']);
+    const r = checkScoutBlock({
+      toolName: 'Read',
+      toolInput: { file_path: 'node_modules/package.json' },
+      options: { ...DEFAULT_OPTS, cwd: projectRoot }
+    });
+    assert.ok(r.blocked);
+    assert.strictEqual(r.configPath, path.join(projectRoot, '.ckignore'));
+  });
+
+  it('falls back to shipped behavior when no project override exists', () => {
+    const projectRoot = createProjectRoot();
+    const r = checkScoutBlock({
+      toolName: 'Read',
+      toolInput: { file_path: 'src/commands/build/run.rb' },
+      options: { ...DEFAULT_OPTS, cwd: projectRoot }
+    });
+    assert.ok(r.blocked);
   });
 });
 

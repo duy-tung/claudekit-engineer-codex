@@ -2,7 +2,8 @@
 /**
  * scout-block.cjs - Cross-platform hook for blocking directory access
  *
- * Blocks access to directories listed in .claude/.ckignore
+ * Blocks access to directories listed in the shipped .claude/.ckignore baseline
+ * plus an optional project-root .ckignore override.
  * Uses gitignore-spec compliant pattern matching via 'ignore' package
  *
  * Blocking Rules:
@@ -12,7 +13,8 @@
  *   - Allowed: npm build, go build, cargo build, make, mvn, gradle, docker build, kubectl, terraform
  *
  * Configuration:
- * - Edit .claude/.ckignore to customize blocked patterns (one per line, # for comments)
+ * - Edit .claude/.ckignore to customize shipped baseline patterns
+ * - Add <project-root>/.ckignore to override locally without changing the baseline
  * - Supports negation patterns (!) to allow specific paths
  *
  * Exit Codes:
@@ -81,6 +83,9 @@ try {
     const toolInput = data.tool_input;
     const toolName = data.tool_name || 'unknown';
     const claudeDir = path.dirname(__dirname); // Go up from hooks/ to .claude/
+    const payloadCwd = typeof data.cwd === 'string' && data.cwd.trim()
+      ? data.cwd
+      : process.cwd();
 
     // Use shared scout checker
     const result = checkScoutBlock({
@@ -88,6 +93,7 @@ try {
       toolInput,
       options: {
         claudeDir,
+        cwd: payloadCwd,
         ckignorePath: path.join(claudeDir, '.ckignore'),
         checkBroadPatterns: true
       }
@@ -123,7 +129,8 @@ try {
         path: result.path,
         pattern: result.pattern,
         tool: toolName,
-        claudeDir: claudeDir
+        claudeDir: claudeDir,
+        configPath: result.configPath
       });
       console.error(errorMsg);
       timer.end({
