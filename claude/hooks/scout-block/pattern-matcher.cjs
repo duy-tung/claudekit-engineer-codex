@@ -54,7 +54,7 @@ function readPatternsFromFile(filePath) {
  * Falls back to DEFAULT_PATTERNS if the shipped file doesn't exist or is empty.
  *
  * @param {string} ckignorePath - Path to shipped/global .ckignore file
- * @param {string} [projectCkignorePath] - Optional project-root .ckignore path
+ * @param {string} [projectCkignorePath] - Optional project-local .ckignore path
  * @returns {string[]} Array of patterns
  */
 function loadPatterns(ckignorePath, projectCkignorePath) {

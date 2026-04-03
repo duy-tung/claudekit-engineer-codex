@@ -129,31 +129,35 @@ function isAllowedCommand(command) {
   return isBuildCommand(stripped) || isVenvExecutable(stripped) || isVenvCreationCommand(stripped);
 }
 
-/**
- * Find an optional project-root .ckignore by walking upward from the caller cwd.
- * Stops at the nearest git root so sibling/parent repos do not leak into matching.
- *
- * @param {string} startDir - Directory to start searching from
- * @returns {string|null}
- */
-function findProjectCkignore(startDir) {
+function findGitRoot(startDir) {
   if (!startDir || typeof startDir !== 'string') return null;
 
   let dir = path.resolve(startDir);
   const root = path.parse(dir).root;
 
   while (true) {
-    const candidate = path.join(dir, '.ckignore');
-    if (fs.existsSync(candidate)) {
-      return candidate;
-    }
-
     if (fs.existsSync(path.join(dir, '.git')) || dir === root) {
-      return null;
+      return fs.existsSync(path.join(dir, '.git')) ? dir : null;
     }
 
     dir = path.dirname(dir);
   }
+}
+
+/**
+ * Find an optional project-local .ckignore at the git root config directory.
+ * This keeps overrides stable regardless of the caller cwd inside the repo.
+ *
+ * @param {string} startDir - Directory to start searching from
+ * @param {string} [configDirName] - Config directory at git root (.claude, .opencode)
+ * @returns {string|null}
+ */
+function findProjectCkignore(startDir, configDirName) {
+  if (!configDirName || typeof configDirName !== 'string') return null;
+  const gitRoot = findGitRoot(startDir);
+  if (!gitRoot) return null;
+  const candidate = path.join(gitRoot, configDirName, '.ckignore');
+  return fs.existsSync(candidate) ? candidate : null;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -168,9 +172,10 @@ function findProjectCkignore(startDir) {
  * @param {Object} params.toolInput - Tool input with file_path, path, pattern, command
  * @param {Object} [params.options]
  * @param {string} [params.options.ckignorePath] - Path to .ckignore file
- * @param {string} [params.options.projectCkignorePath] - Explicit project-root .ckignore path
+ * @param {string} [params.options.projectCkignorePath] - Explicit project-local .ckignore path
  * @param {string} [params.options.claudeDir] - Path to .claude or .opencode directory
  * @param {string} [params.options.cwd] - Working directory used to discover a project .ckignore
+ * @param {string} [params.options.projectConfigDirName] - Git-root config dir for project-local overrides
  * @param {boolean} [params.options.checkBroadPatterns] - Check for overly broad glob patterns (default: true)
  * @returns {{
  *   blocked: boolean,
@@ -189,6 +194,7 @@ function checkScoutBlock({ toolName, toolInput, options = {} }) {
     projectCkignorePath,
     claudeDir = path.join(process.cwd(), '.claude'),
     cwd = process.cwd(),
+    projectConfigDirName,
     checkBroadPatterns = true
   } = options;
 
@@ -234,7 +240,11 @@ function checkScoutBlock({ toolName, toolInput, options = {} }) {
 
   // Resolve .ckignore path
   const resolvedCkignorePath = ckignorePath || path.join(claudeDir, '.ckignore');
-  const resolvedProjectCkignorePath = projectCkignorePath || findProjectCkignore(cwd);
+  const discoveredProjectCkignorePath = projectCkignorePath || findProjectCkignore(cwd, projectConfigDirName);
+  const resolvedProjectCkignorePath = discoveredProjectCkignorePath
+    && path.resolve(discoveredProjectCkignorePath) !== path.resolve(resolvedCkignorePath)
+      ? discoveredProjectCkignorePath
+      : null;
   const configPath = resolvedProjectCkignorePath || resolvedCkignorePath;
 
   // Load patterns and create matcher
@@ -283,6 +293,7 @@ module.exports = {
   splitCompoundCommand,
   stripCommandPrefix,
   unwrapShellExecutor,
+  findGitRoot,
   findProjectCkignore,
 
   // Re-export scout-block modules for direct access

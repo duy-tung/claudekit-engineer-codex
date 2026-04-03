@@ -3,7 +3,7 @@
  * scout-block.cjs - Cross-platform hook for blocking directory access
  *
  * Blocks access to directories listed in the shipped .claude/.ckignore baseline
- * plus an optional project-root .ckignore override.
+ * plus an optional project-local .claude/.ckignore override at the git root.
  * Uses gitignore-spec compliant pattern matching via 'ignore' package
  *
  * Blocking Rules:
@@ -14,7 +14,7 @@
  *
  * Configuration:
  * - Edit .claude/.ckignore to customize shipped baseline patterns
- * - Add <project-root>/.ckignore to override locally without changing the baseline
+ * - Add <project-root>/.claude/.ckignore to override locally without changing the baseline
  * - Supports negation patterns (!) to allow specific paths
  *
  * Exit Codes:
@@ -94,6 +94,7 @@ try {
       options: {
         claudeDir,
         cwd: payloadCwd,
+        projectConfigDirName: '.claude',
         ckignorePath: path.join(claudeDir, '.ckignore'),
         checkBroadPatterns: true
       }

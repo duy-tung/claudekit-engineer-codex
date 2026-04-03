@@ -449,7 +449,7 @@ export const ScoutBlockPlugin: Plugin = async ({ directory }) => {
           ckignorePath,
           claudeDir,
           cwd: directory,
-          projectCkignorePath: `${directory}/.ckignore`
+          projectConfigDirName: `.opencode`
         }
       });
 

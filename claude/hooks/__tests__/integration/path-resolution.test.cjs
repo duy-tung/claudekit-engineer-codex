@@ -203,7 +203,7 @@ describe('Issue #327: Path Resolution Integration', () => {
       );
     });
 
-    it('scout-block uses payload.cwd to discover a project-root .ckignore', async () => {
+    it('scout-block uses payload.cwd to discover a git-root .claude/.ckignore', async () => {
       const tempHome = path.join(os.tmpdir(), 'integration-scout-home-' + Date.now());
       const projectRoot = path.join(os.tmpdir(), 'integration-scout-project-' + Date.now());
       const processCwd = path.join(os.tmpdir(), 'integration-scout-cwd-' + Date.now());
@@ -214,10 +214,11 @@ describe('Issue #327: Path Resolution Integration', () => {
         path.join(tempHome, '.claude', '.ck.json'),
         JSON.stringify({ hooks: { 'scout-block': true } })
       );
+      fs.mkdirSync(path.join(projectRoot, '.claude'), { recursive: true });
       fs.mkdirSync(nestedDir, { recursive: true });
       fs.mkdirSync(processCwd, { recursive: true });
       fs.writeFileSync(path.join(projectRoot, '.git'), 'gitdir: ./.git/worktrees/test\n');
-      fs.writeFileSync(path.join(projectRoot, '.ckignore'), '!build\n');
+      fs.writeFileSync(path.join(projectRoot, '.claude', '.ckignore'), '!build\n');
 
       try {
         const allowResult = await runHook('scout-block.cjs', {
@@ -242,7 +243,7 @@ describe('Issue #327: Path Resolution Integration', () => {
 
         assert.strictEqual(blockResult.exitCode, 2, 'scout-block should still block node_modules');
         assert.ok(
-          blockResult.stderr.includes(path.join(projectRoot, '.ckignore')),
+          blockResult.stderr.includes(path.join(projectRoot, '.claude', '.ckignore')),
           'blocked output should point to the project override file'
         );
       } finally {
