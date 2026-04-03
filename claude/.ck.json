@@ -53,7 +53,7 @@
   },
   "skills": {
     "research": {
-      "useGemini": true
+      "useGemini": false
     }
   },
   "hooks": {},
