@@ -13,7 +13,7 @@
 
 'use strict';
 
-const { readFileSync, readdirSync, statSync } = require('fs');
+const { readFileSync, readdirSync, lstatSync } = require('fs');
 const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..');
@@ -51,10 +51,12 @@ function findFiles(dir, predicate) {
     const full = path.join(dir, entry);
     let stat;
     try {
-      stat = statSync(full);
+      stat = lstatSync(full);
     } catch {
       continue;
     }
+    // Skip symlinks to prevent traversal outside the repo
+    if (stat.isSymbolicLink()) continue;
     if (stat.isDirectory()) {
       results.push(...findFiles(full, predicate));
     } else if (predicate(entry, full)) {

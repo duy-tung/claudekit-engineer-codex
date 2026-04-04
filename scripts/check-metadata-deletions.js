@@ -19,21 +19,34 @@ const path = require('path');
 // Resolve repo root relative to this script's location
 const repoRoot = path.resolve(__dirname, '..');
 
+// Allowed base ref values (prevent shell injection via GITHUB_BASE_REF)
+const ALLOWED_BASES = new Set(['dev', 'main']);
+
 /**
- * Returns paths deleted or renamed under claude/ in diff against origin/dev.
+ * Determine the diff baseline branch from CI environment or default to dev.
+ */
+function getBaseRef() {
+  const envRef = process.env.GITHUB_BASE_REF;
+  if (envRef && ALLOWED_BASES.has(envRef)) return envRef;
+  return 'dev';
+}
+
+/**
+ * Returns paths deleted or renamed under claude/ in diff against the base branch.
  * Both sides of a rename (old path) are checked.
  */
 function getDeletedClaudePaths() {
+  const baseRef = getBaseRef();
   let diff;
   try {
-    diff = execSync('git diff --name-status origin/dev', {
+    diff = execSync(`git diff --name-status origin/${baseRef}`, {
       cwd: repoRoot,
       encoding: 'utf8',
     });
   } catch (err) {
-    // If origin/dev doesn't exist (e.g. first run), fall back gracefully
-    console.error('[!] Could not run git diff against origin/dev:', err.message);
-    process.exit(0);
+    console.error(`[X] Could not run git diff against origin/${baseRef}: ${err.message}`);
+    // Fail-closed: if we can't determine the diff, reject rather than silently pass
+    process.exit(1);
   }
 
   const deleted = new Set();
@@ -45,14 +58,11 @@ function getDeletedClaudePaths() {
     const status = parts[0];
 
     if (status === 'D') {
-      // Deleted: parts[1] is the file path
       const filePath = parts[1];
       if (filePath && filePath.startsWith('claude/')) {
-        // Strip the leading "claude/" to match metadata.json convention
         deleted.add(filePath.slice('claude/'.length));
       }
     } else if (status.startsWith('R')) {
-      // Renamed: parts[1] is old path, parts[2] is new path
       const oldPath = parts[1];
       if (oldPath && oldPath.startsWith('claude/')) {
         deleted.add(oldPath.slice('claude/'.length));
@@ -64,8 +74,21 @@ function getDeletedClaudePaths() {
 }
 
 /**
- * Reads claude/metadata.json and returns the deletions array as a Set.
- * Supports both "path/to/file" and "claude/path/to/file" conventions.
+ * Check if a file path matches a deletion entry.
+ * Supports exact match and glob patterns ending with /** (directory wildcard).
+ */
+function matchesDeletion(filePath, entry) {
+  if (entry === filePath) return true;
+  // Support "dir/**" glob — matches any file under that directory
+  if (entry.endsWith('/**')) {
+    const prefix = entry.slice(0, -2); // strip "**", keep trailing slash
+    return filePath.startsWith(prefix);
+  }
+  return false;
+}
+
+/**
+ * Reads claude/metadata.json and returns the deletions array (normalized).
  */
 function getRegisteredDeletions() {
   const metaPath = path.join(repoRoot, 'claude', 'metadata.json');
@@ -78,12 +101,8 @@ function getRegisteredDeletions() {
   }
 
   const entries = Array.isArray(meta.deletions) ? meta.deletions : [];
-  return new Set(
-    entries.map((e) => {
-      // Normalize: strip leading "claude/" if present so we compare on bare paths
-      return e.startsWith('claude/') ? e.slice('claude/'.length) : e;
-    })
-  );
+  // Normalize: strip leading "claude/" if present
+  return entries.map((e) => (e.startsWith('claude/') ? e.slice('claude/'.length) : e));
 }
 
 function main() {
@@ -94,11 +113,12 @@ function main() {
     process.exit(0);
   }
 
-  const registered = getRegisteredDeletions();
+  const deletionEntries = getRegisteredDeletions();
   const missing = [];
 
   for (const filePath of deleted) {
-    if (!registered.has(filePath)) {
+    const matched = deletionEntries.some((entry) => matchesDeletion(filePath, entry));
+    if (!matched) {
       missing.push(filePath);
     }
   }

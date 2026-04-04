@@ -16,11 +16,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch origin/dev for diff baseline
-        run: git fetch origin dev
+      - name: Fetch base branch for diff baseline
+        run: git fetch origin "$GITHUB_BASE_REF"
 
       - name: Check metadata deletions
         run: node scripts/check-metadata-deletions.js
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
 
   skill-cross-ref-lint:
     name: Skill Cross-Reference Lint
