@@ -72,6 +72,8 @@ ck.md
 
 # Generated runtime layout for release/install smoke tests
 /.claude/
+# But track repo-level rules that Claude Code reads
+!/.claude/rules/
 
 # Local-only state inside tracked claude source
 claude/agent-memory/
