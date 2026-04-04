@@ -1,3 +1,58 @@
+## [2.16.0](https://github.com/claudekit/claudekit-engineer/compare/v2.15.1...v2.16.0) (2026-04-03)
+
+
+### 🚀 Features
+
+* **ai-multimodal:** improve env key resolution DX and add 5xx retry ([f48075b](https://github.com/claudekit/claudekit-engineer/commit/f48075bfc17641ef97f7e801f3fd3a6649ea8c7e)), closes [#600](https://github.com/claudekit/claudekit-engineer/issues/600)
+* **hooks:** support project .ckignore overrides ([5b1a92c](https://github.com/claudekit/claudekit-engineer/commit/5b1a92ca9f29affc6f2d64fd55f44bba31bdab62)), closes [#623](https://github.com/claudekit/claudekit-engineer/issues/623)
+* quota reset countdown display and sectionConfig.color support ([33c1f67](https://github.com/claudekit/claudekit-engineer/commit/33c1f67b51dac3f5373802a0fb8bd1fe676e3add)), closes [#618](https://github.com/claudekit/claudekit-engineer/issues/618)
+* refactor statusline renderer to config-driven modular architecture ([5d42791](https://github.com/claudekit/claudekit-engineer/commit/5d42791c45814b43c407d3b197d0a7c38c2c6cea)), closes [claudekit/claudekit-engineer#610](https://github.com/claudekit/claudekit-engineer/issues/610)
+* **session-state:** always use global storage to avoid project dir pollution ([8b319db](https://github.com/claudekit/claudekit-engineer/commit/8b319db93b55a31fcf119fc3a026df34b4d04aa4)), closes [#625](https://github.com/claudekit/claudekit-engineer/issues/625)
+* **stitch:** fix SDK API mismatches, add env migration, auto quota tracking ([5641256](https://github.com/claudekit/claudekit-engineer/commit/5641256407f9e42c7b14d800f520329561edc32e))
+* **worktree:** preserve forward slashes in --no-prefix branch names ([842583c](https://github.com/claudekit/claudekit-engineer/commit/842583c0a93993f3f69531ad945066bd33479e3b)), closes [#605](https://github.com/claudekit/claudekit-engineer/issues/605)
+
+
+### 🐞 Bug Fixes
+
+* add bright color variants and blue to resolveColor map ([0c98b55](https://github.com/claudekit/claudekit-engineer/commit/0c98b5587352c62ae691b2bb184dd2297617722b))
+* align statusline live colors with configured theme ([d9d94be](https://github.com/claudekit/claudekit-engineer/commit/d9d94bea32c568ef664f5d479a13138214ec8aab))
+* change useGemini default to false and add pre-flight validation ([3f39127](https://github.com/claudekit/claudekit-engineer/commit/3f39127afc92a65012b3d8c4485d599cc207e9f3)), closes [#627](https://github.com/claudekit/claudekit-engineer/issues/627)
+* **ci:** bash regex syntax error in beta release notes generation ([bb23fc6](https://github.com/claudekit/claudekit-engineer/commit/bb23fc67c4cf7da3ea0649d37c3ec2d95bdcb411))
+* **ci:** guard stable tag lookup against grep broken pipe ([072a0f7](https://github.com/claudekit/claudekit-engineer/commit/072a0f7f9b167fe934bdf1bcb564e7bea6ed18dd))
+* compact and minimal modes also respect configLines from user layout ([2eb0e6e](https://github.com/claudekit/claudekit-engineer/commit/2eb0e6e94cd98819beaa703c384fd63e934af7d1))
+* decouple statusline quota display from usage awareness ([ca24edb](https://github.com/claudekit/claudekit-engineer/commit/ca24edb1c35e539d61e8308cf6d97b399d517389))
+* **hooks:** preserve cwd-scoped transcript fallback ([ed6fdad](https://github.com/claudekit/claudekit-engineer/commit/ed6fdad7fb9b66c57871107bfd77d44103f99e4f))
+* **hooks:** restore dev-rules dedup without transcript path ([41bca01](https://github.com/claudekit/claudekit-engineer/commit/41bca01cafeb6494fd2e510e47a015f7373e8151)), closes [#603](https://github.com/claudekit/claudekit-engineer/issues/603)
+* **hooks:** scope scout-block overrides to git root ([739ddc4](https://github.com/claudekit/claudekit-engineer/commit/739ddc4c26a961b8780d3b1388a1307a326e9441))
+* ignore generated opencode backups ([3888c26](https://github.com/claudekit/claudekit-engineer/commit/3888c26b9e5761856caadd1626404104ca4280b4))
+* include hidden source files in release manifest ([5794943](https://github.com/claudekit/claudekit-engineer/commit/5794943b2a78bbbb7419157f0847e9aaf309d017))
+* keep shipped engineer docs runtime-facing ([d3b380e](https://github.com/claudekit/claudekit-engineer/commit/d3b380e800d51f715c84a788e37a501206e057fd))
+* preserve runtime kit content ([0399034](https://github.com/claudekit/claudekit-engineer/commit/0399034774273d61990956799f6ef0338fc296b0))
+* preserve statusline theme compatibility across modes ([2019ccf](https://github.com/claudekit/claudekit-engineer/commit/2019ccfed53e95e13704fae92cc8f9267a6de027))
+* **release:** restore structured sections in beta release notifications ([a37db24](https://github.com/claudekit/claudekit-engineer/commit/a37db2442eb870dec1d6acfa1bfa2bc6e405b4aa)), closes [claudekit-cli#543](https://github.com/claudekit/claudekit-cli/issues/543)
+* render user-configured lines instead of hardcoded section groups ([6ed0783](https://github.com/claudekit/claudekit-engineer/commit/6ed078329ad7d07ef19eef126751b0a81d0279a5)), closes [#616](https://github.com/claudekit/claudekit-engineer/issues/616)
+* restore runtime-facing engineer docs ([4fa6bd0](https://github.com/claudekit/claudekit-engineer/commit/4fa6bd04f9fd146214efa383a2aa8ec8bf58724b))
+* **skills:** enhance `frontend-design` skill ([c0f99e2](https://github.com/claudekit/claudekit-engineer/commit/c0f99e2ec8b461715aa9ce313fae3a263f2b361b))
+* **skills:** update EXACT_CATEGORY_MAP and regenerate skills catalog ([f186e7c](https://github.com/claudekit/claudekit-engineer/commit/f186e7c0920d9db6460050adff5723e36b7f4906))
+* **statusline:** gate quota to native Claude subscriptions ([5466ad4](https://github.com/claudekit/claudekit-engineer/commit/5466ad44156edac4c06470a3a10091d7bde9460a))
+* **statusline:** harden quota cache refresh and session state ([296e1cb](https://github.com/claudekit/claudekit-engineer/commit/296e1cb21e7729e8078e0e896226a3e81920d38c))
+* **statusline:** honor quota toggle and harden session refresh ([a0728a9](https://github.com/claudekit/claudekit-engineer/commit/a0728a9178c8a09a2748a794aa351f3854df61bd))
+* **stitch:** correct quota limits to 400 daily + 15 redesign, add RATE_LIMITED auto-sync ([707a299](https://github.com/claudekit/claudekit-engineer/commit/707a299850a08e6d87f909e9c69283ae8ab0b342))
+* support lines[][] config format in resolveLayout ([8293ace](https://github.com/claudekit/claudekit-engineer/commit/8293ace429ef9385dccb3b3b09c187a8ba4f9aab)), closes [#614](https://github.com/claudekit/claudekit-engineer/issues/614)
+* wire statuslineLayout through loadConfig and resolve 4 runtime issues ([ac9a09e](https://github.com/claudekit/claudekit-engineer/commit/ac9a09e00739911c195de15f52621aaeacded0c7))
+* **worktree:** add --help flag support to worktree script ([bc83fbd](https://github.com/claudekit/claudekit-engineer/commit/bc83fbd8759c6e545ce3ab4495b7d02fa0de618b)), closes [#596](https://github.com/claudekit/claudekit-engineer/issues/596)
+
+
+### ♻️ Code Refactoring
+
+* make startup statusline cache-first ([929ccbf](https://github.com/claudekit/claudekit-engineer/commit/929ccbfc6bf8c6c40594120238fac12f2ef9cd27))
+* move tracked engineer source to claude ([64fcc1a](https://github.com/claudekit/claudekit-engineer/commit/64fcc1abe92e87082f39801acf208520e75d3b72))
+
+
+### ✅ Tests
+
+* **hooks:** align scoped dedup expiry fixture ([fdc2b96](https://github.com/claudekit/claudekit-engineer/commit/fdc2b96817c6a6da01299a670e8a458db0765d1f))
+
 ## [2.15.1](https://github.com/claudekit/claudekit-engineer/compare/v2.15.0...v2.15.1) (2026-03-29)
 
 
