@@ -303,6 +303,12 @@ skills:
     has_scripts: true
     has_references: true
     argument_hint: "[url or task]"
+  - name: "docx"
+    path: "document-skills/docx/SKILL.md"
+    description: "Create, edit, analyze .docx Word documents. Use for document creation, tracked changes, comments, formatting preservation, text extraction, template modification."
+    category: "multimedia"
+    has_scripts: true
+    has_references: false
   - name: "media-processing"
     path: "media-processing/SKILL.md"
     description: "Process media with FFmpeg (video/audio), ImageMagick (images), RMBG (AI background removal). Use for encoding, format conversion, filters, thumbnails, batch processing, HLS/DASH streaming."
@@ -310,6 +316,18 @@ skills:
     has_scripts: true
     has_references: true
     argument_hint: "[input-file] [operation]"
+  - name: "pdf"
+    path: "document-skills/pdf/SKILL.md"
+    description: "Extract text/tables, create, merge, split PDFs. Fill PDF forms programmatically. Use for PDF processing, generation, form filling, document analysis, batch operations."
+    category: "multimedia"
+    has_scripts: true
+    has_references: false
+  - name: "pptx"
+    path: "document-skills/pptx/SKILL.md"
+    description: "Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation."
+    category: "multimedia"
+    has_scripts: true
+    has_references: false
   - name: "web-testing"
     path: "web-testing/SKILL.md"
     description: "Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visual/a11y testing. Use for test automation, flakiness, Core Web Vitals, mobile gestures, cross-browser."
@@ -317,6 +335,12 @@ skills:
     has_scripts: true
     has_references: true
     argument_hint: "[test-type] [target]"
+  - name: "xlsx"
+    path: "document-skills/xlsx/SKILL.md"
+    description: "Create, edit, analyze spreadsheets (.xlsx, .csv, .tsv). Use for Excel formulas, data analysis, visualization, formatting, pivot tables, charts, formula recalculation."
+    category: "multimedia"
+    has_scripts: false
+    has_references: false
   frameworks:
   - name: "mobile-development"
     path: "mobile-development/SKILL.md"
@@ -438,6 +462,13 @@ skills:
     has_scripts: false
     has_references: false
     argument_hint: "[topic or reflection]"
+  - name: "loop"
+    path: "ck-loop/SKILL.md"
+    description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."
+    category: "utilities"
+    has_scripts: false
+    has_references: true
+    argument_hint: "[Goal/Metric description] or inline config block"
   - name: "markdown-novel-viewer"
     path: "markdown-novel-viewer/SKILL.md"
     description: "View markdown files with calm, book-like reading experience via HTTP server. Use for long-form content, documentation preview, novel reading, report viewing, distraction-free reading."
@@ -459,6 +490,13 @@ skills:
     has_scripts: false
     has_references: true
     argument_hint: "[task] OR [archive|red-team|validate]"
+  - name: "predict"
+    path: "ck-predict/SKILL.md"
+    description: "5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes."
+    category: "utilities"
+    has_scripts: false
+    has_references: false
+    argument_hint: "<feature description or change proposal> [--files <glob>]"
   - name: "preview"
     path: "preview/SKILL.md"
     description: "View files/directories OR generate visual explanations, slides, diagrams (Markdown or self-contained HTML)."
@@ -501,6 +539,20 @@ skills:
     has_scripts: false
     has_references: true
     argument_hint: "[timeframe] [--compare] [--team] [--format html|md]"
+  - name: "scenario"
+    path: "ck-scenario/SKILL.md"
+    description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early."
+    category: "utilities"
+    has_scripts: false
+    has_references: false
+    argument_hint: "<file path or feature description>"
+  - name: "security"
+    path: "ck-security/SKILL.md"
+    description: "STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern."
+    category: "utilities"
+    has_scripts: false
+    has_references: true
+    argument_hint: "<scope glob or 'full'> [--fix] [--iterations N]"
   - name: "security-scan"
     path: "security-scan/SKILL.md"
     description: "Scan codebase for security vulnerabilities, hardcoded secrets, dependency issues, and OWASP patterns. Use when asked to 'security scan', 'check for secrets', 'audit security', or before major releases."
@@ -529,61 +581,9 @@ skills:
     has_scripts: false
     has_references: false
   other:
-  - name: "docx"
-    path: "document-skills/docx/SKILL.md"
-    description: "Create, edit, analyze .docx Word documents. Use for document creation, tracked changes, comments, formatting preservation, text extraction, template modification."
-    category: "other"
-    has_scripts: true
-    has_references: false
   - name: "excalidraw"
     path: "excalidraw/SKILL.md"
     description: "Create Excalidraw diagrams — architecture, data flow, workflows, system design. Use when user wants to visualize, diagram, draw architecture, show data flow, create flowcharts, map components, or export .excalidraw files to PNG/SVG. Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright rendering. Also supports zero-config codebase auto-diagramming — just say \"diagram this repo\" or \"visualize the architecture\"."
     category: "other"
     has_scripts: false
     has_references: true
-  - name: "loop"
-    path: "ck-loop/SKILL.md"
-    description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."
-    category: "other"
-    has_scripts: false
-    has_references: true
-    argument_hint: "[Goal/Metric description] or inline config block"
-  - name: "pdf"
-    path: "document-skills/pdf/SKILL.md"
-    description: "Extract text/tables, create, merge, split PDFs. Fill PDF forms programmatically. Use for PDF processing, generation, form filling, document analysis, batch operations."
-    category: "other"
-    has_scripts: true
-    has_references: false
-  - name: "pptx"
-    path: "document-skills/pptx/SKILL.md"
-    description: "Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation."
-    category: "other"
-    has_scripts: true
-    has_references: false
-  - name: "predict"
-    path: "ck-predict/SKILL.md"
-    description: "5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes."
-    category: "other"
-    has_scripts: false
-    has_references: false
-    argument_hint: "<feature description or change proposal> [--files <glob>]"
-  - name: "scenario"
-    path: "ck-scenario/SKILL.md"
-    description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early."
-    category: "other"
-    has_scripts: false
-    has_references: false
-    argument_hint: "<file path or feature description>"
-  - name: "security"
-    path: "ck-security/SKILL.md"
-    description: "STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern."
-    category: "other"
-    has_scripts: false
-    has_references: true
-    argument_hint: "<scope glob or 'full'> [--fix] [--iterations N]"
-  - name: "xlsx"
-    path: "document-skills/xlsx/SKILL.md"
-    description: "Create, edit, analyze spreadsheets (.xlsx, .csv, .tsv). Use for Excel formulas, data analysis, visualization, formatting, pivot tables, charts, formula recalculation."
-    category: "other"
-    has_scripts: false
-    has_references: false

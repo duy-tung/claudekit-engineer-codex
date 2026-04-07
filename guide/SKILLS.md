@@ -278,17 +278,41 @@ Automate browsers with Puppeteer CLI scripts and persistent sessions. Use for sc
 
 **Location**: `.claude/skills/chrome-devtools/SKILL.md`
 
+### 📦 `docx`
+
+Create, edit, analyze .docx Word documents. Use for document creation, tracked changes, comments, formatting preservation, text extraction, template modification.
+
+**Location**: `.claude/skills/document-skills/docx/SKILL.md`
+
 ### 📦 📚 `media-processing`
 
 Process media with FFmpeg (video/audio), ImageMagick (images), RMBG (AI background removal). Use for encoding, format conversion, filters, thumbnails, batch processing, HLS/DASH streaming.
 
 **Location**: `.claude/skills/media-processing/SKILL.md`
 
+### 📦 `pdf`
+
+Extract text/tables, create, merge, split PDFs. Fill PDF forms programmatically. Use for PDF processing, generation, form filling, document analysis, batch operations.
+
+**Location**: `.claude/skills/document-skills/pdf/SKILL.md`
+
+### 📦 `pptx`
+
+Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation.
+
+**Location**: `.claude/skills/document-skills/pptx/SKILL.md`
+
 ### 📦 📚 `web-testing`
 
 Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visual/a11y testing. Use for test automation, flakiness, Core Web Vitals, mobile gestures, cross-browser.
 
 **Location**: `.claude/skills/web-testing/SKILL.md`
+
+### `xlsx`
+
+Create, edit, analyze spreadsheets (.xlsx, .csv, .tsv). Use for Excel formulas, data analysis, visualization, formatting, pivot tables, charts, formula recalculation.
+
+**Location**: `.claude/skills/document-skills/xlsx/SKILL.md`
 
 ## Frameworks & Platforms
 
@@ -396,6 +420,12 @@ Write journal entries analyzing recent changes and session reflections.
 
 **Location**: `.claude/skills/journal/SKILL.md`
 
+### 📚 `loop`
+
+Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation.
+
+**Location**: `.claude/skills/ck-loop/SKILL.md`
+
 ### 📦 `markdown-novel-viewer`
 
 View markdown files with calm, book-like reading experience via HTTP server. Use for long-form content, documentation preview, novel reading, report viewing, distraction-free reading.
@@ -413,6 +443,12 @@ Create diagrams with Mermaid.js v11 syntax. Use for flowcharts, sequence diagram
 Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation.
 
 **Location**: `.claude/skills/ck-plan/SKILL.md`
+
+### `predict`
+
+5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes.
+
+**Location**: `.claude/skills/ck-predict/SKILL.md`
 
 ### 📚 `preview`
 
@@ -450,6 +486,18 @@ Data-driven sprint retrospective. Gathers git metrics (commits, LOC, hotspots, c
 
 **Location**: `.claude/skills/retro/SKILL.md`
 
+### `scenario`
+
+Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early.
+
+**Location**: `.claude/skills/ck-scenario/SKILL.md`
+
+### 📚 `security`
+
+STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern.
+
+**Location**: `.claude/skills/ck-security/SKILL.md`
+
 ### 📚 `security-scan`
 
 Scan codebase for security vulnerabilities, hardcoded secrets, dependency issues, and OWASP patterns. Use when asked to 'security scan', 'check for secrets', 'audit security', or before major releases.
@@ -476,56 +524,8 @@ Review recent changes and wrap up the current work session.
 
 ## Other
 
-### 📦 `docx`
-
-Create, edit, analyze .docx Word documents. Use for document creation, tracked changes, comments, formatting preservation, text extraction, template modification.
-
-**Location**: `.claude/skills/document-skills/docx/SKILL.md`
-
 ### 📚 `excalidraw`
 
 Create Excalidraw diagrams — architecture, data flow, workflows, system design. Use when user wants to visualize, diagram, draw architecture, show data flow, create flowcharts, map components, or export .excalidraw files to PNG/SVG. Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright rendering. Also supports zero-config codebase auto-diagramming — just say "diagram this repo" or "visualize the architecture".
 
 **Location**: `.claude/skills/excalidraw/SKILL.md`
-
-### 📚 `loop`
-
-Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation.
-
-**Location**: `.claude/skills/ck-loop/SKILL.md`
-
-### 📦 `pdf`
-
-Extract text/tables, create, merge, split PDFs. Fill PDF forms programmatically. Use for PDF processing, generation, form filling, document analysis, batch operations.
-
-**Location**: `.claude/skills/document-skills/pdf/SKILL.md`
-
-### 📦 `pptx`
-
-Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation.
-
-**Location**: `.claude/skills/document-skills/pptx/SKILL.md`
-
-### `predict`
-
-5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes.
-
-**Location**: `.claude/skills/ck-predict/SKILL.md`
-
-### `scenario`
-
-Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early.
-
-**Location**: `.claude/skills/ck-scenario/SKILL.md`
-
-### 📚 `security`
-
-STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern.
-
-**Location**: `.claude/skills/ck-security/SKILL.md`
-
-### `xlsx`
-
-Create, edit, analyze spreadsheets (.xlsx, .csv, .tsv). Use for Excel formulas, data analysis, visualization, formatting, pivot tables, charts, formula recalculation.
-
-**Location**: `.claude/skills/document-skills/xlsx/SKILL.md`

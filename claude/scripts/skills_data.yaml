@@ -78,7 +78,7 @@
 - name: "ck-loop"
   path: "ck-loop/SKILL.md"
   description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."
-  category: "other"
+  category: "utilities"
   has_scripts: false
   has_references: true
   argument_hint: "[Goal/Metric description] or inline config block"
@@ -92,21 +92,21 @@
 - name: "ck-predict"
   path: "ck-predict/SKILL.md"
   description: "5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes."
-  category: "other"
+  category: "utilities"
   has_scripts: false
   has_references: false
   argument_hint: "<feature description or change proposal> [--files <glob>]"
 - name: "ck-scenario"
   path: "ck-scenario/SKILL.md"
   description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early."
-  category: "other"
+  category: "utilities"
   has_scripts: false
   has_references: false
   argument_hint: "<file path or feature description>"
 - name: "ck-security"
   path: "ck-security/SKILL.md"
   description: "STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern."
-  category: "other"
+  category: "utilities"
   has_scripts: false
   has_references: true
   argument_hint: "<scope glob or 'full'> [--fix] [--iterations N]"
@@ -190,25 +190,25 @@
 - name: "document-skills/docx"
   path: "document-skills/docx/SKILL.md"
   description: "Create, edit, analyze .docx Word documents. Use for document creation, tracked changes, comments, formatting preservation, text extraction, template modification."
-  category: "other"
+  category: "multimedia"
   has_scripts: true
   has_references: false
 - name: "document-skills/pdf"
   path: "document-skills/pdf/SKILL.md"
   description: "Extract text/tables, create, merge, split PDFs. Fill PDF forms programmatically. Use for PDF processing, generation, form filling, document analysis, batch operations."
-  category: "other"
+  category: "multimedia"
   has_scripts: true
   has_references: false
 - name: "document-skills/pptx"
   path: "document-skills/pptx/SKILL.md"
   description: "Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation."
-  category: "other"
+  category: "multimedia"
   has_scripts: true
   has_references: false
 - name: "document-skills/xlsx"
   path: "document-skills/xlsx/SKILL.md"
   description: "Create, edit, analyze spreadsheets (.xlsx, .csv, .tsv). Use for Excel formulas, data analysis, visualization, formatting, pivot tables, charts, formula recalculation."
-  category: "other"
+  category: "multimedia"
   has_scripts: false
   has_references: false
 - name: "excalidraw"

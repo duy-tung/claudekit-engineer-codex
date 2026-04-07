@@ -216,7 +216,7 @@ def scan_skills(base_path: Path) -> list[dict[str, object]]:
             "display_name": display_name,
             "path": str(skill_file.relative_to(base_path)),
             "description": description,
-            "category": categorize_skill(display_name),
+            "category": categorize_skill(internal_name),
             "has_scripts": (skill_dir / "scripts").exists(),
             "has_references": (skill_dir / "references").exists(),
         }
