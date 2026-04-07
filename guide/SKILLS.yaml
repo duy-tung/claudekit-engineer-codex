@@ -61,13 +61,6 @@ skills:
     has_scripts: false
     has_references: false
     argument_hint: "[component or feature]"
-  - name: "mcp-builder"
-    path: "mcp-builder/SKILL.md"
-    description: "Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers."
-    category: "frontend"
-    has_scripts: true
-    has_references: false
-    argument_hint: "[service or API to integrate]"
   - name: "react-best-practices"
     path: "react-best-practices/SKILL.md"
     description: "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements."
@@ -211,6 +204,13 @@ skills:
     has_scripts: true
     has_references: true
     argument_hint: "[path|url] [--full] [--output path]"
+  - name: "mcp-builder"
+    path: "mcp-builder/SKILL.md"
+    description: "Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers."
+    category: "dev-tools"
+    has_scripts: true
+    has_references: false
+    argument_hint: "[service or API to integrate]"
   - name: "mcp-management"
     path: "mcp-management/SKILL.md"
     description: "Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery."

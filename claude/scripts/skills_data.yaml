@@ -296,7 +296,7 @@
 - name: "mcp-builder"
   path: "mcp-builder/SKILL.md"
   description: "Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers."
-  category: "frontend"
+  category: "dev-tools"
   has_scripts: true
   has_references: false
   argument_hint: "[service or API to integrate]"

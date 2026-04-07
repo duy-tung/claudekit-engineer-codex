@@ -73,6 +73,7 @@ EXACT_CATEGORY_MAP = {
     "gkg": "dev-tools",
     "kanban": "dev-tools",
     "llms": "dev-tools",
+    "mcp-builder": "dev-tools",
     "mintlify": "dev-tools",
     "plans-kanban": "dev-tools",
     "scout": "dev-tools",
@@ -165,6 +166,8 @@ def categorize_skill(name: str) -> str:
         return EXACT_CATEGORY_MAP[lower_name]
     if any(x in lower_name for x in ["ai-", "gemini", "multimodal", "adk"]):
         return "ai-ml"
+    if any(x in lower_name for x in ["mcp", "skill-creator", "repomix", "docs-seeker"]):
+        return "dev-tools"
     if any(x in lower_name for x in ["frontend", "ui", "design", "aesthetic", "threejs"]):
         return "frontend"
     if any(x in lower_name for x in ["backend", "auth", "payment"]):
@@ -173,8 +176,6 @@ def categorize_skill(name: str) -> str:
         return "infrastructure"
     if any(x in lower_name for x in ["database", "mongodb", "postgresql", "sql"]):
         return "database"
-    if any(x in lower_name for x in ["mcp", "skill-creator", "repomix", "docs-seeker"]):
-        return "dev-tools"
     if any(x in lower_name for x in ["media", "chrome-devtools", "document-skills"]):
         return "multimedia"
     if any(x in lower_name for x in ["web-frameworks", "mobile", "shopify"]):

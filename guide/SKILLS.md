@@ -64,12 +64,6 @@ Build React/TypeScript frontends with modern patterns. Use for components, Suspe
 
 **Location**: `.claude/skills/frontend-development/SKILL.md`
 
-### 📦 `mcp-builder`
-
-Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers.
-
-**Location**: `.claude/skills/mcp-builder/SKILL.md`
-
 ### `react-best-practices`
 
 React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.
@@ -197,6 +191,12 @@ AI agent orchestration board for task visualization and team coordination.
 Generate llms.txt files from docs or codebase scanning. Follows llmstxt.org spec. Use for LLM-friendly site indexes, documentation summaries, AI context optimization.
 
 **Location**: `.claude/skills/llms/SKILL.md`
+
+### 📦 `mcp-builder`
+
+Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers.
+
+**Location**: `.claude/skills/mcp-builder/SKILL.md`
 
 ### 📦 📚 `mcp-management`
 
