@@ -260,7 +260,7 @@ Create isolated git worktree for parallel development in monorepos.
 
 ### 📚 `xia`
 
-Extract, compare, port, or adapt a feature from a GitHub repository into the current project. Use when the user wants to copy behavior from another repo, study how another codebase implements something, compare implementations, or rewrite a feature in the local stack. Triggers on: 'port from', 'copy from repo', 'like how X does it', 'clone feature from', 'adapt from', 'bring feature from', 'borrow from', 'take from repo', 'xia', 'xi a', 'xia feature'.
+Extract, compare, port, or adapt a feature from a GitHub repository or local repo path into the current project. Use when the user wants to copy behavior from another repo, study how another codebase implements something, compare implementations, or rewrite a feature in the local stack. Triggers on: 'port from', 'copy from repo', 'like how X does it', 'clone feature from', 'adapt from', 'bring feature from', 'borrow from', 'take from repo', 'xia', 'xi a', 'xia feature'.
 
 **Location**: `.claude/skills/xia/SKILL.md`
 

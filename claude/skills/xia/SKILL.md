@@ -1,7 +1,7 @@
 ---
 name: ck:xia
-description: "Extract, compare, port, or adapt a feature from a GitHub repository into the current project. Use when the user wants to copy behavior from another repo, study how another codebase implements something, compare implementations, or rewrite a feature in the local stack. Triggers on: 'port from', 'copy from repo', 'like how X does it', 'clone feature from', 'adapt from', 'bring feature from', 'borrow from', 'take from repo', 'xia', 'xi a', 'xia feature'."
-argument-hint: "<github-url-or-owner/repo> [feature] [--compare|--copy|--improve|--port] [--auto|--fast]"
+description: "Extract, compare, port, or adapt a feature from a GitHub repository or local repo path into the current project. Use when the user wants to copy behavior from another repo, study how another codebase implements something, compare implementations, or rewrite a feature in the local stack. Triggers on: 'port from', 'copy from repo', 'like how X does it', 'clone feature from', 'adapt from', 'bring feature from', 'borrow from', 'take from repo', 'xia', 'xi a', 'xia feature'."
+argument-hint: "<github-url-or-owner/repo|local-path> [feature] [--compare|--copy|--improve|--port] [--auto|--fast]"
 metadata:
   author: claudekit
   version: "1.0.0"
@@ -9,7 +9,7 @@ metadata:
 
 # Xia
 
-Extract, analyze, and port features from any GitHub repository into your project.
+Extract, analyze, and port features from any GitHub repository or local repo path into your project.
 
 Principles: understand before copy | challenge before implement | adapt, don't transplant
 
@@ -19,7 +19,7 @@ Not for: full project cloning (`ck:bootstrap`), simple file copy, or package ins
 ## Usage
 
 ```text
-/ck:xia <github-url|owner/repo> [feature-description] [--compare|--copy|--improve|--port] [--auto|--fast]
+/ck:xia <github-url|owner/repo|local-path> [feature-description] [--compare|--copy|--improve|--port] [--auto|--fast]
 ```
 
 Modes:
@@ -52,12 +52,18 @@ Hard gate: Phase 4 must complete before Phase 5. Do not plan implementation befo
 
 Understand the source repo and locate the target feature.
 
-1. Pack the source with `/ck:repomix` using remote mode, scoped with include patterns if the feature hint is narrow.
+1. Pack the source with `/ck:repomix`.
+   - GitHub source: use remote mode.
+   - Local source: use the local path directly.
+   - Scope with include patterns if the feature hint is narrow.
 2. Read the source README or docs when available.
 3. Use the `researcher` agent to understand purpose, trade-offs, and community context.
 4. Use `/ck:scout` on the local project to map architecture, similar features, and integration points.
 
-Output: a source map (key files, dependencies, patterns) and a local map (integration surface).
+Output:
+- source manifest: repo or local path, branch or ref, resolved commit SHA when available, narrowed path scope
+- source map: key files, dependencies, patterns
+- local map: integration surface
 
 ### 2. Map
 
@@ -70,6 +76,12 @@ Dissect the feature into layers:
 5. Identify async or concurrency behavior.
 
 Estimate the work: files to create, files to modify, config changes, migrations, and likely risks.
+
+If you delegate to `researcher`, `scout`, or `planner`, pass:
+- work context
+- reports path
+- plans path
+- required status format (`DONE`, `DONE_WITH_CONCERNS`, `BLOCKED`, `NEEDS_CONTEXT`)
 
 ### 3. Analyze
 
@@ -102,6 +114,8 @@ Produce at least 5 challenge questions. For each one, include:
 
 If there are 3 or more competing concerns, activate `/ck:brainstorm`.
 
+If intent is ambiguous, default to `--compare` before recommending implementation work.
+
 Present a decision matrix:
 
 | Decision | Source's way | Our way | Recommendation |
@@ -114,14 +128,18 @@ In non-fast mode, get approval before continuing.
 ### 5. Plan
 
 Delegate to `/ck:plan` with:
+- source manifest
 - the source anatomy
 - dependency matrix
 - approved challenge decisions
+- decision matrix
+- risk score
 - selected mode
 
 Rules:
 - `--compare`: produce a comparison report only
 - all other modes: produce an implementation plan with rollback strategy
+- `xia` is a front door, not a second orchestration stack. Keep planning and delivery ownership in `plan` and `cook`.
 
 ### 6. Deliver
 
@@ -135,6 +153,13 @@ Implementation handoff text:
 ```text
 Plan ready at ./plans/<plan-dir>/plan.md. To implement, run /ck:cook <plan-path>.
 ```
+
+The handoff must include:
+- source manifest
+- source anatomy
+- dependency matrix
+- decision matrix
+- risk score
 
 ## Compare Mode Output
 
