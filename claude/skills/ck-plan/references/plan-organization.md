@@ -181,3 +181,16 @@ Each phase file should contain:
 **Next Steps**
 - Dependencies
 - Follow-up tasks
+
+### Deep / TDD Extensions
+
+When `--deep` is used, add:
+- a file inventory table with action, rough size, and test impact
+- a test scenario matrix for critical, high, and medium paths
+- a dependency map that calls out links to other phases
+
+When `--tdd` is used, add:
+- a **Tests Before** section for regression coverage written first
+- a **Refactor** section describing the protected code changes
+- a **Tests After** section for new behavior introduced in that phase
+- a regression gate listing the compile/test command that must pass

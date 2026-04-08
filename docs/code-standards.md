@@ -104,12 +104,15 @@ project-root/
   - `251026-from-tester-to-debugger-test-failures-report.md`
 
 **Plans** (`plans/`):
-- Format: `{date}-[feature-name]-plan.md`
-- Use date prefix for version tracking (format from `$CK_PLAN_DATE_FORMAT`)
-- Descriptive feature names in kebab-case
+- Format: `{date}-[feature-name]/plan.md`
+- Use the date prefix for the plan directory name (format from
+  `$CK_PLAN_DATE_FORMAT`)
+- Use descriptive feature names in kebab-case for the directory slug
+- Keep related `phase-XX-*.md`, `reports/`, and `research/` files inside the
+  same plan directory
 - Examples:
-  - `251026-user-authentication-plan.md`
-  - `251026-database-migration-plan.md`
+  - `plans/251026-user-authentication/plan.md`
+  - `plans/251026-database-migration/plan.md`
 
 **Research Reports** (`plans/<plan-name>/research/`):
 - Format: `{date}-[research-topic].md`
