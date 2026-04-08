@@ -340,6 +340,8 @@ This project includes several Gemini-powered skills that require a Google Gemini
 - **gemini-image-gen** - AI image generation
 - **gemini-vision** - Image analysis and vision capabilities
 
+For image generation specifically, current Gemini/Imagen API models are paid-tier only. If you want an alternative routing path for image generation, the engineer kit also supports `OPENROUTER_API_KEY` for OpenRouter-backed image models.
+
 ### API Key Setup
 
 The Gemini skills check for `GEMINI_API_KEY` in the following order (priority from highest to lowest):
