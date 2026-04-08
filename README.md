@@ -101,7 +101,10 @@ A comprehensive boilerplate template for building professional software projects
 
    # now you can use these specific commands
    /ck:plan "implement user authentication"
+   /ck:plan --deep "refactor the notification pipeline"
+   /ck:plan --tdd "refactor auth middleware safely"
    /ck:cook "add database integration"
+   /ck:cook "refactor auth middleware" --tdd
    ```
 
 📖 **Learn more from our docs:** [https://docs.claudekit.cc](https://docs.claudekit.cc)
@@ -229,15 +232,18 @@ Use when tasks have dependencies:
 ```bash
 # Planning → Implementation → Testing → Review
 /ck:plan "implement user dashboard"
-# Wait for plan completion, then:
-/ck:cook  # Executes the plan
-# After implementation:
-/ck:test "validate dashboard functionality"
-# Finally:
-/ck:code-review "ensure code quality standards"
+# For large refactors:
+/ck:plan --deep "untangle the dashboard data flow"
+/ck:plan --tdd "refactor dashboard state safely"
+# After planning, use the exact absolute-path handoff command emitted by plan:
+/ck:cook /absolute/path/to/plans/YYMMDD-HHMM-dashboard/plan.md
+# If planning used --tdd, preserve it on handoff:
+/ck:cook /absolute/path/to/plans/YYMMDD-HHMM-dashboard/plan.md --tdd
+# Cook already runs testing and code review as part of the workflow.
 
 # Alternative: Use /ck:cook for standalone implementation (plans internally)
 /ck:cook "implement user dashboard"
+/ck:cook "refactor dashboard state" --tdd
 ```
 
 ### Parallel Execution
@@ -263,16 +269,16 @@ planner agent spawns:
 ```bash
 # Start with planning
 /ck:plan "add real-time notifications"
+/ck:plan --deep "refactor the notifications delivery pipeline"
 
 # Research phase (automatic)
 # Multiple researcher agents investigate approaches
 
 # Implementation
 /ck:cook "implement notification system"
+/ck:cook "refactor notification retries" --tdd
 
-# Quality assurance
-/ck:test
-/ck:code-review
+# Cook includes testing and code review in the workflow.
 
 # Documentation update
 /ck:docs

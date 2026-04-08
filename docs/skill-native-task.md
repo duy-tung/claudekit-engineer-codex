@@ -139,9 +139,9 @@ Step 3.4 (addBlockedBy: [P2-id])   ← critical steps share phase dependency
 4. `TaskUpdate(status: "in_progress")` khi bắt đầu task
 
 **Step 6 Finalize:**
-1. `TaskUpdate` marks all session tasks complete
-2. Spawn `project-manager` agent để chạy full-plan sync-back (sweep all phases + backfill stale completed items)
-3. Sync checkboxes `[ ]` → `[x]` across all phase files, rồi update `plan.md`
+1. Spawn `project-manager` agent để chạy full-plan sync-back (sweep all phases + backfill stale completed items)
+2. Sync checkboxes `[ ]` → `[x]` across all phase files, rồi update `plan.md`
+3. `TaskUpdate` marks all session tasks complete after sync-back confirmation
 
 **Same-Session Handoff:**
 ```

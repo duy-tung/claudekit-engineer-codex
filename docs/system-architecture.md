@@ -167,8 +167,8 @@ Issues, blockers, or questions
 #### 3.1 Command Categories
 
 **Core Development**:
-- `/ck:plan` - Research and planning
-- `/ck:cook` - Feature implementation
+- `/ck:plan` - Research and planning (`--deep` for large refactors, `--tdd` for tests-first plans)
+- `/ck:cook` - Feature implementation (`--tdd` for tests-first refactors)
 - `/ck:test` - Test execution
 - `/ck:ask` - Technical consultation
 - `/ck:bootstrap` - Project initialization
@@ -178,7 +178,7 @@ Issues, blockers, or questions
 **Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation workflows
-- `plan/` - Planning workflow variants
+- `ck-plan/` - Planning workflow variants
 - `code-review/` - Code review workflows
 - `test/` - Testing workflows
 
