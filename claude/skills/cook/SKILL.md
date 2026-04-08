@@ -1,7 +1,7 @@
 ---
 name: ck:cook
 description: "ALWAYS activate this skill before implementing EVERY feature, plan, or fix."
-argument-hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test]"
+argument-hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test] [--tdd]"
 metadata:
   author: claudekit
   version: "2.1.1"
@@ -28,10 +28,15 @@ End-to-end implementation with automatic workflow detection.
 - `--no-test`: Skip testing step
 - `--auto`: Auto-approve all steps
 
+**Composable flags** (combine with any mode):
+- `--tdd`: Tests-first per phase — write tests for current behavior before
+  refactoring, then verify they still pass after the implementation step
+
 **Example:**
 ```
 /ck:cook "Add user authentication to the app" --fast
 /ck:cook path/to/plan.md --auto
+/ck:cook "Refactor auth middleware" --tdd
 ```
 
 <HARD-GATE>

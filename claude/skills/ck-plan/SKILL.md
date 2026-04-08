@@ -1,7 +1,7 @@
 ---
 name: ck:plan
 description: "Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
-argument-hint: "[task] OR [archive|red-team|validate]"
+argument-hint: "[task] [--fast|--hard|--deep|--parallel|--two] [--tdd|--no-tasks] OR [archive|red-team|validate]"
 license: MIT
 metadata:
   author: claudekit
@@ -57,10 +57,15 @@ Default: `--auto` (analyze task complexity and auto-pick mode).
 | `--auto` | Auto-detect | Follows mode | Follows mode | Follows mode | Follows mode |
 | `--fast` | Fast | Skip | Skip | Skip | `--auto` |
 | `--hard` | Hard | 2 researchers | Yes | Optional | (none) |
+| `--deep` | Deep | 2-3 researchers + per-phase scout | Yes | Yes | (none) |
 | `--parallel` | Parallel | 2 researchers | Yes | Optional | `--parallel` |
 | `--two` | Two approaches | 2+ researchers | After selection | After selection | (none) |
 
-Add `--no-tasks` to skip task hydration in any mode.
+**Composable flags** (combine with any mode):
+| Flag | Effect |
+|------|--------|
+| `--tdd` | Add tests-first structure to each phase for regression-safe refactors |
+| `--no-tasks` | Skip task hydration |
 
 Load: `references/workflow-modes.md` for auto-detection logic, per-mode workflows, context reminders.
 
@@ -106,7 +111,7 @@ flowchart TD
     B --> C[Scope Challenge]
     C --> D[Mode Detection]
     D -->|fast| E[Skip Research]
-    D -->|hard/parallel/two| F[Spawn Researchers]
+    D -->|hard/deep/parallel/two| F[Spawn Researchers]
     E --> G[Codebase Analysis]
     F --> G
     G --> H[Write Plan via Planner]
@@ -133,8 +138,8 @@ flowchart TD
 3. **Research Phase** → Spawn researchers (skip in fast mode)
 4. **Codebase Analysis** → Read docs, scout if needed
 5. **Plan Documentation** → Write comprehensive plan via planner subagent
-6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/parallel/two modes)
-7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/parallel/two modes)
+6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/deep/parallel/two modes)
+7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/deep/parallel/two modes)
 8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
 9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
 10. **Journal** → Run `/ck:journal` to write a concise technical journal entry upon completion
