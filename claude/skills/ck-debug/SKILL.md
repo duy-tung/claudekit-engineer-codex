@@ -123,3 +123,9 @@ Stop and follow process if thinking:
 - "Tests pass, we're done"
 
 **All mean:** Return to systematic process.
+
+## Workflow Position
+
+**Typically follows:** `/ck:scout` (after locating relevant code)
+**Typically precedes:** `/ck:fix` (fix the diagnosed issue), `/ck:brainstorm` (explore solutions for complex problems)
+**Related:** `/ck:scout` (discover before debugging), `/ck:fix` (fix after diagnosing)

@@ -163,3 +163,9 @@ Human review required at these checkpoints (skipped with `--auto`):
 - `references/workflow-steps.md` - Detailed step definitions for all modes
 - `references/review-cycle.md` - Interactive and auto review processes
 - `references/subagent-patterns.md` - Subagent invocation patterns
+
+## Workflow Position
+
+**Typically follows:** `/ck:plan` (execute a plan), `/ck:brainstorm` (implement agreed solution)
+**Typically precedes:** `/ck:code-review` (review after implementation), `/ck:test` (validate changes)
+**Related:** `/ck:fix` (alternative for bug fixes), `/ck:plan` (create plan before cooking)

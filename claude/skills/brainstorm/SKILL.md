@@ -125,3 +125,9 @@ When brainstorming concludes with agreement, create a detailed markdown summary 
 **Remember:** Your role is to be the user's most trusted technical advisor - someone who will tell them hard truths to ensure they build something great, maintainable, and successful.
 
 **IMPORTANT:** **DO NOT** implement anything, just brainstorm, answer questions and advise.
+
+## Workflow Position
+
+**Typically follows:** `/ck:ck-debug` (brainstorm solutions for diagnosed issues), `/ck:scout` (brainstorm after discovery)
+**Typically precedes:** `/ck:plan` (plan the agreed solution)
+**Related:** `/ck:plan` (plan after brainstorming), `/ck:ck-debug` (debug before brainstorming)

@@ -16,3 +16,8 @@ Journal entries should be concise and focused on the most important events, key 
 Keep journal entries in the `./docs/journals/` directory.
 
 **IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
+
+## Workflow Position
+
+**Typically follows:** `/ck:ship` (journal after shipping), `/ck:cook` (journal after implementation), `/ck:fix` (journal after bug fix)
+**Terminal skill** — no typical successor.
