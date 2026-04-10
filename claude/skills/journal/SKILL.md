@@ -1,6 +1,8 @@
 ---
 name: ck:journal
-description: "Write journal entries analyzing recent changes and session reflections."
+description: "Write technical journal entries analyzing recent changes. Use for session reflections, change analysis, decision documentation."
+category: utilities
+keywords: [journal, reflection, changes, session]
 argument-hint: "[topic or reflection]"
 metadata:
   author: claudekit

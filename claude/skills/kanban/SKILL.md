@@ -1,6 +1,8 @@
 ---
 name: ck:kanban
-description: "AI agent orchestration board for task visualization and team coordination."
+description: "Orchestrate AI agent tasks on a visual board. Use for multi-agent coordination, task tracking, team workflows. Not for plan files (use plans-kanban)."
+category: dev-tools
+keywords: [kanban, tasks, agents, orchestration]
 argument-hint: "[dir]"
 metadata:
   author: claudekit

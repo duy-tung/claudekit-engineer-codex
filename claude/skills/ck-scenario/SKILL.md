@@ -1,6 +1,8 @@
 ---
 name: ck:scenario
 description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early."
+category: utilities
+keywords: [edge-cases, test-scenarios, dimensions]
 argument-hint: "<file path or feature description>"
 metadata:
   author: claudekit

@@ -1,6 +1,8 @@
 ---
 name: ck:use-mcp
-description: "Utilize MCP server tools with intelligent discovery and execution."
+description: "Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery."
+category: dev-tools
+keywords: [MCP, tools, execute, discovery]
 argument-hint: "[task]"
 metadata:
   author: claudekit

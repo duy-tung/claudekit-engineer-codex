@@ -1,6 +1,8 @@
 ---
 name: ck:coding-level
-description: "Set coding experience level for tailored explanations and output format."
+description: "Set coding experience level for tailored output. Use for adjusting explanation depth, code complexity, and response format to user expertise."
+category: utilities
+keywords: [experience, level, explanation, format]
 argument-hint: "[0-5]"
 metadata:
   author: claudekit

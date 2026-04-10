@@ -1,6 +1,8 @@
 ---
 name: ck:ship
 description: "Ship pipeline: merge main, test, review, commit, push, PR. Single command from feature branch to PR URL. Use for shipping official releases to main/master or beta releases to dev/beta branches."
+category: dev-tools
+keywords: [ship, PR, merge, push, release]
 argument-hint: "[official|beta] [--skip-tests] [--skip-review] [--skip-journal] [--skip-docs] [--dry-run]"
 license: MIT
 metadata:

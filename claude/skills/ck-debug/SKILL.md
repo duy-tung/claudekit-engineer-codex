@@ -1,6 +1,8 @@
 ---
 name: ck:debug
 description: "Debug systematically with root cause analysis before fixes. Use for bugs, test failures, unexpected behavior, performance issues, call stack tracing, multi-layer validation, log analysis, CI/CD failures, database diagnostics, system investigation."
+category: utilities
+keywords: [debug, root-cause, bugs, test-failures]
 languages: all
 argument-hint: "[error or issue description]"
 metadata:

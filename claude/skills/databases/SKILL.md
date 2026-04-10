@@ -1,6 +1,8 @@
 ---
 name: ck:databases
 description: Design schemas, write queries for MongoDB and PostgreSQL. Use for database design, SQL/NoSQL queries, aggregation pipelines, indexes, migrations, replication, performance optimization, psql CLI.
+category: database
+keywords: [mongodb, postgresql, sql, schemas, queries]
 license: MIT
 argument-hint: "[query or schema task]"
 metadata:

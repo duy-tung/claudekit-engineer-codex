@@ -1,6 +1,8 @@
 ---
 name: ck:bootstrap
 description: "Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent)."
+category: utilities
+keywords: [scaffold, project, setup, boilerplate]
 license: MIT
 argument-hint: "[requirements] [--full|--auto|--fast|--parallel]"
 metadata:

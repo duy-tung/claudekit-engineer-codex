@@ -2,9 +2,9 @@
 
 Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
-**Last Updated**: 2026-04-07
+**Last Updated**: 2026-04-10
 
-**Total Skills**: 81
+**Total Skills**: 82
 
 ## Categories
 
@@ -48,7 +48,7 @@ Build AI agents with Google ADK Python. Multi-agent systems, A2A protocol, MCP t
 
 ### 📦 📚 `ckm:design`
 
-Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro), social photos (HTML→screenshot, multi-platform). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, create social photos, social media images, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Pinterest, TikTok, Threads, Google Ads.
+Design brand identity, logos, banners, and visual assets. Use for brand systems, design tokens, corporate identity programs. Not for UI code patterns.
 
 **Location**: `.claude/skills/design/SKILL.md`
 
@@ -66,13 +66,13 @@ Build React/TypeScript frontends with modern patterns. Use for components, Suspe
 
 ### `react-best-practices`
 
-React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.
+Apply React and Next.js performance optimization patterns from Vercel Engineering. Use for component optimization, rendering performance, bundle analysis.
 
 **Location**: `.claude/skills/react-best-practices/SKILL.md`
 
 ### `remotion`
 
-Best practices for Remotion - Video creation in React
+Build video content with Remotion in React. Use for programmatic video creation, animated sequences, data-driven video rendering.
 
 **Location**: `.claude/skills/remotion/SKILL.md`
 
@@ -90,7 +90,7 @@ AI design generation with Google Stitch. Generate UI designs from text prompts, 
 
 ### 📦 📚 `threejs`
 
-Build 3D web apps with Three.js (WebGL/WebGPU). 556 searchable examples, 60 API classes, 20 use cases. Actions: create 3D scene, load model, add animation, implement physics, build VR/XR. Topics: GLTF loader, PBR materials, particle effects, shadows, post-processing, compute shaders, TSL. Integrations: WebGPU, physics engines, spatial audio.
+Build 3D web experiences with Three.js. Use for WebGL/WebGPU scenes, GLTF models, animations, physics, VR/XR. Supports 556 searchable examples.
 
 **Location**: `.claude/skills/threejs/SKILL.md`
 
@@ -156,11 +156,23 @@ Design schemas, write queries for MongoDB and PostgreSQL. Use for database desig
 
 ## Development Tools
 
+### 📚 `agent-browser`
+
+AI-optimized browser automation CLI with context-efficient snapshots. Use for long autonomous sessions, self-verifying workflows, video recording, and cloud browser testing (Browserbase).
+
+**Location**: `.claude/skills/agent-browser/SKILL.md`
+
 ### 📦 📚 `docs-seeker`
 
 Search library/framework documentation via llms.txt (context7.com). Use for API docs, GitHub repository analysis, technical documentation lookup, latest library features.
 
 **Location**: `.claude/skills/docs-seeker/SKILL.md`
+
+### 📚 `excalidraw`
+
+Create Excalidraw diagrams — architecture, data flow, workflows, system design. Use when user wants to visualize, diagram, draw architecture, show data flow, create flowcharts, map components, or export .excalidraw files to PNG/SVG. Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright rendering. Also supports zero-config codebase auto-diagramming — just say "diagram this repo" or "visualize the architecture".
+
+**Location**: `.claude/skills/excalidraw/SKILL.md`
 
 ### `find-skills`
 
@@ -182,7 +194,7 @@ Semantic code analysis with GitLab Knowledge Graph. Use for go-to-definition, fi
 
 ### `kanban`
 
-AI agent orchestration board for task visualization and team coordination.
+Orchestrate AI agent tasks on a visual board. Use for multi-agent coordination, task tracking, team workflows. Not for plan files (use plans-kanban).
 
 **Location**: `.claude/skills/kanban/SKILL.md`
 
@@ -248,13 +260,19 @@ Orchestrate Agent Teams for parallel multi-session collaboration. Use for resear
 
 ### `use-mcp`
 
-Utilize MCP server tools with intelligent discovery and execution.
+Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery.
 
 **Location**: `.claude/skills/use-mcp/SKILL.md`
 
+### 📦 📚 `web-testing`
+
+Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visual/a11y testing. Use for test automation, flakiness, Core Web Vitals, mobile gestures, cross-browser.
+
+**Location**: `.claude/skills/web-testing/SKILL.md`
+
 ### 📦 `worktree`
 
-Create isolated git worktree for parallel development in monorepos.
+Create isolated git worktrees for parallel development. Use for feature isolation, monorepo branches, concurrent development workflows.
 
 **Location**: `.claude/skills/worktree/SKILL.md`
 
@@ -265,12 +283,6 @@ Extract, compare, port, or adapt a feature from a GitHub repository or local rep
 **Location**: `.claude/skills/xia/SKILL.md`
 
 ## Multimedia & Processing
-
-### 📚 `agent-browser`
-
-AI-optimized browser automation CLI with context-efficient snapshots. Use for long autonomous sessions, self-verifying workflows, video recording, and cloud browser testing (Browserbase).
-
-**Location**: `.claude/skills/agent-browser/SKILL.md`
 
 ### 📦 📚 `chrome-devtools`
 
@@ -301,12 +313,6 @@ Extract text/tables, create, merge, split PDFs. Fill PDF forms programmatically.
 Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation.
 
 **Location**: `.claude/skills/document-skills/pptx/SKILL.md`
-
-### 📦 📚 `web-testing`
-
-Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visual/a11y testing. Use for test automation, flakiness, Core Web Vitals, mobile gestures, cross-browser.
-
-**Location**: `.claude/skills/web-testing/SKILL.md`
 
 ### `xlsx`
 
@@ -344,13 +350,13 @@ Build with Next.js (App Router, RSC, SSR, ISR), Turborepo monorepos. Use for Rea
 
 ### `ask`
 
-Answer technical and architectural questions with expert consultation.
+Answer technical and architectural questions with expert analysis. Use for design decisions, best practices evaluation, solution comparison.
 
 **Location**: `.claude/skills/ask/SKILL.md`
 
 ### 📚 `autoresearch`
 
-Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation.
+Run autonomous optimization loops (deprecated alias for ck-loop). Use for metric-driven iteration, coverage improvement, performance tuning.
 
 **Location**: `.claude/skills/ck-autoresearch/SKILL.md`
 
@@ -374,7 +380,7 @@ Review code quality with adversarial rigor. Supports input modes: pending change
 
 ### `coding-level`
 
-Set coding experience level for tailored explanations and output format.
+Set coding experience level for tailored output. Use for adjusting explanation depth, code complexity, and response format to user expertise.
 
 **Location**: `.claude/skills/coding-level/SKILL.md`
 
@@ -386,7 +392,7 @@ Check context usage limits, monitor time remaining, optimize token consumption, 
 
 ### 📚 `cook`
 
-ALWAYS activate this skill before implementing EVERY feature, plan, or fix.
+Implement features, plans, and fixes with structured workflow. Use for feature development, plan execution, code implementation pipelines.
 
 **Location**: `.claude/skills/cook/SKILL.md`
 
@@ -404,19 +410,19 @@ Debug systematically with root cause analysis before fixes. Use for bugs, test f
 
 ### 📚 `docs`
 
-Analyze codebase and manage project documentation — init, update, summarize.
+Analyze codebase and manage project documentation. Use for doc initialization, updates, summaries, codebase analysis.
 
 **Location**: `.claude/skills/docs/SKILL.md`
 
 ### 📚 `fix`
 
-ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem.
+Fix bugs, errors, test failures, and CI/CD issues with intelligent routing. Use for type errors, lint issues, log errors, UI bugs, code problems.
 
 **Location**: `.claude/skills/fix/SKILL.md`
 
 ### `journal`
 
-Write journal entries analyzing recent changes and session reflections.
+Write technical journal entries analyzing recent changes. Use for session reflections, change analysis, decision documentation.
 
 **Location**: `.claude/skills/journal/SKILL.md`
 
@@ -452,7 +458,7 @@ Plan implementations, design architectures, create technical roadmaps with detai
 
 ### 📚 `preview`
 
-View files/directories OR generate visual explanations, slides, diagrams (Markdown or self-contained HTML).
+View files or generate visual explanations, slides, and diagrams. Use for code walkthroughs, architecture visualization, HTML/Markdown presentations.
 
 **Location**: `.claude/skills/preview/SKILL.md`
 
@@ -482,7 +488,7 @@ Research technical solutions, analyze architectures, gather requirements thoroug
 
 ### 📚 `retro`
 
-Data-driven sprint retrospective. Gathers git metrics (commits, LOC, hotspots, churn), computes derived health indicators, and generates a structured markdown or HTML report. Use after sprints, weekly check-ins, or any review period.
+Generate data-driven sprint retrospectives from git metrics. Use for sprint reviews, commit analysis, code health indicators, team velocity.
 
 **Location**: `.claude/skills/retro/SKILL.md`
 
@@ -518,14 +524,14 @@ Run unit, integration, e2e, and UI tests. Use for test execution, coverage analy
 
 ### `watzup`
 
-Review recent changes and wrap up the current work session.
+Review recent changes and wrap up the current work session. Use for session summaries, change review, progress tracking.
 
 **Location**: `.claude/skills/watzup/SKILL.md`
 
 ## Other
 
-### 📚 `excalidraw`
+### 📦 `show-off`
 
-Create Excalidraw diagrams — architecture, data flow, workflows, system design. Use when user wants to visualize, diagram, draw architecture, show data flow, create flowcharts, map components, or export .excalidraw files to PNG/SVG. Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright rendering. Also supports zero-config codebase auto-diagramming — just say "diagram this repo" or "visualize the architecture".
+Create stunning self-contained HTML pages to showcase work. Use for demos, visual presentations, interactive showcases.
 
-**Location**: `.claude/skills/excalidraw/SKILL.md`
+**Location**: `.claude/skills/show-off/SKILL.md`

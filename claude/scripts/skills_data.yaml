@@ -1,7 +1,7 @@
 - name: "agent-browser"
   path: "agent-browser/SKILL.md"
   description: "AI-optimized browser automation CLI with context-efficient snapshots. Use for long autonomous sessions, self-verifying workflows, video recording, and cloud browser testing (Browserbase)."
-  category: "multimedia"
+  category: "dev-tools"
   has_scripts: false
   has_references: true
   argument_hint: "[url or task]"
@@ -11,7 +11,7 @@
   category: "ai-ml"
   has_scripts: true
   has_references: true
-  argument_hint: "[concept] [--mode search|creative|wild|all] [--skip]"
+  argument_hint: "[concept] [--mode search|creative|wild|all] [--provider auto|google|openrouter] [--skip]"
 - name: "ai-multimodal"
   path: "ai-multimodal/SKILL.md"
   description: "Analyze images/audio/video with Gemini API (better vision than Claude). Generate images (Imagen 4, Nano Banana 2, MiniMax), videos (Veo 3, Hailuo), speech (MiniMax TTS), music (MiniMax). Use for vision analysis, transcription, OCR, design extraction, multimodal AI."
@@ -21,7 +21,7 @@
   argument_hint: "[file-path] [prompt]"
 - name: "ask"
   path: "ask/SKILL.md"
-  description: "Answer technical and architectural questions with expert consultation."
+  description: "Answer technical and architectural questions with expert analysis. Use for design decisions, best practices evaluation, solution comparison."
   category: "utilities"
   has_scripts: false
   has_references: false
@@ -63,7 +63,7 @@
   argument_hint: "[url or task]"
 - name: "ck-autoresearch"
   path: "ck-autoresearch/SKILL.md"
-  description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."
+  description: "Run autonomous optimization loops (deprecated alias for ck-loop). Use for metric-driven iteration, coverage improvement, performance tuning."
   category: "utilities"
   has_scripts: false
   has_references: true
@@ -88,7 +88,7 @@
   category: "utilities"
   has_scripts: false
   has_references: true
-  argument_hint: "[task] OR [archive|red-team|validate]"
+  argument_hint: "[task] [--fast|--hard|--deep|--parallel|--two] [--tdd|--no-tasks] OR [archive|red-team|validate]"
 - name: "ck-predict"
   path: "ck-predict/SKILL.md"
   description: "5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes."
@@ -119,7 +119,7 @@
   argument_hint: "[#PR | COMMIT | --pending | codebase [parallel]]"
 - name: "coding-level"
   path: "coding-level/SKILL.md"
-  description: "Set coding experience level for tailored explanations and output format."
+  description: "Set coding experience level for tailored output. Use for adjusting explanation depth, code complexity, and response format to user expertise."
   category: "utilities"
   has_scripts: false
   has_references: false
@@ -133,11 +133,11 @@
   argument_hint: "[topic or question]"
 - name: "cook"
   path: "cook/SKILL.md"
-  description: "ALWAYS activate this skill before implementing EVERY feature, plan, or fix."
+  description: "Implement features, plans, and fixes with structured workflow. Use for feature development, plan execution, code implementation pipelines."
   category: "utilities"
   has_scripts: false
   has_references: true
-  argument_hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test]"
+  argument_hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test] [--tdd]"
 - name: "copywriting"
   path: "copywriting/SKILL.md"
   description: "Conversion copywriting formulas, headline templates, email copy patterns, landing page structures, CTA optimization, and writing style extraction. Activate for writing high-converting copy, crafting headlines, email campaigns, landing pages, or applying custom writing styles from assets/writing-styles/ directory."
@@ -161,7 +161,7 @@
   argument_hint: "[platform] [environment]"
 - name: "design"
   path: "design/SKILL.md"
-  description: "Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro), social photos (HTML→screenshot, multi-platform). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, create social photos, social media images, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Pinterest, TikTok, Threads, Google Ads."
+  description: "Design brand identity, logos, banners, and visual assets. Use for brand systems, design tokens, corporate identity programs. Not for UI code patterns."
   category: "frontend"
   has_scripts: true
   has_references: true
@@ -175,7 +175,7 @@
   argument_hint: "[platform] [task]"
 - name: "docs"
   path: "docs/SKILL.md"
-  description: "Analyze codebase and manage project documentation — init, update, summarize."
+  description: "Analyze codebase and manage project documentation. Use for doc initialization, updates, summaries, codebase analysis."
   category: "utilities"
   has_scripts: false
   has_references: true
@@ -214,7 +214,7 @@
 - name: "excalidraw"
   path: "excalidraw/SKILL.md"
   description: "Create Excalidraw diagrams — architecture, data flow, workflows, system design. Use when user wants to visualize, diagram, draw architecture, show data flow, create flowcharts, map components, or export .excalidraw files to PNG/SVG. Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright rendering. Also supports zero-config codebase auto-diagramming — just say \"diagram this repo\" or \"visualize the architecture\"."
-  category: "other"
+  category: "dev-tools"
   has_scripts: false
   has_references: true
 - name: "find-skills"
@@ -226,7 +226,7 @@
   argument_hint: "[capability or task description]"
 - name: "fix"
   path: "fix/SKILL.md"
-  description: "ALWAYS activate this skill before fixing ANY bug, error, test failure, CI/CD issue, type error, lint, log error, UI issue, code problem."
+  description: "Fix bugs, errors, test failures, and CI/CD issues with intelligent routing. Use for type errors, lint issues, log errors, UI bugs, code problems."
   category: "utilities"
   has_scripts: false
   has_references: true
@@ -267,14 +267,14 @@
   argument_hint: "[agent or feature]"
 - name: "journal"
   path: "journal/SKILL.md"
-  description: "Write journal entries analyzing recent changes and session reflections."
+  description: "Write technical journal entries analyzing recent changes. Use for session reflections, change analysis, decision documentation."
   category: "utilities"
   has_scripts: false
   has_references: false
   argument_hint: "[topic or reflection]"
 - name: "kanban"
   path: "kanban/SKILL.md"
-  description: "AI agent orchestration board for task visualization and team coordination."
+  description: "Orchestrate AI agent tasks on a visual board. Use for multi-agent coordination, task tracking, team workflows. Not for plan files (use plans-kanban)."
   category: "dev-tools"
   has_scripts: false
   has_references: false
@@ -351,7 +351,7 @@
   argument_hint: "[plans-dir]"
 - name: "preview"
   path: "preview/SKILL.md"
-  description: "View files/directories OR generate visual explanations, slides, diagrams (Markdown or self-contained HTML)."
+  description: "View files or generate visual explanations, slides, and diagrams. Use for code walkthroughs, architecture visualization, HTML/Markdown presentations."
   category: "utilities"
   has_scripts: false
   has_references: true
@@ -379,14 +379,14 @@
   argument_hint: "[directories or files to organize]"
 - name: "react-best-practices"
   path: "react-best-practices/SKILL.md"
-  description: "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements."
+  description: "Apply React and Next.js performance optimization patterns from Vercel Engineering. Use for component optimization, rendering performance, bundle analysis."
   category: "frontend"
   has_scripts: false
   has_references: false
   argument_hint: "[component or pattern]"
 - name: "remotion"
   path: "remotion/SKILL.md"
-  description: "Best practices for Remotion - Video creation in React"
+  description: "Build video content with Remotion in React. Use for programmatic video creation, animated sequences, data-driven video rendering."
   category: "frontend"
   has_scripts: false
   has_references: false
@@ -407,7 +407,7 @@
   argument_hint: "[topic]"
 - name: "retro"
   path: "retro/SKILL.md"
-  description: "Data-driven sprint retrospective. Gathers git metrics (commits, LOC, hotspots, churn), computes derived health indicators, and generates a structured markdown or HTML report. Use after sprints, weekly check-ins, or any review period."
+  description: "Generate data-driven sprint retrospectives from git metrics. Use for sprint reviews, commit analysis, code health indicators, team velocity."
   category: "utilities"
   has_scripts: false
   has_references: true
@@ -454,6 +454,13 @@
   has_scripts: true
   has_references: true
   argument_hint: "[extension-type] [feature]"
+- name: "show-off"
+  path: "show-off/SKILL.md"
+  description: "Create stunning self-contained HTML pages to showcase work. Use for demos, visual presentations, interactive showcases."
+  category: "other"
+  has_scripts: true
+  has_references: false
+  argument_hint: "[markdown-or-prompt]"
 - name: "skill-creator"
   path: "skill-creator/SKILL.md"
   description: "Create or update Claude skills with eval-driven iteration. Use for new skills, skill scripts, references, benchmark optimization, description optimization, eval testing, extending Claude's capabilities."
@@ -491,7 +498,7 @@
   argument_hint: "[context] OR ui [url]"
 - name: "threejs"
   path: "threejs/SKILL.md"
-  description: "Build 3D web apps with Three.js (WebGL/WebGPU). 556 searchable examples, 60 API classes, 20 use cases. Actions: create 3D scene, load model, add animation, implement physics, build VR/XR. Topics: GLTF loader, PBR materials, particle effects, shadows, post-processing, compute shaders, TSL. Integrations: WebGPU, physics engines, spatial audio."
+  description: "Build 3D web experiences with Three.js. Use for WebGL/WebGPU scenes, GLTF models, animations, physics, VR/XR. Supports 556 searchable examples."
   category: "frontend"
   has_scripts: true
   has_references: true
@@ -511,14 +518,14 @@
   has_references: false
 - name: "use-mcp"
   path: "use-mcp/SKILL.md"
-  description: "Utilize MCP server tools with intelligent discovery and execution."
+  description: "Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery."
   category: "dev-tools"
   has_scripts: false
   has_references: false
   argument_hint: "[task]"
 - name: "watzup"
   path: "watzup/SKILL.md"
-  description: "Review recent changes and wrap up the current work session."
+  description: "Review recent changes and wrap up the current work session. Use for session summaries, change review, progress tracking."
   category: "utilities"
   has_scripts: false
   has_references: false
@@ -539,13 +546,13 @@
 - name: "web-testing"
   path: "web-testing/SKILL.md"
   description: "Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visual/a11y testing. Use for test automation, flakiness, Core Web Vitals, mobile gestures, cross-browser."
-  category: "multimedia"
+  category: "dev-tools"
   has_scripts: true
   has_references: true
   argument_hint: "[test-type] [target]"
 - name: "worktree"
   path: "worktree/SKILL.md"
-  description: "Create isolated git worktree for parallel development in monorepos."
+  description: "Create isolated git worktrees for parallel development. Use for feature isolation, monorepo branches, concurrent development workflows."
   category: "dev-tools"
   has_scripts: true
   has_references: false

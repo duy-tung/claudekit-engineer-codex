@@ -1,6 +1,8 @@
 ---
 name: ck:worktree
-description: "Create isolated git worktree for parallel development in monorepos."
+description: "Create isolated git worktrees for parallel development. Use for feature isolation, monorepo branches, concurrent development workflows."
+category: dev-tools
+keywords: [worktree, parallel, monorepo, isolation]
 argument-hint: "[feature-description] OR [project] [feature]"
 metadata:
   author: claudekit

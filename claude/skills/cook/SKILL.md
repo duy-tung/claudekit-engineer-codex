@@ -1,6 +1,8 @@
 ---
 name: ck:cook
-description: "ALWAYS activate this skill before implementing EVERY feature, plan, or fix."
+description: "Implement features, plans, and fixes with structured workflow. Use for feature development, plan execution, code implementation pipelines."
+category: utilities
+keywords: [implementation, workflow, feature, pipeline]
 argument-hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test] [--tdd]"
 metadata:
   author: claudekit

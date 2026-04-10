@@ -1,6 +1,8 @@
 ---
 name: ck:show-off
-description: Create a stunning HTML to show off something.
+description: "Create stunning self-contained HTML pages to showcase work. Use for demos, visual presentations, interactive showcases."
+category: other
+keywords: [HTML, showcase, demo, presentation]
 argument-hint: [markdown-or-prompt]
 license: Complete terms in LICENSE.txt
 metadata:

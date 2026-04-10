@@ -1,6 +1,8 @@
 ---
 name: ck:research
 description: "Research technical solutions, analyze architectures, gather requirements thoroughly. Use for technology evaluation, best practices research, solution design, scalability/security/maintainability analysis."
+category: utilities
+keywords: [research, evaluation, analysis, solutions]
 license: MIT
 argument-hint: "[topic]"
 metadata:

@@ -1,6 +1,8 @@
 ---
 name: ck:ask
-description: "Answer technical and architectural questions with expert consultation."
+description: "Answer technical and architectural questions with expert analysis. Use for design decisions, best practices evaluation, solution comparison."
+category: utilities
+keywords: [questions, consultation, architecture]
 argument-hint: "[technical-question]"
 metadata:
   author: claudekit
