@@ -11,10 +11,10 @@ When a user's task involves a specific domain, consider suggesting relevant spec
 | database, SQL, schema, migration, query | `/ck:databases` |
 | deploy, CI/CD, Docker, infrastructure | `/ck:deploy`, `/ck:devops` |
 | test, coverage, assertion, spec | `/ck:test` |
-| security, auth, vulnerability, OWASP | `/ck:ck-security`, `/ck:security-scan` |
+| security, auth, vulnerability, OWASP | `/ck:security`, `/ck:security-scan` |
 | AI, LLM, agent, prompt, model | `/ck:context-engineering`, `/ck:llms` |
 | MCP, tool server, protocol | `/ck:mcp-builder`, `/ck:mcp-management` |
-| design, mockup, wireframe, layout | `/ck:design`, `/ck:web-design-guidelines` |
+| design, mockup, wireframe, layout | `/ck:frontend-design`, `/ck:web-design-guidelines` |
 | mobile, iOS, Android, Flutter | `/ck:mobile-development` |
 | 3D, shader, WebGL, Three.js | `/ck:threejs`, `/ck:shader` |
 | payment, Stripe, billing | `/ck:payment-integration` |

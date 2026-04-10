@@ -128,6 +128,6 @@ When brainstorming concludes with agreement, create a detailed markdown summary 
 
 ## Workflow Position
 
-**Typically follows:** `/ck:ck-debug` (brainstorm solutions for diagnosed issues), `/ck:scout` (brainstorm after discovery)
+**Typically follows:** `/ck:debug` (brainstorm solutions for diagnosed issues), `/ck:scout` (brainstorm after discovery)
 **Typically precedes:** `/ck:plan` (plan the agreed solution)
-**Related:** `/ck:plan` (plan after brainstorming), `/ck:ck-debug` (debug before brainstorming)
+**Related:** `/ck:plan` (plan after brainstorming), `/ck:debug` (debug before brainstorming)

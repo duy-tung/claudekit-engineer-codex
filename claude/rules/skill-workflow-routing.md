@@ -17,25 +17,25 @@ When orchestrating multi-step tasks, consider these workflow sequences. Skills a
 ## Bugfix Workflow
 
 ```
-/ck:scout → /ck:ck-debug → /ck:fix → /ck:test → /ck:code-review
+/ck:scout → /ck:debug → /ck:fix → /ck:test → /ck:code-review
 ```
 
 | User Intent | Suggested Start |
 |-------------|----------------|
 | "X is broken", "error in X", "bug in X" | `/ck:fix` (auto-scouts internally) |
 | "CI is failing", "tests broken" | `/ck:fix --auto` |
-| "investigate why X happens" | `/ck:scout` then `/ck:ck-debug` |
+| "investigate why X happens" | `/ck:scout` then `/ck:debug` |
 
 ## Investigation Workflow
 
 ```
-/ck:scout → /ck:ck-debug → /ck:brainstorm → /ck:plan
+/ck:scout → /ck:debug → /ck:brainstorm → /ck:plan
 ```
 
 | User Intent | Suggested Start |
 |-------------|----------------|
 | "understand how X works" | `/ck:scout` |
-| "why is X happening" | `/ck:ck-debug` |
+| "why is X happening" | `/ck:debug` |
 | "explore options for X" | `/ck:brainstorm` then `/ck:plan` |
 
 ## Post-Implementation Checklist

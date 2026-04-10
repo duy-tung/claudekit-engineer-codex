@@ -215,6 +215,6 @@ Load as needed:
 
 ## Workflow Position
 
-**Typically follows:** `/ck:ck-debug` (after root cause analysis), `/ck:scout` (after locating affected code)
+**Typically follows:** `/ck:debug` (after root cause analysis), `/ck:scout` (after locating affected code)
 **Typically precedes:** `/ck:code-review` (review the fix), `/ck:test` (validate the fix)
-**Related:** `/ck:cook` (alternative for feature work), `/ck:ck-debug` (diagnose before fixing)
+**Related:** `/ck:cook` (alternative for feature work), `/ck:debug` (diagnose before fixing)

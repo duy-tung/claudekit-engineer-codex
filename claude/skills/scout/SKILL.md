@@ -97,5 +97,5 @@ Load appropriate reference based on decision tree:
 
 ## Workflow Position
 
-**Typically precedes:** `/ck:ck-debug` (debug after scouting), `/ck:fix` (fix after locating code), `/ck:code-review` (scout edge cases before review)
-**Related:** `/ck:ck-debug` (investigate after scouting), `/ck:brainstorm` (explore after scouting)
+**Typically precedes:** `/ck:debug` (debug after scouting), `/ck:fix` (fix after locating code), `/ck:code-review` (scout edge cases before review)
+**Related:** `/ck:debug` (investigate after scouting), `/ck:brainstorm` (explore after scouting)
