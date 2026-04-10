@@ -119,3 +119,9 @@ User says `/ck:ship official` → ship to main with full docs + journal.
 - **Framework-agnostic.** Works for Node, Python, Rust, Go, Ruby, Java, or any project with a test command.
 - **Subagent delegation.** Use `tester` for tests, `code-reviewer` for review, `journal-writer` for journal, `docs-manager` for docs. Don't inline.
 - **Background tasks.** Journal and docs run in background to not block the pipeline.
+
+## Workflow Position
+
+**Typically follows:** `/ck:code-review` (ship after review passes)
+**Typically precedes:** `/ck:journal` (document after shipping)
+**Related:** `/ck:code-review` (review before shipping), `/ck:test` (test before shipping)

@@ -109,3 +109,8 @@ Based on project context, run in background:
 - Default worktree location is smart: superproject > monorepo > sibling
 - Use `--worktree-root` only to override defaults
 - Env templates (`.env*.example`) auto-copied with `.example` suffix removed
+
+## Workflow Position
+
+**Typically precedes:** `/ck:cook` (implement in worktree), `/ck:fix` (fix in worktree)
+**Setup skill** — creates isolated environment before implementation.

@@ -212,3 +212,9 @@ Load as needed:
 - `references/workflow-test.md` - Test suite failures
 - `references/workflow-types.md` - TypeScript type errors
 - `references/workflow-ui.md` - Visual/UI issues (requires design skills)
+
+## Workflow Position
+
+**Typically follows:** `/ck:debug` (after root cause analysis), `/ck:scout` (after locating affected code)
+**Typically precedes:** `/ck:code-review` (review the fix), `/ck:test` (validate the fix)
+**Related:** `/ck:cook` (alternative for feature work), `/ck:debug` (diagnose before fixing)

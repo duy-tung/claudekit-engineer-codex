@@ -203,3 +203,9 @@ Reports: Active plans → plan-specific path. Suggested → default path.
 - Validate against existing codebase patterns
 
 **Remember:** Plan quality determines implementation success. Be comprehensive and consider all solution aspects.
+
+## Workflow Position
+
+**Typically follows:** `/ck:brainstorm` (after exploring options), `/ck:scout` (after codebase discovery)
+**Typically precedes:** `/ck:cook` (hand off plan for implementation)
+**Related:** `/ck:brainstorm` (explore before planning), `/ck:cook` (execute after planning)
