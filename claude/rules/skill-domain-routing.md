@@ -1,6 +1,6 @@
 # Skill Domain Routing
 
-When a user's task involves a specific domain, use these decision trees to pick the RIGHT skill. Don't suggest multiple overlapping skills — pick ONE based on user intent.
+When a user's task involves a specific domain, use these decision trees to pick the RIGHT skill based on user intent.
 
 ## Frontend / UI
 
@@ -24,8 +24,7 @@ User wants to...
 User wants to...
 ├── Quick file search, locate specific code     → /ck:scout
 ├── Full codebase dump for LLM context          → /ck:repomix
-├── Architecture graph, cross-file relationships → graphify skill (install separately)
-└── Semantic go-to-definition, find-usages (Ruby/Java/Python/TS) → /ck:gkg
+└── Semantic go-to-definition, find-usages      → /ck:gkg
 ```
 
 ## Backend / API
@@ -35,6 +34,15 @@ User wants to...
 ├── Build REST/GraphQL API (NestJS, FastAPI, Django) → /ck:backend-development
 ├── Add authentication (OAuth, JWT, passkeys)        → /ck:better-auth
 └── Integrate payments (Stripe, Polar, SePay)        → /ck:payment-integration
+```
+
+## Database
+
+```
+User wants to...
+├── Design schemas, write SQL/NoSQL queries     → /ck:databases
+├── Optimize indexes, migrations, replication   → /ck:databases
+└── Add auth with database-backed sessions      → /ck:better-auth
 ```
 
 ## Infrastructure / Deployment
@@ -72,13 +80,22 @@ User wants to...
 └── Execute MCP tools directly                   → /ck:use-mcp
 ```
 
-## Testing
+## Testing / Browser
 
 ```
 User wants to...
-├── Run unit/integration/e2e tests, coverage     → /ck:test
-├── Web testing (Playwright, Vitest, k6, a11y)   → /ck:web-testing
-└── Browser automation, screenshots, console     → /ck:chrome-devtools
+├── Run test suites, coverage reports, TDD       → /ck:test
+├── Web-specific testing (Playwright, k6, a11y)  → /ck:web-testing
+├── Puppeteer automation, screenshots, scraping  → /ck:chrome-devtools
+└── AI-driven browser sessions, Browserbase cloud → /ck:agent-browser
+```
+
+## Media
+
+```
+User wants to...
+├── Process video/audio (FFmpeg), images (ImageMagick) → /ck:media-processing
+└── Generate AI images (Imagen, Nano Banana)           → /ck:ai-artist
 ```
 
 ## Documentation
@@ -91,12 +108,12 @@ User wants to...
 └── Create diagrams (Mermaid v11 syntax)         → /ck:mermaidjs-v11
 ```
 
-## Design (Non-Code)
+## Content / Copy
 
 ```
 User wants to...
+├── Write landing page, email, headline copy     → /ck:copywriting
 ├── Brand identity, logos, banners               → /ckm:design
-├── Generate AI images (Imagen, Nano Banana)     → /ck:ai-artist
 └── Create Excalidraw diagrams                   → /ck:excalidraw
 ```
 
@@ -112,7 +129,7 @@ User wants to...
 
 ## Usage Notes
 
-- Pick ONE skill per user intent — don't list alternatives
-- If user intent is ambiguous, ask which aspect they need
+- Pick ONE skill per distinct user intent
+- If a task spans two domains (e.g. "build + deploy"), suggest the primary skill and mention the secondary
 - Domain skills combine with core workflow: `/ck:plan` → domain skill → `/ck:cook`
-- Skills not listed here are core workflow skills (plan, cook, fix, etc.) — see `skill-workflow-routing.md`
+- Skills not listed here are either core workflow skills (see `skill-workflow-routing.md`) or utility skills activated on demand (e.g. `/ck:ask`, `/ck:preview`, `/ck:sequential-thinking`)
