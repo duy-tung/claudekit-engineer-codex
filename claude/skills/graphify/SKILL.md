@@ -1,13 +1,13 @@
 ---
 name: ck:graphify
 description: "Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation."
-category: ai-ml
+category: dev-tools
 keywords: [knowledge-graph, code-analysis, tree-sitter, codebase-understanding, ast]
 argument-hint: "[path] [--mcp|--report|--watch]"
 related: [ck:repomix, ck:scout, ck:gkg]
+maturity: beta
 metadata:
   author: safishamsi
-  version: "1.0.0"
   attribution: "https://github.com/safishamsi/graphify"
 ---
 
@@ -24,6 +24,10 @@ Turn any folder of code, docs, papers, or images into a queryable knowledge grap
 - Preparing context-efficient codebase representation (71.5x fewer tokens vs raw files)
 
 ## Installation
+
+**Note:** The PyPI package is `graphifyy` (double-y). Other `graphify*` packages on PyPI are unaffiliated.
+
+`graphify install` downloads tree-sitter grammars for AST parsing.
 
 ```bash
 # Core install
@@ -146,3 +150,8 @@ Graph rebuilds are incremental — only changed files get reprocessed. Cache at 
 - Semantic extraction quality depends on the underlying model
 - Neo4j integration requires separate setup (`pip install 'graphifyy[neo4j]'`)
 - Leiden community detection requires `pip install 'graphifyy[leiden]'`
+
+## Workflow Position
+
+**Typically precedes:** `/ck:plan` (understand architecture before planning)
+**Related:** `/ck:scout` (quick file search), `/ck:repomix` (full context dump), `/ck:gkg` (semantic symbol navigation)
