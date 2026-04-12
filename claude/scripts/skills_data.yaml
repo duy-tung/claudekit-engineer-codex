@@ -274,11 +274,11 @@
   argument_hint: "[topic or reflection]"
 - name: "kanban"
   path: "kanban/SKILL.md"
-  description: "Orchestrate AI agent tasks on a visual board. Use for multi-agent coordination, task tracking, team workflows. Not for plan files (use plans-kanban)."
+  description: "Alias launcher for the ClaudeKit plans dashboard. Use for visual plan boards, progress tracking, and quick navigation into plan files."
   category: "dev-tools"
   has_scripts: false
   has_references: false
-  argument_hint: "[dir]"
+  argument_hint: "[deprecated plans path or flags]"
 - name: "llms"
   path: "llms/SKILL.md"
   description: "Generate llms.txt files from docs or codebase scanning. Follows llmstxt.org spec. Use for LLM-friendly site indexes, documentation summaries, AI context optimization."
@@ -344,11 +344,11 @@
   argument_hint: "[provider] [task]"
 - name: "plans-kanban"
   path: "plans-kanban/SKILL.md"
-  description: "View plans dashboard with progress tracking and timeline visualization. Use for kanban boards, plan status overview, phase progress, milestone tracking, project visibility."
+  description: "Open the ClaudeKit plans dashboard in the CLI config UI. Use for plan kanban views, progress tracking, timeline checks, and quick navigation into plan files."
   category: "dev-tools"
   has_scripts: true
   has_references: false
-  argument_hint: "[plans-dir]"
+  argument_hint: "[deprecated flags are accepted with warnings]"
 - name: "preview"
   path: "preview/SKILL.md"
   description: "View files or generate visual explanations, slides, and diagrams. Use for code walkthroughs, architecture visualization, HTML/Markdown presentations."

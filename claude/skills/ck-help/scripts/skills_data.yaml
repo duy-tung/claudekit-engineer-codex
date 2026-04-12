@@ -391,11 +391,11 @@
   has_scripts: true
   name: payment-integration
   path: payment-integration/SKILL.md
-- argument_hint: '[plans-dir]'
+- argument_hint: '[deprecated flags are accepted with warnings]'
   category: dev-tools
-  description: View plans dashboard with progress tracking and timeline visualization.
-    Use for kanban boards, plan status overview, phase progress, milestone tracking,
-    project visibility.
+  description: Open the ClaudeKit plans dashboard in the CLI config UI. Use for
+    plan kanban views, progress tracking, timeline checks, and quick navigation
+    into plan files.
   has_references: false
   has_scripts: true
   name: plans-kanban

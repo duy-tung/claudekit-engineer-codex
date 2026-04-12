@@ -649,7 +649,7 @@ install_node_deps() {
         print_success "markdown-novel-viewer dependencies installed"
     fi
 
-    # plans-kanban (gray-matter)
+    # plans-kanban launcher package
     if [ -d "$SCRIPT_DIR/plans-kanban" ] && [ -f "$SCRIPT_DIR/plans-kanban/package.json" ]; then
         print_info "Installing plans-kanban dependencies..."
         (cd "$SCRIPT_DIR/plans-kanban" && npm install --quiet)
