@@ -14,6 +14,11 @@ metadata:
 
 Create detailed technical implementation plans through research, codebase analysis, solution design, and comprehensive documentation.
 
+## Prerequisites
+
+- **ClaudeKit CLI required:** This skill requires `ck` CLI for plan operations.
+  Run `npm install -g claudekit` if not installed.
+
 ## CLI Integration
 
 This skill orchestrates planning, but ClaudeKit CLI now owns the plan file scaffolding and phase state mutations whenever `ck` is available.
@@ -24,7 +29,8 @@ Use these commands instead of hand-editing CLI-managed plan structure:
 ck plan create \
   --title "{plan title}" \
   --phases "{Research},{Implement},{Test}" \
-  --dir {plan-dir}
+  --dir {plan-dir} \
+  --source skill
 
 cd /absolute/path/to/plan-dir && ck plan check <phase-id> --start
 cd /absolute/path/to/plan-dir && ck plan check <phase-id>
