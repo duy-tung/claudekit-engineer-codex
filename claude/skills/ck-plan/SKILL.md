@@ -14,6 +14,37 @@ metadata:
 
 Create detailed technical implementation plans through research, codebase analysis, solution design, and comprehensive documentation.
 
+## Prerequisites
+
+- **ClaudeKit CLI required:** This skill requires `ck` CLI for plan operations.
+  Run `npm install -g claudekit` if not installed.
+
+## CLI Integration
+
+This skill orchestrates planning, but ClaudeKit CLI now owns the plan file scaffolding and phase state mutations whenever `ck` is available.
+
+Use these commands instead of hand-editing CLI-managed plan structure:
+
+```bash
+ck plan create \
+  --title "{plan title}" \
+  --phases "{Research},{Implement},{Test}" \
+  --dir {plan-dir} \
+  --source skill
+
+cd /absolute/path/to/plan-dir && ck plan check <phase-id> --start
+cd /absolute/path/to/plan-dir && ck plan check <phase-id>
+cd /absolute/path/to/plan-dir && ck plan uncheck <phase-id>
+ck plan status /absolute/path/to/plan.md
+ck config ui --port 3456
+```
+
+Rules:
+- Use `ck plan create` to scaffold `plan.md` and `phase-*.md` when the CLI is available.
+- Use `ck plan check` / `ck plan uncheck` for phase status changes.
+- Do not hand-edit the phases table for status toggles or structural updates when CLI commands are available.
+- Use the dashboard at `http://localhost:3456/plans` for visual plan management.
+
 **IMPORTANT:** Before you start, scan unfinished plans in the current project at `./plans/` directory, read the `plan.md`, if there are relevant plans with your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
 
 ### Cross-Plan Dependency Detection

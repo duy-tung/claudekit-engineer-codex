@@ -194,7 +194,7 @@ Semantic code analysis with GitLab Knowledge Graph. Use for go-to-definition, fi
 
 ### `kanban`
 
-Orchestrate AI agent tasks on a visual board. Use for multi-agent coordination, task tracking, team workflows. Not for plan files (use plans-kanban).
+Alias launcher for the ClaudeKit plans dashboard. Use for visual plan boards, progress tracking, and quick navigation into plan files.
 
 **Location**: `.claude/skills/kanban/SKILL.md`
 
@@ -224,7 +224,7 @@ Build and deploy documentation sites with Mintlify. Use when creating API docs, 
 
 ### 📦 `plans-kanban`
 
-View plans dashboard with progress tracking and timeline visualization. Use for kanban boards, plan status overview, phase progress, milestone tracking, project visibility.
+Open the ClaudeKit plans dashboard in the CLI config UI. Use for plan kanban views, progress tracking, timeline checks, and quick navigation into plan files.
 
 **Location**: `.claude/skills/plans-kanban/SKILL.md`
 
