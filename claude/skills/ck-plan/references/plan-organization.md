@@ -6,11 +6,16 @@
 
 Use `Plan dir:` from `## Naming` section injected by hooks. This is the full computed path.
 
-**Example:** `plans/251101-1505-authentication/` or `ai_docs/feature/MRR-1453/`
+Default scope:
+- project scope → `plans/251101-1505-authentication/`
+- global scope → `{configured-global-plans-root}/251101-1505-authentication/`
+  - Default when unset: `~/.claude/plans/251101-1505-authentication/`
+
+Use global scope only when `--global` is explicit or there is no project context.
 
 ### File Organization
 
-IN CURRENT WORKING PROJECT DIRECTORY:
+In the active scope root:
 ```
 {plan-dir}/                                    # From `Plan dir:` in ## Naming
 ├── research/
@@ -57,6 +62,16 @@ After determining phases from research/design:
      --priority {P1|P2|P3} \
      --source skill \
      [--issue {N}]
+
+   # Global scope when explicitly requested
+   ck plan create \
+     --global \
+     --title "{plan title}" \
+     --phases "{Phase1},{Phase2},{Phase3}" \
+     --dir {plan-dir} \
+     --priority {P1|P2|P3} \
+     --source skill \
+     [--issue {N}]
    ```
 
 2. **Fill content sections** in plan.md via Edit tool:
@@ -92,7 +107,7 @@ issue: 123
 branch: kai/feat/oauth-auth
 tags: [auth, backend, security]
 blockedBy: []
-blocks: [260115-0900-user-dashboard]
+blocks: [global:260115-0900-user-dashboard]
 created: 2025-12-16
 ---
 
@@ -106,7 +121,7 @@ Brief description of what this plan accomplishes.
 
 | Relationship | Plan | Status |
 |-------------|------|--------|
-| Blocks | [260115-0900-user-dashboard](../260115-0900-user-dashboard/plan.md) | pending |
+| Blocks | `global:260115-0900-user-dashboard` | pending |
 
 ## Phases
 
@@ -124,6 +139,11 @@ Brief description of what this plan accomplishes.
 
 - List key dependencies here
 ```
+
+Reference rules:
+- Bare refs stay in the current scope.
+- Use `global:` or `project:` when the dependency crosses scopes.
+- `ck plan status` is the authoritative place to inspect resolved dependency state.
 
 **Guidelines:**
 - Keep generic and under 80 lines

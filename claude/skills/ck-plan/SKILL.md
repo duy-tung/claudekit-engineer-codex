@@ -32,6 +32,13 @@ ck plan create \
   --dir {plan-dir} \
   --source skill
 
+ck plan create \
+  --global \
+  --title "{plan title}" \
+  --phases "{Research},{Implement},{Test}" \
+  --dir {plan-dir} \
+  --source skill
+
 cd /absolute/path/to/plan-dir && ck plan check <phase-id> --start
 cd /absolute/path/to/plan-dir && ck plan check <phase-id>
 cd /absolute/path/to/plan-dir && ck plan uncheck <phase-id>
@@ -41,11 +48,27 @@ ck config ui --port 3456
 
 Rules:
 - Use `ck plan create` to scaffold `plan.md` and `phase-*.md` when the CLI is available.
+- Default scope is project-local (`./plans/` under the current project).
+- Global scope is conditional: use `ck plan create --global ...` or fall back to global scope only when no project context exists.
 - Use `ck plan check` / `ck plan uncheck` for phase status changes.
 - Do not hand-edit the phases table for status toggles or structural updates when CLI commands are available.
 - Use the dashboard at `http://localhost:3456/plans` for visual plan management.
 
-**IMPORTANT:** Before you start, scan unfinished plans in the current project at `./plans/` directory, read the `plan.md`, if there are relevant plans with your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
+**IMPORTANT:** Before you start, scan unfinished plans in the active scope first:
+- Project scope: `./plans/`
+- Global scope: the configured global plans root
+  - Default when unset: `~/.claude/plans/`
+
+If there are relevant plans overlapping your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
+
+### Scope Selection
+
+- **Project scope** is the default whenever the current working tree has project context.
+- **Global scope** is allowed only when:
+  - the user explicitly asks for it via `--global`, or
+  - there is no project context to anchor a local plan.
+- **No project context** means no `.git`, `package.json`, or `CLAUDE.md` was found in the ancestor chain.
+- Keep scope honest in prose and examples: the skill describes CLI-owned behavior, it does not implement scope resolution itself.
 
 ### Cross-Plan Dependency Detection
 
@@ -56,17 +79,19 @@ During the pre-creation scan, detect and mark blocking relationships between pla
 3. **Classify relationship:**
    - New plan needs output of existing plan → new plan `blockedBy: [existing-plan-dir]`
    - New plan changes something existing plan depends on → existing plan `blockedBy: [new-plan-dir]`, new plan `blocks: [existing-plan-dir]`
+   - Cross-scope dependency → use `global:` or `project:` prefixes
    - Mutual dependency → both plans reference each other in `blockedBy`/`blocks`
 4. **Bidirectional update** — When relationship detected, update BOTH `plan.md` files' frontmatter
 5. **Ambiguous?** → Use `AskUserQuestion` with header "Plan Dependency", present detected overlap, ask user to confirm relationship type (blocks/blockedBy/none)
 
-**Frontmatter fields** (relative plan dir paths):
+**Frontmatter fields**:
 ```yaml
-blockedBy: [260301-1200-auth-system]     # This plan waits on these plans
-blocks: [260228-0900-user-dashboard]     # This plan blocks these plans
+blockedBy: [260301-1200-auth-system]            # Same-scope dependency
+blockedBy: [global:260301-1200-auth-system]     # Cross-scope dependency
+blocks: [project:260228-0900-user-dashboard]    # Explicit project-scope dependency
 ```
 
-**Status interaction:** A plan with `blockedBy` entries where ANY blocker is not `completed` → plan status should note `blocked` in its overview. When all blockers complete, the blocked plan becomes unblocked automatically on next scan.
+**Status interaction:** `ck plan status` is the authoritative inspection surface. Same-scope bare refs stay in the current scope; prefixed refs resolve against the explicit project/global root. Missing refs should warn and show `not found`, not hard-fail the plan.
 
 ## Default (No Arguments)
 
@@ -214,8 +239,11 @@ After creating plan: `node .claude/scripts/set-active-plan.cjs {plan-dir}`
 Reports: Active plans → plan-specific path. Suggested → default path.
 
 ### Important
-**DO NOT** create plans or reports in USER directory.
-**MUST** create plans or reports in **THE CURRENT WORKING PROJECT DIRECTORY**.
+**DO NOT** create plans or reports in arbitrary user directories.
+**MUST** create plans or reports in one of these allowed roots:
+- project scope → current working project directory
+- global scope → configured global plans root
+  - Default when unset: `~/.claude/plans/`
 
 ## Subcommands
 
