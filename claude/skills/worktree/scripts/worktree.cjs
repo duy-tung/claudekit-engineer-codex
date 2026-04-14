@@ -46,6 +46,22 @@ function isSafeEnvFileName(fileName) {
   return /^\.env[\w.-]*$/.test(normalized);
 }
 
+// Sanitize and validate base branch name to prevent command injection
+// Returns null if invalid (caller should fall back to auto-detection or error)
+function sanitizeBaseBranch(value) {
+  if (!value || typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  // Reject values that look like flags (start with -)
+  if (trimmed.startsWith('-')) return { error: 'LOOKS_LIKE_FLAG', value: trimmed };
+  // Reject shell metacharacters that could enable command injection
+  if (/[;|&$`()\n\r\0\\'"<>]/.test(trimmed)) return { error: 'SHELL_CHARS', value: trimmed };
+  // Allow valid git ref characters: alphanumeric, dash, underscore, slash, dot, tilde, caret, at, colon
+  // This covers: branch names, remote refs (origin/main), HEAD~N, HEAD^, tags, etc.
+  if (!/^[a-zA-Z0-9_./:~^@-]+$/.test(trimmed)) return { error: 'INVALID_CHARS', value: trimmed };
+  return trimmed;
+}
+
 // Minimum Node.js version check
 const MIN_NODE_VERSION = 18;
 const nodeVersion = parseInt(process.version.slice(1).split('.')[0], 10);
@@ -99,8 +115,16 @@ if (worktreeRootIndex > -1) {
 // --base: explicit override for base branch (skip auto-detection)
 const baseIndex = args.indexOf('--base');
 let explicitBase = null;
+let explicitBaseError = null;
 if (baseIndex > -1) {
-  explicitBase = args[baseIndex + 1];
+  const rawBase = args[baseIndex + 1];
+  const sanitized = sanitizeBaseBranch(rawBase);
+  if (sanitized && typeof sanitized === 'object' && sanitized.error) {
+    // Store error for later — will be reported during cmdCreate
+    explicitBaseError = sanitized;
+  } else {
+    explicitBase = sanitized; // null if empty/invalid, string if valid
+  }
   args.splice(baseIndex, 2);
 }
 
@@ -684,8 +708,32 @@ function cmdCreate() {
   // Create branch name — --no-prefix uses sanitized feature as-is
   const branchName = noPrefix ? sanitizedFeature : `${branchPrefix}/${sanitizedFeature}`;
 
+  // Handle --base validation errors
+  if (explicitBaseError) {
+    const errorMessages = {
+      LOOKS_LIKE_FLAG: `Base branch "${explicitBaseError.value}" looks like a flag`,
+      SHELL_CHARS: `Base branch "${explicitBaseError.value}" contains invalid shell characters`,
+      INVALID_CHARS: `Base branch "${explicitBaseError.value}" contains invalid characters`
+    };
+    outputError('INVALID_BASE_BRANCH', errorMessages[explicitBaseError.error] || 'Invalid base branch', {
+      suggestion: 'Provide a valid branch name (e.g., main, dev, feature/branch-name)'
+    });
+  }
+
   // Detect base branch (use explicit --base if provided, otherwise auto-detect)
   const baseBranch = explicitBase || detectBaseBranch(workDir);
+  const baseBranchSource = explicitBase ? 'explicit' : 'auto-detected';
+
+  // Validate explicit base branch exists (auto-detected branches are already verified)
+  if (explicitBase) {
+    const baseExists = branchExists(explicitBase, workDir);
+    if (!baseExists) {
+      outputError('BASE_BRANCH_NOT_FOUND', `Base branch "${explicitBase}" does not exist`, {
+        suggestion: 'Check branch name or use auto-detection by omitting --base',
+        availableBranches: ['dev', 'develop', 'main', 'master'].filter(b => branchExists(b, workDir))
+      });
+    }
+  }
 
   // Check if branch already checked out
   if (isBranchCheckedOut(branchName, workDir)) {
@@ -730,6 +778,7 @@ function cmdCreate() {
         worktreeRootSource: worktreeRoot.source,
         branch: branchName,
         baseBranch,
+        baseBranchSource,
         branchExists: !!branchStatus,
         project: isMonorepo ? projectName : null,
         envFilesToCopy: safeEnvFilesToCopy.length > 0 ? safeEnvFilesToCopy : undefined
@@ -806,6 +855,7 @@ function cmdCreate() {
     worktreeRootSource: worktreeRoot.source,
     branch: branchName,
     baseBranch,
+    baseBranchSource,
     project: isMonorepo ? projectName : null,
     envFilesCopied,
     envTemplatesCopied: envResult.copied,
