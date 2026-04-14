@@ -38,6 +38,12 @@ Use this skill when you want the visual plans dashboard for:
 - Navigating into `plan.md` and `phase-*.md` files
 - Quick visibility into active vs completed work
 
+Scope note:
+- Project dashboards should show project-scoped plans only.
+- Global dashboards should show global-scoped plans only.
+- Use `ck plan status` as the authoritative dependency/status view for `blockedBy` / `blocks`; `plans-kanban` is a launcher, not the source of cross-scope dependency truth.
+- The generic `/plans` route defaults to `plans` unless a `dir` query param is already present; scope-aware plan roots come from the project/global dashboard context, not from deprecated launcher flags.
+
 ## Dashboard Workflow
 
 ```bash
@@ -60,7 +66,7 @@ The old standalone server flags are accepted for compatibility and replaced with
 
 | Legacy input | Current behavior |
 |-------------|------------------|
-| `--dir <path>` / positional path | Warns and ignores. The CLI dashboard auto-discovers plans. |
+| `--dir <path>` / positional path | Warns and ignores. This launcher always opens the generic `/plans` route; it does not choose a custom plan root. |
 | `--plans <path>` | Warns and ignores. |
 | `--port <n>` | Warns and ignores. `plans-kanban` now targets the CLI dashboard starting at `3456` and follows the CLI fallback port if needed. |
 | `--host <addr>` | Warns and ignores. Use `ck config ui --host ...` directly if needed. |

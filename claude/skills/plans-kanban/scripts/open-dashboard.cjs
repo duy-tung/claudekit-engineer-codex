@@ -55,7 +55,7 @@ function parseArgs(argv) {
     if (!arg.startsWith('--')) {
       args.deprecated.push({
         flag: arg,
-        detail: 'Positional plans paths are no longer used here. The CLI dashboard discovers plans automatically.'
+        detail: 'Positional plans paths are no longer used here. This launcher opens the generic /plans route and does not choose a custom plan root.'
       });
       continue;
     }
@@ -73,7 +73,7 @@ function getDeprecatedDetail(flag) {
   switch (flag) {
     case '--dir':
     case '--plans':
-      return 'The integrated dashboard auto-discovers plans. Directory selection is no longer handled by this launcher.';
+      return 'This launcher opens the generic /plans route. Directory selection is no longer handled here; use a scope-aware dashboard entry point or an explicit /plans?dir=... URL.';
     case '--port':
       return 'plans-kanban now targets the CLI dashboard starting at port 3456 and follows CLI auto-fallback ports.';
     case '--host':
