@@ -272,7 +272,7 @@ Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visu
 
 ### 📦 `worktree`
 
-Create isolated git worktrees for parallel development. Use for feature isolation, monorepo branches, concurrent development workflows.
+Create, inspect, and clean isolated git worktrees. Use for feature isolation, worktree health audits, stale cleanup, and monorepo or submodule workflows.
 
 **Location**: `.claude/skills/worktree/SKILL.md`
 
