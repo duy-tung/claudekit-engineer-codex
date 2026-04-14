@@ -12,6 +12,7 @@
  *
  * Options:
  *   --prefix <type>        Branch prefix (feat|fix|refactor|docs|test|chore|perf)
+ *   --base <branch>        Override auto-detected base branch (default: dev→develop→main→master)
  *   --worktree-root <path> Explicit worktree directory (Claude's decision)
  *   --json                 Output in JSON format for LLM consumption
  *   --env <files>          Comma-separated list of .env files to copy (legacy)
@@ -93,6 +94,14 @@ let explicitWorktreeRoot = null;
 if (worktreeRootIndex > -1) {
   explicitWorktreeRoot = args[worktreeRootIndex + 1];
   args.splice(worktreeRootIndex, 2);
+}
+
+// --base: explicit override for base branch (skip auto-detection)
+const baseIndex = args.indexOf('--base');
+let explicitBase = null;
+if (baseIndex > -1) {
+  explicitBase = args[baseIndex + 1];
+  args.splice(baseIndex, 2);
 }
 
 const command = args[0];
@@ -675,8 +684,8 @@ function cmdCreate() {
   // Create branch name — --no-prefix uses sanitized feature as-is
   const branchName = noPrefix ? sanitizedFeature : `${branchPrefix}/${sanitizedFeature}`;
 
-  // Detect base branch
-  const baseBranch = detectBaseBranch(workDir);
+  // Detect base branch (use explicit --base if provided, otherwise auto-detect)
+  const baseBranch = explicitBase || detectBaseBranch(workDir);
 
   // Check if branch already checked out
   if (isBranchCheckedOut(branchName, workDir)) {
@@ -940,6 +949,7 @@ Commands:
 
 Options:
   --prefix <type>        Branch prefix (feat|fix|refactor|docs|test|chore|perf)
+  --base <branch>        Override auto-detected base branch
   --worktree-root <path> Explicit worktree directory
   --json                 Output in JSON format for LLM consumption
   --env <files>          Comma-separated list of .env files to copy (legacy)
