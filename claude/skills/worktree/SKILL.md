@@ -77,6 +77,7 @@ node .claude/skills/worktree/scripts/worktree.cjs create "<SLUG>" --prefix <TYPE
 
 **Options:**
 - `--prefix` - Branch type: feat|fix|refactor|docs|test|chore|perf
+- `--base <branch>` - Override auto-detected base branch (default: dev→develop→main→master)
 - `--no-prefix` - Skip branch prefix and preserve original case and slashes (for Jira keys, multi-segment branches like `user/type/feature`)
 - `--worktree-root <path>` - Override default location (only if needed)
 - `--json` - JSON output
@@ -103,11 +104,24 @@ Based on project context, run in background:
 | `info` | `info` | Repo info with worktree location |
 | `list` | `list` | List worktrees |
 
+## JSON Output Fields
+
+When using `--json`, the create command returns:
+
+| Field | Description |
+|-------|-------------|
+| `baseBranch` | Branch the worktree is based on |
+| `baseBranchSource` | `"explicit"` (from `--base`) or `"auto-detected"` |
+| `branch` | New branch name created |
+| `worktreePath` | Absolute path to worktree |
+| `worktreeRootSource` | How location was determined |
+
 ## Notes
 
 - Script auto-detects superproject, monorepo, and standalone repos
 - Default worktree location is smart: superproject > monorepo > sibling
 - Use `--worktree-root` only to override defaults
+- Use `--base` for long-lived variant branches (e.g., `main-dsl`) that diverge from auto-detected base
 - Env templates (`.env*.example`) auto-copied with `.example` suffix removed
 
 ## Workflow Position
