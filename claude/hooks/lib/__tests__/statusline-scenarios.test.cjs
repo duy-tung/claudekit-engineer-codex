@@ -1013,6 +1013,67 @@ async function main() {
     }
   });
 
+  await test('Active plan slug renders from Unix-style session path', async () => {
+    const tmpDir = createTempConfigProject('full');
+    const sessionId = `active-plan-unix-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      activePlan: '/tmp/.ckit/plans/260414-1130-statusline-fix',
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: []
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: '/tmp/project' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Unix active plan scenario');
+      assertContains(result.stdout, '📋 statusline-fix', 'Statusline should render the active plan slug');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Windows active plan path is normalized before rendering', async () => {
+    const tmpDir = createTempConfigProject('full');
+    const sessionId = `active-plan-win-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      activePlan: 'C:\\Users\\test\\.ckit\\plans\\260414-1130-statusline-fix',
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: []
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: 'D:\\statusline-test\\project' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Windows active plan scenario');
+      assertContains(result.stdout, '📋 statusline-fix', 'Windows session paths should render the plan slug');
+      assertTrue(!result.stdout.includes('.ckit\\plans'), 'Raw Windows plan paths should not leak into the statusline');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   await test('Wide terminal keeps layout compact', async () => {
     const payload = {
       model: { display_name: 'Opus 4.5' },
