@@ -17,10 +17,11 @@ const DEFAULT_SECTIONS = [
   { id: 'quota',     enabled: true, order: 2, icon: '⌛' },
   { id: 'directory', enabled: true, order: 3, icon: '📁' },
   { id: 'git',       enabled: true, order: 4, icon: '🌿' },
-  { id: 'cost',      enabled: false, order: 5, icon: '💰' },
-  { id: 'changes',   enabled: true, order: 6, icon: '📝' },
-  { id: 'agents',    enabled: true, order: 7, icon: '🔄' },
-  { id: 'todos',     enabled: true, order: 8, icon: '✅' },
+  { id: 'plan',      enabled: true, order: 5, icon: '📋' },
+  { id: 'cost',      enabled: false, order: 6, icon: '💰' },
+  { id: 'changes',   enabled: true, order: 7, icon: '📝' },
+  { id: 'agents',    enabled: true, order: 8, icon: '🔄' },
+  { id: 'todos',     enabled: true, order: 9, icon: '✅' },
 ];
 
 const DEFAULT_THEME = {
@@ -94,6 +95,13 @@ function renderGitSection(ctx, sectionConfig, theme) {
   return part;
 }
 
+// "📋 feature-slug" — returns null when no active plan is set
+function renderPlanSection(ctx, sectionConfig) {
+  if (!ctx.activePlan) return null;
+  const planColorFn = sectionConfig.color ? resolveColor(sectionConfig.color) : (value) => value;
+  return `${sectionConfig.icon || '📋'} ${planColorFn(ctx.activePlan)}`;
+}
+
 // "💰 $0.42" — returns null when no cost data
 function renderCostSection(ctx, sectionConfig, theme) {
   if (!ctx.costText) return null;
@@ -116,6 +124,7 @@ const SECTION_RENDERERS = {
   quota:     renderQuotaSection,
   directory: renderDirectorySection,
   git:       renderGitSection,
+  plan:      renderPlanSection,
   cost:      renderCostSection,
   changes:   renderChangesSection,
 };

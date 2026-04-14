@@ -78,16 +78,19 @@ function renderSessionLines(ctx, layout) {
 
   const dirPart    = rs('directory');
   const branchPart = rs('git');
+  const planPart   = rs('plan');
   const sessionPart = ['model', 'context', 'quota']
     .map(rs).filter(Boolean).join('  ');
   const statsPart = ['cost', 'changes']
     .map(rs).filter(Boolean).join('  ');
 
-  const locationPart = branchPart ? `${dirPart}  ${branchPart}` : dirPart;
+  const locationPart = [dirPart, branchPart, planPart].filter(Boolean).join('  ');
+  const locationLen  = visibleLength(locationPart);
   const statsLen     = visibleLength(statsPart);
 
   const allOneLine     = `${sessionPart}  ${locationPart}  ${statsPart}`;
   const sessionLocation = `${sessionPart}  ${locationPart}`;
+  const sessionStats    = `${sessionPart}  ${statsPart}`;
 
   const lines = [];
   if (visibleLength(allOneLine) <= threshold && statsLen > 0) {
@@ -95,14 +98,19 @@ function renderSessionLines(ctx, layout) {
   } else if (visibleLength(sessionLocation) <= threshold) {
     lines.push(sessionLocation);
     if (statsLen > 0) lines.push(statsPart);
-  } else if (visibleLength(sessionPart) <= threshold) {
-    lines.push(sessionPart);
+  } else if (locationLen <= threshold) {
     lines.push(locationPart);
-    if (statsLen > 0) lines.push(statsPart);
+    if (statsLen > 0 && visibleLength(sessionStats) <= threshold) {
+      lines.push(sessionStats);
+    } else {
+      lines.push(sessionPart);
+      if (statsLen > 0) lines.push(statsPart);
+    }
   } else {
-    lines.push(sessionPart);
     if (dirPart)    lines.push(dirPart);
     if (branchPart) lines.push(branchPart);
+    if (planPart)   lines.push(planPart);
+    lines.push(sessionPart);
     if (statsLen > 0) lines.push(statsPart);
   }
 
