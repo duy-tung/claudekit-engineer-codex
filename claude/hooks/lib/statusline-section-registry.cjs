@@ -33,6 +33,18 @@ const DEFAULT_THEME = {
   separator:   'dim',
 };
 
+// Default per-section colors — applied when sectionConfig[id].color is not set.
+// Matches UI DEFAULT_SECTION_COLORS (statusline-types.ts) for consistent behavior.
+const DEFAULT_SECTION_COLORS = {
+  model:     'cyan',
+  directory: 'blue',
+  git:       'magenta',
+  cost:      'dim',
+  changes:   'brightYellow',
+  agents:    'brightCyan',
+  todos:     'brightGreen',
+};
+
 function getContextColorName(percent, theme) {
   if (percent >= 85) return theme.contextHigh || 'red';
   if (percent >= 70) return theme.contextMid || 'yellow';
@@ -167,7 +179,11 @@ function resolveLayout(statuslineLayout) {
       for (const id of line) {
         const base = defaultById[id] || { id, enabled: true, order: 99 };
         const cfg = sectionConfig[id] || {};
-        sections.push({ ...base, ...cfg, id, enabled: true, order: order++ });
+        // Apply default section color when no explicit color is set
+        // Priority: sectionConfig[id].color > DEFAULT_SECTION_COLORS[id] > renderer's theme.accent fallback
+        const defaultColor = DEFAULT_SECTION_COLORS[id];
+        const mergedCfg = (defaultColor && !cfg.color) ? { ...cfg, color: defaultColor } : cfg;
+        sections.push({ ...base, ...mergedCfg, id, enabled: true, order: order++ });
       }
     }
   } else if (Array.isArray(statuslineLayout.sections)) {
@@ -175,7 +191,11 @@ function resolveLayout(statuslineLayout) {
     sections = statuslineLayout.sections
       .map((cs) => {
         const cfg = sectionConfig[cs.id] || {};
-        return { ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...cfg, ...cs };
+        // Apply default section color when no explicit color is set
+        // Priority: sectionConfig[id].color > DEFAULT_SECTION_COLORS[id] > renderer's theme.accent fallback
+        const defaultColor = DEFAULT_SECTION_COLORS[cs.id];
+        const mergedCfg = (defaultColor && !cfg.color) ? { ...cfg, color: defaultColor } : cfg;
+        return { ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...mergedCfg, ...cs };
       })
       .filter(s => s.id)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -206,6 +226,7 @@ function resolveLayout(statuslineLayout) {
 module.exports = {
   DEFAULT_SECTIONS,
   DEFAULT_THEME,
+  DEFAULT_SECTION_COLORS,
   getContextColorName,
   getSectionRenderer,
   getQuotaColorName,

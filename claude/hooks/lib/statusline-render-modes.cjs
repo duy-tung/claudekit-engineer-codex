@@ -131,8 +131,12 @@ function render(ctx, layout, singleLineMode) {
     const isEnabled = id => effectiveSectionsForEnabled.some(s => s.id === id && s.enabled !== false);
     const getSectionConfig = id => effectiveSectionsForEnabled.find(s => s.id === id && s.enabled !== false) || {};
 
+    // Show idle placeholder for agents when agents is explicitly placed in configLines[][].
+    // This ensures full mode outputs all N configured rows (compact mode slices via slice(0,2)).
+    const agentsInConfigLines = !!(layout.configLines && layout.configLines.some(row => Array.isArray(row) && row.includes('agents')));
+
     if (isEnabled('agents')) {
-      lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows, getSectionConfig('agents')));
+      lines.push(...renderAgentsLines(ctx.transcript, layout.maxAgentRows, getSectionConfig('agents'), agentsInConfigLines));
     }
     if (isEnabled('todos')) {
       const todosLine = renderTodosLine(ctx.transcript, layout.todoTruncation, getSectionConfig('todos'));

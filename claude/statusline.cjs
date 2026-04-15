@@ -167,7 +167,7 @@ async function main() {
 
     // Config
     const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
-    const statuslineMode = config.statusline || 'full';
+    const statuslineMode = config.statuslineLayout?.baseMode || config.statusline || 'full';
     const usageWindows = config.statuslineQuota === false
       ? []
       : (resolveQuotaDisplayEligibility({ useCache: true }).eligible
