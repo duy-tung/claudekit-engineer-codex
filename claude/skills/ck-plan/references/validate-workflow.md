@@ -24,6 +24,32 @@ Check `## Plan Context` section for validation settings:
 ### Step 2: Extract Question Topics
 Load: `references/validate-question-framework.md`
 
+### Step 2.5: Verification Pass (Auto-Scaled)
+
+Before interviewing the user, verify plan accuracy against the actual codebase.
+Load: `references/verification-roles.md`
+
+1. **Tier detection** — Count phases in the plan:
+   - 1-2 phases → Light (Fact Checker only, 5 claims/phase)
+   - 3-4 phases → Standard (Fact Checker + Contract Verifier, 10 claims/phase)
+   - 5+ phases → Full (all 4 roles, 15+ claims/phase)
+2. **For each active role at the current tier:**
+   - Sample N claims per phase (per tier budget)
+   - Run grep/glob to verify file paths, symbols, endpoints
+   - Collect findings: VERIFIED | FAILED | UNVERIFIED
+3. **Handle failures:**
+   - Auto-correct obvious errors (wrong path → find correct via glob)
+   - Surface ambiguous failures as additional interview questions in Step 4
+4. **Check `[UNVERIFIED]` tags** — Scan plan for planner-tagged unverified claims, attempt to resolve
+5. **Append results** to `## Validation Log`:
+   ```
+   ### Verification Results
+   - Claims checked: N
+   - Verified: N | Failed: N | Unverified: N
+   - Tier: Light|Standard|Full
+   - Failures: [list with file:line evidence]
+   ```
+
 ### Step 3: Generate Questions
 For each detected topic, formulate a concrete question with 2-4 options.
 Mark recommended option with "(Recommended)" suffix.

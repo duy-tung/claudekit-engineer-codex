@@ -9,6 +9,25 @@
 | **Assumption Destroyer** | Skeptic | Unstated dependencies, false "will work" claims, missing error paths, scale assumptions, integration assumptions |
 | **Scope & Complexity Critic** | YAGNI enforcer | Over-engineering, premature abstraction, unnecessary complexity, missing MVP cuts, scope creep, gold plating |
 
+## Verification Role Assignment
+
+Each reviewer carries their adversarial lens PLUS a verification role. Findings must include grep/glob evidence from the actual codebase, not just logical argument.
+Load: `references/verification-roles.md` for full role definitions.
+
+| Reviewer | Adversarial Lens | Verification Role |
+|----------|-----------------|-------------------|
+| Security Adversary | Attacker mindset | Fact Checker |
+| Failure Mode Analyst | Murphy's Law | Flow Tracer |
+| Assumption Destroyer | Skeptic | Scope Auditor |
+| Scope & Complexity Critic | YAGNI enforcer | Contract Verifier |
+
+### Evidence Requirement
+
+- Every finding MUST include verification evidence from the codebase
+- Run grep/glob to back up claims — cite file:line for every referenced symbol
+- If claiming "X doesn't handle Y", show the actual code path proving it
+- **Findings without codebase evidence = automatically rejected during adjudication**
+
 ## Reviewer Prompt Template
 
 Each reviewer prompt MUST include:
@@ -29,6 +48,9 @@ Rules:
 - Skip trivial observations (style, naming, formatting)
 - No praise. No "overall looks good". Only findings.
 - 5-10 findings per reviewer. Quality over quantity.
+- Back up every finding with grep/glob evidence from the codebase
+- Your assigned verification role: {VERIFICATION_ROLE} — use it to fact-check plan claims
+- Findings without codebase evidence (file:line citations) will be auto-rejected
 
 Output format per finding:
 ## Finding {N}: {title}
