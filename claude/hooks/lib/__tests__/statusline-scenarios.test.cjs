@@ -1101,6 +1101,89 @@ async function main() {
     assertTrue(stdout.split('\n').length >= 2, 'Narrow width should wrap to multiple lines');
   });
 
+  // --- TDD Red: baseMode + DEFAULT_SECTION_COLORS bugs ---
+
+  await test('baseMode in statuslineLayout overrides top-level statusline config', async () => {
+    // Config has statusline: "compact" at top level but statuslineLayout.baseMode: "full"
+    // Expected: baseMode wins — full mode output (3+ lines)
+    // Currently FAILS: runtime ignores baseMode, uses config.statusline (compact = 2 lines)
+    const tmpDir = createTempConfigProject('compact', {
+      statuslineLayout: {
+        baseMode: 'full',
+        lines: [
+          ['model', 'context'],
+          ['directory', 'git'],
+          ['agents', 'todos']
+        ]
+      }
+    });
+
+    try {
+      const payload = {
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: tmpDir },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 50000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'baseMode override scenario');
+      // Full mode should produce 3+ lines (compact would be 2)
+      assertLineCountBetween(result.stdout, 3, 10, 'baseMode full should override compact — expect 3+ lines');
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Default section colors applied when no sectionConfig.color set', async () => {
+    // Config has lines but no sectionConfig colors
+    // Expected: model uses cyan (\x1b[36m), not theme.accent
+    // Currently FAILS: all sections fall back to theme.accent uniformly
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['model'], ['directory']],
+        theme: { accent: 'red' } // deliberately NOT cyan — detects if default color or accent is used
+      }
+    });
+
+    try {
+      const payload = {
+        model: { display_name: 'TestModel' },
+        workspace: { current_dir: '/tmp/test-colors' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Default section colors scenario');
+      // Model default color should be cyan (\x1b[36m), NOT red (\x1b[31m which is theme.accent)
+      assertContains(result.stdout, '\x1b[36m', 'Model should use default cyan color, not theme.accent');
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Explicit sectionConfig.color overrides default section color', async () => {
+    // Config explicitly sets model color to magenta
+    // Expected: model uses magenta, not default cyan
+    // This is a regression guard — must PASS before and after the fix
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['model']],
+        sectionConfig: { model: { color: 'magenta' } }
+      }
+    });
+
+    try {
+      const payload = {
+        model: { display_name: 'TestModel' },
+        workspace: { current_dir: '/tmp/test-override' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'sectionConfig color override scenario');
+      assertContains(result.stdout, '\x1b[35m', 'Model should use explicit magenta from sectionConfig');
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   console.log('\n==============================================');
   console.log('SCENARIO TEST SUMMARY');
   console.log('==============================================');
