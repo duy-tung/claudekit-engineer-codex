@@ -177,8 +177,9 @@ flowchart TD
     I -->|Yes| J[Red Team Review]
     I -->|No| K{Validate?}
     J --> K
-    K -->|Yes| L[Validation Interview]
+    K -->|Yes| V[Verification Pass]
     K -->|No| M[Hydrate Tasks]
+    V --> L[Validation Interview]
     L --> M
     M --> N[Output Cook Command]
     N --> O[Journal]

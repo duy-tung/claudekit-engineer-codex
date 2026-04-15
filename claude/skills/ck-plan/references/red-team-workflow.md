@@ -39,8 +39,11 @@ Load: `references/red-team-personas.md` for reviewer prompt template.
 3. Sort by severity: Critical → High → Medium
 4. Cap at 15 findings
 
+### Step 5.5: Evidence Filter
+For each finding, check: does the `Evidence:` field contain at least one `file:line` citation (pattern `path/to/file.ext:NNN`)? If not, auto-set disposition to **Reject** with rationale "No codebase evidence." Do not evaluate merit for evidence-free findings.
+
 ### Step 6: Adjudicate
-For each finding, evaluate and propose: **Accept** or **Reject**.
+For each finding that passed the evidence filter, evaluate and propose: **Accept** or **Reject**.
 
 ### Step 7: User Review
 Present via `AskUserQuestion`:
