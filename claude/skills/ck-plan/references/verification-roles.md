@@ -16,8 +16,6 @@ Count phases in the plan to determine verification tier.
 | 3-4 | Standard | Fact Checker + Contract Verifier | 10 claims/phase |
 | 5+ | Full | All 4 roles | 15+ claims/phase |
 
-Override with `--verify-level light|standard|full` to force a specific tier.
-
 ## Role: Fact Checker
 
 **Purpose:** Verify every file path, symbol, endpoint, and config key cited in the plan actually exists.

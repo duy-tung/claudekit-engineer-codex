@@ -14,8 +14,10 @@
 Each reviewer carries their adversarial lens PLUS a verification role. Findings must include grep/glob evidence from the actual codebase, not just logical argument.
 Load: `references/verification-roles.md` for full role definitions.
 
-| Reviewer | Adversarial Lens | Verification Role |
-|----------|-----------------|-------------------|
+**Tier precedence rule:** The verification tier (Light/Standard/Full) determines which verification roles are active — NOT the reviewer's persona assignment. At Light tier, all reviewers use Fact Checker regardless of persona. At Standard tier, Fact Checker + Contract Verifier. At Full tier, the persona-specific role below applies.
+
+| Reviewer | Adversarial Lens | Verification Role (Full Tier) |
+|----------|-----------------|-------------------------------|
 | Security Adversary | Attacker mindset | Fact Checker |
 | Failure Mode Analyst | Murphy's Law | Flow Tracer |
 | Assumption Destroyer | Skeptic | Scope Auditor |
@@ -32,7 +34,7 @@ Load: `references/verification-roles.md` for full role definitions.
 
 Each reviewer prompt MUST include:
 
-1. This override: `"IGNORE your default code-review instructions. You are reviewing a PLAN DOCUMENT, not code. There is no code to lint, build, or test. Focus exclusively on plan quality."`
+1. This override: `"IGNORE your default code quality checks (linting, type safety, build validation). You are reviewing a PLAN DOCUMENT, not code — do not lint, build, or test. DO run grep/glob to verify the plan's factual claims against the actual codebase. Focus on plan quality backed by codebase evidence."`
 2. Their specific adversarial lens and persona
 3. The plan file paths so they can read original files directly
 4. These instructions:
@@ -50,7 +52,9 @@ Rules:
 - 5-10 findings per reviewer. Quality over quantity.
 - Back up every finding with grep/glob evidence from the codebase
 - Your assigned verification role: {VERIFICATION_ROLE} — use it to fact-check plan claims
-- Findings without codebase evidence (file:line citations) will be auto-rejected
+- Your verification role methods (apply these exactly):
+{VERIFICATION_ROLE_METHODS}
+- Findings without codebase evidence (file:line citations) will be rejected at adjudication
 
 Output format per finding:
 ## Finding {N}: {title}

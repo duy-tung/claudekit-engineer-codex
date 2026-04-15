@@ -29,6 +29,8 @@ Load: `references/validate-question-framework.md`
 Before interviewing the user, verify plan accuracy against the actual codebase.
 Load: `references/verification-roles.md`
 
+**Guard:** If `## Red Team Review` section already exists in `plan.md` with verification evidence, skip to Step 3 — limit this step to resolving any remaining `[UNVERIFIED]` tags only.
+
 1. **Tier detection** — Count phases in the plan:
    - 1-2 phases → Light (Fact Checker only, 5 claims/phase)
    - 3-4 phases → Standard (Fact Checker + Contract Verifier, 10 claims/phase)
@@ -38,8 +40,8 @@ Load: `references/verification-roles.md`
    - Run grep/glob to verify file paths, symbols, endpoints
    - Collect findings: VERIFIED | FAILED | UNVERIFIED
 3. **Handle failures:**
-   - Auto-correct obvious errors (wrong path → find correct via glob)
-   - Surface ambiguous failures as additional interview questions in Step 4
+   - Surface ALL failures as additional interview questions in Step 4 (with glob-suggested alternatives as "(Recommended)" options)
+   - Never auto-correct plan files — all corrections require user confirmation via interview
 4. **Check `[UNVERIFIED]` tags** — Scan plan for planner-tagged unverified claims, attempt to resolve
 5. **Append results** to `## Validation Log`:
    ```
@@ -79,9 +81,9 @@ Remind user with absolute path:
 > **Best Practice:** Run `/clear` before implementing to start with fresh context.
 > Then run:
 > ```
-> /ck:cook --auto {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> /ck:cook {--auto-or-interactive} {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
-> **Why `--auto`?** Plan was already validated — safe to skip review gates.
+> **Flag selection:** If Verification Results show `Failed: 0`, use `--auto` (safe to skip review gates). If `Failed: N > 0`, use interactive mode (no `--auto`) so review gates catch unresolved issues.
 > **Why absolute path?** After `/clear`, the new session loses previous context.
 > Fresh context helps Claude focus solely on implementation without planning context pollution.
 
