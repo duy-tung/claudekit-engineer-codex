@@ -1,5 +1,7 @@
 {
   "deletions": [
+    "AGENTS.md",
+    ".opencode/**",
     "agents/copywriter.md",
     "agents/database-admin.md",
     "agents/scout.md",
@@ -122,7 +124,7 @@
   ],
   "version": "2.16.0-beta.22",
   "name": "claudekit-engineer",
-  "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
+  "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
   "buildDate": "2026-04-15T20:06:37.891Z",
   "repository": {
     "type": "git",

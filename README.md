@@ -1,6 +1,6 @@
 # Claude Code Boilerplate
 
-A comprehensive boilerplate template for building professional software projects with **CLI Coding Agents** (**Claude Code** and **Open Code**). This template provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
+A comprehensive boilerplate template for building professional software projects with **Claude Code**. This template provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
 
 ## What is Claude Code?
 
@@ -9,10 +9,7 @@ A comprehensive boilerplate template for building professional software projects
 - [Claude Code](https://claude.com/product/claude-code)
 - [Docs](https://docs.claude.com/en/docs/claude-code/overview)
 
-**Open Code CLI Coding Agents** extend Claude Code with specialized AI agents that handle specific aspects of software development - from planning and research to testing and documentation. This creates a collaborative AI development team that works alongside human developers.
-
-- [Open Code](https://opencode.ai/)
-- [Docs](https://opencode.ai/docs)
+Additional provider support, including OpenCode, is handled by ClaudeKit CLI migration rather than bundled engineer-kit artifacts.
 
 ## Related Projects & Directories
 
@@ -92,6 +89,11 @@ A comprehensive boilerplate template for building professional software projects
    ck init --kit engineer
    ```
 
+   To target another provider later, run ClaudeKit CLI migration from the project root, for example:
+   ```bash
+   ck migrate -a opencode
+   ```
+
 3. **Start development**:
    ```bash
    # Begin with Claude Code
@@ -129,7 +131,6 @@ A comprehensive boilerplate template for building professional software projects
 │   ├── templates/          # Plan templates
 │   └── reports/            # Agent-to-agent communication
 ├── CLAUDE.md              # Project-specific Claude instructions
-├── AGENTS.md              # Agent coordination guidelines
 └── README.md              # This file
 ```
 

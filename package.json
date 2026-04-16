@@ -1,7 +1,7 @@
 {
   "name": "claudekit-engineer",
   "version": "2.16.0-beta.22",
-  "description": "A comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code).",
+  "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Warning: no test specified\" && exit 0",
@@ -38,7 +38,6 @@
   "files": [
     ".claude/",
     "plans/",
-    "AGENTS.md",
     "CLAUDE.md",
     "README.md",
     "CHANGELOG.md",

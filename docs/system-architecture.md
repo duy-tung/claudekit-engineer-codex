@@ -30,7 +30,7 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 ### 1. Core Layer
 
 #### 1.1 CLI Interface
-**Location**: Claude Code / Open Code CLI
+**Location**: Claude Code CLI
 **Responsibility**: User interaction and command routing
 **Key Functions**:
 - Parse slash commands
@@ -38,7 +38,7 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 - Display results to users
 - Manage conversation context
 
-**Technology**: Anthropic Claude Code CLI / OpenCode AI CLI
+**Technology**: Anthropic Claude Code CLI
 
 #### 1.2 Command Parser
 **Location**: Built into CLI
@@ -1064,7 +1064,6 @@ User Project
 
 ### External Resources
 - [Claude Code Documentation](https://docs.claude.com/)
-- [Open Code Documentation](https://opencode.ai/docs)
 - [MCP Documentation](https://modelcontextprotocol.io/)
 - [Semantic Versioning](https://semver.org/)
 
