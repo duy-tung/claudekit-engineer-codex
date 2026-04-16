@@ -93,6 +93,3 @@ external/
 
 # Git worktrees (local development only)
 worktrees/
-
-# Generated OpenCode backup from scripts/generate-opencode.py --force
-.opencode.backup/

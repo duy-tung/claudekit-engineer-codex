@@ -6,7 +6,7 @@
 
 ## Overview
 
-ClaudeKit Engineer is a comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code). It provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
+ClaudeKit Engineer is a comprehensive boilerplate template for building professional software projects with Claude Code. It provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
 
 ## Project Structure
 

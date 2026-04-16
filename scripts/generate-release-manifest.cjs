@@ -12,7 +12,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
 
-const INCLUDE_FILES = ['.gitignore', '.repomixignore', '.mcp.json', 'CLAUDE.md', 'AGENTS.md'];
+const INCLUDE_FILES = ['.gitignore', '.repomixignore', '.mcp.json', 'CLAUDE.md'];
 
 // Directories to skip
 const SKIP_DIRS = [
@@ -133,7 +133,7 @@ function main() {
   const tempPath = path.join(projectRoot, 'release-manifest.json.tmp');
   const sourceClaudeDir = path.join(projectRoot, sourceDir);
   const sourceClaudePrefix = path.relative(projectRoot, sourceClaudeDir).replace(/\\/g, '/');
-  const includeDirs = [sourceClaudePrefix, '.opencode', 'plans/templates'];
+  const includeDirs = [sourceClaudePrefix, 'plans/templates'];
 
   console.log(`Generating release manifest v${version}...`);
 

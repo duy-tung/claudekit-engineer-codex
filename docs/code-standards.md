@@ -928,7 +928,6 @@ const expensiveCalculation = memoize((n) => {
 
 ### Related Projects
 - [Claude Code Documentation](https://docs.claude.com/)
-- [Open Code Documentation](https://opencode.ai/docs)
 
 ## Unresolved Questions
 

@@ -104,11 +104,6 @@ function stageRuntimeClaudeDir(sourceClaudeDir, runtimeClaudeDir, runtimeDirLabe
     fs.writeFileSync(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
     console.log(`✓ Generated metadata.json with version ${metadata.version}`);
 
-    // Generate OpenCode configuration from the tracked Claude source.
-    console.log('Generating OpenCode configuration...');
-    execSync('python3 scripts/generate-opencode.py --force', { stdio: 'inherit' });
-    console.log('✓ Generated .opencode directory and AGENTS.md');
-
     // Generate release manifest against the tracked Claude source tree.
     console.log('Generating release manifest with timestamps...');
     execSync(`node scripts/generate-release-manifest.cjs "${version}"`, { stdio: 'inherit' });
@@ -143,20 +138,18 @@ function stageRuntimeClaudeDir(sourceClaudeDir, runtimeClaudeDir, runtimeDirLabe
 
     const archiveTargets = [
       runtimeDir,
-      '.opencode',
       'plans/templates',
       '.gitignore',
       '.repomixignore',
       '.mcp.json',
       'CLAUDE.md',
-      'AGENTS.md',
       'release-manifest.json',
     ];
 
     const existingTargets = archiveTargets.filter((target) => fs.existsSync(path.join(projectRoot, target)));
 
     // Validate critical files are present
-    const missingCritical = [runtimeDir, '.opencode', 'release-manifest.json'].filter(
+    const missingCritical = [runtimeDir, 'release-manifest.json'].filter(
       (target) => !fs.existsSync(path.join(projectRoot, target))
     );
 
