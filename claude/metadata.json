@@ -120,7 +120,11 @@
     "scripts/skills_data.yaml",
     "scripts/commands_data.yaml",
     "scripts/test_ck_help.py",
-    "scripts/test_ck_help_integration.py"
+    "scripts/test_ck_help_integration.py",
+    "hooks/post-edit-simplify-reminder.cjs",
+    "hooks/simplify-suggest.cjs",
+    "hooks/simplify-mark-ran.cjs",
+    "hooks/lib/simplify-state.cjs"
   ],
   "version": "2.16.0-beta.25",
   "name": "claudekit-engineer",

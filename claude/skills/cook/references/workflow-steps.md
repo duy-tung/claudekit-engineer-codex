@@ -115,6 +115,35 @@ the refactor broke something and must be fixed before the workflow proceeds.
 
 **Output:** `✓ Step 3: Implemented [N] files - [X/Y] tasks complete`
 
+### Step 3.S: Conditional Simplify (live-diff gated)
+
+Recompute signals from the live worktree (no hook state):
+
+```bash
+totals=$(git diff --numstat HEAD --ignore-all-space)
+loc=$(echo "$totals" | awk '{s+=$1+$2} END {print s+0}')
+files=$(echo "$totals" | awk 'NF{c++} END {print c+0}')
+maxFile=$(echo "$totals" | awk 'BEGIN{m=0} {if ($1>m) m=$1} END {print m+0}')
+modified=$(git diff --name-only HEAD)
+```
+
+Read thresholds from `.ck.json` (`simplify.threshold.{locDelta,fileCount,singleFileLoc}`),
+defaulting to 400 / 8 / 200. If any threshold is breached, spawn the simplifier
+scoped to the modified files:
+
+```
+Task(subagent_type="code-simplifier", prompt="Simplify these files while preserving behavior exactly: [file-list]", description="Simplify recent edits")
+```
+
+After the subagent returns, log only — never re-run or block:
+- `git diff --shortstat HEAD -- [file-list]` changed → "simplifier made scoped edits"
+- unchanged → "simplifier ran clean"
+
+Skip the step entirely when `CK_SIMPLIFY_DISABLED=1` or
+`.ck.json` `simplify.gate.enabled` is `false`.
+
+**Output:** `✓ Step 3.S: Simplify [ran|skipped] - [scoped changes|clean|under threshold]`
+
 ### [Review Gate 3] Post-Implementation (skip if auto mode)
 - Present implementation summary (files changed, key changes)
 - Use `AskUserQuestion` to ask: "Proceed to testing?" / "Request implementation changes" / "Abort"

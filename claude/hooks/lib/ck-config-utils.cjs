@@ -75,7 +75,7 @@ const DEFAULT_CONFIG = {
     'context-tracking': true,
     'scout-block': true,
     'privacy-block': true,
-    'post-edit-simplify-reminder': true,
+    'simplify-gate': true,
     'task-completed-handler': true,
     'teammate-idle-handler': true,
     'session-state': true
