@@ -547,7 +547,8 @@
           "properties": {
             "enabled": {
               "type": "boolean",
-              "default": true
+              "default": false,
+              "description": "Master toggle. Off by default (opt-in). Set true to activate the gate; env CK_SIMPLIFY_DISABLED=1 always bypasses."
             },
             "hardVerbs": {
               "type": "array",

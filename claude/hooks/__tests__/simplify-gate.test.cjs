@@ -9,13 +9,21 @@ const path = require('node:path');
 
 const HOOK = path.resolve(__dirname, '..', 'simplify-gate.cjs');
 
-function makeRepo() {
+function makeRepo({ enableGate = true } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'simplify-gate-'));
   const git = (...args) => execFileSync('git', args, { cwd: dir, stdio: 'ignore' });
   git('init', '--initial-branch=main');
   git('config', 'user.email', 'test@example.com');
   git('config', 'user.name', 'Test');
   fs.writeFileSync(path.join(dir, 'README.md'), '# repo\n');
+  // Gate defaults to OFF (opt-in). Most tests exercise enabled-gate behavior,
+  // so commit a .ck.json enabling it (committed so it doesn't pollute diff signals).
+  // Tests that need default-off pass enableGate=false.
+  if (enableGate) {
+    fs.writeFileSync(path.join(dir, '.ck.json'), JSON.stringify({
+      simplify: { gate: { enabled: true } }
+    }));
+  }
   git('add', '.');
   git('commit', '-m', 'init');
   return dir;
@@ -135,6 +143,14 @@ test('CK_SIMPLIFY_DISABLED=1 short-circuits regardless of signals', () => {
   assert.strictEqual(r.stdout.trim(), '');
 });
 
+test('default config (no .ck.json) leaves gate OFF — exits silently even on big diff + ship verb', () => {
+  const dir = makeRepo({ enableGate: false });
+  writeBigFile(dir, 'big.ts', 600);
+  const r = runHook({ cwd: dir, prompt: 'ship it' });
+  assert.strictEqual(r.status, 0);
+  assert.strictEqual(r.stdout.trim(), '');
+});
+
 test('respects .ck.json simplify.gate.enabled=false', () => {
   const dir = makeRepo();
   writeBigFile(dir, 'big.ts', 600);
@@ -150,7 +166,10 @@ test('honors custom thresholds from .ck.json', () => {
   const dir = makeRepo();
   writeBigFile(dir, 'mid.ts', 100);
   fs.writeFileSync(path.join(dir, '.ck.json'), JSON.stringify({
-    simplify: { threshold: { locDelta: 50, fileCount: 100, singleFileLoc: 10000 } }
+    simplify: {
+      threshold: { locDelta: 50, fileCount: 100, singleFileLoc: 10000 },
+      gate: { enabled: true }
+    }
   }));
   const r = runHook({ cwd: dir, prompt: 'ship it' });
   assert.strictEqual(r.status, 2);
@@ -162,7 +181,7 @@ test('honors custom verbs from .ck.json', () => {
   const dir = makeRepo();
   writeBigFile(dir, 'big.ts', 600);
   fs.writeFileSync(path.join(dir, '.ck.json'), JSON.stringify({
-    simplify: { gate: { hardVerbs: ['launch'], softVerbs: [] } }
+    simplify: { gate: { enabled: true, hardVerbs: ['launch'], softVerbs: [] } }
   }));
   const blocked = runHook({ cwd: dir, prompt: 'launch the rocket' });
   assert.strictEqual(blocked.status, 2);
