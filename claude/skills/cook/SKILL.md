@@ -86,7 +86,10 @@ flowchart TD
     F --> G[Review Gate]
     G -->|approved| H[Implement]
     G -->|rejected| E
-    H --> I[Review Gate]
+    H --> H1{Simplify signal?}
+    H1 -->|Yes| H2[Conditional Simplify]
+    H1 -->|No| I[Review Gate]
+    H2 --> I
     I -->|approved| J{--no-test?}
     J -->|No| K[Test]
     J -->|Yes| L[Finalize]
@@ -99,7 +102,7 @@ flowchart TD
 ## Workflow Overview
 
 ```
-[Intent Detection] → [Research?] → [Review] → [Plan] → [Review] → [Implement] → [Review] → [Test?] → [Review] → [Finalize]
+[Intent Detection] → [Research?] → [Review] → [Plan] → [Review] → [Implement] → [Conditional Simplify?] → [Review] → [Test?] → [Review] → [Finalize]
 ```
 
 **Default (non-auto):** Stops at `[Review]` gates for human approval before each major step.
