@@ -19,10 +19,22 @@ $ARGUMENTS
 ## PURPOSE:
 Showcase, social media posting, use output images as illustrations for articles
 
+## PREREQUISITE (MANDATORY — run BEFORE any workflow step)
+
+Invoke `/ck:project-management` **first**, before reading/analyzing the request or doing any other work. This skill owns plan/task lifecycle; `show-off` is a consumer.
+
+Purpose:
+- Create a dated plan directory under `plans/` (naming from hook injection: `{date}-{issue}-{slug}`).
+- Register the full checklist below (request-analysis → content → HTML → capture → publish) as trackable tasks.
+- Set the active plan context so downstream skills (`frontend-design`, `chrome-devtools`, capture script) share the same plan folder and assets root.
+- Record the invocation arguments (mission name, target sections, languages) in `plan.md`.
+
+Hard gate: do NOT proceed to the DETAILED INSTRUCTIONS below until the plan directory exists and the checklist is registered. If `project-management` returns `BLOCKED` / `NEEDS_CONTEXT`, resolve it first.
+
 ## DETAILED INSTRUCTIONS
 Follow these steps strictly in order, one by one:
 - Read and analyze the request carefully, split into topics/sections (minimum 2, maximum 6, including hero section).
-- Invoke `project-management` skill to break into tasks and track progress throughout.
+- Update the registered tasks in the active plan as each step starts/completes (via `project-management`).
 - Search the internet for supporting evidence or fact-checking information in the request/mission.
 - Write showcase content as markdown at `assets/showoff/<mission-name>/content.md` with all content organized by sections/topics.
   **NOTE:**
@@ -46,7 +58,7 @@ Follow these steps strictly in order, one by one:
   Remember id/class names of each section for screenshot capture later.
 - Content MUST support 2 languages: Vietnamese & English.
 - Activate `ck:chrome-devtools` skill to capture each section as images (JPG/PNG) at `assets/showoff/<mission-name>/images/` with ratio-based prefix (`horizontal`, `vertical`, `square`).
-  **NOTE:** Add slight load delay so assets and fonts render before capture.
+  **NOTE:** The capture script now auto-waits for fonts, `<img>` completion, and CSS background-image loading before each shot. `--settle-delay` adds an extra cushion for animations / lazy reveals.
   **IMPORTANT:** Use the parallel capture script for efficiency:
   ```bash
   node .claude/skills/show-off/scripts/capture-sections.js \
@@ -54,8 +66,33 @@ Follow these steps strictly in order, one by one:
     --output-dir "assets/showoff/<mission-name>/images" \
     --sections "#hero,#section-2,#section-3" \
     --ratios "horizontal,vertical,square" \
-    --delay 2000
+    --settle-delay 1500
   ```
+  **FALLBACK — `rws` CLI**: if the local script fails (puppeteer missing, headless Chrome unavailable, sandbox error, script exit non-zero) AND the `rws` command is on PATH AND `$RWEB_API_KEY` is set, fall back to the ReviewWeb screenshot API. The HTML must be publicly reachable (publish via `agentwiki` first, then use the public URL + `#section-id` anchors).
+
+  Detection:
+  ```bash
+  command -v rws >/dev/null && [ -n "$RWEB_API_KEY" ] && echo "rws fallback available"
+  ```
+
+  Per (section, ratio) capture loop:
+  ```bash
+  # Viewports: horizontal=1920x1080, vertical=1080x1920, square=1080x1080
+  rws screenshot \
+    --url "https://public-host/mission/#hero" \
+    --width 1920 --height 1080 \
+    --delay 1500 \
+    --format json \
+    | jq -r '.imageUrl' \
+    | xargs -I{} curl -sSL {} -o "assets/showoff/<mission-name>/images/horizontal-hero.png"
+  ```
+
+  Fallback rules:
+  - Run per (section, ratio) combo; parallelise with `xargs -P` or shell `&`.
+  - `--delay` passes the same settle-delay value used by the local script.
+  - Skip `rws` fallback if the HTML is only reachable via `file://` and cannot be published yet — in that case, surface the local script error to the user and stop.
+  - Never pass `$RWEB_API_KEY` on the command line; rely on the env var resolution (`rws` reads it automatically).
+  - On `rws` exit code 2 (auth error) or missing `$RWEB_API_KEY`, stop and report — do not silently skip capture.
 - Use `agentwiki` CLI to publish/update this static site when complete.
 - Use `open` CLI (or equivalent) to open the resulting HTML page.
 
@@ -79,7 +116,7 @@ node .claude/skills/show-off/scripts/capture-sections.js \
   --output-dir "./assets/showoff/my-mission/images" \
   --sections "#hero,#about,#features,#footer" \
   --ratios "horizontal,vertical,square" \
-  --delay 2000 \
+  --settle-delay 1500 \
   --format png \
   --quality 90
 
@@ -96,10 +133,21 @@ Options:
 - `--output-dir` (required): Output directory for images
 - `--sections` (required): Comma-separated CSS selectors for sections
 - `--ratios` (default: "horizontal,vertical,square"): Capture ratios
-- `--delay` (default: 2000): Ms to wait after page load before capture
+- `--settle-delay` (default: 1500): Ms to wait AFTER the page is visually ready (fonts + images + CSS backgrounds all resolved). Alias: `--delay` (back-compat).
+- `--render-timeout` (default: 15000): Max ms to wait for any single readiness signal (fonts, images, bg-images). Prevents a broken asset from hanging the run.
 - `--format` (default: "png"): Image format (png/jpg/webp)
 - `--quality` (default: 90): Image quality (1-100, for jpg/webp)
 - `--max-size` (default: 5): Max file size in MB before compression
+
+**Readiness chain before each capture:**
+1. `networkidle0` (no in-flight requests)
+2. `document.fonts.ready` (web fonts loaded)
+3. Every `<img>` complete (or errored)
+4. Every CSS `background-image` URL preloaded
+5. Double `requestAnimationFrame` (layout + compositor settle)
+6. `--settle-delay` ms (animations / JS-triggered reveals)
+
+Same chain runs again after `scrollIntoView()` per section, so reveal-on-scroll animations capture correctly.
 
 ## SECURITY POLICY
 This skill handles HTML generation and screenshot capture only. 
