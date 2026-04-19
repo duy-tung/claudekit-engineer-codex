@@ -13,6 +13,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { getStateDir } = require('../lib/session-state-manager.cjs');
 
 const HOOK_PATH = path.join(__dirname, '..', 'session-init.cjs');
 
@@ -208,12 +209,11 @@ describe('session-init.cjs', () => {
     });
 
     it('loads previous session state during startup without session-state SessionStart hook', async () => {
-      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'session-init-state-'));
-      const stateDir = path.join(tempDir, '.claude', 'session-state');
-      fs.mkdirSync(stateDir, { recursive: true });
+      const tempDir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'session-init-state-')));
+      const stateDir = getStateDir(tempDir);
       fs.writeFileSync(
         path.join(stateDir, 'latest.md'),
-        '# Session State\n<!-- Generated: 2026-03-31T12:00:00.000Z -->\n\n## What Worked (Verified)\n- Cached work\n'
+        `# Session State\n<!-- Generated: ${new Date().toISOString()} -->\n\n## What Worked (Verified)\n- Cached work\n`
       );
 
       const result = await new Promise((resolve, reject) => {
@@ -241,16 +241,16 @@ describe('session-init.cjs', () => {
     });
 
     it('respects hooks.session-state=false during startup recovery', async () => {
-      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'session-init-disabled-'));
-      const stateDir = path.join(tempDir, '.claude', 'session-state');
-      fs.mkdirSync(stateDir, { recursive: true });
+      const tempDir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'session-init-disabled-')));
+      const stateDir = getStateDir(tempDir);
+      fs.mkdirSync(path.join(tempDir, '.claude'), { recursive: true });
       fs.writeFileSync(
         path.join(tempDir, '.claude', '.ck.json'),
         JSON.stringify({ hooks: { 'session-state': false } }, null, 2)
       );
       fs.writeFileSync(
         path.join(stateDir, 'latest.md'),
-        '# Session State\n<!-- Generated: 2026-03-31T12:00:00.000Z -->\n\n## What Worked (Verified)\n- Cached work\n'
+        `# Session State\n<!-- Generated: ${new Date().toISOString()} -->\n\n## What Worked (Verified)\n- Cached work\n`
       );
 
       const result = await new Promise((resolve, reject) => {
@@ -441,8 +441,15 @@ describe('session-init.cjs', () => {
       const gitRoot = require('child_process')
         .execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim();
 
-      // Use .claude/hooks as subdirectory (guaranteed to exist)
-      const subdirPath = require('path').join(gitRoot, '.claude', 'hooks');
+      // Prefer the runtime hook dir if present; fall back to the tracked source dir in worktrees.
+      const subdirCandidates = [
+        require('path').join(gitRoot, '.claude', 'hooks'),
+        require('path').join(gitRoot, 'claude', 'hooks')
+      ];
+      const subdirPath = subdirCandidates.find((candidate) => fs.existsSync(candidate));
+      if (!subdirPath) {
+        throw new Error('No hook subdirectory found for session-init subdirectory test');
+      }
 
       const result = await new Promise((resolve, reject) => {
         const proc = spawn('node', [HOOK_PATH], {
