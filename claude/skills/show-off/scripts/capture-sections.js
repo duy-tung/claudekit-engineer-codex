@@ -34,6 +34,67 @@ let sharp = null;
 try { sharp = (await import('sharp')).default; } catch { /* noop */ }
 
 /**
+ * Wait until the page is visually ready:
+ *  1. Fonts loaded (`document.fonts.ready`)
+ *  2. Every <img> complete and non-zero natural size (or explicitly broken)
+ *  3. Every CSS background-image resolved (best-effort via Image() preload)
+ *  4. Two rAF paints to let layout + compositor settle
+ *  5. Final `settleDelay` ms for animations / lazy-triggered work
+ *
+ * Timeout bounds each wait so a broken asset never hangs the capture.
+ */
+async function waitForRender(page, { settleDelay = 500, timeout = 15000 } = {}) {
+  await page.evaluate(async (timeoutMs) => {
+    const withTimeout = (promise, ms) =>
+      Promise.race([promise, new Promise((r) => setTimeout(r, ms))]);
+
+    if (document.fonts && document.fonts.ready) {
+      await withTimeout(document.fonts.ready, timeoutMs);
+    }
+
+    const imgs = Array.from(document.images || []);
+    await withTimeout(
+      Promise.all(
+        imgs.map((img) =>
+          img.complete
+            ? Promise.resolve()
+            : new Promise((res) => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+              }),
+        ),
+      ),
+      timeoutMs,
+    );
+
+    const bgUrls = new Set();
+    for (const el of document.querySelectorAll('*')) {
+      const bg = getComputedStyle(el).backgroundImage;
+      if (!bg || bg === 'none') continue;
+      for (const m of bg.matchAll(/url\(["']?([^"')]+)["']?\)/g)) bgUrls.add(m[1]);
+    }
+    await withTimeout(
+      Promise.all(
+        Array.from(bgUrls).map(
+          (url) =>
+            new Promise((res) => {
+              const probe = new Image();
+              probe.addEventListener('load', res, { once: true });
+              probe.addEventListener('error', res, { once: true });
+              probe.src = url;
+            }),
+        ),
+      ),
+      timeoutMs,
+    );
+
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  }, timeout);
+
+  if (settleDelay > 0) await new Promise((r) => setTimeout(r, settleDelay));
+}
+
+/**
  * Compress image if it exceeds maxSizeMB.
  */
 async function compressIfNeeded(filePath, maxSizeMB = 5) {
@@ -110,7 +171,10 @@ async function main() {
   const outputDir = path.resolve(args['output-dir']);
   const sections = args.sections.split(',').map(s => s.trim());
   const ratios = (args.ratios || 'horizontal,vertical,square').split(',').map(s => s.trim());
-  const delay = parseInt(args.delay || '2000', 10);
+  // `--delay` is the post-ready settle delay (kept for back-compat).
+  // `--settle-delay` is a preferred alias. `--render-timeout` bounds each readiness check.
+  const settleDelay = parseInt(args['settle-delay'] || args.delay || '1500', 10);
+  const renderTimeout = parseInt(args['render-timeout'] || '15000', 10);
   const format = args.format || 'png';
   const quality = parseInt(args.quality || '90', 10);
   const maxSize = parseFloat(args['max-size'] || '5');
@@ -120,9 +184,9 @@ async function main() {
   const browser = await getBrowser({ headless: args.headless });
   const page = await getPage(browser);
 
-  // Navigate and wait for fonts/assets
-  await page.goto(url, { waitUntil: 'networkidle2' });
-  if (delay > 0) await new Promise(r => setTimeout(r, delay));
+  // Navigate and wait for full network+asset+font readiness before any capture.
+  await page.goto(url, { waitUntil: 'networkidle0', timeout: renderTimeout + 15000 });
+  await waitForRender(page, { settleDelay, timeout: renderTimeout });
 
   // Build capture tasks: one per (section, ratio) pair
   // Group by ratio to minimise viewport switches — captures within same ratio run sequentially,
@@ -135,8 +199,8 @@ async function main() {
     const ratioPage = await browser.newPage();
     const vp = VIEWPORTS[ratio];
     await ratioPage.setViewport({ width: vp.width, height: vp.height, deviceScaleFactor: 2 });
-    await ratioPage.goto(url, { waitUntil: 'networkidle2' });
-    if (delay > 0) await new Promise(r => setTimeout(r, delay));
+    await ratioPage.goto(url, { waitUntil: 'networkidle0', timeout: renderTimeout + 15000 });
+    await waitForRender(ratioPage, { settleDelay, timeout: renderTimeout });
 
     for (const selector of sections) {
       try {
@@ -146,8 +210,8 @@ async function main() {
           continue;
         }
         await el.scrollIntoView();
-        // Double rAF to ensure paint completes
-        await ratioPage.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+        // Let scroll-linked animations / IntersectionObserver reveals trigger, then repaint.
+        await waitForRender(ratioPage, { settleDelay: Math.min(settleDelay, 400), timeout: renderTimeout });
 
         const sectionName = selector.replace(/^[#.]/, '').replace(/[^a-zA-Z0-9-_]/g, '_');
         const fileName = `${vp.label}-${sectionName}.${format}`;
