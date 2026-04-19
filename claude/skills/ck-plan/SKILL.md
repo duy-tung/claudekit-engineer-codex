@@ -53,6 +53,49 @@ Rules:
 - Use `ck plan check` / `ck plan uncheck` for phase status changes.
 - Do not hand-edit the phases table for status toggles or structural updates when CLI commands are available.
 - Use the dashboard at `http://localhost:3456/plans` for visual plan management.
+- **Overwriting phase stub files:** `ck plan create` scaffolds small boilerplate `phase-XX-*.md` stubs. Always **Read the stub before Write** — Claude Code enforces Read-before-Write on existing files; skipping the Read causes the Write to be rejected, wasting the Write's input tokens AND forcing a retry. The stubs are tiny (~15 lines), so the Read cost is trivial. Then Write the full content following the canonical template below.
+
+### Canonical Phase File Template
+
+Use this structure when filling each `phase-XX-*.md`. Loaded once with the skill — no per-file Read needed to learn it. Frontmatter fields match the CLI's phase schema; section headers match `documentation-management.md` so phase files stay consistent across plans.
+
+````markdown
+---
+phase: <N>
+title: "<Phase Name>"
+status: pending       # pending | in-progress | completed
+priority: P2          # P1 | P2 | P3
+effort: ""            # e.g. "4h", "2d"
+dependencies: []      # phase IDs this blocks on
+---
+
+# Phase <id>: <Name>
+
+## Overview
+<1-2 sentences describing what this phase delivers>
+
+## Requirements
+- Functional: ...
+- Non-functional: ...
+
+## Architecture
+<Design, data flow, component interactions>
+
+## Related Code Files
+- Create: `path/...`
+- Modify: `path/...`
+- Delete: `path/...`
+
+## Implementation Steps
+1. ...
+2. ...
+
+## Success Criteria
+- [ ] ...
+
+## Risk Assessment
+<Risks + mitigations>
+````
 
 **IMPORTANT:** Before you start, scan unfinished plans in the active scope first:
 - Project scope: `./plans/`
