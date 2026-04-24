@@ -85,6 +85,18 @@ cd /absolute/path/to/plan-dir && ck plan check 1 --start
 cd /absolute/path/to/plan-dir && ck plan uncheck 1
 ```
 
+## Requirements
+
+### CLI Compatibility
+
+The launcher performs a capability probe before opening the browser.
+The dashboard at `/plans` is only opened when the running claudekit-cli instance supports it — detected by either:
+
+- `/api/health` response containing `"plans-dashboard"` in its `features` array, or
+- `/api/plans` responding with a 2xx status (backward-compat for early dev builds).
+
+If neither probe succeeds, the launcher prints an upgrade message and exits with code 1 without opening the browser. Upgrade the CLI to a version that exposes the plans-dashboard capability to use this launcher.
+
 ## Migration Notes
 
 The legacy standalone server, renderer, and assets have been retired from this skill.

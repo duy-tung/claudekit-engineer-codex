@@ -126,6 +126,77 @@ async function isDashboardRunningOnPort(port) {
   });
 }
 
+/**
+ * Fetch the `features` array from /api/health.
+ * Returns an empty array on any failure (timeout, parse error, missing field).
+ */
+async function fetchHealthFeatures(port) {
+  return new Promise((resolve) => {
+    const chunks = [];
+    const request = http.get(`http://localhost:${port}/api/health`, (response) => {
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        response.resume();
+        resolve([]);
+        return;
+      }
+      response.on('data', (chunk) => chunks.push(chunk));
+      response.on('end', () => {
+        try {
+          const body = JSON.parse(Buffer.concat(chunks).toString());
+          const features = body && Array.isArray(body.features) ? body.features : [];
+          resolve(features);
+        } catch {
+          resolve([]);
+        }
+      });
+    });
+
+    request.setTimeout(1500, () => {
+      request.destroy();
+      resolve([]);
+    });
+
+    request.on('error', () => resolve([]));
+  });
+}
+
+/**
+ * Probe /api/plans with a GET request.
+ * Returns true if the endpoint responds with a 2xx status.
+ * Used as a backward-compat fallback for CLI dev builds that shipped plan
+ * routes before the `features` flag was added to /api/health.
+ */
+async function probePlansRoute(port) {
+  return new Promise((resolve) => {
+    const request = http.get(`http://localhost:${port}/api/plans`, (response) => {
+      response.resume();
+      resolve(response.statusCode >= 200 && response.statusCode < 300);
+    });
+
+    request.setTimeout(1500, () => {
+      request.destroy();
+      resolve(false);
+    });
+
+    request.on('error', () => resolve(false));
+  });
+}
+
+/**
+ * Check whether the running dashboard at `port` supports the plans route.
+ * Strategy (in order):
+ *   1. /api/health features array contains "plans-dashboard"
+ *   2. /api/plans responds with 2xx (backward-compat for early dev builds)
+ * Returns true if either probe succeeds.
+ */
+async function hasPlansDashboardSupport(port) {
+  const features = await fetchHealthFeatures(port);
+  if (features.includes('plans-dashboard')) {
+    return true;
+  }
+  return probePlansRoute(port);
+}
+
 async function findRunningDashboardPort() {
   for (const port of PORT_CANDIDATES) {
     if (await isDashboardRunningOnPort(port)) {
@@ -185,6 +256,16 @@ async function waitForDashboard(timeoutMs = 15000) {
   return null;
 }
 
+function printPlansNotAvailable(port) {
+  const dashboardBase = `http://localhost:${port}`;
+  process.stderr.write('\x1b[33m[plans-kanban]\x1b[0m Plans dashboard not available on this CLI version.\n');
+  process.stderr.write('  The integrated plans dashboard requires claudekit-cli with the plans-dashboard feature.\n');
+  process.stderr.write('  Options:\n');
+  process.stderr.write('    - Update to the latest dev channel:  ck update --dev\n');
+  process.stderr.write('    - Wait for the next stable CLI release\n');
+  process.stderr.write(`  Dashboard is running at ${dashboardBase} — the plans route is not yet implemented there.\n`);
+}
+
 function openBrowser(url) {
   if (process.platform === 'darwin') {
     execFileSync('open', [url], { stdio: 'ignore' });
@@ -241,6 +322,16 @@ async function main() {
   if (!dashboardPort) {
     console.error(`Dashboard did not become ready on ports ${PORT_CANDIDATES.join(', ')}.`);
     console.error(`Try running \`ck ${START_COMMAND.join(' ')}\` manually, then open ${DASHBOARD_URL}.`);
+    process.exitCode = 1;
+    return;
+  }
+
+  // Capability probe: verify the running CLI supports the plans dashboard
+  // before opening the browser. Stable CLI builds (≤3.41.4) have no /plans
+  // route — sending the user there produces a broken experience.
+  const plansSupported = await hasPlansDashboardSupport(dashboardPort);
+  if (!plansSupported) {
+    printPlansNotAvailable(dashboardPort);
     process.exitCode = 1;
     return;
   }
