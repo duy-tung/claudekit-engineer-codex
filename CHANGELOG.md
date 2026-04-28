@@ -1,3 +1,73 @@
+## [2.17.0](https://github.com/claudekit/claudekit-engineer/compare/v2.16.0...v2.17.0) (2026-04-28)
+
+
+### 🚀 Features
+
+* **.claude:** ignore session-state dir and add xia intro page ([a0d1efc](https://github.com/claudekit/claudekit-engineer/commit/a0d1efccd32c2173e18420a6732c17c6285af51a))
+* add quality gate CI checks and CLAUDE.md preventive rules ([0fa0bc0](https://github.com/claudekit/claudekit-engineer/commit/0fa0bc038a427f0c1afa515f278d233cd4814c40)), closes [#634](https://github.com/claudekit/claudekit-engineer/issues/634) [#635](https://github.com/claudekit/claudekit-engineer/issues/635) [#636](https://github.com/claudekit/claudekit-engineer/issues/636) [#633](https://github.com/claudekit/claudekit-engineer/issues/633)
+* **agentize:** add skill to convert codebases to CLI + MCP server ([6553015](https://github.com/claudekit/claudekit-engineer/commit/65530153f409401bd4f3e6a656cdb4d516412f90))
+* **ai-multimodal:** add multi-provider image routing ([669ad49](https://github.com/claudekit/claudekit-engineer/commit/669ad49bf3bc96bd8b699ec27232cf87a4841e4a))
+* **ck-plan:** add canonical phase-file template and reinforce Read-before-Write ([5e8095b](https://github.com/claudekit/claudekit-engineer/commit/5e8095b8563be8b20187ed83a5546fe499c991a0))
+* **cti-expert:** add CTI/OSINT investigation skill ([cca0550](https://github.com/claudekit/claudekit-engineer/commit/cca0550f1f8a0a6a7d3f4f79b4534014f33078bb))
+* **hooks:** signal-driven code-simplifier gate ([44103e5](https://github.com/claudekit/claudekit-engineer/commit/44103e5c39fa8c9410b47b30f3633a3dba5b7d5d)), closes [#675](https://github.com/claudekit/claudekit-engineer/issues/675)
+* **plan-skill:** enforce CLI-only plan creation, remove fallback ([7fdc580](https://github.com/claudekit/claudekit-engineer/commit/7fdc580dfae14417dbaadab3dff446e432b5a225))
+* **plan:** add verification roles for plan content accuracy ([272c525](https://github.com/claudekit/claudekit-engineer/commit/272c5252dde86ceafb1226b0cbf718f1a5a2c661)), closes [#667](https://github.com/claudekit/claudekit-engineer/issues/667)
+* **plan:** align ck:plan docs with scoped plans ([688f5bd](https://github.com/claudekit/claudekit-engineer/commit/688f5bd069da608a94337990eb935687ec10fc4c))
+* **rules:** add skill cross-reference integrity quality gate ([09aea35](https://github.com/claudekit/claudekit-engineer/commit/09aea35f0168a0df85a2df6c67caf3596930e13d)), closes [#650](https://github.com/claudekit/claudekit-engineer/issues/650)
+* **rules:** replace flat domain tables with intent-based decision trees ([6c2d8d2](https://github.com/claudekit/claudekit-engineer/commit/6c2d8d2e917742d749787403940ec3ae1df18bc1)), closes [#655](https://github.com/claudekit/claudekit-engineer/issues/655)
+* **show-off:** readiness chain, project-management prereq, rws fallback ([943b7db](https://github.com/claudekit/claudekit-engineer/commit/943b7db83a7fcac2665d2e4db1d05e2e212b30e9))
+* **simplify-gate:** default gate.enabled to false (opt-in) ([889da7a](https://github.com/claudekit/claudekit-engineer/commit/889da7a098eedbf2893bcdca9e5a3b6d250cf3c6))
+* **skills:** add deep and tdd plan-cook workflows ([3e252e2](https://github.com/claudekit/claudekit-engineer/commit/3e252e20b80d55433ae58eb50ebcb919e2eb0e7b))
+* **skills:** add excalidraw diagram generation skill ([fb5ab7a](https://github.com/claudekit/claudekit-engineer/commit/fb5ab7a47259a3f88705beea32e3e6222f4753a4))
+* **skills:** add graphify knowledge graph skill ([ffe7449](https://github.com/claudekit/claudekit-engineer/commit/ffe74492378376adbbc00be450955c9932237355)), closes [#649](https://github.com/claudekit/claudekit-engineer/issues/649)
+* **skills:** add show-off showcase skill ([#643](https://github.com/claudekit/claudekit-engineer/issues/643)) ([ea8aabf](https://github.com/claudekit/claudekit-engineer/commit/ea8aabff43c4f1e477b9cc2b0dcd618550b70b41))
+* **skills:** add skill schema contract, format compliance gate, and harden all 82 descriptions ([b40b474](https://github.com/claudekit/claudekit-engineer/commit/b40b474874bceb360950989e66fe37c89215eee6))
+* **skills:** add workflow routing rules and cross-reference strengthening ([d21753e](https://github.com/claudekit/claudekit-engineer/commit/d21753ec1a4b480baa12c24f5ff30f369e38f1bc)), closes [#652](https://github.com/claudekit/claudekit-engineer/issues/652)
+* **skills:** add xia repo-porting skill ([ad9229d](https://github.com/claudekit/claudekit-engineer/commit/ad9229d2c06acf3d2034c709bf715491f4eb7423))
+* **stitch:** automatic per-project isolation with --project-name flag ([d2e38ca](https://github.com/claudekit/claudekit-engineer/commit/d2e38ca7498e0c9d5066f331d5bd056fbbb44dae)), closes [#673](https://github.com/claudekit/claudekit-engineer/issues/673)
+* **worktree:** add --base flag to override auto-detected base branch ([5b5ce33](https://github.com/claudekit/claudekit-engineer/commit/5b5ce333e93e7a271467a88b824226fc17d7e53f)), closes [#662](https://github.com/claudekit/claudekit-engineer/issues/662)
+* **worktree:** add status prune and submodule setup ([52ce428](https://github.com/claudekit/claudekit-engineer/commit/52ce428f1b5068a7cbd52e9992295bdf2c0bbaee))
+* **worktree:** document --base flag and baseBranchSource in SKILL.md ([e5c95af](https://github.com/claudekit/claudekit-engineer/commit/e5c95afb3ea0f014bb86faf6e6bb9d067b38d27d))
+
+
+### 🐞 Bug Fixes
+
+* baseMode override and DEFAULT_SECTION_COLORS fallback ([8d7b6a9](https://github.com/claudekit/claudekit-engineer/commit/8d7b6a91bd5a6b8ade415cb1a6b103b239ad6385)), closes [mrgoonie/claudekit-cli#674](https://github.com/mrgoonie/claudekit-cli/issues/674)
+* **ci:** restore 'released on [@dev](https://github.com/dev)' label on beta releases ([82f438e](https://github.com/claudekit/claudekit-engineer/commit/82f438e0eace8672f5d1f469a74089711026d44b))
+* harden CI gate scripts against red-team findings ([6b6711e](https://github.com/claudekit/claudekit-engineer/commit/6b6711ea7f1a7a79b92b19df970ce6dba00fcde8))
+* move quality gate rules from CLAUDE.md to .claude/rules/ ([8510736](https://github.com/claudekit/claudekit-engineer/commit/8510736721e3e3bfe2a949dfbcf9aec22711e7d1))
+* **plan:** address red-team findings in verification roles pipeline ([91bd88b](https://github.com/claudekit/claudekit-engineer/commit/91bd88bb7d50ca154a7c9406b3c0c2bccdcb80d2))
+* **plans-kanban:** feature-detect plans dashboard before opening browser ([8aa152d](https://github.com/claudekit/claudekit-engineer/commit/8aa152d51d1dfcfe9e46453d61dd018273f10f40)), closes [#697](https://github.com/claudekit/claudekit-engineer/issues/697)
+* **rules:** address red-team findings for decision tree routing ([8c9fe67](https://github.com/claudekit/claudekit-engineer/commit/8c9fe67706ca1be05270f144a6d4c67be9b255d1))
+* **skills:** add error handling and fix incorrect docs for gemini CLI across all skills ([6dd63ea](https://github.com/claudekit/claudekit-engineer/commit/6dd63ea1dae4e99c6733ca5a506a23c5e5c7e4bf)), closes [#631](https://github.com/claudekit/claudekit-engineer/issues/631)
+* **skills:** address red-team findings for graphify skill ([ada9522](https://github.com/claudekit/claudekit-engineer/commit/ada9522b22b0f2b9b21dadc3ed7ea5b1e930b4b2))
+* **skills:** address red-team review findings — standardize error patterns and fix claims ([b7ccc45](https://github.com/claudekit/claudekit-engineer/commit/b7ccc45b0c2e1be3536b4b21de19349795ee310a))
+* **skills:** categorize aliases by internal path ([db1540d](https://github.com/claudekit/claudekit-engineer/commit/db1540d29f0bf84506f3524f8dff763ecef5f661))
+* **skills:** harden xia repo-analysis flow ([4963465](https://github.com/claudekit/claudekit-engineer/commit/49634654ddb45e49adaafc549d3563d1ac526c24))
+* **skills:** use registered skill names in cross-references ([dd0bd9c](https://github.com/claudekit/claudekit-engineer/commit/dd0bd9c9c6f07bce14c6cd7b41590f94a50a171d))
+* **statusline:** restore active plan rendering ([f93cdf9](https://github.com/claudekit/claudekit-engineer/commit/f93cdf920a5f2ddfd243bcf8e3712025d5aa1e8e))
+* **worktree:** add security validation for --base flag ([555ca0a](https://github.com/claudekit/claudekit-engineer/commit/555ca0abe1bfed42cf1384e85c0bd0aa9407796b))
+
+
+### 📚 Documentation
+
+* **ai-multimodal:** document provider routing setup ([9719cc2](https://github.com/claudekit/claudekit-engineer/commit/9719cc23e313012487cad9db214612c56a0f8bdd))
+* **engineer:** sync plan and cook workflow guidance ([bd0da4f](https://github.com/claudekit/claudekit-engineer/commit/bd0da4f37e808e5af5eb1c7e9817556fb41247a4))
+* **skills:** tighten xia handoff contract ([f212cda](https://github.com/claudekit/claudekit-engineer/commit/f212cda0dbd7b1d6057142f09635c6002a901201))
+* **worktree:** refresh skills catalog entry ([aadae7e](https://github.com/claudekit/claudekit-engineer/commit/aadae7e2187f82bc1473a7cd91c94e4d5aa45a8b))
+
+
+### ♻️ Code Refactoring
+
+* **plans-kanban:** replace server with cli launcher ([e758b9a](https://github.com/claudekit/claudekit-engineer/commit/e758b9a3cfd1d0cc55c029d93cede02e80d42819))
+* remove bundled opencode artifacts from engineer kit ([7495e0d](https://github.com/claudekit/claudekit-engineer/commit/7495e0dc0dee9bfa732c0a455bad8e26e05988b0))
+* **skills:** generate skill catalogs from scanner ([898200d](https://github.com/claudekit/claudekit-engineer/commit/898200dcf4449883c1dcc77085380a1c2cc367d7))
+
+
+### ✅ Tests
+
+* **hooks:** cover Windows scout-block absolute paths ([f68b4f2](https://github.com/claudekit/claudekit-engineer/commit/f68b4f26ce6a445196053feaa2be3ee9bbdfbc64))
+
 ## [2.16.0](https://github.com/claudekit/claudekit-engineer/compare/v2.15.1...v2.16.0) (2026-04-03)
 
 

@@ -126,10 +126,10 @@
     "hooks/simplify-mark-ran.cjs",
     "hooks/lib/simplify-state.cjs"
   ],
-  "version": "2.16.0-beta.31",
+  "version": "2.17.0",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
-  "buildDate": "2026-04-24T00:35:57.474Z",
+  "buildDate": "2026-04-28T15:22:45.425Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"
