@@ -577,6 +577,20 @@ function Install-SystemDeps {
             -Category "optional"
     }
 
+    # librsvg (rsvg-convert) — required for tech-graph skill
+    if (Test-Command "rsvg-convert") {
+        Write-Success "librsvg (rsvg-convert) already installed"
+        Track-Success -Category "optional" -Name "librsvg"
+    } else {
+        $null = Install-WithPackageManager `
+            -DisplayName "librsvg (rsvg-convert)" `
+            -WingetId "GNOME.librsvg" `
+            -ChocoName "rsvg-convert" `
+            -ScoopName "librsvg" `
+            -ManualUrl "https://gitlab.gnome.org/GNOME/librsvg" `
+            -Category "optional"
+    }
+
     # Docker (optional)
     if (Test-Command "docker") {
         $dockerVersion = (docker --version)

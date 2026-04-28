@@ -507,6 +507,16 @@ install_system_deps() {
     # ImageMagick (required for media-processing skill)
     install_system_package "imagemagick" "ImageMagick" "magick,convert"
 
+    # librsvg (provides rsvg-convert — required for tech-graph skill).
+    # Package name differs per distro: brew/Alpine/Arch use "librsvg",
+    # Debian uses "librsvg2-bin", RedHat uses "librsvg2-tools".
+    local rsvg_pkg="librsvg"
+    case "$DISTRO" in
+        debian) rsvg_pkg="librsvg2-bin" ;;
+        redhat) rsvg_pkg="librsvg2-tools" ;;
+    esac
+    install_system_package "$rsvg_pkg" "librsvg (rsvg-convert)" "rsvg-convert"
+
     # PostgreSQL client (optional - just check)
     if command_exists psql; then
         print_success "PostgreSQL client already installed"
