@@ -6,7 +6,9 @@ keywords: [preview, visual, slides, diagrams, HTML]
 argument-hint: "[path] OR [--html] --explain|--slides|--diagram|--ascii [topic] OR --html --diff|--plan-review|--recap"
 metadata:
   author: claudekit
-  version: "1.1.0"
+  version: "1.2.0"
+  attribution: "Visual self-review pattern for diagram output adapted from fireworks-tech-graph by yizhiyanhua-ai (MIT)"
+  license: MIT
 ---
 
 # Preview
