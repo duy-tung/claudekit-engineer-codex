@@ -3,6 +3,8 @@ name: ck:context-engineering
 description: >-
   Check context usage limits, monitor time remaining, optimize token consumption, debug context failures.
   Use when asking about context percentage, rate limits, usage warnings, context optimization, agent architectures, memory systems.
+category: utilities
+keywords: [context, tokens, limits, memory, optimization]
 argument-hint: "[topic or question]"
 metadata:
   author: claudekit

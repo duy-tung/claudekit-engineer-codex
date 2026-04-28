@@ -1,7 +1,9 @@
 ---
 name: ck:cook
-description: "ALWAYS activate this skill before implementing EVERY feature, plan, or fix."
-argument-hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test]"
+description: "Implement features, plans, and fixes with structured workflow. Use for feature development, plan execution, code implementation pipelines."
+category: utilities
+keywords: [implementation, workflow, feature, pipeline]
+argument-hint: "[task|plan-path] [--interactive|--fast|--parallel|--auto|--no-test] [--tdd]"
 metadata:
   author: claudekit
   version: "2.1.1"
@@ -28,10 +30,15 @@ End-to-end implementation with automatic workflow detection.
 - `--no-test`: Skip testing step
 - `--auto`: Auto-approve all steps
 
+**Composable flags** (combine with any mode):
+- `--tdd`: Tests-first per phase — write tests for current behavior before
+  refactoring, then verify they still pass after the implementation step
+
 **Example:**
 ```
 /ck:cook "Add user authentication to the app" --fast
 /ck:cook path/to/plan.md --auto
+/ck:cook "Refactor auth middleware" --tdd
 ```
 
 <HARD-GATE>
@@ -79,7 +86,10 @@ flowchart TD
     F --> G[Review Gate]
     G -->|approved| H[Implement]
     G -->|rejected| E
-    H --> I[Review Gate]
+    H --> H1{Simplify signal?}
+    H1 -->|Yes| H2[Conditional Simplify]
+    H1 -->|No| I[Review Gate]
+    H2 --> I
     I -->|approved| J{--no-test?}
     J -->|No| K[Test]
     J -->|Yes| L[Finalize]
@@ -92,7 +102,7 @@ flowchart TD
 ## Workflow Overview
 
 ```
-[Intent Detection] → [Research?] → [Review] → [Plan] → [Review] → [Implement] → [Review] → [Test?] → [Review] → [Finalize]
+[Intent Detection] → [Research?] → [Review] → [Plan] → [Review] → [Implement] → [Conditional Simplify?] → [Review] → [Test?] → [Review] → [Finalize]
 ```
 
 **Default (non-auto):** Stops at `[Review]` gates for human approval before each major step.
@@ -156,3 +166,9 @@ Human review required at these checkpoints (skipped with `--auto`):
 - `references/workflow-steps.md` - Detailed step definitions for all modes
 - `references/review-cycle.md` - Interactive and auto review processes
 - `references/subagent-patterns.md` - Subagent invocation patterns
+
+## Workflow Position
+
+**Typically follows:** `/ck:plan` (execute a plan), `/ck:brainstorm` (implement agreed solution)
+**Typically precedes:** `/ck:code-review` (review after implementation), `/ck:test` (validate changes)
+**Related:** `/ck:fix` (alternative for bug fixes), `/ck:plan` (create plan before cooking)

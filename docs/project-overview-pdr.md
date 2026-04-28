@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-ClaudeKit Engineer is a comprehensive boilerplate template that revolutionizes software development by integrating AI-powered CLI coding agents (Claude Code and Open Code) into the development workflow. It provides a complete orchestration framework where specialized AI agents collaborate to handle planning, implementation, testing, code review, documentation, and project management.
+ClaudeKit Engineer is a comprehensive boilerplate template that revolutionizes software development by integrating AI-powered Claude Code workflows into the development workflow. It provides a complete orchestration framework where specialized AI agents collaborate to handle planning, implementation, testing, code review, documentation, and project management.
 
 ## Project Purpose
 
@@ -82,8 +82,8 @@ Provide a production-ready template that:
 ### 2. Comprehensive Slash Commands
 
 **Core Development Commands**:
-- `/ck:plan` - Research and create implementation plans
-- `/ck:cook` - Implement features with full workflow
+- `/ck:plan` - Research and create implementation plans (`--deep` for major refactors, `--tdd` for tests-first plans)
+- `/ck:cook` - Implement features with full workflow (`--tdd` for tests-first refactors)
 - `/ck:test` - Run comprehensive test suites
 - `/ck:ask` - Expert technical consultation
 - `/ck:bootstrap` - Initialize new projects end-to-end
@@ -94,7 +94,7 @@ Provide a production-ready template that:
 Command behavior is implemented via skill directories:
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation generation and updates
-- `plan/` - Planning workflows and validators
+- `ck-plan/` - Planning workflows and validators
 - `code-review/` - Code review workflows
 - `test/` - Testing and validation workflows
 
@@ -115,7 +115,7 @@ Command behavior is implemented via skill directories:
 **Media Processing**: media-processing (FFmpeg, ImageMagick)
 **MCP Tools**: mcp-builder, mcp-management
 **Mobile Development**: mobile-development
-**Project Planning**: plan, plans-kanban
+**Project Planning**: ck-plan, plans-kanban
 **Skill Development**: skill-creator, template-skill
 **Testing & QA**: web-testing
 **Visualization**: mermaidjs-v11
@@ -362,7 +362,7 @@ Command behavior is implemented via skill directories:
 **Actor**: Developer
 **Goal**: Add feature with full workflow
 **Flow**:
-1. Run `/ck:cook "add user authentication"`
+1. Run `/ck:cook "add user authentication"` or `/ck:cook "refactor auth middleware" --tdd`
 2. Planner creates implementation plan
 3. Researcher agents explore auth solutions
 4. Developer reviews and approves plan
@@ -420,7 +420,7 @@ Command behavior is implemented via skill directories:
 
 ### Technical Constraints
 - Requires Node.js >= 18.0.0
-- Depends on Claude Code or Open Code CLI
+- Depends on Claude Code CLI
 - File-based communication has I/O overhead
 - Token limits on AI model context windows
 
@@ -497,7 +497,7 @@ Command behavior is implemented via skill directories:
 ### Required Dependencies
 - Node.js runtime environment
 - Git version control
-- Claude Code or Open Code CLI
+- Claude Code CLI
 - API keys for AI platforms
 
 ### Optional Dependencies
@@ -566,7 +566,6 @@ Command behavior is implemented via skill directories:
 
 ### External Resources
 - [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)
-- [Open Code Documentation](https://opencode.ai/docs)
 - [Conventional Commits](https://conventionalcommits.org/)
 - [Semantic Versioning](https://semver.org/)
 - [Keep a Changelog](https://keepachangelog.com/)

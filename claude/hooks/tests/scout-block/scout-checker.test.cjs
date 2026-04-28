@@ -579,6 +579,16 @@ describe('P0 - absolute and relative paths', () => {
     assert.ok(r.blocked);
   });
 
+  it('blocks Windows absolute path to node_modules', () => {
+    const r = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: 'C:/Users/kai/project/node_modules/pkg/index.js' }, options: DEFAULT_OPTS });
+    assert.ok(r.blocked);
+  });
+
+  it('blocks Windows backslash absolute path to node_modules', () => {
+    const r = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: 'C:\\Users\\kai\\project\\node_modules\\pkg\\index.js' }, options: DEFAULT_OPTS });
+    assert.ok(r.blocked);
+  });
+
   it('blocks absolute path to dist', () => {
     const r = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: '/Users/kai/project/dist/bundle.js' }, options: DEFAULT_OPTS });
     assert.ok(r.blocked);
@@ -599,6 +609,16 @@ describe('P0 - absolute and relative paths', () => {
     assert.ok(!r.blocked);
   });
 
+  it('allows Windows absolute path to src', () => {
+    const r = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: 'C:/Users/kai/project/src/index.ts' }, options: DEFAULT_OPTS });
+    assert.ok(!r.blocked);
+  });
+
+  it('allows Windows backslash absolute path to src', () => {
+    const r = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: 'C:\\Users\\kai\\project\\src\\index.ts' }, options: DEFAULT_OPTS });
+    assert.ok(!r.blocked);
+  });
+
   it('allows ../ path to safe dir', () => {
     const r = checkScoutBlock({ toolName: 'Read', toolInput: { file_path: '../src/utils.ts' }, options: DEFAULT_OPTS });
     assert.ok(!r.blocked);
@@ -606,6 +626,16 @@ describe('P0 - absolute and relative paths', () => {
 
   it('blocks cat with absolute node_modules path', () => {
     const r = checkScoutBlock({ toolName: 'Bash', toolInput: { command: 'cat /home/user/project/node_modules/pkg/index.js' }, options: DEFAULT_OPTS });
+    assert.ok(r.blocked);
+  });
+
+  it('blocks cat with Windows absolute node_modules path', () => {
+    const r = checkScoutBlock({ toolName: 'Bash', toolInput: { command: 'cat C:/Users/kai/project/node_modules/pkg/index.js' }, options: DEFAULT_OPTS });
+    assert.ok(r.blocked);
+  });
+
+  it('blocks cat with Windows backslash absolute node_modules path', () => {
+    const r = checkScoutBlock({ toolName: 'Bash', toolInput: { command: 'cat C:\\Users\\kai\\project\\node_modules\\pkg\\index.js' }, options: DEFAULT_OPTS });
     assert.ok(r.blocked);
   });
 });

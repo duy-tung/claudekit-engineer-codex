@@ -1,6 +1,8 @@
 ---
 name: ck:project-management
 description: "Track progress, update plan statuses, manage Claude Tasks, generate reports, coordinate docs updates. Use for project oversight, status checks, plan completion, task hydration, cross-session continuity."
+category: utilities
+keywords: [project, progress, status, reports]
 argument-hint: "[task: status, hydrate, sync, report]"
 metadata:
   author: claudekit

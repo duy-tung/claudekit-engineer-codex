@@ -17,10 +17,11 @@ const DEFAULT_SECTIONS = [
   { id: 'quota',     enabled: true, order: 2, icon: '⌛' },
   { id: 'directory', enabled: true, order: 3, icon: '📁' },
   { id: 'git',       enabled: true, order: 4, icon: '🌿' },
-  { id: 'cost',      enabled: false, order: 5, icon: '💰' },
-  { id: 'changes',   enabled: true, order: 6, icon: '📝' },
-  { id: 'agents',    enabled: true, order: 7, icon: '🔄' },
-  { id: 'todos',     enabled: true, order: 8, icon: '✅' },
+  { id: 'plan',      enabled: true, order: 5, icon: '📋' },
+  { id: 'cost',      enabled: false, order: 6, icon: '💰' },
+  { id: 'changes',   enabled: true, order: 7, icon: '📝' },
+  { id: 'agents',    enabled: true, order: 8, icon: '🔄' },
+  { id: 'todos',     enabled: true, order: 9, icon: '✅' },
 ];
 
 const DEFAULT_THEME = {
@@ -30,6 +31,18 @@ const DEFAULT_THEME = {
   accent:      'cyan',
   muted:       'dim',
   separator:   'dim',
+};
+
+// Default per-section colors — applied when sectionConfig[id].color is not set.
+// Matches UI DEFAULT_SECTION_COLORS (statusline-types.ts) for consistent behavior.
+const DEFAULT_SECTION_COLORS = {
+  model:     'cyan',
+  directory: 'blue',
+  git:       'magenta',
+  cost:      'dim',
+  changes:   'brightYellow',
+  agents:    'brightCyan',
+  todos:     'brightGreen',
 };
 
 function getContextColorName(percent, theme) {
@@ -94,6 +107,13 @@ function renderGitSection(ctx, sectionConfig, theme) {
   return part;
 }
 
+// "📋 feature-slug" — returns null when no active plan is set
+function renderPlanSection(ctx, sectionConfig) {
+  if (!ctx.activePlan) return null;
+  const planColorFn = sectionConfig.color ? resolveColor(sectionConfig.color) : (value) => value;
+  return `${sectionConfig.icon || '📋'} ${planColorFn(ctx.activePlan)}`;
+}
+
 // "💰 $0.42" — returns null when no cost data
 function renderCostSection(ctx, sectionConfig, theme) {
   if (!ctx.costText) return null;
@@ -116,6 +136,7 @@ const SECTION_RENDERERS = {
   quota:     renderQuotaSection,
   directory: renderDirectorySection,
   git:       renderGitSection,
+  plan:      renderPlanSection,
   cost:      renderCostSection,
   changes:   renderChangesSection,
 };
@@ -158,7 +179,11 @@ function resolveLayout(statuslineLayout) {
       for (const id of line) {
         const base = defaultById[id] || { id, enabled: true, order: 99 };
         const cfg = sectionConfig[id] || {};
-        sections.push({ ...base, ...cfg, id, enabled: true, order: order++ });
+        // Apply default section color when no explicit color is set
+        // Priority: sectionConfig[id].color > DEFAULT_SECTION_COLORS[id] > renderer's theme.accent fallback
+        const defaultColor = DEFAULT_SECTION_COLORS[id];
+        const mergedCfg = (defaultColor && !cfg.color) ? { ...cfg, color: defaultColor } : cfg;
+        sections.push({ ...base, ...mergedCfg, id, enabled: true, order: order++ });
       }
     }
   } else if (Array.isArray(statuslineLayout.sections)) {
@@ -166,7 +191,11 @@ function resolveLayout(statuslineLayout) {
     sections = statuslineLayout.sections
       .map((cs) => {
         const cfg = sectionConfig[cs.id] || {};
-        return { ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...cfg, ...cs };
+        // Apply default section color when no explicit color is set
+        // Priority: sectionConfig[id].color > DEFAULT_SECTION_COLORS[id] > renderer's theme.accent fallback
+        const defaultColor = DEFAULT_SECTION_COLORS[cs.id];
+        const mergedCfg = (defaultColor && !cfg.color) ? { ...cfg, color: defaultColor } : cfg;
+        return { ...(defaultById[cs.id] || { id: cs.id, enabled: true, order: 99 }), ...mergedCfg, ...cs };
       })
       .filter(s => s.id)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -197,6 +226,7 @@ function resolveLayout(statuslineLayout) {
 module.exports = {
   DEFAULT_SECTIONS,
   DEFAULT_THEME,
+  DEFAULT_SECTION_COLORS,
   getContextColorName,
   getSectionRenderer,
   getQuotaColorName,

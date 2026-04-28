@@ -688,7 +688,7 @@ function Install-NodeDeps {
         Write-Success "markdown-novel-viewer dependencies installed"
     }
 
-    # plans-kanban (gray-matter)
+    # plans-kanban launcher package
     $plansKanbanPath = Join-Path $ScriptDir "plans-kanban"
     $plansKanbanPackageJson = Join-Path $plansKanbanPath "package.json"
     if ((Test-Path $plansKanbanPath) -and (Test-Path $plansKanbanPackageJson)) {

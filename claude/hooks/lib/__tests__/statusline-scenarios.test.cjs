@@ -1013,6 +1013,67 @@ async function main() {
     }
   });
 
+  await test('Active plan slug renders from Unix-style session path', async () => {
+    const tmpDir = createTempConfigProject('full');
+    const sessionId = `active-plan-unix-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      activePlan: '/tmp/.ckit/plans/260414-1130-statusline-fix',
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: []
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: '/tmp/project' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Unix active plan scenario');
+      assertContains(result.stdout, '📋 statusline-fix', 'Statusline should render the active plan slug');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Windows active plan path is normalized before rendering', async () => {
+    const tmpDir = createTempConfigProject('full');
+    const sessionId = `active-plan-win-${Date.now()}`;
+    const sessionPath = writeSessionStateFile(sessionId, {
+      activePlan: 'C:\\Users\\test\\.ckit\\plans\\260414-1130-statusline-fix',
+      statusline: {
+        sessionStart: new Date(Date.now() - 120000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        warmed: true,
+        agents: [],
+        todos: []
+      }
+    });
+
+    try {
+      const payload = {
+        session_id: sessionId,
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: 'D:\\statusline-test\\project' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Windows active plan scenario');
+      assertContains(result.stdout, '📋 statusline-fix', 'Windows session paths should render the plan slug');
+      assertTrue(!result.stdout.includes('.ckit\\plans'), 'Raw Windows plan paths should not leak into the statusline');
+    } finally {
+      try { fs.unlinkSync(sessionPath); } catch {}
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   await test('Wide terminal keeps layout compact', async () => {
     const payload = {
       model: { display_name: 'Opus 4.5' },
@@ -1038,6 +1099,89 @@ async function main() {
     const { stdout } = result;
     assertTrue(stdout.length > 0, 'Should render output in narrow mode');
     assertTrue(stdout.split('\n').length >= 2, 'Narrow width should wrap to multiple lines');
+  });
+
+  // --- TDD Red: baseMode + DEFAULT_SECTION_COLORS bugs ---
+
+  await test('baseMode in statuslineLayout overrides top-level statusline config', async () => {
+    // Config has statusline: "compact" at top level but statuslineLayout.baseMode: "full"
+    // Expected: baseMode wins — full mode output (3+ lines)
+    // Currently FAILS: runtime ignores baseMode, uses config.statusline (compact = 2 lines)
+    const tmpDir = createTempConfigProject('compact', {
+      statuslineLayout: {
+        baseMode: 'full',
+        lines: [
+          ['model', 'context'],
+          ['directory', 'git'],
+          ['agents', 'todos']
+        ]
+      }
+    });
+
+    try {
+      const payload = {
+        model: { display_name: 'Claude' },
+        workspace: { current_dir: tmpDir },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 50000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'baseMode override scenario');
+      // Full mode should produce 3+ lines (compact would be 2)
+      assertLineCountBetween(result.stdout, 3, 10, 'baseMode full should override compact — expect 3+ lines');
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Default section colors applied when no sectionConfig.color set', async () => {
+    // Config has lines but no sectionConfig colors
+    // Expected: model uses cyan (\x1b[36m), not theme.accent
+    // Currently FAILS: all sections fall back to theme.accent uniformly
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['model'], ['directory']],
+        theme: { accent: 'red' } // deliberately NOT cyan — detects if default color or accent is used
+      }
+    });
+
+    try {
+      const payload = {
+        model: { display_name: 'TestModel' },
+        workspace: { current_dir: '/tmp/test-colors' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'Default section colors scenario');
+      // Model default color should be cyan (\x1b[36m), NOT red (\x1b[31m which is theme.accent)
+      assertContains(result.stdout, '\x1b[36m', 'Model should use default cyan color, not theme.accent');
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  await test('Explicit sectionConfig.color overrides default section color', async () => {
+    // Config explicitly sets model color to magenta
+    // Expected: model uses magenta, not default cyan
+    // This is a regression guard — must PASS before and after the fix
+    const tmpDir = createTempConfigProject('full', {
+      statuslineLayout: {
+        lines: [['model']],
+        sectionConfig: { model: { color: 'magenta' } }
+      }
+    });
+
+    try {
+      const payload = {
+        model: { display_name: 'TestModel' },
+        workspace: { current_dir: '/tmp/test-override' },
+        context_window: { context_window_size: 200000, current_usage: { input_tokens: 1000 } }
+      };
+      const result = runStatuslineSync({ payload, cwd: tmpDir });
+      assertSuccessfulRun(result, 'sectionConfig color override scenario');
+      assertContains(result.stdout, '\x1b[35m', 'Model should use explicit magenta from sectionConfig');
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   console.log('\n==============================================');

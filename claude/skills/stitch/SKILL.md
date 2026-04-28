@@ -1,6 +1,8 @@
 ---
 name: ck:stitch
 description: "AI design generation with Google Stitch. Generate UI designs from text prompts, export Tailwind/HTML/DESIGN.md, orchestrate design-to-code pipeline. Use for rapid prototyping, UI generation, design exploration."
+category: frontend
+keywords: [Stitch, UI-generation, prototyping, Tailwind]
 license: MIT
 allowed-tools:
   - Bash
@@ -83,7 +85,7 @@ npx tsx scripts/stitch-export.ts <screen-id> --format all --output ./stitch-expo
 Generate UI design from text prompt.
 
 ```bash
-npx tsx scripts/stitch-generate.ts "<prompt>" [--project <id>] [--device MOBILE|DESKTOP|TABLET] [--variants <count>]
+npx tsx scripts/stitch-generate.ts "<prompt>" [--project <id>] [--project-name <title>] [--device MOBILE|DESKTOP|TABLET] [--variants <count>]
 ```
 
 Returns: screen ID, preview image URL. With `--variants`: additional design alternatives.
@@ -119,12 +121,30 @@ Refine an existing design.
 const editedScreen = await screen.edit("Make the header darker and add a search bar");
 ```
 
+### Project Isolation
+
+Stitch auto-isolates designs per git repo. Each repo gets its own Stitch project automatically.
+
+**Resolution priority:**
+1. `--project <id>` — direct Stitch project ID
+2. `--project-name <title>` — title-based lookup-or-create
+3. `STITCH_PROJECT_ID` env — user's global override
+4. Auto-detect from git repo name
+5. `"claudekit-default"` fallback
+
+When an active plan exists, pass `--project-name "{repo}/{plan-slug}"` to group designs by plan:
+```bash
+npx tsx scripts/stitch-generate.ts "checkout page" --project-name "my-saas/auth-system"
+```
+
+If no plan is active, omit `--project-name` — the script auto-detects from the git repo name.
+
 ## Orchestration Pipeline
 
 ### Design-to-Code Flow
 
 1. **Check quota** — Run `stitch-quota.ts check`. If exhausted, suggest `ck:ui-ux-pro-max` fallback.
-2. **Generate** — Run `stitch-generate.ts` with user's design prompt
+2. **Generate** — Run `stitch-generate.ts` with user's design prompt. If a plan is active, pass `--project-name "{repo}/{plan-slug}"` for isolation.
 3. **Review** — Show generated design image to user for feedback
 4. **Variants** (optional) — Generate alternatives if user wants exploration
 5. **Export** — Run `stitch-export.ts --format all` to get HTML + DESIGN.md

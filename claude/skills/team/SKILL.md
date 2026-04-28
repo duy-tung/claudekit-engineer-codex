@@ -1,6 +1,8 @@
 ---
 name: ck:team
 description: "Orchestrate Agent Teams for parallel multi-session collaboration. Use for research, implementation, review, and debug workflows requiring independent teammates."
+category: dev-tools
+keywords: [agents, parallel, multi-session, collaboration]
 argument-hint: "<template> <context> [--devs|--researchers|--reviewers N] [--delegate]"
 metadata:
   author: claudekit

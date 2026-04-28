@@ -281,7 +281,7 @@ Enterprise-grade features and deployment options.
 
 ### Technical
 - Requires Node.js >= 18.0.0
-- Depends on Claude Code or Open Code CLI
+- Depends on Claude Code CLI
 - File-based communication has I/O overhead
 - Token limits on AI model context windows
 
@@ -316,7 +316,7 @@ Enterprise-grade features and deployment options.
 ### Required
 - Node.js runtime environment
 - Git version control
-- Claude Code or Open Code CLI
+- Claude Code CLI
 - API keys for AI platforms
 
 ### Optional
@@ -507,7 +507,6 @@ Enterprise-grade features and deployment options.
 
 ### External Resources
 - [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)
-- [Open Code Documentation](https://opencode.ai/docs)
 - [Conventional Commits](https://conventionalcommits.org/)
 - [Semantic Versioning](https://semver.org/)
 - [Keep a Changelog](https://keepachangelog.com/)

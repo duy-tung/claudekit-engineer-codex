@@ -88,6 +88,14 @@ function buildUsageWindows(cache) {
   }).filter(Boolean);
 }
 
+function extractActivePlanLabel(planPath) {
+  if (!planPath || typeof planPath !== 'string') return '';
+  const normalizedPath = planPath.trim().replace(/\\/g, '/');
+  const match = normalizedPath.match(/(?:^|\/)plans\/\d+-\d+-(.+?)(?:\/|$)/);
+  if (match) return match[1];
+  return normalizedPath.split('/').filter(Boolean).pop() || normalizedPath;
+}
+
 // ============================================================================
 // MAIN
 // ============================================================================
@@ -121,10 +129,7 @@ async function main() {
       if (sessionId) {
         const session = readSessionState(sessionId);
         const planPath = session?.activePlan?.trim();
-        if (planPath) {
-          const match = planPath.match(/plans\/\d+-\d+-(.+?)(?:\/|$)/);
-          activePlan = match ? match[1] : planPath.split('/').pop();
-        }
+        if (planPath) activePlan = extractActivePlanLabel(planPath);
         transcript = readActivitySnapshot(sessionId, readSessionState) || transcript;
       }
     } catch {}
@@ -162,7 +167,7 @@ async function main() {
 
     // Config
     const config = loadConfig({ includeProject: false, includeAssertions: false, includeLocale: false });
-    const statuslineMode = config.statusline || 'full';
+    const statuslineMode = config.statuslineLayout?.baseMode || config.statusline || 'full';
     const usageWindows = config.statuslineQuota === false
       ? []
       : (resolveQuotaDisplayEligibility({ useCache: true }).eligible

@@ -24,11 +24,20 @@ function getActivityTint(sectionConfig, fallback) {
  *
  * @param {Object} transcript - Activity snapshot { agents, todos }
  * @param {number} maxRows - Max collapsed groups to show (from layout.maxAgentRows)
+ * @param {Object} sectionConfig - Section config (color, icon, etc.)
+ * @param {boolean} showIdle - When true, output a minimal idle indicator for empty agent state.
+ *   Used in full-mode renders when agents row is explicitly configured in lines[][],
+ *   ensuring the configured row position occupies at least one output line.
  * @returns {string[]} 0–2 lines
  */
-function renderAgentsLines(transcript, maxRows, sectionConfig = {}) {
+function renderAgentsLines(transcript, maxRows, sectionConfig = {}, showIdle = false) {
   const { agents } = transcript;
-  if (!agents || agents.length === 0) return [];
+  if (!agents || agents.length === 0) {
+    // When agents row is explicitly configured (showIdle=true), emit a minimal idle marker
+    // so that compact mode can slice it away while full mode shows all configured rows.
+    if (showIdle) return [dim('○')];
+    return [];
+  }
 
   const running   = agents.filter(a => a.status === 'running');
   const completed = agents.filter(a => a.status === 'completed');

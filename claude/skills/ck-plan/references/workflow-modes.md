@@ -8,6 +8,7 @@ When no flag specified, analyze task and pick mode:
 |--------|------|-----------|
 | Simple task, clear scope, no unknowns | fast | Skip research overhead |
 | Complex task, unfamiliar domain, new tech | hard | Research needed |
+| Major refactor, 5+ areas, architectural debt | deep | Need per-phase scouting |
 | 3+ independent features/layers/modules | parallel | Enable concurrent agents |
 | Ambiguous approach, multiple valid paths | two | Compare alternatives |
 
@@ -47,6 +48,54 @@ Research → Scout → Plan → Red Team → Validate → Hydrate Tasks.
 7. **Context reminder:** `/ck:cook {absolute-plan-path}/plan.md`
 
 **Why no cook flag?** Thorough planning needs interactive review gates.
+
+## Deep Mode (`--deep`)
+
+For major refactors touching 5+ areas with meaningful architectural debt.
+
+Research → Per-phase scouting → Plan → Red Team → Validate → Hydrate Tasks.
+
+1. Spawn 2-3 `researcher` agents for high-level architecture analysis
+2. Read all relevant docs and use `/ck:scout` across the affected areas
+3. For EACH planned phase, run focused scout work to:
+   - inventory files to create, modify, or delete
+   - count existing tests and identify missing coverage
+   - list functions or interfaces that need test protection
+   - identify duplicated code or risky dependency edges
+4. Planner embeds the scout data into each phase file
+5. Run red-team review
+6. Run validation
+7. Hydrate tasks unless `--no-tasks`
+8. Output the standard `/ck:cook {absolute-plan-path}/plan.md` reminder
+
+### Deep Phase Requirements
+
+Each phase file in deep mode should include:
+- a file inventory table
+- a test scenario matrix
+- a function or interface checklist
+- a dependency map for that phase
+
+## `--tdd` Flag (Composable)
+
+Combine with any mode: `--hard --tdd`, `--deep --tdd`, `--parallel --tdd`.
+
+`--tdd` adds tests-first structure to every implementation phase:
+
+```
+Phase N: [Topic]
+├── Step A: Write tests for current behavior
+├── Step B: Add shared infrastructure or seams
+├── Step C: Refactor existing code
+└── Step D: Verify compile + tests
+```
+
+Each TDD phase should include:
+- **Tests Before**: regression coverage written before refactoring
+- **Refactor**: code changes those tests protect
+- **Tests After**: new tests for new behavior created during the phase
+- **Regression Gate**: compile/type-check + test command that must pass after
+  the refactor
 
 ## Parallel Mode (`--parallel`)
 
@@ -89,6 +138,7 @@ Research → Scout → Plan 2 approaches → Compare → Hydrate Tasks.
 |------|------------------|--------------------|
 | fast | Phase-level only | Sequential chain |
 | hard | Phase + critical steps | Sequential + step deps |
+| deep | Phase + per-phase inventories | Sequential + validation gates |
 | parallel | Phase + steps + ownership | Parallel groups + sequential deps |
 | two | After user selects approach | Sequential chain |
 
@@ -98,7 +148,7 @@ All modes: See `task-management.md` for TaskCreate patterns and metadata.
 
 Adversarial review that spawns hostile reviewers to find flaws before validation.
 
-**Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
+**Available in:** hard, deep, parallel, two modes. **Skipped in:** fast mode.
 
 **Invocation:** Run `/ck:plan red-team {plan-directory-path}`.
 ```
@@ -125,7 +175,7 @@ Check `## Plan Context` → `Validation: mode=X, questions=MIN-MAX`:
 /ck:plan validate {plan-directory-path}
 ```
 
-**Available in:** hard, parallel, two modes. **Skipped in:** fast mode.
+**Available in:** hard, deep, parallel, two modes. **Skipped in:** fast mode.
 
 ## Context Reminder (MANDATORY)
 
@@ -135,8 +185,13 @@ After plan creation, MUST output with **actual absolute path**:
 |------|-----------------------------|
 | fast | `/ck:cook --auto {path}/plan.md` |
 | hard | `/ck:cook {path}/plan.md` |
+| deep | `/ck:cook {path}/plan.md` |
 | parallel | `/ck:cook --parallel {path}/plan.md` |
 | two | `/ck:cook {path}/plan.md` |
+
+If planning ran with `--tdd`, append `--tdd` to the reminder above so cook keeps
+the tests-first execution path. Example:
+`/ck:cook {path}/plan.md --tdd`
 
 > **Best Practice:** Run `/clear` before implementing to reduce planning-context carryover.
 > Then run the cook command above.

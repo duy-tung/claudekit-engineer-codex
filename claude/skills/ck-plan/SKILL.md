@@ -1,7 +1,9 @@
 ---
 name: ck:plan
 description: "Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
-argument-hint: "[task] OR [archive|red-team|validate]"
+category: utilities
+keywords: [planning, architecture, phases, roadmap]
+argument-hint: "[task] [--fast|--hard|--deep|--parallel|--two] [--tdd|--no-tasks] OR [archive|red-team|validate]"
 license: MIT
 metadata:
   author: claudekit
@@ -12,7 +14,104 @@ metadata:
 
 Create detailed technical implementation plans through research, codebase analysis, solution design, and comprehensive documentation.
 
-**IMPORTANT:** Before you start, scan unfinished plans in the current project at `./plans/` directory, read the `plan.md`, if there are relevant plans with your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
+## Prerequisites
+
+- **ClaudeKit CLI required:** This skill requires `ck` CLI for plan operations.
+  Run `npm install -g claudekit` if not installed.
+
+## CLI Integration
+
+This skill orchestrates planning, but ClaudeKit CLI now owns the plan file scaffolding and phase state mutations whenever `ck` is available.
+
+Use these commands instead of hand-editing CLI-managed plan structure:
+
+```bash
+ck plan create \
+  --title "{plan title}" \
+  --phases "{Research},{Implement},{Test}" \
+  --dir {plan-dir} \
+  --source skill
+
+ck plan create \
+  --global \
+  --title "{plan title}" \
+  --phases "{Research},{Implement},{Test}" \
+  --dir {plan-dir} \
+  --source skill
+
+cd /absolute/path/to/plan-dir && ck plan check <phase-id> --start
+cd /absolute/path/to/plan-dir && ck plan check <phase-id>
+cd /absolute/path/to/plan-dir && ck plan uncheck <phase-id>
+ck plan status /absolute/path/to/plan.md
+ck config ui --port 3456
+```
+
+Rules:
+- Use `ck plan create` to scaffold `plan.md` and `phase-*.md` when the CLI is available.
+- Default scope is project-local (`./plans/` under the current project).
+- Global scope is conditional: use `ck plan create --global ...` or fall back to global scope only when no project context exists.
+- Use `ck plan check` / `ck plan uncheck` for phase status changes.
+- Do not hand-edit the phases table for status toggles or structural updates when CLI commands are available.
+- Use the dashboard at `http://localhost:3456/plans` for visual plan management.
+- **Overwriting phase stub files:** `ck plan create` scaffolds small boilerplate `phase-XX-*.md` stubs. Always **Read the stub before Write** — Claude Code enforces Read-before-Write on existing files; skipping the Read causes the Write to be rejected, wasting the Write's input tokens AND forcing a retry. The stubs are tiny (~15 lines), so the Read cost is trivial. Then Write the full content following the canonical template below.
+
+### Canonical Phase File Template
+
+Use this structure when filling each `phase-XX-*.md`. Loaded once with the skill — no per-file Read needed to learn it. Frontmatter fields match the CLI's phase schema; section headers match `documentation-management.md` so phase files stay consistent across plans.
+
+````markdown
+---
+phase: <N>
+title: "<Phase Name>"
+status: pending       # pending | in-progress | completed
+priority: P2          # P1 | P2 | P3
+effort: ""            # e.g. "4h", "2d"
+dependencies: []      # phase IDs this blocks on
+---
+
+# Phase <id>: <Name>
+
+## Overview
+<1-2 sentences describing what this phase delivers>
+
+## Requirements
+- Functional: ...
+- Non-functional: ...
+
+## Architecture
+<Design, data flow, component interactions>
+
+## Related Code Files
+- Create: `path/...`
+- Modify: `path/...`
+- Delete: `path/...`
+
+## Implementation Steps
+1. ...
+2. ...
+
+## Success Criteria
+- [ ] ...
+
+## Risk Assessment
+<Risks + mitigations>
+````
+
+**IMPORTANT:** Before you start, scan unfinished plans in the active scope first:
+- Project scope: `./plans/`
+- Global scope: the configured global plans root
+  - Default when unset: `~/.claude/plans/`
+
+If there are relevant plans overlapping your upcoming plan, update them as well. If you're unsure or need more clarifications, use `AskUserQuestion` tool to ask the user.
+
+### Scope Selection
+
+- **Project scope** is the default whenever the current working tree has project context.
+- **Global scope** is allowed only when:
+  - the user explicitly asks for it via `--global`, or
+  - there is no project context to anchor a local plan.
+- **No project context** means no `.git`, `package.json`, or `CLAUDE.md` was found in the ancestor chain.
+- Keep scope honest in prose and examples: the skill describes CLI-owned behavior, it does not implement scope resolution itself.
 
 ### Cross-Plan Dependency Detection
 
@@ -23,17 +122,19 @@ During the pre-creation scan, detect and mark blocking relationships between pla
 3. **Classify relationship:**
    - New plan needs output of existing plan → new plan `blockedBy: [existing-plan-dir]`
    - New plan changes something existing plan depends on → existing plan `blockedBy: [new-plan-dir]`, new plan `blocks: [existing-plan-dir]`
+   - Cross-scope dependency → use `global:` or `project:` prefixes
    - Mutual dependency → both plans reference each other in `blockedBy`/`blocks`
 4. **Bidirectional update** — When relationship detected, update BOTH `plan.md` files' frontmatter
 5. **Ambiguous?** → Use `AskUserQuestion` with header "Plan Dependency", present detected overlap, ask user to confirm relationship type (blocks/blockedBy/none)
 
-**Frontmatter fields** (relative plan dir paths):
+**Frontmatter fields**:
 ```yaml
-blockedBy: [260301-1200-auth-system]     # This plan waits on these plans
-blocks: [260228-0900-user-dashboard]     # This plan blocks these plans
+blockedBy: [260301-1200-auth-system]            # Same-scope dependency
+blockedBy: [global:260301-1200-auth-system]     # Cross-scope dependency
+blocks: [project:260228-0900-user-dashboard]    # Explicit project-scope dependency
 ```
 
-**Status interaction:** A plan with `blockedBy` entries where ANY blocker is not `completed` → plan status should note `blocked` in its overview. When all blockers complete, the blocked plan becomes unblocked automatically on next scan.
+**Status interaction:** `ck plan status` is the authoritative inspection surface. Same-scope bare refs stay in the current scope; prefixed refs resolve against the explicit project/global root. Missing refs should warn and show `not found`, not hard-fail the plan.
 
 ## Default (No Arguments)
 
@@ -57,10 +158,15 @@ Default: `--auto` (analyze task complexity and auto-pick mode).
 | `--auto` | Auto-detect | Follows mode | Follows mode | Follows mode | Follows mode |
 | `--fast` | Fast | Skip | Skip | Skip | `--auto` |
 | `--hard` | Hard | 2 researchers | Yes | Optional | (none) |
+| `--deep` | Deep | 2-3 researchers + per-phase scout | Yes | Yes | (none) |
 | `--parallel` | Parallel | 2 researchers | Yes | Optional | `--parallel` |
 | `--two` | Two approaches | 2+ researchers | After selection | After selection | (none) |
 
-Add `--no-tasks` to skip task hydration in any mode.
+**Composable flags** (combine with any mode):
+| Flag | Effect |
+|------|--------|
+| `--tdd` | Add tests-first structure to each phase for regression-safe refactors |
+| `--no-tasks` | Skip task hydration |
 
 Load: `references/workflow-modes.md` for auto-detection logic, per-mode workflows, context reminders.
 
@@ -106,7 +212,7 @@ flowchart TD
     B --> C[Scope Challenge]
     C --> D[Mode Detection]
     D -->|fast| E[Skip Research]
-    D -->|hard/parallel/two| F[Spawn Researchers]
+    D -->|hard/deep/parallel/two| F[Spawn Researchers]
     E --> G[Codebase Analysis]
     F --> G
     G --> H[Write Plan via Planner]
@@ -114,8 +220,9 @@ flowchart TD
     I -->|Yes| J[Red Team Review]
     I -->|No| K{Validate?}
     J --> K
-    K -->|Yes| L[Validation Interview]
+    K -->|Yes| V[Verification Pass]
     K -->|No| M[Hydrate Tasks]
+    V --> L[Validation Interview]
     L --> M
     M --> N[Output Cook Command]
     N --> O[Journal]
@@ -133,8 +240,8 @@ flowchart TD
 3. **Research Phase** → Spawn researchers (skip in fast mode)
 4. **Codebase Analysis** → Read docs, scout if needed
 5. **Plan Documentation** → Write comprehensive plan via planner subagent
-6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/parallel/two modes)
-7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/parallel/two modes)
+6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/deep/parallel/two modes)
+7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/deep/parallel/two modes)
 8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
 9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
 10. **Journal** → Run `/ck:journal` to write a concise technical journal entry upon completion
@@ -176,8 +283,11 @@ After creating plan: `node .claude/scripts/set-active-plan.cjs {plan-dir}`
 Reports: Active plans → plan-specific path. Suggested → default path.
 
 ### Important
-**DO NOT** create plans or reports in USER directory.
-**MUST** create plans or reports in **THE CURRENT WORKING PROJECT DIRECTORY**.
+**DO NOT** create plans or reports in arbitrary user directories.
+**MUST** create plans or reports in one of these allowed roots:
+- project scope → current working project directory
+- global scope → configured global plans root
+  - Default when unset: `~/.claude/plans/`
 
 ## Subcommands
 
@@ -196,3 +306,9 @@ Reports: Active plans → plan-specific path. Suggested → default path.
 - Validate against existing codebase patterns
 
 **Remember:** Plan quality determines implementation success. Be comprehensive and consider all solution aspects.
+
+## Workflow Position
+
+**Typically follows:** `/ck:brainstorm` (after exploring options), `/ck:scout` (after codebase discovery)
+**Typically precedes:** `/ck:cook` (hand off plan for implementation)
+**Related:** `/ck:brainstorm` (explore before planning), `/ck:cook` (execute after planning)

@@ -72,6 +72,8 @@ ck.md
 
 # Generated runtime layout for release/install smoke tests
 /.claude/
+# But track repo-level rules that Claude Code reads
+!/.claude/rules/
 
 # Local-only state inside tracked claude source
 claude/agent-memory/
@@ -83,11 +85,11 @@ claude/skills/ai-multimodal/assets/demo-*.claude/session-state/*.tmp
 
 # Gemini CLI settings (symlink to staged .claude/.mcp.json)
 .gemini/settings.json
+# Showoff/marketing assets (images, showcases)
+assets/
+
 # External repos for study/reference
 external/
 
 # Git worktrees (local development only)
 worktrees/
-
-# Generated OpenCode backup from scripts/generate-opencode.py --force
-.opencode.backup/

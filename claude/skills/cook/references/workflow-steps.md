@@ -66,6 +66,39 @@ All modes share core steps with mode-specific variations.
 3. If no tasks → read plan phases, `TaskCreate` for each unchecked `[ ]` item with priority order and metadata (`phase`, `planDir`, `phaseFile`)
 4. Tasks can be blocked by other tasks via `addBlockedBy`
 
+### Conformance Checklist (before writing code)
+
+Before implementing each phase, the developer agent MUST:
+
+1. **Read `./docs/code-standards.md`** and confirm naming, file structure, and
+   error-handling patterns still match the repo.
+2. **Scout adjacent code patterns** in the files being modified and follow the
+   same import, logging, and error-wrapping style.
+3. **Check for existing helpers** before creating new utilities so the change
+   stays DRY.
+4. **Verify interface contracts** so new code extends the current surface
+   instead of creating a parallel one.
+5. **Cross-check the plan checklist** so every file in the phase inventory is
+   actually addressed.
+
+After each file is modified:
+- **Compile check:** run the relevant project compile/type-check command
+- **Pattern verify:** confirm the new code matches adjacent conventions
+- **Import check:** confirm no circular dependency or dead import was added
+
+### `--tdd` Flag Behavior
+
+When `--tdd` is active, Step 3 splits into sub-steps per phase:
+
+```
+Step 3.T: Write tests for CURRENT behavior (regression safety net)
+Step 3.I: Implement changes (refactor, new code)
+Step 3.V: Verify all tests from 3.T still pass + compile gates
+```
+
+Tests from Step 3.T document the current behavior. If any fail after Step 3.I,
+the refactor broke something and must be fixed before the workflow proceeds.
+
 **All modes:**
 - Use `TaskUpdate` to mark tasks as `in_progress` immediately.
 - Execute phase tasks sequentially (Step 3.1, 3.2, etc.)
@@ -81,6 +114,35 @@ All modes share core steps with mode-specific variations.
 - Wait for parallel group before next
 
 **Output:** `✓ Step 3: Implemented [N] files - [X/Y] tasks complete`
+
+### Step 3.S: Conditional Simplify (live-diff gated)
+
+Recompute signals from the live worktree (no hook state):
+
+```bash
+totals=$(git diff --numstat HEAD --ignore-all-space)
+loc=$(echo "$totals" | awk '{s+=$1+$2} END {print s+0}')
+files=$(echo "$totals" | awk 'NF{c++} END {print c+0}')
+maxFile=$(echo "$totals" | awk 'BEGIN{m=0} {if ($1>m) m=$1} END {print m+0}')
+modified=$(git diff --name-only HEAD)
+```
+
+Read thresholds from `.ck.json` (`simplify.threshold.{locDelta,fileCount,singleFileLoc}`),
+defaulting to 400 / 8 / 200. If any threshold is breached, spawn the simplifier
+scoped to the modified files:
+
+```
+Task(subagent_type="code-simplifier", prompt="Simplify these files while preserving behavior exactly: [file-list]", description="Simplify recent edits")
+```
+
+After the subagent returns, log only — never re-run or block:
+- `git diff --shortstat HEAD -- [file-list]` changed → "simplifier made scoped edits"
+- unchanged → "simplifier ran clean"
+
+Skip the step entirely when `CK_SIMPLIFY_DISABLED=1` or
+`.ck.json` `simplify.gate.enabled` is `false`.
+
+**Output:** `✓ Step 3.S: Simplify [ran|skipped] - [scoped changes|clean|under threshold]`
 
 ### [Review Gate 3] Post-Implementation (skip if auto mode)
 - Present implementation summary (files changed, key changes)

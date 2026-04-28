@@ -1,6 +1,8 @@
 ---
 name: ck:research
 description: "Research technical solutions, analyze architectures, gather requirements thoroughly. Use for technology evaluation, best practices research, solution design, scalability/security/maintainability analysis."
+category: utilities
+keywords: [research, evaluation, analysis, solutions]
 license: MIT
 argument-hint: "[topic]"
 metadata:
@@ -30,8 +32,8 @@ You will employ a multi-source research strategy:
 1. **Search Strategy**:
    - **Gemini Toggle**: Check `.claude/.ck.json` (or `~/.claude/.ck.json`) for `skills.research.useGemini` (default: `false`). If `false` or absent, skip Gemini and use WebSearch directly.
    - **Gemini Model**: Read from `.claude/.ck.json`: `gemini.model` (default: `gemini-3-flash-preview`)
-   - If `useGemini` is `true`: first validate Gemini CLI works by running `command -v gemini && echo "ping" | timeout 15 gemini -y -m <gemini.model>`. If validation fails or times out, fall back to WebSearch and warn: "Gemini CLI unavailable, falling back to WebSearch. Set `skills.research.useGemini: false` in `.claude/.ck.json` to suppress this check."
-   - If validation passes, execute `echo "...your search prompt..." | timeout 180 gemini -y -m <gemini.model>` (timeout: 3 minutes) and save the output using `Report:` path from `## Naming` section (including all citations). If execution times out, fall back to WebSearch for that query.
+   - If `useGemini` is `true`: first validate Gemini CLI works: `command -v gemini >/dev/null 2>&1 && cd /tmp && timeout 15 gemini -y -m <gemini.model> --prompt "ping" >/dev/null 2>&1`. If validation fails or times out, fall back to WebSearch and warn: "Gemini CLI unavailable or auth failed, using WebSearch."
+   - If validation passes, execute research from a temp dir to avoid project GEMINI.md interception (note: global `~/.gemini/GEMINI.md` still loads): `cd /tmp && timeout 180 gemini -y -m <gemini.model> --prompt "...your search prompt..." 2>&1`. Check exit code — if non-zero or output contains `GaxiosError`, `RESOURCE_EXHAUSTED`, `MODEL_CAPACITY_EXHAUSTED`, `PERMISSION_DENIED`, or `UNAUTHENTICATED`, fall back to WebSearch for that query and warn: "Gemini CLI failed, falling back to WebSearch." Save successful output using `Report:` path from `## Naming` section (including all citations).
    - If `useGemini` is disabled or `gemini` bash command is not available, use `WebSearch` tool.
    - Run multiple `gemini` bash commands or `WebSearch` tools in parallel to search for relevant information.
    - Craft precise search queries with relevant keywords

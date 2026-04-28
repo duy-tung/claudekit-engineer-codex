@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: release-beta-${{ github.repository }}
@@ -178,6 +179,29 @@ jobs:
             gh release create "v${{ steps.version.outputs.version }}" $RELEASE_ARGS
           fi
           rm -f "${{ steps.notes.outputs.file }}"
+
+      - name: Label released PRs
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Find PRs included in this release (merged since previous tag)
+          CURRENT_TAG="v${{ steps.version.outputs.version }}"
+          PREV_TAG=$(git tag --sort=-v:refname -l "v*" | grep -v "^${CURRENT_TAG}$" | head -1 || true)
+
+          if [ -z "$PREV_TAG" ]; then
+            MERGE_COMMITS=$(git log --merges --format="%s" -20)
+          else
+            MERGE_COMMITS=$(git log "${PREV_TAG}..HEAD" --merges --format="%s")
+          fi
+
+          # Extract PR numbers from merge commit messages ("Merge pull request #NNN")
+          PR_NUMBERS=$(echo "$MERGE_COMMITS" | grep -oP '#\K[0-9]+' | sort -u)
+
+          for pr in $PR_NUMBERS; do
+            echo "[i] Labeling PR #${pr} with 'released on @dev'"
+            gh pr edit "$pr" --add-label "released on @dev" 2>/dev/null || true
+          done
 
       - name: Send beta release notification to Discord
         if: success()

@@ -6,7 +6,7 @@
 
 ## Overview
 
-ClaudeKit Engineer is a comprehensive boilerplate template for building professional software projects with CLI Coding Agents (Claude Code and Open Code). It provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
+ClaudeKit Engineer is a comprehensive boilerplate template for building professional software projects with Claude Code. It provides a complete development environment with AI-powered agent orchestration, automated workflows, and intelligent project management.
 
 ## Project Structure
 
@@ -74,8 +74,8 @@ claudekit-engineer/
 ### 2. Slash Commands System (Skill-Backed)
 
 **Core Development Commands**:
-- `/ck:plan` - Research and planning
-- `/ck:cook` - Feature implementation
+- `/ck:plan` - Research and planning (`--deep` for major refactors, `--tdd` for tests-first plans)
+- `/ck:cook` - Feature implementation (`--tdd` for tests-first refactors)
 - `/ck:test` - Test execution
 - `/ck:ask` - Technical consultation
 - `/ck:bootstrap` - Project initialization
@@ -86,7 +86,7 @@ claudekit-engineer/
 **Skill Directories** (`.claude/skills/`):
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation workflows
-- `plan/` - Planning variants
+- `ck-plan/` - Planning variants
 - `code-review/` - Code review workflows
 - `test/` - Testing workflows
 
@@ -109,7 +109,7 @@ claudekit-engineer/
 - docs-seeker, document-skills, find-skills, frontend-design, frontend-development
 - git, gkg, google-adk-python, markdown-novel-viewer, mcp-builder
 - mcp-management, media-processing, mermaidjs-v11, mobile-development, payment-integration
-- plan, plans-kanban, problem-solving, react-best-practices, remotion
+- ck-plan, plans-kanban, problem-solving, react-best-practices, remotion
 - repomix, research, scout, sequential-thinking, shader
 - shopify, skill-creator, template-skill, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing

@@ -1,6 +1,8 @@
 ---
 name: ck:brainstorm
 description: "Brainstorm solutions with trade-off analysis and brutal honesty. Use for ideation, architecture decisions, technical debates, feature exploration, feasibility assessment, design discussions."
+category: utilities
+keywords: [ideation, tradeoffs, debate, decisions]
 license: MIT
 argument-hint: "[topic or problem]"
 metadata:
@@ -123,3 +125,9 @@ When brainstorming concludes with agreement, create a detailed markdown summary 
 **Remember:** Your role is to be the user's most trusted technical advisor - someone who will tell them hard truths to ensure they build something great, maintainable, and successful.
 
 **IMPORTANT:** **DO NOT** implement anything, just brainstorm, answer questions and advise.
+
+## Workflow Position
+
+**Typically follows:** `/ck:debug` (brainstorm solutions for diagnosed issues), `/ck:scout` (brainstorm after discovery)
+**Typically precedes:** `/ck:plan` (plan the agreed solution)
+**Related:** `/ck:plan` (plan after brainstorming), `/ck:debug` (debug before brainstorming)

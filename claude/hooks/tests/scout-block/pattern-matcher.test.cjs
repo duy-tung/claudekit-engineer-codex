@@ -263,6 +263,16 @@ describe('matchPath - normalization', () => {
     assert.ok(matchPath(matcher, 'node_modules\\pkg\\index.js').blocked);
   });
 
+  it('blocks Windows absolute paths with drive letters', () => {
+    assert.ok(matchPath(matcher, 'C:/Users/kai/project/node_modules/pkg/index.js').blocked);
+    assert.ok(matchPath(matcher, 'D:/work/repo/dist/bundle.js').blocked);
+  });
+
+  it('allows Windows absolute paths outside blocked directories', () => {
+    assert.ok(!matchPath(matcher, 'C:/Users/kai/project/src/index.ts').blocked);
+    assert.ok(!matchPath(matcher, 'D:/work/repo/tests/unit/example.test.ts').blocked);
+  });
+
   it('strips leading ./', () => {
     assert.ok(matchPath(matcher, './node_modules').blocked);
     assert.ok(!matchPath(matcher, './src/index.ts').blocked);
