@@ -11,9 +11,7 @@ category: dev-tools
 keywords: [diagrams, architecture, flowcharts, whiteboard, SVG]
 metadata:
   author: claudekit
-  version: "1.1.0"
-  attribution: "SVG layout cross-reference pattern adapted from fireworks-tech-graph by yizhiyanhua-ai (MIT)"
-  license: MIT
+  version: "1.2.0"
 ---
 
 # Excalidraw Diagram Skill
@@ -207,4 +205,4 @@ After generating, validate before presenting:
 | `references/element-templates.md` | Copy-paste JSON templates for file-based mode |
 | `references/json-schema.md` | Excalidraw JSON format reference |
 
-For universal SVG layout rules (component spacing, arrow routing, label placement, z-index ordering, anti-pattern catalog) that apply across any rendered SVG output, see `/ck:mermaidjs-v11`'s `references/svg-layout-from-fireworks.md`. Useful when reviewing exported Excalidraw SVGs for collisions or unreadable labels.
+For universal SVG layout rules (component spacing, arrow routing, label placement, z-index ordering, anti-pattern catalog) that apply across any rendered SVG output, see `/ck:tech-graph`'s `references/svg-layout-best-practices.md`. Useful when reviewing exported Excalidraw SVGs for collisions or unreadable labels.

@@ -6,9 +6,7 @@ keywords: [documentation, init, update, summarize]
 argument-hint: "init|update|summarize"
 metadata:
   author: claudekit
-  version: "1.1.0"
-  attribution: "SVG layout cross-reference pattern adapted from fireworks-tech-graph by yizhiyanhua-ai (MIT)"
-  license: MIT
+  version: "1.2.0"
 ---
 
 # Documentation Management
@@ -61,6 +59,6 @@ Documentation lives in `./docs` directory:
 
 Use `docs/` directory as the source of truth for documentation.
 
-When authoring or refreshing diagrams in `system-architecture.md`, apply the universal SVG layout rules from `/ck:mermaidjs-v11`'s `references/svg-layout-from-fireworks.md` (component spacing, arrow routing, label placement, z-index ordering). Pair with `/ck:preview --diagram` for visual self-review before committing.
+When authoring or refreshing diagrams in `system-architecture.md`, apply the universal SVG layout rules from `/ck:tech-graph`'s `references/svg-layout-best-practices.md` (component spacing, arrow routing, label placement, z-index ordering). Pair with `/ck:preview --diagram` for visual self-review, or use `/ck:tech-graph` directly for publish-grade output.
 
 **IMPORTANT**: **Do not** start implementing code.
