@@ -94,7 +94,7 @@ After rendering a diagram, do not trust syntactic validity alone — load the re
 - Widen inter-row / inter-column gutters so same-layer arrows have clear corridors
 - Re-render and re-inspect — repeat until visually clean
 
-For full SVG layout rules (spacing minimums, arrow connection points, z-index ordering, anti-pattern catalog), read `/ck:mermaidjs-v11`'s `references/svg-layout-from-fireworks.md`.
+For full SVG layout rules (spacing minimums, arrow connection points, z-index ordering, anti-pattern catalog), read `/ck:tech-graph`'s `references/svg-layout-best-practices.md`. For full publish-grade SVG+PNG diagram generation (7 visual styles, agent/memory primitives), use `/ck:tech-graph` directly.
 
 ## Step 3: Save and Preview
 
