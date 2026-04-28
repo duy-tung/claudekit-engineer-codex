@@ -6,9 +6,7 @@ keywords: [mermaid, diagrams, flowcharts, charts]
 argument-hint: "[diagram-type or description]"
 metadata:
   author: claudekit
-  version: "1.1.0"
-  attribution: "SVG layout best-practices reference adapted from fireworks-tech-graph by yizhiyanhua-ai (MIT)"
-  license: MIT
+  version: "1.2.0"
 ---
 
 # Mermaid.js v11
@@ -121,4 +119,5 @@ Load `references/examples.md` for:
 - `references/cli-usage.md` - CLI commands and workflows
 - `references/integration.md` - JavaScript API and embedding
 - `references/examples.md` - Practical patterns and use cases
-- `references/svg-layout-from-fireworks.md` - Universal SVG layout rules (spacing, arrow routing, label placement, z-index, anti-patterns). Read when reviewing rendered SVG output for collisions or unreadable labels.
+
+For universal SVG layout rules (component spacing, arrow routing, label placement, z-index ordering, anti-pattern catalog) when reviewing rendered output for collisions or unreadable labels, see `/ck:tech-graph`'s `references/svg-layout-best-practices.md`.
