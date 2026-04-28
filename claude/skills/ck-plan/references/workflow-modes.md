@@ -1,6 +1,6 @@
 # Workflow Modes
 
-## Auto-Detection (Default: `--auto`)
+## Auto-Detection (Default Planning Mode)
 
 When no flag specified, analyze task and pick mode:
 
@@ -31,9 +31,9 @@ No research. Analyze → Plan → Hydrate Tasks.
 1. Read codebase docs (`codebase-summary.md`, `code-standards.md`, `system-architecture.md`)
 2. Use `planner` subagent to create plan
 3. Hydrate tasks (unless `--no-tasks`)
-4. **Context reminder:** `/ck:cook --auto {absolute-plan-path}/plan.md`
+4. **Implementation option:** `/ck:cook {absolute-plan-path}/plan.md`
 
-**Why `--auto` cook flag?** Fast planning pairs with fast execution — skip review gates.
+**Why no default cook automation?** Fast planning reduces planning overhead, but implementation still requires a user choice. Add `--auto` only when the user explicitly asks to skip cook review gates.
 
 ## Hard Mode (`--hard`)
 
@@ -177,13 +177,13 @@ Check `## Plan Context` → `Validation: mode=X, questions=MIN-MAX`:
 
 **Available in:** hard, deep, parallel, two modes. **Skipped in:** fast mode.
 
-## Context Reminder (MANDATORY)
+## Context Reminder
 
-After plan creation, MUST output with **actual absolute path**:
+After plan creation, output user-choice next steps with the **actual absolute path**:
 
 | Mode | Cook Command |
 |------|-----------------------------|
-| fast | `/ck:cook --auto {path}/plan.md` |
+| fast | `/ck:cook {path}/plan.md` |
 | hard | `/ck:cook {path}/plan.md` |
 | deep | `/ck:cook {path}/plan.md` |
 | parallel | `/ck:cook --parallel {path}/plan.md` |
@@ -194,10 +194,11 @@ the tests-first execution path. Example:
 `/ck:cook {path}/plan.md --tdd`
 
 > **Best Practice:** Run `/clear` before implementing to reduce planning-context carryover.
-> Then run the cook command above.
+> Then, if the user chooses implementation, run the cook command above.
+> Add `--auto` only when the user explicitly asks for autonomous implementation.
 
 **Why absolute path?** After `/clear`, the new session loses previous context.
-This reminder is **NON-NEGOTIABLE** — always output after presenting the plan.
+Always include the absolute path after presenting the plan so the user can choose a next step safely.
 
 ## Pre-Creation Check
 
