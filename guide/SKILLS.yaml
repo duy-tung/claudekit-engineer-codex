@@ -275,10 +275,10 @@ skills:
     argument_hint: "<template> <context> [--devs|--researchers|--reviewers N] [--delegate]"
   - name: "use-mcp"
     path: "use-mcp/SKILL.md"
-    description: "Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery."
+    description: "Discover and execute MCP server tools. Two execution paths: Gemini CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server). Use for MCP integrations, tool execution, capability discovery, persistent tool catalog."
     category: "dev-tools"
-    has_scripts: false
-    has_references: false
+    has_scripts: true
+    has_references: true
     argument_hint: "[task]"
   - name: "web-testing"
     path: "web-testing/SKILL.md"

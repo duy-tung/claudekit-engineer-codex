@@ -593,9 +593,12 @@
   path: ui-ux-pro-max/SKILL.md
 - argument_hint: '[task]'
   category: dev-tools
-  description: Utilize MCP server tools with intelligent discovery and execution.
-  has_references: false
-  has_scripts: false
+  description: Discover and execute MCP server tools. Two execution paths — Gemini
+    CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server).
+    Use for MCP integrations, tool execution, capability discovery, persistent tool
+    catalog.
+  has_references: true
+  has_scripts: true
   name: use-mcp
   path: use-mcp/SKILL.md
 - category: utilities
