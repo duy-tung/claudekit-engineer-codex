@@ -224,13 +224,6 @@ skills:
     has_scripts: true
     has_references: false
     argument_hint: "[service or API to integrate]"
-  - name: "mcp-management"
-    path: "mcp-management/SKILL.md"
-    description: "Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery."
-    category: "dev-tools"
-    has_scripts: true
-    has_references: true
-    argument_hint: "[task or server-name]"
   - name: "mintlify"
     path: "mintlify/SKILL.md"
     description: "Build and deploy documentation sites with Mintlify. Use when creating API docs, developer portals, or knowledge bases. Covers docs.json configuration, MDX components (Cards, Steps, Tabs, Accordions, CodeGroup, Callouts, Mermaid, View, Tiles, Tree, Badge, Banner, Color, Tooltips, Panel), page frontmatter, navigation structure (tabs, anchors, dropdowns, products, versions, languages), theming (7 themes), OpenAPI/AsyncAPI integration, AI features (llms.txt, MCP, skill.md), deployment (GitHub, GitLab, Vercel, Cloudflare, AWS), and CLI commands for local development and validation."

@@ -22,12 +22,11 @@ Execute MCP operations via **Gemini CLI** to preserve context budget.
    echo "$ARGUMENTS. Return JSON only per GEMINI.md instructions." | gemini -y -m <gemini.model>
    ```
 
-2. **Fallback to mcp-manager subagent** (if Gemini CLI unavailable):
-   - Use `mcp-manager` subagent to discover and execute tools
-   - If the subagent got issues with the scripts of `ck:mcp-management` skill, use `ck:mcp-builder` skill to fix them
+2. **Fallback to direct MCP client tools** (if Gemini CLI unavailable):
+   - Use `ListMcpResourcesTool` and `ReadMcpResourceTool` to discover capabilities
+   - If no MCP servers are configured for the task, use `ck:mcp-builder` skill to add one
    - **DO NOT** create ANY new scripts
-   - The subagent can only use MCP tools if any to achieve this task
-   - If the subagent can't find any suitable tools, just report it back to the main agent to move on to the next step
+   - If no suitable tools exist, report back to the main agent to move on to the next step
 
 ## Important Notes
 
@@ -35,7 +34,7 @@ Execute MCP operations via **Gemini CLI** to preserve context budget.
 - Use `-y` flag to auto-approve tool execution
 - **GEMINI.md auto-loaded**: Gemini CLI automatically loads `GEMINI.md` from project root, enforcing JSON-only response format
 - **Parseable output**: Responses are structured JSON: `{"server":"name","tool":"name","success":true,"result":<data>,"error":null}`
-- **Error handling**: Check gemini exit code — if non-zero or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`/`UNAUTHENTICATED`, fall back to mcp-manager subagent
+- **Error handling**: Check gemini exit code — if non-zero or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`/`UNAUTHENTICATED`, fall back to direct `ListMcpResourcesTool` / `ReadMcpResourceTool` calls
 
 ## Anti-Pattern for MCP Tasks
 

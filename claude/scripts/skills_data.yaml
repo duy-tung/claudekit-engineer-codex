@@ -300,13 +300,6 @@
   has_scripts: true
   has_references: false
   argument_hint: "[service or API to integrate]"
-- name: "mcp-management"
-  path: "mcp-management/SKILL.md"
-  description: "Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery."
-  category: "dev-tools"
-  has_scripts: true
-  has_references: true
-  argument_hint: "[task or server-name]"
 - name: "media-processing"
   path: "media-processing/SKILL.md"
   description: "Process media with FFmpeg (video/audio), ImageMagick (images), RMBG (AI background removal). Use for encoding, format conversion, filters, thumbnails, batch processing, HLS/DASH streaming."
