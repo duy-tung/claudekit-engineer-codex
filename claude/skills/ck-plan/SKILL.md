@@ -151,12 +151,12 @@ Present as options via `AskUserQuestion` with header "Planning Operation", quest
 
 ## Workflow Modes
 
-Default: `--auto` (analyze task complexity and auto-pick mode).
+Default: auto-detect planning mode (analyze task complexity and pick mode).
 
 | Flag | Mode | Research | Red Team | Validation | Cook Flag |
 |------|------|----------|----------|------------|-----------|
 | `--auto` | Auto-detect | Follows mode | Follows mode | Follows mode | Follows mode |
-| `--fast` | Fast | Skip | Skip | Skip | `--auto` |
+| `--fast` | Fast | Skip | Skip | Skip | (none) |
 | `--hard` | Hard | 2 researchers | Yes | Optional | (none) |
 | `--deep` | Deep | 2-3 researchers + per-phase scout | Yes | Yes | (none) |
 | `--parallel` | Parallel | 2 researchers | Yes | Optional | `--parallel` |
@@ -224,7 +224,7 @@ flowchart TD
     K -->|No| M[Hydrate Tasks]
     V --> L[Validation Interview]
     L --> M
-    M --> N[Output Cook Command]
+    M --> N[Present Boundary Reminder]
     N --> O[Journal]
 ```
 
@@ -243,7 +243,7 @@ flowchart TD
 6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/deep/parallel/two modes)
 7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/deep/parallel/two modes)
 8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
-9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
+9. **Boundary Reminder** → Present optional next-step commands with absolute path
 10. **Journal** → Run `/ck:journal` to write a concise technical journal entry upon completion
 
 ## Output Requirements
@@ -310,5 +310,5 @@ Reports: Active plans → plan-specific path. Suggested → default path.
 ## Workflow Position
 
 **Typically follows:** `/ck:brainstorm` (after exploring options), `/ck:scout` (after codebase discovery)
-**Typically precedes:** `/ck:cook` (hand off plan for implementation)
+**May precede:** `/ck:cook` after user approval (otherwise stop with plan path and next-step options)
 **Related:** `/ck:brainstorm` (explore before planning), `/ck:cook` (execute after planning)

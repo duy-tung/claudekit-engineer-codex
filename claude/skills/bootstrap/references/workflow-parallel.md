@@ -1,7 +1,7 @@
 # Parallel Workflow (`--parallel`)
 
 **Thinking level:** Ultrathink parallel
-**User gates:** Design approval only. Implementation uses multi-agent parallel execution.
+**User gates:** Design approval, then normal parallel cook review gates. Implementation uses multi-agent parallel execution after user-approved cook continuation.
 
 ## Step 1: Research
 
@@ -42,7 +42,7 @@ Activate **ck:plan** skill: `/ck:plan --parallel <requirements>`
 - `plan.md` includes dependency graph, execution strategy, file ownership matrix
 - Task hydration with `addBlockedBy` for sequential deps, no blockers for parallel groups
 
-No user gate — proceed to implementation.
+After planning, hand off to cook with normal review gates. Add `--auto` only if the user explicitly asked for autonomous bootstrap.
 
 ## Step 5: Parallel Implementation → Final Report
 
@@ -55,5 +55,6 @@ Activate **ck:cook** skill: `/ck:cook --parallel <plan-path>`
 - Use `ui-ux-designer` for frontend (generate/analyze assets with `ck:ai-multimodal`, edit with `imagemagick`)
 - Respect file ownership boundaries
 - Run type checking after implementation
+- Keep cook review gates; `--parallel` controls execution shape, not approval bypass
 
 Cook handles testing, review, docs, onboarding, final report per `shared-phases.md`.

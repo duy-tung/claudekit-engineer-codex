@@ -427,8 +427,8 @@ function buildSessionSection(staticEnv = {}) {
     `- Locale: ${staticEnv.locale || process.env.LANG || ''}`,
     `- Memory usage: ${memUsed}MB/${memTotal}MB (${memPercent}%)`,
     `- CPU usage: ${cpuUsage}% user / ${cpuSystem}% system`,
-    `- Spawning multiple subagents can cause performance issues, spawn and delegate tasks intelligently based on the available system resources.`,
-    `- Remember that each subagent only has 200K tokens in context window, spawn and delegate tasks intelligently to make sure their context windows don't get bloated.`,
+    `- Spawning multiple subagents can cause performance issues; delegate only when the current user request authorizes subagent or parallel work.`,
+    `- Remember that each subagent only has 200K tokens in context window; keep prompts scoped. Advisory subagents report findings and do not mutate plan/code unless explicitly tasked.`,
     `- IMPORTANT: Include these environment information when prompting subagents to perform tasks.`,
     ``
   ];
@@ -590,7 +590,7 @@ function buildRulesSection({ devRulesPath, skillsVenv, plansPath, docsPath }) {
     lines.push(`- Python scripts in .claude/skills/: Use \`${skillsVenv}\``);
   }
 
-  lines.push(`- When skills' scripts are failed to execute, always fix them and run again, repeat until success.`);
+  lines.push(`- When skills' scripts fail, report the failure unless the current task explicitly authorizes fixing skill code; only then fix and rerun.`);
   lines.push(`- Follow **YAGNI (You Aren't Gonna Need It) - KISS (Keep It Simple, Stupid) - DRY (Don't Repeat Yourself)** principles`);
   lines.push(`- Sacrifice grammar for the sake of concision when writing reports.`);
   lines.push(`- In reports, list any unresolved questions at the end, if any.`);
@@ -611,7 +611,7 @@ function buildModularizationSection() {
     `- Analyze logical separation boundaries (functions, classes, concerns)`,
     `- Prefer kebab-case for JS/TS/Python/shell; respect language conventions (C#/Java use PascalCase, Go/Rust use snake_case)`,
     `- Write descriptive code comments`,
-    `- After modularization, continue with main task`,
+    `- After modularization, continue with the main task only when the current request authorizes implementation; advisory/report-only tasks should report the recommendation.`,
     `- When not to modularize: Markdown files, plain text files, bash scripts, configuration files, environment variables files, etc.`,
     ``
   ];

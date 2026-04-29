@@ -76,14 +76,14 @@ Add marker: `<!-- Updated: Validation Session N - {change} -->`
 - Phase propagation results
 - Recommendation: proceed or revise
 
-## Next Steps (MANDATORY)
-Remind user with absolute path:
+## Next Steps
+Present user-choice next steps with the absolute path:
 > **Best Practice:** Run `/clear` before implementing to start with fresh context.
-> Then run:
+> If the user chooses implementation, run:
 > ```
-> /ck:cook {--auto-or-interactive} {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> /ck:cook {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
-> **Flag selection:** If Verification Results show `Failed: 0`, use `--auto` (safe to skip review gates). If `Failed: N > 0`, use interactive mode (no `--auto`) so review gates catch unresolved issues.
+> **Flag selection:** If Verification Results show `Failed: 0`, the plan is eligible for implementation. Ask the user before proceeding. Add `--auto` only when the user explicitly asks for autonomous implementation. If `Failed: N > 0`, revise the plan before cooking.
 > **Why absolute path?** After `/clear`, the new session loses previous context.
 > Fresh context helps Claude focus solely on implementation without planning context pollution.
 

@@ -70,8 +70,10 @@ Add `## Red Team Review` section to `plan.md`.
 - Files modified
 - Key risks addressed
 
-## Next Steps (MANDATORY)
-Remind user to run `/ck:plan validate` then `/ck:cook --auto`.
+## Next Steps
+Remind user they can run `/ck:plan validate {plan-directory-path}` before implementation.
+When the user approves implementation, run `/ck:cook {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md`.
+Add `--auto` only when the user explicitly asks for autonomous implementation.
 
 ## Important Notes
 - Reviewers must be HOSTILE, not helpful
