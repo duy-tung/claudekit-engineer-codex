@@ -158,7 +158,7 @@ Command-line interface for MCP operations. Commands:
 
 **Method 1: Gemini CLI** (recommended)
 ```bash
-npm install -g gemini-cli
+npm install -g @google/gemini-cli
 mkdir -p .gemini && ln -sf .claude/.mcp.json .gemini/settings.json
 # IMPORTANT: Use stdin piping for MCP tasks (historically more reliable for MCP server init)
 # GEMINI.md auto-loads to enforce JSON responses
