@@ -79,7 +79,7 @@ LLM analyzes `assets/tools.json` directly - better than keyword matching algorit
 ```bash
 # IMPORTANT: Use stdin piping for MCP tasks (historically more reliable for MCP server init)
 echo "Take a screenshot of https://example.com" | gemini -y -m <gemini.model>
-# If gemini fails (exit code != 0 or output contains GaxiosError/RESOURCE_EXHAUSTED/PERMISSION_DENIED), fall back to direct scripts
+# If gemini fails (exit code != 0 or output contains GaxiosError/RESOURCE_EXHAUSTED/MODEL_CAPACITY_EXHAUSTED/PERMISSION_DENIED/UNAUTHENTICATED), fall back to direct scripts
 ```
 
 **Secondary: Direct Scripts**
@@ -102,7 +102,7 @@ Use Gemini CLI for automatic tool discovery and execution. Gemini CLI auto-loads
 # IMPORTANT: Use stdin piping for MCP tasks (historically more reliable for MCP server init)
 # Add "Return JSON only per GEMINI.md instructions" to enforce structured output
 echo "Take a screenshot of https://example.com. Return JSON only per GEMINI.md instructions." | gemini -y -m <gemini.model>
-# If gemini fails (exit code != 0 or output contains GaxiosError/RESOURCE_EXHAUSTED/PERMISSION_DENIED), fall back to Pattern 2 (direct scripts)
+# If gemini fails (exit code != 0 or output contains GaxiosError/RESOURCE_EXHAUSTED/MODEL_CAPACITY_EXHAUSTED/PERMISSION_DENIED/UNAUTHENTICATED), fall back to Pattern 2 (direct scripts)
 ```
 
 **Expected Output**:
@@ -158,7 +158,7 @@ Command-line interface for MCP operations. Commands:
 
 **Method 1: Gemini CLI** (recommended)
 ```bash
-npm install -g gemini-cli
+npm install -g @google/gemini-cli
 mkdir -p .gemini && ln -sf .claude/.mcp.json .gemini/settings.json
 # IMPORTANT: Use stdin piping for MCP tasks (historically more reliable for MCP server init)
 # GEMINI.md auto-loads to enforce JSON responses

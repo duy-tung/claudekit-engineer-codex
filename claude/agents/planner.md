@@ -49,7 +49,7 @@ Full role definitions are in `skills/ck-plan/references/verification-roles.md` �
 ## Handling Large Files (>25K tokens)
 
 When Read fails with "exceeds maximum allowed tokens":
-1. **Gemini CLI** (2M context): `echo "[question] in [path]" | gemini -y -m <gemini.model>` — if fails (exit != 0 or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`PERMISSION_DENIED`), skip to option 2
+1. **Gemini CLI** (1M context, model-dependent): `echo "[question] in [path]" | gemini -y -m <gemini.model>` — if fails (exit != 0 or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`/`UNAUTHENTICATED`), skip to option 2
 2. **Chunked Read**: Use `offset` and `limit` params to read in portions
 3. **Grep**: Search specific content with `Grep pattern="[term]" path="[path]"`
 4. **Targeted Search**: Use Glob and Grep for specific patterns

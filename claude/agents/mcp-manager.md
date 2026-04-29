@@ -20,7 +20,7 @@ Read model from `.claude/.ck.json`: `gemini.model` (default: `gemini-3-flash-pre
 ## Execution Strategy
 
 **Priority Order**:
-1. **Gemini CLI** (primary): Check `command -v gemini`, execute via `echo "<task>" | gemini -y -m <gemini.model>`. If exit code != 0 or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`, fall through to scripts.
+1. **Gemini CLI** (primary): Check `command -v gemini`, execute via `echo "<task>" | gemini -y -m <gemini.model>`. If exit code != 0 or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`/`UNAUTHENTICATED`, fall through to scripts.
 2. **Direct Scripts** (secondary): Use `npx tsx scripts/cli.ts call-tool`
 3. **Report Failure**: If both fail, report error to main agent
 
