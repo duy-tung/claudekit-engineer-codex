@@ -333,15 +333,13 @@ Reusable templates for:
 
 ## Gemini Skills Configuration
 
-This project includes several Gemini-powered skills that require a Google Gemini API key:
+Multimodal capabilities (audio, video, image, vision, document/PDF processing) are now consolidated into a single skill that requires a Google Gemini API key:
 
-- **gemini-audio** - Audio analysis and speech generation
-- **gemini-video-understanding** - Video analysis and understanding
-- **gemini-document-processing** - PDF document processing
-- **gemini-image-gen** - AI image generation
-- **gemini-vision** - Image analysis and vision capabilities
+- **`ai-multimodal`** (`claude/skills/ai-multimodal/`) — analyze images/audio/video/PDFs via Gemini API, plus image/video/speech/music generation routing across Google (Imagen, Nano Banana, Veo), OpenRouter, and MiniMax.
 
-For image generation specifically, current Gemini/Imagen API models are paid-tier only. If you want an alternative routing path for image generation, the engineer kit also supports `OPENROUTER_API_KEY` for OpenRouter-backed image models.
+> Earlier versions of the engineer kit shipped per-modality skills (`gemini-audio`, `gemini-video-understanding`, `gemini-document-processing`, `gemini-image-gen`, `gemini-vision`). These were merged into `ai-multimodal` — those names no longer exist on disk.
+
+For image generation specifically, current Gemini/Imagen API models are paid-tier only. If you want an alternative routing path for image generation, `ai-multimodal` also supports `OPENROUTER_API_KEY` for OpenRouter-backed image models and `MINIMAX_API_KEY` for MiniMax.
 
 ### API Key Setup
 
@@ -374,8 +372,8 @@ The Gemini skills check for `GEMINI_API_KEY` in the following order (priority fr
 
 5. **Individual Skill Directory `.env`** (For skill-specific keys)
    ```bash
-   # Example for gemini-audio skill
-   cp .claude/skills/gemini-audio/.env.example .claude/skills/gemini-audio/.env
+   # Example for ai-multimodal skill
+   cp .claude/skills/ai-multimodal/.env.example .claude/skills/ai-multimodal/.env
    # Then edit and set your API key
    ```
 

@@ -103,8 +103,9 @@ Use `App` when needing plugins, event compaction, or custom lifecycle management
 
 ## Model Support
 
-Latest: `gemini-2.5-flash` (default), `gemini-2.5-pro`, `gemini-2.0-flash` (sunsets Mar 2026)
+Latest: `gemini-2.5-flash` (default), `gemini-2.5-pro`
 Preview: `gemini-3-flash-preview`, `gemini-3-pro-preview`
+Deprecated: `gemini-2.0-flash` (legacy; verify against Google's model lifecycle page before relying on it)
 Also: Anthropic Claude, Ollama, LiteLLM, vLLM, Model Garden
 
 ## Best Practices
