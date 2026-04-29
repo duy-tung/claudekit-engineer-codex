@@ -27,8 +27,10 @@ Gemini CLI provides automatic MCP tool discovery and execution via natural langu
 ## Installation
 
 ```bash
-npm install -g gemini-cli
+npm install -g @google/gemini-cli
 ```
+
+The published npm package is `@google/gemini-cli` (NOT `gemini-cli` — that name was unpublished on 2025-06-25). Latest verified version: `0.40.0` (2026-04-28).
 
 Verify installation:
 ```bash
@@ -72,11 +74,40 @@ echo "<prompt>" | gemini [flags]
 
 ### Essential Flags
 
-- `-y`: Skip confirmation prompts (auto-approve tool execution)
+- `-y` / `--yolo`: Skip confirmation prompts (auto-approve tool execution). Equivalent to `--approval-mode yolo`.
 - `-m <model>`: Model selection
   - `gemini-2.5-flash` (stable, works on all account tiers)
-  - `gemini-3-flash-preview` (fast, may require Google AI Pro/Ultra for CLI)
+  - `gemini-3-flash-preview` (fast, may require Google AI Pro/Ultra for CLI; default in `.ck.json` and upstream e2e tests)
   - `gemini-2.5-pro` (quality, may hit capacity limits)
+- `-p` / `--prompt`: Headless mode (non-interactive). Official flag, NOT deprecated. Use stdin piping for MCP tasks (see warning above), `--prompt` for non-MCP research/analysis.
+
+### Approval Modes (alternative to `-y`)
+
+`--approval-mode <mode>` (added in v0.36+) is a finer-grained replacement for `-y`:
+
+| Mode | Behavior |
+|------|----------|
+| `default` | Prompt for each tool call (interactive only) |
+| `auto_edit` | Auto-approve edit tools, prompt for others |
+| `yolo` | Auto-approve everything (same as `-y` / `--yolo`) |
+| `plan` | Read-only — no tools executed; useful for dry-run analysis |
+
+```bash
+echo "task" | gemini --approval-mode yolo -m <gemini.model>
+```
+
+### Output Formats (v0.36+)
+
+`-o, --output-format <text|json|stream-json>` lets the CLI emit machine-readable output. Useful when scripting or piping into parsers:
+
+```bash
+echo "List all MCP tools" | gemini -y -m <gemini.model> -o json
+```
+
+### Deprecated Flags
+
+- `--allowed-tools` is **deprecated** as of v0.36+. Replaced by the Policy Engine (`--policy <file>` and `--admin-policy <file>`). See https://geminicli.com/docs/core/policy-engine for migration.
+- `--experimental-acp` was promoted to `--acp` (the experimental form still works but is deprecated).
 
 ### Examples
 
