@@ -246,6 +246,15 @@ flowchart TD
 9. **Boundary Reminder** → Present optional next-step commands with absolute path
 10. **Journal** → Run `/ck:journal` to write a concise technical journal entry upon completion
 
+### Whole-Plan Consistency Gate
+
+This gate is mandatory after `/ck:plan validate` or `/ck:plan red-team` edits any plan file.
+Load: `references/verification-roles.md` → "Whole-Plan Consistency Sweep".
+
+Before recommending `/ck:cook`, re-read `plan.md` and every `phase-*.md` file. Search all plan files for stale terms, rejected assumptions, renamed APIs/files/fields, superseded decisions, and duplicate embedded drafts/contracts. Reconcile contradictions across the entire plan, not only the edited phase.
+
+If unresolved contradictions remain, report them and ask the user. Do not recommend cook until the whole-plan consistency sweep reports zero unresolved contradictions.
+
 ## Output Requirements
 **IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
 

@@ -103,8 +103,48 @@ Append to plan's `## Validation Log` or include in red-team findings:
 2. [Contract Verifier] `parseConfig()` — plan says 3 callers, found 7
 ```
 
+## Whole-Plan Consistency Sweep
+
+**Purpose:** Prevent iterative validate/red-team edits from fixing one phase while leaving stale claims elsewhere.
+
+Run this after any validation or red-team change that edits `plan.md` or any `phase-*.md` file.
+
+### Required Inputs
+
+- `plan.md`
+- Every `phase-*.md` file in the plan directory
+- New decisions or accepted findings from the current validation/red-team session
+
+### Sweep Method
+
+1. Re-read `plan.md` and all `phase-*.md` files after applying edits.
+2. Build a short decision delta list from the current session:
+   - renamed fields, APIs, files, tags, timestamps, scopes, or workflows
+   - changed validation decisions or rejected assumptions
+   - changed phase order, dependencies, ownership, or success criteria
+3. Search all plan files for old terms, superseded assumptions, and duplicate embedded drafts from each delta.
+4. Reconcile affected sections across files, not only the file that triggered the finding.
+5. Check `plan.md` summary, phases table text, phase requirements, implementation steps, success criteria, risk notes, and validation/red-team logs for contradictions.
+6. If a conflict cannot be resolved with current evidence, add it to unresolved questions and do not recommend cooking yet.
+
+### Output Format
+
+Append to the current `## Validation Log` or `## Red Team Review` section:
+
+```markdown
+### Whole-Plan Consistency Sweep
+- Files reread: plan.md, phase-01-..., phase-02-...
+- Decision deltas checked: N
+- Reconciled stale references: N
+- Unresolved contradictions: N
+```
+
+If `Unresolved contradictions` is greater than zero, list each conflict with the affected files and ask the user before implementation.
+
 ## Integration Points
 
 - **Planner self-verify:** Apply Fact Checker inline while writing each phase. Tag `[UNVERIFIED]` for claims that can't be confirmed. Other roles applied during validate/red-team.
 - **Validate Step 2.5:** Run tier-appropriate roles after reading plan, before interview questions. FAILED findings become additional interview topics.
+- **Validate after propagation:** Run Whole-Plan Consistency Sweep before recommending implementation.
 - **Red-team reviewers:** Each reviewer carries their adversarial lens + assigned verification role. Findings without grep evidence = auto-rejected during adjudication.
+- **Red-team after accepted edits:** Run Whole-Plan Consistency Sweep before presenting next steps.
