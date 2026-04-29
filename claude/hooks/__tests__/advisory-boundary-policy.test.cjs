@@ -21,7 +21,8 @@ const PLAN_REFERENCES = [
   'claude/skills/ck-plan/references/workflow-modes.md',
   'claude/skills/ck-plan/references/validate-workflow.md',
   'claude/skills/ck-plan/references/red-team-workflow.md',
-  'claude/skills/ck-plan/references/task-management.md'
+  'claude/skills/ck-plan/references/task-management.md',
+  'claude/skills/ck-plan/references/verification-roles.md'
 ];
 
 function readRepoFile(relativePath) {
@@ -135,6 +136,49 @@ describe('advisory boundary policy', () => {
     assert.doesNotMatch(taskManagement, /planning\s+→\s+cook immediately/i);
     assert.match(taskManagement, /User-Approved Cook Continuation/i);
     assert.match(taskManagement, /asks the user which next step/i);
+  });
+
+  it('validate and red-team workflows require a whole-plan consistency sweep before cook', () => {
+    const planSkill = readRepoFile('claude/skills/ck-plan/SKILL.md');
+    const validateWorkflow = readRepoFile('claude/skills/ck-plan/references/validate-workflow.md');
+    const redTeamWorkflow = readRepoFile('claude/skills/ck-plan/references/red-team-workflow.md');
+    const verificationRoles = readRepoFile('claude/skills/ck-plan/references/verification-roles.md');
+
+    assert.match(planSkill, /Whole-Plan Consistency Gate/);
+    assert.match(planSkill, /Load: `references\/verification-roles\.md`/);
+    assert.match(planSkill, /re-read `plan\.md` and every `phase-\*\.md` file/i);
+    assert.match(planSkill, /Do not recommend cook until the whole-plan consistency sweep reports zero unresolved contradictions/i);
+
+    for (const [label, content] of [
+      ['validate workflow', validateWorkflow],
+      ['red-team workflow', redTeamWorkflow]
+    ]) {
+      assert.match(
+        content,
+        /Whole-Plan Consistency Sweep/,
+        `${label} must run the final whole-plan consistency sweep`
+      );
+      assert.match(
+        content,
+        /re-read `plan\.md` and every `phase-\*\.md` file/i,
+        `${label} must reread the full plan after edits`
+      );
+      assert.match(
+        content,
+        /unresolved contradictions/i,
+        `${label} must block cook when contradictions remain`
+      );
+      assert.match(
+        content,
+        /Never recommend cooking until the whole-plan consistency sweep has no unresolved contradictions/i,
+        `${label} must gate implementation on consistency`
+      );
+    }
+
+    assert.match(verificationRoles, /Whole-Plan Consistency Sweep/);
+    assert.match(verificationRoles, /Prevent iterative validate\/red-team edits/i);
+    assert.match(verificationRoles, /Search all plan files for old terms/i);
+    assert.match(verificationRoles, /Unresolved contradictions: N/);
   });
 
   it('advisory agent prompts do not tell reviewers to mutate plan files', () => {

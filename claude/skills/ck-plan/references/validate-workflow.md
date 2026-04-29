@@ -70,10 +70,23 @@ Load: `references/validate-question-framework.md` for recording format.
 Auto-propagate validation decisions to affected phase files.
 Add marker: `<!-- Updated: Validation Session N - {change} -->`
 
+### Step 7: Whole-Plan Consistency Sweep
+Load: `references/verification-roles.md` → "Whole-Plan Consistency Sweep".
+
+After propagation, re-read `plan.md` and every `phase-*.md` file. Check the whole plan for stale or contradictory claims caused by the validation decisions.
+
+Required checks:
+- Search all plan files for old terms, renamed fields/APIs/files, rejected assumptions, and superseded validation decisions.
+- Reconcile `plan.md` overview, phase summaries, implementation steps, success criteria, risk notes, and validation logs.
+- If the same SQL/query/API/body/contract appears as both prose and embedded draft, update both copies or mark the unresolved conflict.
+- Append `### Whole-Plan Consistency Sweep` to the current `## Validation Log`.
+- If any unresolved contradiction remains, ask the user before recommending implementation.
+
 ## Output
 - Number of questions asked
 - Key decisions confirmed
 - Phase propagation results
+- Whole-plan consistency sweep results
 - Recommendation: proceed or revise
 
 ## Next Steps
@@ -91,3 +104,4 @@ Present user-choice next steps with the absolute path:
 - Only ask about genuine decision points
 - If plan is simple, fewer than min questions is okay
 - Prioritize questions that could change implementation significantly
+- Never recommend cooking until the whole-plan consistency sweep has no unresolved contradictions
