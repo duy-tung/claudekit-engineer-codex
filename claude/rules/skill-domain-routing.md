@@ -76,8 +76,7 @@ User wants to...
 ```
 User wants to...
 ├── Build a new MCP server                       → /ck:mcp-builder
-├── Discover and manage existing MCP tools       → /ck:mcp-management
-└── Execute MCP tools directly                   → /ck:use-mcp
+└── Discover and execute MCP tools               → /ck:use-mcp
 ```
 
 ## Testing / Browser

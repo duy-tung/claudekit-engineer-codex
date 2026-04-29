@@ -113,7 +113,7 @@ Command behavior is implemented via skill directories:
 **Framework Integration**: web-frameworks, react-best-practices, shopify
 **Game Development**: threejs, shader
 **Media Processing**: media-processing (FFmpeg, ImageMagick)
-**MCP Tools**: mcp-builder, mcp-management
+**MCP Tools**: mcp-builder, use-mcp
 **Mobile Development**: mobile-development
 **Project Planning**: ck-plan, plans-kanban
 **Skill Development**: skill-creator, template-skill

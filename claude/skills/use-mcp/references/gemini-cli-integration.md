@@ -144,7 +144,7 @@ RESULT=$(echo "task" | gemini -y -m <gemini.model> 2>&1)
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ] || echo "$RESULT" | grep -q "GaxiosError\|RESOURCE_EXHAUSTED\|MODEL_CAPACITY_EXHAUSTED\|PERMISSION_DENIED\|UNAUTHENTICATED"; then
   echo "[GEMINI_UNAVAILABLE] Falling back to script execution."
-  # Use Pattern 2 (direct scripts) or Pattern 3 (mcp-manager subagent)
+  # Use Pattern 2 (direct scripts in scripts/cli.ts) as the fallback path
 else
   echo "$RESULT"
 fi
@@ -264,10 +264,9 @@ Shows detailed MCP communication logs.
 | Method | Speed | Flexibility | Setup | Best For |
 |--------|-------|-------------|-------|----------|
 | Gemini CLI | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | All tasks |
-| Direct Scripts | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | Specific tools |
-| mcp-manager | ⭐ | ⭐⭐ | ⭐⭐⭐ | Fallback |
+| Direct Scripts | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | Specific tool, deterministic invocation |
 
-**Recommendation**: Use Gemini CLI as primary method, fallback to scripts/subagent when unavailable.
+**Recommendation**: Use Gemini CLI as primary method, fall back to `scripts/cli.ts call-tool` when unavailable.
 
 ## Resources
 

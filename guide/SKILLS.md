@@ -192,12 +192,6 @@ Semantic code analysis with GitLab Knowledge Graph. Use for go-to-definition, fi
 
 **Location**: `.claude/skills/gkg/SKILL.md`
 
-### `kanban`
-
-Alias launcher for the ClaudeKit plans dashboard. Use for visual plan boards, progress tracking, and quick navigation into plan files.
-
-**Location**: `.claude/skills/kanban/SKILL.md`
-
 ### 📦 📚 `llms`
 
 Generate llms.txt files from docs or codebase scanning. Follows llmstxt.org spec. Use for LLM-friendly site indexes, documentation summaries, AI context optimization.
@@ -209,12 +203,6 @@ Generate llms.txt files from docs or codebase scanning. Follows llmstxt.org spec
 Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers.
 
 **Location**: `.claude/skills/mcp-builder/SKILL.md`
-
-### 📦 📚 `mcp-management`
-
-Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery.
-
-**Location**: `.claude/skills/mcp-management/SKILL.md`
 
 ### 📚 `mintlify`
 

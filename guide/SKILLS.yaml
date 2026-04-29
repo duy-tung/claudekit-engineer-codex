@@ -224,13 +224,6 @@ skills:
     has_scripts: true
     has_references: false
     argument_hint: "[service or API to integrate]"
-  - name: "mcp-management"
-    path: "mcp-management/SKILL.md"
-    description: "Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery."
-    category: "dev-tools"
-    has_scripts: true
-    has_references: true
-    argument_hint: "[task or server-name]"
   - name: "mintlify"
     path: "mintlify/SKILL.md"
     description: "Build and deploy documentation sites with Mintlify. Use when creating API docs, developer portals, or knowledge bases. Covers docs.json configuration, MDX components (Cards, Steps, Tabs, Accordions, CodeGroup, Callouts, Mermaid, View, Tiles, Tree, Badge, Banner, Color, Tooltips, Panel), page frontmatter, navigation structure (tabs, anchors, dropdowns, products, versions, languages), theming (7 themes), OpenAPI/AsyncAPI integration, AI features (llms.txt, MCP, skill.md), deployment (GitHub, GitLab, Vercel, Cloudflare, AWS), and CLI commands for local development and validation."
@@ -282,10 +275,10 @@ skills:
     argument_hint: "<template> <context> [--devs|--researchers|--reviewers N] [--delegate]"
   - name: "use-mcp"
     path: "use-mcp/SKILL.md"
-    description: "Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery."
+    description: "Discover and execute MCP server tools. Two execution paths: Gemini CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server). Use for MCP integrations, tool execution, capability discovery, persistent tool catalog."
     category: "dev-tools"
-    has_scripts: false
-    has_references: false
+    has_scripts: true
+    has_references: true
     argument_hint: "[task]"
   - name: "web-testing"
     path: "web-testing/SKILL.md"

@@ -193,17 +193,6 @@
   has_scripts: true
   name: mcp-builder
   path: mcp-builder/SKILL.md
-- category: dev-tools
-  description: Manage Model Context Protocol (MCP) servers - discover, analyze, and
-    execute tools/prompts/resources from configured MCP servers. Use when working
-    with MCP integrations, need to discover available MCP capabilities, filter MCP
-    tools for specific tasks, execute MCP tools programmatically, access MCP prompts/resources,
-    or implement MCP client functionality. Supports intelligent tool selection, multi-server
-    management, and context-efficient capability discovery.
-  has_references: true
-  has_scripts: true
-  name: mcp-management
-  path: mcp-management/SKILL.md
 - category: multimedia
   description: Process multimedia files with FFmpeg (video/audio encoding, conversion,
     streaming, filtering, hardware acceleration), ImageMagick (image manipulation,

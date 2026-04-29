@@ -300,13 +300,6 @@
   has_scripts: true
   has_references: false
   argument_hint: "[service or API to integrate]"
-- name: "mcp-management"
-  path: "mcp-management/SKILL.md"
-  description: "Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery."
-  category: "dev-tools"
-  has_scripts: true
-  has_references: true
-  argument_hint: "[task or server-name]"
 - name: "media-processing"
   path: "media-processing/SKILL.md"
   description: "Process media with FFmpeg (video/audio), ImageMagick (images), RMBG (AI background removal). Use for encoding, format conversion, filters, thumbnails, batch processing, HLS/DASH streaming."
@@ -518,10 +511,10 @@
   has_references: false
 - name: "use-mcp"
   path: "use-mcp/SKILL.md"
-  description: "Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery."
+  description: "Discover and execute MCP server tools. Two execution paths: Gemini CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server). Use for MCP integrations, tool execution, capability discovery, persistent tool catalog."
   category: "dev-tools"
-  has_scripts: false
-  has_references: false
+  has_scripts: true
+  has_references: true
   argument_hint: "[task]"
 - name: "watzup"
   path: "watzup/SKILL.md"

@@ -67,7 +67,7 @@ export class MCPClientManager {
     });
 
     const client = new Client({
-      name: `mcp-manager-${serverName}`,
+      name: `use-mcp-${serverName}`,
       version: '1.0.0'
     }, { capabilities: {} });
 

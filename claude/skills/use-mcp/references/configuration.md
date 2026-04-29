@@ -101,7 +101,7 @@ Reference env vars with `${VAR_NAME}` syntax:
 Scripts check for config in this order:
 
 1. `process.env` (runtime environment)
-2. `.claude/skills/mcp-management/.env`
+2. `.claude/skills/use-mcp/.env`
 3. `.claude/skills/.env`
 4. `.claude/.env`
 

@@ -74,7 +74,7 @@ Pure capability providers — referenced by hub skills but don't call other skil
 ### Layer 4 — Standalone Skills
 Domain-specific tools operating independently.
 
-`agent-browser` · `ai-artist` · `backend-development` · `better-auth` · `databases` · `devops` · `frontend-development` · `google-adk-python` · `markdown-novel-viewer` · `mcp-builder` · `mcp-management` · `mintlify` · `mobile-development` · `payment-integration` · `plans-kanban` · `react-best-practices` · `remotion` · `shader` · `shopify` · `tanstack` · `template-skill` · `threejs` · `ui-styling` · `web-design-guidelines` · `web-frameworks` · `web-testing`
+`agent-browser` · `ai-artist` · `backend-development` · `better-auth` · `databases` · `devops` · `frontend-development` · `google-adk-python` · `markdown-novel-viewer` · `mcp-builder` · `mintlify` · `mobile-development` · `payment-integration` · `plans-kanban` · `react-best-practices` · `remotion` · `shader` · `shopify` · `tanstack` · `template-skill` · `threejs` · `ui-styling` · `web-design-guidelines` · `web-frameworks` · `web-testing`
 
 ## Hub Connectivity (most referenced)
 

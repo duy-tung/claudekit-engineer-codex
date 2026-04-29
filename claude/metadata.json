@@ -125,7 +125,10 @@
     "hooks/simplify-suggest.cjs",
     "hooks/simplify-mark-ran.cjs",
     "hooks/lib/simplify-state.cjs",
-    "skills/mermaidjs-v11/references/svg-layout-from-fireworks.md"
+    "skills/mermaidjs-v11/references/svg-layout-from-fireworks.md",
+    "skills/kanban/**",
+    "skills/mcp-management/**",
+    "agents/mcp-manager.md"
   ],
   "version": "2.17.0-beta.6",
   "name": "claudekit-engineer",

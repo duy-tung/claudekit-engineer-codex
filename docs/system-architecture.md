@@ -97,7 +97,6 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 - `journal-writer` - Development decision journaling
 - `git-manager` - Version control and commit management
 - `project-manager` - Progress tracking and oversight
-- `mcp-manager` - MCP server management and integration
 
 #### 2.2 Agent Definition Structure
 
