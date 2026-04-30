@@ -22,7 +22,7 @@ Keep all reports ≤150 lines.
    - Design guidelines at `./docs/design-guidelines.md`
    - Wireframes in HTML at `./docs/wireframe/`
 2. If no logo provided: generate with `ck:ai-multimodal` skill
-3. Screenshot wireframes with `ck:chrome-devtools` → save to `./docs/wireframes/`
+3. Screenshot wireframes with `ck:agent-browser` → save to `./docs/wireframes/`
 
 **Image tools:** `ck:ai-multimodal` for generation/analysis, `imagemagick` for crop/resize, background removal tool as needed.
 

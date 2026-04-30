@@ -26,7 +26,7 @@ Invoke `/ck:project-management` **first**, before reading/analyzing the request 
 Purpose:
 - Create a dated plan directory under `plans/` (naming from hook injection: `{date}-{issue}-{slug}`).
 - Register the full checklist below (request-analysis → content → HTML → capture → publish) as trackable tasks.
-- Set the active plan context so downstream skills (`frontend-design`, `chrome-devtools`, capture script) share the same plan folder and assets root.
+- Set the active plan context so downstream skills (`frontend-design`, `agent-browser`, capture script) share the same plan folder and assets root.
 - Record the invocation arguments (mission name, target sections, languages) in `plan.md`.
 
 Hard gate: do NOT proceed to the DETAILED INSTRUCTIONS below until the plan directory exists and the checklist is registered. If `project-management` returns `BLOCKED` / `NEEDS_CONTEXT`, resolve it first.
@@ -57,7 +57,7 @@ Follow these steps strictly in order, one by one:
 - Layout organized into multiple sections corresponding to request topics -> user scrolls smoothly top-to-bottom with parallax effects.
   Remember id/class names of each section for screenshot capture later.
 - Content MUST support 2 languages: Vietnamese & English.
-- Activate `ck:chrome-devtools` skill to capture each section as images (JPG/PNG) at `assets/showoff/<mission-name>/images/` with ratio-based prefix (`horizontal`, `vertical`, `square`).
+- Capture each section as images (JPG/PNG) at `assets/showoff/<mission-name>/images/` with ratio-based prefix (`horizontal`, `vertical`, `square`).
   **NOTE:** The capture script now auto-waits for fonts, `<img>` completion, and CSS background-image loading before each shot. `--settle-delay` adds an extra cushion for animations / lazy reveals.
   **IMPORTANT:** Use the parallel capture script for efficiency:
   ```bash
@@ -138,6 +138,7 @@ Options:
 - `--format` (default: "png"): Image format (png/jpg/webp)
 - `--quality` (default: 90): Image quality (1-100, for jpg/webp)
 - `--max-size` (default: 5): Max file size in MB before compression
+- `--executable-path`: Optional Chrome/Chromium executable path. Also reads `CHROME_EXECUTABLE_PATH` or `PUPPETEER_EXECUTABLE_PATH`.
 
 **Readiness chain before each capture:**
 1. `networkidle0` (no in-flight requests)

@@ -658,17 +658,6 @@ function Install-NodeDeps {
     # Install local npm packages for skills
     Write-Info "Installing local npm packages for skills..."
 
-    # chrome-devtools
-    $chromeDevToolsPath = Join-Path $ScriptDir "chrome-devtools\scripts"
-    $chromePackageJson = Join-Path $chromeDevToolsPath "package.json"
-    if ((Test-Path $chromeDevToolsPath) -and (Test-Path $chromePackageJson)) {
-        Write-Info "Installing chrome-devtools dependencies..."
-        Push-Location $chromeDevToolsPath
-        npm install --quiet
-        Pop-Location
-        Write-Success "chrome-devtools dependencies installed"
-    }
-
     # sequential-thinking
     $seqThinkingPath = Join-Path $ScriptDir "sequential-thinking"
     $seqPackageJson = Join-Path $seqThinkingPath "package.json"
@@ -680,17 +669,6 @@ function Install-NodeDeps {
         Write-Success "sequential-thinking dependencies installed"
     }
 
-    # mcp-management
-    $mcpManagementPath = Join-Path $ScriptDir "mcp-management\scripts"
-    $mcpPackageJson = Join-Path $mcpManagementPath "package.json"
-    if ((Test-Path $mcpManagementPath) -and (Test-Path $mcpPackageJson)) {
-        Write-Info "Installing mcp-management dependencies..."
-        Push-Location $mcpManagementPath
-        npm install --quiet
-        Pop-Location
-        Write-Success "mcp-management dependencies installed"
-    }
-
     # markdown-novel-viewer (marked, highlight.js, gray-matter)
     $novelViewerPath = Join-Path $ScriptDir "markdown-novel-viewer"
     $novelViewerPackageJson = Join-Path $novelViewerPath "package.json"
@@ -700,6 +678,17 @@ function Install-NodeDeps {
         npm install --quiet
         Pop-Location
         Write-Success "markdown-novel-viewer dependencies installed"
+    }
+
+    # show-off capture script (puppeteer, sharp)
+    $showOffPath = Join-Path $ScriptDir "show-off\scripts"
+    $showOffPackageJson = Join-Path $showOffPath "package.json"
+    if ((Test-Path $showOffPath) -and (Test-Path $showOffPackageJson)) {
+        Write-Info "Installing show-off capture dependencies..."
+        Push-Location $showOffPath
+        npm install --quiet
+        Pop-Location
+        Write-Success "show-off capture dependencies installed"
     }
 
     # plans-kanban launcher package

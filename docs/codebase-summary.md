@@ -103,7 +103,7 @@ claudekit-engineer/
 
 **Current Skills** (47+ Total):
 - ai-artist, ai-multimodal, agent-browser, backend-development, better-auth
-- brainstorm, chrome-devtools, code-review, common, context-engineering
+- brainstorm, code-review, common, context-engineering
 - cook, copywriting, databases, debug, devops
 - docs-seeker, document-skills, find-skills, frontend-design, frontend-development
 - git, gkg, google-adk-python, markdown-novel-viewer, mcp-builder

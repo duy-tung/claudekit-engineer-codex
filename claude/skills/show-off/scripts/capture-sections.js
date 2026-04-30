@@ -11,16 +11,12 @@
  *     --ratios "horizontal,vertical,square" \
  *     --delay 2000
  *
- * Reuses chrome-devtools browser utilities for session persistence.
+ * Uses a local Puppeteer dependency from show-off/scripts/package.json.
  */
 import path from 'path';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
-
-// Resolve chrome-devtools lib relative to this script
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const chromeLib = path.join(__dirname, '..', '..', 'chrome-devtools', 'scripts', 'lib', 'browser.js');
-const { getBrowser, getPage, disconnectBrowser, parseArgs, outputJSON, outputError } = await import(chromeLib);
+import puppeteer from 'puppeteer';
 
 // Viewport presets per ratio name
 const VIEWPORTS = {
@@ -29,9 +25,63 @@ const VIEWPORTS = {
   square:     { width: 1080, height: 1080, label: 'square' },      // 1:1
 };
 
-// Optional sharp for compression (mirrors chrome-devtools approach)
+// Optional Sharp compression for large captures.
 let sharp = null;
 try { sharp = (await import('sharp')).default; } catch { /* noop */ }
+
+function parseArgs(argv) {
+  const args = {};
+
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    if (!arg.startsWith('--')) continue;
+
+    const key = arg.slice(2);
+    const nextArg = argv[i + 1];
+    if (nextArg && !nextArg.startsWith('--')) {
+      args[key] = nextArg;
+      i++;
+    } else {
+      args[key] = true;
+    }
+  }
+
+  return args;
+}
+
+function resolveHeadless(value) {
+  if (value === false || value === 'false') return false;
+  if (value === true || value === 'true') return true;
+  if (process.env.CI || process.env.GITHUB_ACTIONS || process.env.GITLAB_CI || process.env.JENKINS_URL) return true;
+  return process.platform === 'linux';
+}
+
+async function getBrowser(options = {}) {
+  const executablePath = options.executablePath || process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_EXECUTABLE_PATH;
+  return puppeteer.launch({
+    headless: resolveHeadless(options.headless),
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    defaultViewport: { width: 1920, height: 1080 },
+    ...(executablePath && { executablePath }),
+  });
+}
+
+async function getPage(browser) {
+  const pages = await browser.pages();
+  return pages[0] || browser.newPage();
+}
+
+function outputJSON(data) {
+  console.log(JSON.stringify(data, null, 2));
+}
+
+function outputError(error) {
+  console.error(JSON.stringify({
+    success: false,
+    error: error.message,
+    stack: error.stack,
+  }, null, 2));
+}
 
 /**
  * Wait until the page is visually ready:
@@ -181,7 +231,7 @@ async function main() {
 
   await fs.mkdir(outputDir, { recursive: true });
 
-  const browser = await getBrowser({ headless: args.headless });
+  const browser = await getBrowser({ headless: args.headless, executablePath: args['executable-path'] });
   const page = await getPage(browser);
 
   // Navigate and wait for full network+asset+font readiness before any capture.
@@ -241,9 +291,8 @@ async function main() {
   // Run all ratios in parallel
   await Promise.all(ratioTasks);
 
-  // Close original page (we only used it for initial load check)
-  // Keep browser alive for session reuse
-  await disconnectBrowser();
+  // Close original page and browser now that the capture batch is complete.
+  await browser.close();
 
   outputJSON({
     success: errors.length === 0,

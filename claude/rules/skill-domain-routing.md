@@ -87,8 +87,7 @@ User wants to...
 User wants to...
 ├── Run test suites, coverage reports, TDD          → /ck:test
 ├── Test strategy + Playwright/Vitest/k6 runner     → /ck:web-testing
-└── Drive a live browser (default for any browser interaction) → /ck:agent-browser
-        (AI-driven; for scripted/CI-safe Puppeteer fallback see /ck:chrome-devtools)
+└── Drive a live browser                            → /ck:agent-browser
 ```
 
 ## Media
