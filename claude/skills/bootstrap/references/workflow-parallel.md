@@ -28,7 +28,7 @@ No user gate — proceed automatically.
    - Design guidelines at `./docs/design-guidelines.md`
    - Wireframes in HTML at `./docs/wireframe/`
 3. If no logo: generate with `ck:ai-multimodal` skill
-4. Screenshot with `ck:chrome-devtools` → save to `./docs/wireframes/`
+4. Screenshot with `ck:agent-browser` → save to `./docs/wireframes/`
 
 **Gate:** Ask user to approve design. Repeat if rejected.
 

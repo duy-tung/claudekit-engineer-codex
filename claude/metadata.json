@@ -129,7 +129,8 @@
     "skills/mermaidjs-v11/references/svg-layout-from-fireworks.md",
     "skills/kanban/**",
     "skills/mcp-management/**",
-    "agents/mcp-manager.md"
+    "agents/mcp-manager.md",
+    "skills/chrome-devtools/**"
   ],
   "version": "2.17.0-beta.9",
   "name": "claudekit-engineer",

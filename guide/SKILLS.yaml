@@ -2,7 +2,7 @@ metadata:
   title: "Skills Catalog"
   description: "Auto-generated catalog of all available skills in ClaudeKit Engineer"
   last_updated: '2026-04-30'
-  total_skills: 84
+  total_skills: 83
 categories:
   ai-ml: "AI & Machine Learning"
   frontend: "Frontend & Design"
@@ -317,13 +317,6 @@ skills:
     has_references: true
     argument_hint: "<github-url-or-owner/repo|local-path> [feature] [--compare|--copy|--improve|--port] [--auto|--fast]"
   multimedia:
-  - name: "chrome-devtools"
-    path: "chrome-devtools/SKILL.md"
-    description: "Automate browsers with Puppeteer CLI scripts and persistent sessions. Use for screenshots, performance analysis, network monitoring, web scraping, form automation, JavaScript debugging."
-    category: "multimedia"
-    has_scripts: true
-    has_references: true
-    argument_hint: "[url or task]"
   - name: "docx"
     path: "document-skills/docx/SKILL.md"
     description: "Create, edit, analyze .docx Word documents. Use for document creation, tracked changes, comments, formatting preservation, text extraction, template modification."

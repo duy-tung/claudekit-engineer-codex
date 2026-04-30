@@ -133,7 +133,7 @@ Load `references/slides-create.md` for the creation workflow.
 
 ## Banner Design (Built-in)
 
-22 art direction styles across social, ads, web, print. Uses `frontend-design`, `ai-artist`, `ai-multimodal`, `chrome-devtools` skills.
+22 art direction styles across social, ads, web, print. Uses `frontend-design`, `ai-artist`, `ai-multimodal`, and browser capture tools.
 
 Load `references/banner-sizes-and-styles.md` for complete sizes and styles reference.
 
@@ -142,7 +142,7 @@ Load `references/banner-sizes-and-styles.md` for complete sizes and styles refer
 1. **Gather requirements** via `AskUserQuestion` — purpose, platform, content, brand, style, quantity
 2. **Research** — Activate `ui-ux-pro-max`, browse Pinterest for references
 3. **Design** — Create HTML/CSS banner with `frontend-design`, generate visuals with `ai-artist`/`ai-multimodal`
-4. **Export** — Screenshot to PNG at exact dimensions via `chrome-devtools`
+4. **Export** — Screenshot to PNG at exact dimensions via `ck:agent-browser`, Chrome headless, or Playwright
 5. **Present** — Show all options side-by-side, iterate on feedback
 
 ### Banner: Quick Size Reference
@@ -218,7 +218,7 @@ python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "user profile"
 
 ## Social Photos (Built-in)
 
-Multi-platform social image design: HTML/CSS → screenshot export. Uses `ui-ux-pro-max`, `brand`, `design-system`, `chrome-devtools` skills.
+Multi-platform social image design: HTML/CSS → screenshot export. Uses `ui-ux-pro-max`, `brand`, `design-system`, and browser capture tools.
 
 Load `references/social-photos-design.md` for sizes, templates, best practices.
 
@@ -228,8 +228,8 @@ Load `references/social-photos-design.md` for sizes, templates, best practices.
 2. **Analyze** — Parse prompt: subject, platforms, style, brand context, content elements
 3. **Ideate** — 3-5 concepts, present via `AskUserQuestion`
 4. **Design** — `/ckm:brand` → `/ckm:design-system` → randomly invoke `/ck:ui-ux-pro-max` OR `/ck:frontend-design`; HTML per idea × size
-5. **Export** — `chrome-devtools` or Playwright screenshot at exact px (2x deviceScaleFactor)
-6. **Verify** — Use Chrome MCP or `chrome-devtools` skill to visually inspect exported designs; fix layout/styling issues and re-export
+5. **Export** — `ck:agent-browser`, Chrome headless, or Playwright screenshot at exact px (2x deviceScaleFactor)
+6. **Verify** — Use Chrome MCP / `chrome-devtools-mcp`, `ck:agent-browser`, or Playwright to visually inspect exported designs; fix layout/styling issues and re-export
 7. **Report** — Summary to `plans/reports/` with design decisions
 8. **Organize** — Invoke `assets-organizing` skill to sort output files and reports
 
@@ -301,4 +301,4 @@ pip install google-genai pillow
 ## Integration
 
 **External sub-skills:** brand, design-system, ui-styling
-**Related Skills:** frontend-design, ui-ux-pro-max, ai-multimodal, chrome-devtools
+**Related Skills:** frontend-design, ui-ux-pro-max, ai-multimodal, agent-browser

@@ -145,7 +145,7 @@ def categorize_skill(name: str, frontmatter: dict | None = None) -> str:
         return "infrastructure"
     if any(x in lower for x in ["database", "mongodb", "postgresql", "sql"]):
         return "database"
-    if any(x in lower for x in ["media", "chrome-devtools", "document-skills"]):
+    if any(x in lower for x in ["media", "document-skills"]):
         return "multimedia"
     if any(x in lower for x in ["web-frameworks", "mobile", "shopify"]):
         return "frameworks"

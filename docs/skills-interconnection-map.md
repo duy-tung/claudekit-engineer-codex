@@ -1,6 +1,6 @@
 # ClaudeKit Skills Interconnection Map
 
-> 54 skills · 80+ connections · 1 ecosystem
+> 53 skills · 80+ connections · 1 ecosystem
 
 ## Core Architecture
 
@@ -14,9 +14,9 @@ cook (orchestrator)
 │         → scout (parallel agents)
 │         → mermaidjs-v11
 ├── scout → parallel Explore subagents
-├── debug → docs-seeker, repomix, chrome-devtools, problem-solving, sequential-thinking
+├── debug → docs-seeker, repomix, agent-browser, problem-solving, sequential-thinking
 ├── fix → debug, code-review, problem-solving, sequential-thinking, brainstorm, context-engineering
-├── test → chrome-devtools, ai-multimodal, debug, sequential-thinking
+├── test → agent-browser, web-testing, ai-multimodal, debug, sequential-thinking
 ├── code-review → scout (edge-case scouting)
 ├── ui-ux-pro-max
 ├── project-management → plans-kanban
@@ -48,9 +48,9 @@ copywriting → ai-multimodal
 |-------|------|----------|-------|
 | **plan** | Architecture & planning | cook, team, bootstrap, brainstorm | research, scout, mermaidjs-v11 |
 | **scout** | Fast codebase exploration | cook, plan, brainstorm, code-review, fix | parallel Explore agents |
-| **debug** | Root cause investigation | cook, fix, test | docs-seeker, repomix, chrome-devtools, problem-solving, sequential-thinking |
+| **debug** | Root cause investigation | cook, fix, test | docs-seeker, repomix, agent-browser, problem-solving, sequential-thinking |
 | **fix** | Bug resolution | cook, team | debug, code-review, problem-solving, sequential-thinking, brainstorm, context-engineering |
-| **test** | Validation & coverage | cook, team | chrome-devtools, ai-multimodal, debug, sequential-thinking |
+| **test** | Validation & coverage | cook, team | agent-browser, web-testing, ai-multimodal, debug, sequential-thinking |
 | **code-review** | Quality assurance | cook, fix, team | scout |
 | **brainstorm** | Solution ideation | fix | scout, docs-seeker, ai-multimodal, sequential-thinking, plan, research |
 
@@ -64,7 +64,7 @@ Pure capability providers — referenced by hub skills but don't call other skil
 | **sequential-thinking** | Step-by-step analysis | brainstorm, fix, test, debug |
 | **problem-solving** | Structured problem decomposition | debug, fix |
 | **ai-multimodal** | Image/video/audio analysis | frontend-design, test, copywriting, brainstorm |
-| **chrome-devtools** | Browser automation | debug, test |
+| **agent-browser** | Live browser automation | debug, test |
 | **repomix** | Repository packing | debug, gkg |
 | **context-engineering** | Token management | git, fix |
 | **mermaidjs-v11** | Diagram generation | plan |

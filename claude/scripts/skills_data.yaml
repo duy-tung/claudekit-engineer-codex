@@ -61,13 +61,6 @@
   has_scripts: false
   has_references: false
   argument_hint: "[topic or problem]"
-- name: "chrome-devtools"
-  path: "chrome-devtools/SKILL.md"
-  description: "Automate browsers with Puppeteer CLI scripts and persistent sessions. Use for screenshots, performance analysis, network monitoring, web scraping, form automation, JavaScript debugging."
-  category: "multimedia"
-  has_scripts: true
-  has_references: true
-  argument_hint: "[url or task]"
 - name: "ck-autoresearch"
   path: "ck-autoresearch/SKILL.md"
   description: "Run autonomous optimization loops (deprecated alias for ck-loop). Use for metric-driven iteration, coverage improvement, performance tuning."

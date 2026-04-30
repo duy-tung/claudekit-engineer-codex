@@ -116,5 +116,5 @@ See `references/review-cycle.md` for mode-specific handling.
 | 6 | `ck:project-management`, `git-manager`, `docs-manager` subagents |
 
 **Rules:** Don't skip steps. Validate before proceeding. One phase at a time.
-**Frontend:** Use `chrome`, `ck:chrome-devtools` or any relevant skills/tools to verify.
+**Frontend:** Use `ck:agent-browser`, Chrome MCP / `chrome-devtools-mcp`, or any relevant project-native browser tests to verify.
 **Visual Assets:** Use `ck:ai-multimodal` for visual assets generation, analysis and verification.

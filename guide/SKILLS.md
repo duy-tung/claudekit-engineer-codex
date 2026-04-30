@@ -4,7 +4,7 @@ Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
 **Last Updated**: 2026-04-30
 
-**Total Skills**: 84
+**Total Skills**: 83
 
 ## Categories
 
@@ -289,12 +289,6 @@ Extract, compare, port, or adapt a feature from a GitHub repository or local rep
 **Location**: `.claude/skills/xia/SKILL.md`
 
 ## Multimedia & Processing
-
-### 📦 📚 `chrome-devtools`
-
-Automate browsers with Puppeteer CLI scripts and persistent sessions. Use for screenshots, performance analysis, network monitoring, web scraping, form automation, JavaScript debugging.
-
-**Location**: `.claude/skills/chrome-devtools/SKILL.md`
 
 ### 📦 `docx`
 
