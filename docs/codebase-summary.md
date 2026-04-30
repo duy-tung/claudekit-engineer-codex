@@ -110,7 +110,7 @@ claudekit-engineer/
 - media-processing, mermaidjs-v11, mobile-development, payment-integration
 - ck-plan, plans-kanban, problem-solving, react-best-practices, remotion
 - repomix, research, scout, sequential-thinking, shader
-- shopify, skill-creator, template-skill, threejs, ui-styling
+- shopify, skill-creator, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
 
 ### 4. Hook System (9+ Core Hooks)

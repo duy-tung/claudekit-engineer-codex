@@ -1,8 +1,8 @@
 metadata:
   title: "Skills Catalog"
   description: "Auto-generated catalog of all available skills in ClaudeKit Engineer"
-  last_updated: '2026-04-10'
-  total_skills: 82
+  last_updated: '2026-04-30'
+  total_skills: 84
 categories:
   ai-ml: "AI & Machine Learning"
   frontend: "Frontend & Design"
@@ -21,7 +21,7 @@ skills:
   ai-ml:
   - name: "ai-artist"
     path: "ai-artist/SKILL.md"
-    description: "Generate images via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent."
+    description: "Generate product mockups, marketing assets, brand visuals, and concept art via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent."
     category: "ai-ml"
     has_scripts: true
     has_references: true
@@ -169,6 +169,13 @@ skills:
     has_scripts: false
     has_references: true
     argument_hint: "[url or task]"
+  - name: "agentize"
+    path: "agentize/SKILL.md"
+    description: "Convert the current codebase (or a specific feature/module) into an AI agent-friendly and user-friendly CLI and/or MCP server. Triggers on: 'agentize', 'make this an MCP', 'expose as MCP server', 'wrap as CLI', 'turn into agent tool', 'publish to npm', 'convert to agent tool', 'build CLI from this', 'build MCP from this', 'make this LLM-accessible', 'expose feature as tool'. Use when the user wants to transform an existing feature, module, or whole project into a consumable CLI (npm) and/or MCP server (stdio/SSE/Streamable HTTP) with credentials resolution, docs, tests, CI, and a companion Claude skill."
+    category: "dev-tools"
+    has_scripts: false
+    has_references: true
+    argument_hint: "[feature-or-module] [--both|--mcp|--cli] [--auto|--ask]"
   - name: "docs-seeker"
     path: "docs-seeker/SKILL.md"
     description: "Search library/framework documentation via llms.txt (context7.com). Use for API docs, GitHub repository analysis, technical documentation lookup, latest library features."
@@ -203,13 +210,14 @@ skills:
     has_scripts: false
     has_references: true
     argument_hint: "[symbol or query]"
-  - name: "kanban"
-    path: "kanban/SKILL.md"
-    description: "Alias launcher for the ClaudeKit plans dashboard. Use for visual plan boards, progress tracking, and quick navigation into plan files."
+  - name: "graphify"
+    path: "graphify/SKILL.md"
+    description: "Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation."
     category: "dev-tools"
     has_scripts: false
     has_references: false
-    argument_hint: "[dir]"
+    argument_hint: "[path] [--mcp|--report|--watch]"
+    maturity: "beta"
   - name: "llms"
     path: "llms/SKILL.md"
     description: "Generate llms.txt files from docs or codebase scanning. Follows llmstxt.org spec. Use for LLM-friendly site indexes, documentation summaries, AI context optimization."
@@ -237,10 +245,10 @@ skills:
     category: "dev-tools"
     has_scripts: true
     has_references: false
-    argument_hint: "[plans-dir]"
+    argument_hint: "[deprecated flags are accepted with warnings]"
   - name: "repomix"
     path: "repomix/SKILL.md"
-    description: "Pack repositories into AI-friendly files with Repomix (XML, Markdown, plain text). Use for codebase snapshots, LLM context preparation, security audits, third-party library analysis."
+    description: "Pack repositories into AI-friendly files with Repomix (XML, Markdown, plain text). Use for new-project onboarding, codebase snapshots, LLM context preparation, security audits, third-party library analysis."
     category: "dev-tools"
     has_scripts: true
     has_references: true
@@ -273,6 +281,13 @@ skills:
     has_scripts: false
     has_references: true
     argument_hint: "<template> <context> [--devs|--researchers|--reviewers N] [--delegate]"
+  - name: "tech-graph"
+    path: "tech-graph/SKILL.md"
+    description: "Generate production-quality SVG+PNG technical diagrams — architecture, data flow, flowchart, sequence, agent/memory, or concept maps — across 7 visual styles. Use when user wants \"generate diagram\", \"draw diagram\", \"visualize\", \"architecture diagram\", \"flowchart\", or any system/flow they want illustrated. Pairs with /ck:preview --diagram for visual self-review and /ck:mermaidjs-v11 for inline-doc diagrams; this skill is the publish-grade output mode."
+    category: "dev-tools"
+    has_scripts: true
+    has_references: true
+    argument_hint: "[diagram-type or system description]"
   - name: "use-mcp"
     path: "use-mcp/SKILL.md"
     description: "Discover and execute MCP server tools. Two execution paths: Gemini CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server). Use for MCP integrations, tool execution, capability discovery, persistent tool catalog."
@@ -289,7 +304,7 @@ skills:
     argument_hint: "[test-type] [target]"
   - name: "worktree"
     path: "worktree/SKILL.md"
-    description: "Create isolated git worktrees for parallel development. Use for feature isolation, monorepo branches, concurrent development workflows."
+    description: "Create, inspect, and clean isolated git worktrees. Use for feature isolation, worktree health audits, stale cleanup, and monorepo or submodule workflows."
     category: "dev-tools"
     has_scripts: true
     has_references: false
@@ -386,7 +401,7 @@ skills:
     argument_hint: "[Goal/Metric description] or inline config block"
   - name: "bootstrap"
     path: "bootstrap/SKILL.md"
-    description: "Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent)."
+    description: "Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (default interactive), auto (explicit autonomous), fast (skip research), parallel (multi-agent)."
     category: "utilities"
     has_scripts: false
     has_references: true
@@ -470,7 +485,7 @@ skills:
     argument_hint: "[Goal/Metric description] or inline config block"
   - name: "markdown-novel-viewer"
     path: "markdown-novel-viewer/SKILL.md"
-    description: "View markdown files with calm, book-like reading experience via HTTP server. Use for long-form content, documentation preview, novel reading, report viewing, distraction-free reading."
+    description: "View markdown files in a calm, book-like reader served via HTTP. Use for long-form content review — RFCs, runbooks, design docs, reports, specs, novels — anywhere you want a distraction-free reading mode in the browser."
     category: "utilities"
     has_scripts: true
     has_references: false
@@ -533,7 +548,7 @@ skills:
     argument_hint: "[topic]"
   - name: "retro"
     path: "retro/SKILL.md"
-    description: "Generate data-driven sprint retrospectives from git metrics. Use for sprint reviews, commit analysis, code health indicators, team velocity."
+    description: "Generate data-driven sprint retrospectives from any git history. Use for sprint reviews, commit analysis, code-health indicators, team-velocity reporting, and quarterly engineering reviews. Works on solo or team repos."
     category: "utilities"
     has_scripts: false
     has_references: true
@@ -575,11 +590,18 @@ skills:
     argument_hint: "[context] OR ui [url]"
   - name: "watzup"
     path: "watzup/SKILL.md"
-    description: "Review recent changes and wrap up the current work session. Use for session summaries, change review, progress tracking."
+    description: "Generate session hand-off summaries from recent changes — what shipped, what's in flight, what's next. Use at end-of-day, before context handoff to a teammate or new session, or to produce a quick progress-tracking report on any active project."
     category: "utilities"
     has_scripts: false
     has_references: false
   other:
+  - name: "cti-expert"
+    path: "cti-expert/SKILL.md"
+    description: "CTI Expert — cyber threat intelligence and OSINT analysis toolkit. Activates on: OSINT, CTI, threat intelligence, digital footprint, social media investigation, username enumeration, email tracing, domain recon, OPSEC, metadata analysis, people search, geolocation, breach checking, phone lookup, subdomain enumeration, case investigation, recon, due diligence, image forensics, face search, blockchain investigation, crypto tracing, flight tracking, maritime tracking, vehicle lookup, darknet search, WiFi SSID geolocation, vulnerability lookup, ransomware check, M365 recon, Azure tenant enumeration. Commands: /case, /sweep, /query, /subject, /timeline, /report, /brief, /exposure, /username, /phone, /breach-deep, /vuln-check, /wifi, /flow, /threat-model, /msftrecon. Techniques: social media platforms, advanced geolocation, web/DNS forensics, image forensics, blockchain, transport tracking, darknet, people search, cloud audit, incident triage, OWASP audit, prompt injection audit. Author: Hieu Ngo - chongluadao.vn"
+    category: "other"
+    has_scripts: true
+    has_references: false
+    argument_hint: "[target] [--yolo] [--case|--sweep|--query|--flow]"
   - name: "show-off"
     path: "show-off/SKILL.md"
     description: "Create stunning self-contained HTML pages to showcase work. Use for demos, visual presentations, interactive showcases."

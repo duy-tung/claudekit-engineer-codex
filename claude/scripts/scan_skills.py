@@ -174,8 +174,6 @@ def scan_skills(base_path: Path) -> list[dict]:
             continue
         skill_dir = skill_file.parent
         internal_name = skill_dir.name
-        if internal_name == "template-skill":
-            continue
         if skill_dir.parent.name != "skills":
             internal_name = f"{skill_dir.parent.name}/{internal_name}"
 
