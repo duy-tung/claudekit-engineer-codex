@@ -85,10 +85,10 @@ User wants to...
 
 ```
 User wants to...
-├── Run test suites, coverage reports, TDD       → /ck:test
-├── Web-specific testing (Playwright, k6, a11y)  → /ck:web-testing
-├── Puppeteer automation, screenshots, scraping  → /ck:chrome-devtools
-└── AI-driven browser sessions, Browserbase cloud → /ck:agent-browser
+├── Run test suites, coverage reports, TDD          → /ck:test
+├── E2E/unit/load/a11y test runner (Playwright/k6)  → /ck:web-testing
+├── AI-driven autonomous browser session            → /ck:agent-browser
+└── Scripted/deterministic Puppeteer (CI-safe)      → /ck:chrome-devtools
 ```
 
 ## Media
