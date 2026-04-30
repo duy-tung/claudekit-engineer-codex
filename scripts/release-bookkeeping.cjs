@@ -33,7 +33,11 @@ function getTags() {
 }
 
 function getPreviousTag(currentTag) {
-  return getTags().find((tag) => tag !== currentTag) || '';
+  try {
+    return run('git', ['describe', '--tags', '--match', 'v*', '--abbrev=0', `${currentTag}^`]);
+  } catch {
+    return '';
+  }
 }
 
 function writeGithubOutput(values) {

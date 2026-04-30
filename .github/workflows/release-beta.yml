@@ -77,10 +77,10 @@ jobs:
       - name: Generate structured release notes
         id: notes
         run: |
-          # Find previous tag — aligned with send-discord-release.cjs logic:
-          # sort ALL v* tags by version, skip current release tag, pick next.
+          # Find the previous reachable tag by commit history, not semver order.
+          # This keeps release ranges correct even if a stray future beta tag exists.
           CURRENT_TAG="v${{ steps.version.outputs.version }}"
-          PREV_TAG=$(git tag --sort=-v:refname -l "v*" | grep -v "^${CURRENT_TAG}$" | head -1 || true)
+          PREV_TAG=$(git describe --tags --match "v*" --abbrev=0 "${CURRENT_TAG}^" 2>/dev/null || true)
           if [ -z "$PREV_TAG" ]; then
             echo "[i] No previous tag found, using last 20 commits"
             RANGE=""

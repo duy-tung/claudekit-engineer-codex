@@ -31,18 +31,13 @@ function findLatestStableVersion(tags) {
 
 function computeNextBetaVersion(stableVersion, existingTags) {
   const stable = parseStableVersion(stableVersion);
-  const betaBase = { major: stable.major, minor: stable.minor + 1, patch: 0 };
   const maxBeta = existingTags.reduce((max, tag) => {
     const match = String(tag).match(BETA_TAG_RE);
     if (!match) {
       return max;
     }
     const [, major, minor, patch, beta] = match.map(Number);
-    if (
-      major !== betaBase.major ||
-      minor !== betaBase.minor ||
-      patch !== betaBase.patch
-    ) {
+    if (major !== stable.major || minor !== stable.minor || patch !== stable.patch) {
       return max;
     }
     return Math.max(max, beta);
@@ -50,7 +45,7 @@ function computeNextBetaVersion(stableVersion, existingTags) {
 
   return {
     stable: `${stable.major}.${stable.minor}.${stable.patch}`,
-    version: `${betaBase.major}.${betaBase.minor}.${betaBase.patch}-beta.${maxBeta + 1}`,
+    version: `${stable.major}.${stable.minor}.${stable.patch}-beta.${maxBeta + 1}`,
   };
 }
 
