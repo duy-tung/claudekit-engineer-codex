@@ -116,7 +116,7 @@ Command behavior is implemented via skill directories:
 **MCP Tools**: mcp-builder, use-mcp
 **Mobile Development**: mobile-development
 **Project Planning**: ck-plan, plans-kanban
-**Skill Development**: skill-creator, template-skill
+**Skill Development**: skill-creator
 **Testing & QA**: web-testing
 **Visualization**: mermaidjs-v11
 **Workflow Tools**: cook, research, scout, payment-integration

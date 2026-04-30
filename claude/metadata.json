@@ -1,5 +1,6 @@
 {
   "deletions": [
+    "skills/template-skill/**",
     "AGENTS.md",
     ".opencode/**",
     "agents/copywriter.md",
