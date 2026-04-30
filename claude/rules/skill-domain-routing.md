@@ -86,9 +86,9 @@ User wants to...
 ```
 User wants to...
 ├── Run test suites, coverage reports, TDD          → /ck:test
-├── E2E/unit/load/a11y test runner (Playwright/k6)  → /ck:web-testing
-├── AI-driven autonomous browser session            → /ck:agent-browser
-└── Scripted/deterministic Puppeteer (CI-safe)      → /ck:chrome-devtools
+├── Test strategy + Playwright/Vitest/k6 runner     → /ck:web-testing
+└── Drive a live browser (default for any browser interaction) → /ck:agent-browser
+        (AI-driven; for scripted/CI-safe Puppeteer fallback see /ck:chrome-devtools)
 ```
 
 ## Media

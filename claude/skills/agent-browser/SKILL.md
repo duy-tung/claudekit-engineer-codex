@@ -50,18 +50,22 @@ agent-browser click @e1
 agent-browser snapshot -i
 ```
 
-## When to Use (vs chrome-devtools)
+## When to Use
 
-| Use agent-browser | Use chrome-devtools |
-|-------------------|---------------------|
-| Long autonomous AI sessions | Quick one-off screenshots |
-| Context-constrained workflows | Custom Puppeteer scripts needed |
-| Video recording for debugging | WebSocket full frame debugging |
-| Cloud browsers (Browserbase) | Existing workflow integration |
-| Multi-tab handling | Need Sharp auto-compression |
-| Self-verifying build loops | Session with auth injection |
+This is the **default skill for any live-browser interaction** — autonomous sessions, ad-hoc navigation, screenshots, form fills, scraping. Use it first; reach for `/ck:chrome-devtools` only when you need a *scripted, deterministic* Puppeteer flow (typically CI-safe automation with custom WebSocket debugging or Sharp-based image compression).
+
+| Default — use agent-browser | Fallback — use /ck:chrome-devtools |
+|---|---|
+| Any AI-driven browser interaction | Scripted CI-safe Puppeteer flows |
+| Long autonomous sessions | Custom WebSocket frame debugging |
+| Context-constrained workflows | Sharp auto-compression pipelines |
+| Cloud browsers (Browserbase) | Existing Puppeteer-script integrations |
+| Multi-tab handling | Auth injection via cookie import |
+| Self-verifying build loops | Deterministic snapshot regression suites |
 
 **Token efficiency:** ~280 chars/snapshot vs 8K+ for Playwright MCP.
+
+> Long-term: `/ck:chrome-devtools` will be deprecated once `chrome-devtools-mcp` supports `defer_loading: true` (tracked in engineer #77). Until then, both ship side-by-side with `agent-browser` as the recommended default.
 
 ## Command Reference
 

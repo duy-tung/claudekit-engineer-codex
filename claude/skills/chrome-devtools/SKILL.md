@@ -12,6 +12,8 @@ metadata:
 
 # Chrome DevTools Agent Skill
 
+> **For most browser interactions, prefer [`/ck:agent-browser`](../agent-browser/SKILL.md).** This skill is the *scripted/deterministic* fallback — use it when you need CI-safe Puppeteer flows, custom WebSocket frame debugging, or Sharp-based auto-compression. Long-term: this skill will be deprecated once `chrome-devtools-mcp` supports `defer_loading: true` (engineer #77).
+
 Browser automation via Puppeteer scripts with persistent sessions. All scripts output JSON.
 
 ## Skill Location
