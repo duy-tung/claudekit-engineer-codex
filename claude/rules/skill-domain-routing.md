@@ -23,7 +23,7 @@ User wants to...
 ```
 User wants to...
 ├── Quick file search, locate specific code     → /ck:scout
-├── Full codebase dump for LLM context          → /ck:repomix
+├── Onboard a new repo / dump codebase for LLM  → /ck:repomix
 └── Semantic go-to-definition, find-usages      → /ck:gkg
 ```
 
@@ -58,7 +58,8 @@ User wants to...
 ```
 User wants to...
 ├── STRIDE/OWASP security audit with auto-fix    → /ck:security
-└── Scan for secrets, vulnerabilities, OWASP patterns → /ck:security-scan
+├── Scan for secrets, vulnerabilities, OWASP patterns → /ck:security-scan
+└── OSINT / CTI / threat-intel investigation     → /ck:cti-expert
 ```
 
 ## AI / LLM
@@ -76,6 +77,7 @@ User wants to...
 ```
 User wants to...
 ├── Build a new MCP server                       → /ck:mcp-builder
+├── Convert existing code into CLI/MCP server    → /ck:agentize
 └── Discover and execute MCP tools               → /ck:use-mcp
 ```
 
@@ -83,10 +85,10 @@ User wants to...
 
 ```
 User wants to...
-├── Run test suites, coverage reports, TDD       → /ck:test
-├── Web-specific testing (Playwright, k6, a11y)  → /ck:web-testing
-├── Puppeteer automation, screenshots, scraping  → /ck:chrome-devtools
-└── AI-driven browser sessions, Browserbase cloud → /ck:agent-browser
+├── Run test suites, coverage reports, TDD          → /ck:test
+├── Test strategy + Playwright/Vitest/k6 runner     → /ck:web-testing
+└── Drive a live browser (default for any browser interaction) → /ck:agent-browser
+        (AI-driven; for scripted/CI-safe Puppeteer fallback see /ck:chrome-devtools)
 ```
 
 ## Media
@@ -104,7 +106,8 @@ User wants to...
 ├── Update project docs (codebase-summary, PDR)  → /ck:docs
 ├── Search library/framework docs (context7)     → /ck:docs-seeker
 ├── Build docs site with Mintlify                → /ck:mintlify
-└── Create diagrams (Mermaid v11 syntax)         → /ck:mermaidjs-v11
+├── Inline doc diagrams (Mermaid v11)            → /ck:mermaidjs-v11
+└── Publish-grade SVG/PNG diagrams (architecture) → /ck:tech-graph
 ```
 
 ## Content / Copy
