@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: release-beta-${{ github.repository }}
@@ -49,24 +50,7 @@ jobs:
 
       - name: Compute beta version
         id: version
-        run: |
-          # Get latest stable tag (only pure semver, exclude all prereleases)
-          STABLE_TAG=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)
-          STABLE_VERSION=${STABLE_TAG#v}
-
-          if [ -z "$STABLE_VERSION" ]; then
-            echo "No stable tag found, using 0.0.0"
-            STABLE_VERSION="0.0.0"
-          fi
-
-          # Find highest existing beta number (not count — avoids collision if tags deleted)
-          LAST_BETA=$(git tag -l "v${STABLE_VERSION}-beta.*" | sed 's/.*beta\.//' | sort -n | tail -1)
-          NEXT_BETA=$(( ${LAST_BETA:-0} + 1 ))
-
-          BETA_VERSION="${STABLE_VERSION}-beta.${NEXT_BETA}"
-          echo "version=${BETA_VERSION}" >> "$GITHUB_OUTPUT"
-          echo "stable=${STABLE_VERSION}" >> "$GITHUB_OUTPUT"
-          echo "[i] Stable: v${STABLE_VERSION} | Beta: v${BETA_VERSION}"
+        run: node scripts/release-bookkeeping.cjs next-beta-version
 
       - name: Update package version
         run: |
@@ -180,28 +164,15 @@ jobs:
           fi
           rm -f "${{ steps.notes.outputs.file }}"
 
-      - name: Label released PRs
+      - name: Mark dev release bookkeeping
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Find PRs included in this release (merged since previous tag)
-          CURRENT_TAG="v${{ steps.version.outputs.version }}"
-          PREV_TAG=$(git tag --sort=-v:refname -l "v*" | grep -v "^${CURRENT_TAG}$" | head -1 || true)
-
-          if [ -z "$PREV_TAG" ]; then
-            MERGE_COMMITS=$(git log --merges --format="%s" -20)
-          else
-            MERGE_COMMITS=$(git log "${PREV_TAG}..HEAD" --merges --format="%s")
-          fi
-
-          # Extract PR numbers from merge commit messages ("Merge pull request #NNN")
-          PR_NUMBERS=$(echo "$MERGE_COMMITS" | grep -oP '#\K[0-9]+' | sort -u)
-
-          for pr in $PR_NUMBERS; do
-            echo "[i] Labeling PR #${pr} with 'released on @dev'"
-            gh pr edit "$pr" --add-label "released on @dev" 2>/dev/null || true
-          done
+        run: >
+          node scripts/release-bookkeeping.cjs mark-dev-release
+          --current-tag "v${{ steps.version.outputs.version }}"
+          --label "released on @dev"
+          --close-issues
 
       - name: Send beta release notification to Discord
         if: success()
