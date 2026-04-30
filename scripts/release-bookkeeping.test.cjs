@@ -48,19 +48,26 @@ test('findLatestStableVersion ignores prerelease tags', () => {
   });
 });
 
-test('computeNextBetaVersion starts next minor after latest stable', () => {
+test('computeNextBetaVersion stays on latest stable version family', () => {
   assert.deepEqual(computeNextBetaVersion('2.17.0', ['v2.17.0-beta.10', 'v2.17.0']), {
     stable: '2.17.0',
-    version: '2.18.0-beta.1',
+    version: '2.17.0-beta.11',
   });
 });
 
-test('computeNextBetaVersion increments existing next-minor beta tags', () => {
+test('computeNextBetaVersion ignores unrelated future beta tags', () => {
   assert.deepEqual(
-    computeNextBetaVersion('v2.17.0', ['v2.18.0-beta.1', 'v2.18.0-beta.3']),
+    computeNextBetaVersion('v2.17.0', ['v2.17.0-beta.10', 'v2.18.0-beta.1']),
     {
       stable: '2.17.0',
-      version: '2.18.0-beta.4',
+      version: '2.17.0-beta.11',
     },
   );
+});
+
+test('computeNextBetaVersion starts beta one for stable version without existing betas', () => {
+  assert.deepEqual(computeNextBetaVersion('v3.0.0', ['v2.18.0-beta.1']), {
+    stable: '3.0.0',
+    version: '3.0.0-beta.1',
+  });
 });

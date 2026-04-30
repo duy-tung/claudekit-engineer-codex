@@ -200,30 +200,29 @@ function extractBetaRelease() {
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   const version = pkg.version;
 
-  const { execSync } = require('child_process');
+  const { execFileSync } = require('child_process');
 
   // Find previous tag to scope commits (avoid repeating old entries).
   // In CI, the current release tag is already pushed before this script runs.
-  // Use package.json version to identify current tag explicitly, then pick
-  // the next most recent tag as the range base.
+  // Use commit history, not semver order, so stray future beta tags do not
+  // become the range base forever.
   let range = '';
   try {
     const currentTag = `v${version}`;
-    const allTags = execSync('git tag --sort=-v:refname', { encoding: 'utf8' })
-      .trim()
-      .split('\n')
-      .filter(t => t?.startsWith('v') && t !== currentTag);
-    const prevTag = allTags.length >= 1 ? allTags[0] : null;
+    const prevTag = execFileSync(
+      'git',
+      ['describe', '--tags', '--match', 'v*', '--abbrev=0', `${currentTag}^`],
+      { encoding: 'utf8' },
+    ).trim();
     if (prevTag) range = `${prevTag}..HEAD`;
   } catch { /* fall back to last 20 commits */ }
 
   let commits = [];
   try {
-    // range is from git tag output (semver only, safe for shell)
-    const cmd = range
-      ? `git log ${range} --no-merges --format="%h %s"`
-      : 'git log --no-merges -20 --format="%h %s"';
-    const log = execSync(cmd, { encoding: 'utf8' });
+    const args = range
+      ? ['log', range, '--no-merges', '--format=%h %s']
+      : ['log', '--no-merges', '-20', '--format=%h %s'];
+    const log = execFileSync('git', args, { encoding: 'utf8' });
     commits = log.trim().split('\n').filter(l => l && !l.includes('[skip ci]'));
   } catch { /* ignore */ }
 
