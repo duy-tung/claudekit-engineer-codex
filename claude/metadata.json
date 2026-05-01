@@ -132,10 +132,10 @@
     "agents/mcp-manager.md",
     "skills/chrome-devtools/**"
   ],
-  "version": "2.17.0-beta.11",
+  "version": "2.17.0-beta.12",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
-  "buildDate": "2026-04-30T21:08:28.737Z",
+  "buildDate": "2026-05-01T03:22:11.931Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"
