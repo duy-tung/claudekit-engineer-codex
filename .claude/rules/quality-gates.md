@@ -66,6 +66,34 @@ Delete only when: (a) audit confirms zero unique capability, AND (b) routing fix
 
 **Affected files:** `scripts/check-skill-routing.js`, `scripts/skill-routing-allowlist.json`, `claude/rules/skill-domain-routing.md`, `claude/rules/skill-workflow-routing.md`
 
+## Skill Description Lint (warn-only)
+
+CI runs `node scripts/check-skill-descriptions.js` on every PR as a non-blocking job (`continue-on-error: true` in the workflow). It surfaces frontmatter `description:` patterns that hurt user discoverability:
+
+| Rule | Severity | Catches |
+|---|---|---|
+| `use-this-prefix` | minor | Description starts with "Use this when…" / "Use this skill…" — instructional, not capability-led |
+| `maintainer-marker` | major | Description contains `[KAI]`, `maintainer-only`, `for kai` — should be removed if shipped to all users |
+| `todo-marker` | major | Description contains TODO / FIXME / XXX / WIP — resolve before shipping |
+| `too-short` | minor | Description <50 chars — add trigger keywords / use cases |
+| `too-long` | minor | Description >800 chars — first 1-2 sentences should convey core value |
+| `missing-description` | major | No `description:` field in frontmatter at all (auto-emitted) |
+
+Allowlist (`scripts/skill-description-lint-allowlist.json`) lets specific skills opt out of specific rules with required `reason`. Rule IDs in allowlist entries are validated at load — typos like `too_short` vs `too-short` error out instead of silently allowing nothing.
+
+**Why warn-only initially:** at introduction, the lint surfaced 2 minor warnings (both legitimate `too-long`). Goal is to drive that to zero, then flip to blocking. **Two-step transition** — both required, otherwise the gate stays non-blocking:
+
+1. Change `process.exit(0)` at the bottom of `scripts/check-skill-descriptions.js` to honor severity counts
+2. Remove `continue-on-error: true` from the `skill-description-lint` job in `.github/workflows/quality-gates.yml`
+
+Doing only one leaves the gate non-blocking — the script may exit 1 but the job-level `continue-on-error` swallows the failure (or vice versa).
+
+**When the lint flags a description:**
+- For "minor" rules: review the description, rewrite if the warning is fair, OR allowlist with justification
+- For "major" rules: fix immediately. These usually indicate ship-blockers (TODO left in, or maintainer-only marker on a user-shipped skill)
+
+**Affected files:** `scripts/check-skill-descriptions.js`, `scripts/skill-description-lint-allowlist.json`
+
 ## Statusline Changes
 
 Changes to `statusline*.cjs` or `statusline-*.cjs` MUST update snapshot tests. Run test suite with all config variants: minimal config, full config, custom lines, no quota, 1M context window. ANSI escape sequences and special characters (NBSP) must be explicitly tested.

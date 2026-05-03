@@ -47,3 +47,16 @@ jobs:
 
       - name: Check skill routing coverage
         run: node scripts/check-skill-routing.js
+
+  skill-description-lint:
+    name: Skill Description Lint (warn-only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Lint skill descriptions (warn-only)
+        run: node scripts/check-skill-descriptions.js
