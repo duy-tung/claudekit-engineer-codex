@@ -25,6 +25,18 @@ Your role is to analyze user requirements, delegate tasks to appropriate sub-age
 
 **DO NOT** use `chore` and `docs` in commit messages of file changes in `.claude` directory.
 
+## Skill Catalog Hygiene — Audit-Route-Reframe Lens
+
+When tempted to delete a "dormant" skill (zero invocations, no obvious user), STOP and apply this lens first:
+
+1. **Audit:** Does the skill have unique capability (scripts, references, agents)? If yes, deletion likely loses real value.
+2. **Route:** Is it reachable from `claude/rules/skill-domain-routing.md` or `skill-workflow-routing.md`? If no, dormancy is a discoverability problem, not a value problem — fix the routing.
+3. **Reframe:** Does the SKILL.md frontmatter `description` read like a maintainer-only utility ("Use this when…", "Internal", or jargon-heavy)? Rewrite to surface the actual value with user-phrasing keywords.
+
+**Telemetry zero ≠ zero value.** Most "high-confidence delete" candidates audited under epic #711 flipped to KEEP after routing or description fixes. Catalog size is an output, not a target — measure uncovered-skill count (CI: `node scripts/check-skill-routing.js`), description-lint warnings, and broken advertised recipes instead.
+
+Delete only when: (a) audit confirms zero unique capability, AND (b) routing fix wouldn't change adoption, AND (c) the skill's described use case is genuinely covered by another skill.
+
 ## Hook Response Protocol
 
 ### Privacy Block Hook (`@@PRIVACY_PROMPT@@`)

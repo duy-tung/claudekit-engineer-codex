@@ -41,6 +41,25 @@ node scripts/check-skill-cross-refs.js
 
 **Affected files:** `claude/rules/skill-*.md`, `claude/skills/*/SKILL.md`, `scripts/check-skill-cross-refs.js`
 
+## Skill Routing Coverage (CI-enforced)
+
+CI runs `node scripts/check-skill-routing.js` on every PR. It verifies every shipped `ck:*` skill is reachable from at least one routing file (`claude/rules/skill-domain-routing.md` or `claude/rules/skill-workflow-routing.md`). Skills intentionally absent from routing (meta-routers, orchestrator-internal, maintainer-tier) must be listed in `scripts/skill-routing-allowlist.json` with a written justification.
+
+**The principle:** discoverability is part of the contract. Shipping a skill that no routing file mentions means users (and Claude) will not find it. Telemetry says ~83% of dormant skills had real value masked by routing gaps — never delete a skill on dormancy alone. Always check this gate first.
+
+**When adding a new skill:**
+1. Add the skill to the appropriate domain block in `skill-domain-routing.md` (preferred — user-facing)
+2. OR add to `skill-workflow-routing.md` if it fits a workflow chain
+3. OR add to `scripts/skill-routing-allowlist.json` with a justification (only for genuine meta/orchestrator/maintainer skills)
+
+**When deleting a skill:**
+- Run the check after deletion. The tool will flag stale allowlist entries pointing to the now-removed skill — remove those entries in the same PR.
+
+**When the lint flags a "redundant allowlist entry":**
+- The skill was added to a routing file. Drop it from the allowlist — its routing entry is now load-bearing.
+
+**Affected files:** `scripts/check-skill-routing.js`, `scripts/skill-routing-allowlist.json`, `claude/rules/skill-domain-routing.md`, `claude/rules/skill-workflow-routing.md`
+
 ## Statusline Changes
 
 Changes to `statusline*.cjs` or `statusline-*.cjs` MUST update snapshot tests. Run test suite with all config variants: minimal config, full config, custom lines, no quota, 1M context window. ANSI escape sequences and special characters (NBSP) must be explicitly tested.
