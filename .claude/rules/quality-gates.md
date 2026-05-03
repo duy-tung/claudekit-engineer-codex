@@ -72,12 +72,13 @@ CI runs `node scripts/check-skill-descriptions.js` on every PR as a non-blocking
 
 | Rule | Severity | Catches |
 |---|---|---|
-| `use-this-prefix` | minor | Description starts with "Use this when…" / "Use this skill…" — instructional, not capability-led |
+| `use-this-prefix` | minor | Description starts with "Use this when/skill/for/to…" — instructional, not capability-led |
 | `maintainer-marker` | major | Description contains `[KAI]`, `maintainer-only`, `for kai` — should be removed if shipped to all users |
 | `todo-marker` | major | Description contains TODO / FIXME / XXX / WIP — resolve before shipping |
 | `too-short` | minor | Description <50 chars — add trigger keywords / use cases |
 | `too-long` | minor | Description >800 chars — first 1-2 sentences should convey core value |
-| `missing-description` | major | No `description:` field in frontmatter at all (auto-emitted) |
+| `missing-description` | major | Frontmatter parsed but no `description:` field (auto-emitted) |
+| `frontmatter-parse-error` | major | Frontmatter block missing or unclosed (auto-emitted; distinct from missing-description so authors can debug) |
 
 Allowlist (`scripts/skill-description-lint-allowlist.json`) lets specific skills opt out of specific rules with required `reason`. Rule IDs in allowlist entries are validated at load — typos like `too_short` vs `too-short` error out instead of silently allowing nothing.
 

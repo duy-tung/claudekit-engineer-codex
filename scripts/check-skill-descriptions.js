@@ -38,9 +38,9 @@ const RULES = [
   {
     id: 'use-this-prefix',
     severity: 'minor',
-    test: (desc) => /^\s*Use\s+this\s+(when|skill)/i.test(desc),
+    test: (desc) => /^\s*Use\s+this\s+(when|skill|for|to)\b/i.test(desc),
     message:
-      'Starts with "Use this when/skill" — instructional, not capability-led. Lead with what the skill DOES ("Build X", "Run Y", "Analyze Z").',
+      'Starts with "Use this when/skill/for/to" — instructional, not capability-led. Lead with what the skill DOES ("Build X", "Run Y", "Analyze Z").',
   },
   {
     id: 'maintainer-marker',
@@ -97,22 +97,31 @@ function findFiles(dir, predicate) {
   return results;
 }
 
+// Sentinel returned when frontmatter block (---...---) is absent or unclosed.
+// Distinct from `null` which means "block parsed but field missing" — lets
+// the caller emit a `frontmatter-parse-error` finding instead of the
+// generic `missing-description` one.
+const FRONTMATTER_PARSE_ERROR = Symbol('frontmatter-parse-error');
+
 function extractFrontmatterField(content, field) {
   const fmMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (!fmMatch) return null;
+  if (!fmMatch) return FRONTMATTER_PARSE_ERROR;
   const fm = fmMatch[1];
   // Match `field:` followed by the value. Supports:
   //   field: value
   //   field: "value"
   //   field: 'value'
-  //   field: >- (folded scalar — multiline)
+  //   field: >- / > (folded scalar — newlines collapse to spaces)
+  //   field: |- / |  (literal block scalar — newlines preserved, joined with space here
+  //                   since description is rendered as a single line)
   const re = new RegExp(`^${field}:\\s*(.*)$`, 'm');
   const m = fm.match(re);
   if (!m) return null;
   let value = m[1].trim();
 
-  // Folded scalar: collect indented continuation lines
-  if (value === '>-' || value === '>') {
+  // Block scalar (folded `>`/`>-` or literal `|`/`|-`): collect indented continuation
+  // lines. For a single-line description rendering, both styles join with spaces.
+  if (value === '>-' || value === '>' || value === '|-' || value === '|') {
     const lines = fm.split('\n');
     const idx = lines.findIndex((l) => l.match(re));
     const collected = [];
@@ -136,16 +145,17 @@ function extractFrontmatterField(content, field) {
 
 function extractName(content) {
   const raw = extractFrontmatterField(content, 'name');
-  if (!raw) return null;
+  if (!raw || raw === FRONTMATTER_PARSE_ERROR) return null;
   return raw.startsWith('ck:') ? raw.slice(3) : raw;
 }
 
-// Known rule IDs (RULES array + the auto-emitted missing-description finding).
+// Known rule IDs (RULES array + auto-emitted findings).
 // Used to validate allowlist entries — typo'd rule IDs error out instead of
 // silently being ignored.
 const KNOWN_RULE_IDS = new Set([
   ...RULES.map((r) => r.id),
   'missing-description',
+  'frontmatter-parse-error',
 ]);
 
 function loadAllowlist() {
@@ -206,12 +216,45 @@ function main() {
       continue;
     }
     const name = extractName(content);
-    if (!name) continue;
+    if (!name) {
+      // Could be a non-ck: skill OR malformed frontmatter. Distinguish: try
+      // to read the name field directly. If extractFrontmatterField returns
+      // the sentinel, the frontmatter block itself failed to parse — emit a
+      // distinct finding so authors can debug instead of silently skipping.
+      const rawName = extractFrontmatterField(content, 'name');
+      if (rawName === FRONTMATTER_PARSE_ERROR) {
+        findings.push({
+          skill: path.basename(path.dirname(filePath)),
+          file: path.relative(repoRoot, filePath),
+          ruleId: 'frontmatter-parse-error',
+          severity: 'major',
+          message:
+            'Frontmatter block missing or unclosed. Expected `---`-delimited block at top of file.',
+          snippet: '',
+        });
+        scanned++;
+      }
+      continue;
+    }
     // ck:* namespace only
     const rawName = extractFrontmatterField(content, 'name') || '';
     if (!rawName.startsWith('ck:')) continue;
 
     const description = extractFrontmatterField(content, 'description');
+    if (description === FRONTMATTER_PARSE_ERROR) {
+      // Defensive — extractName already handled this above, but keep the
+      // branch for clarity if call order ever changes.
+      findings.push({
+        skill: name,
+        file: path.relative(repoRoot, filePath),
+        ruleId: 'frontmatter-parse-error',
+        severity: 'major',
+        message: 'Frontmatter block missing or unclosed.',
+        snippet: '',
+      });
+      scanned++;
+      continue;
+    }
     if (!description) {
       findings.push({
         skill: name,
@@ -285,4 +328,13 @@ function main() {
   process.exit(0);
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  RULES,
+  FRONTMATTER_PARSE_ERROR,
+  extractFrontmatterField,
+  extractName,
+};
