@@ -218,3 +218,11 @@ Saturation loop mechanics, novelty detection algorithm, and generation strategie
 # Saturation with domain hint for priority dimension ordering
 /ck:scenario src/middleware/auth.ts --saturation --domain security
 ```
+
+---
+
+## Lineage
+
+Faithful absorption (in scope) of upstream `/autoresearch:scenario` ([uditgoenka/autoresearch](https://github.com/uditgoenka/autoresearch), MIT). The local version supports both one-shot generation and the iterative saturation loop (closed in #729).
+
+See `/ck:autoresearch` for the full family map.

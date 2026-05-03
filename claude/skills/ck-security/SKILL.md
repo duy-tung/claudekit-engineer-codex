@@ -184,3 +184,11 @@ When `--fix` is provided, apply fixes iteratively after the audit:
 See `references/stride-owasp-checklist.md` for the detailed per-category checklist and secret detection regex patterns.
 
 See `references/red-team-personas.md` for the full persona catalog: threat models, attack vectors, probe checklists, discovery loop integration, and TSV schema extension for `--red-team` mode.
+
+---
+
+## Lineage
+
+Faithful absorption (in scope) of upstream `/autoresearch:security` ([uditgoenka/autoresearch](https://github.com/uditgoenka/autoresearch), MIT). The local version supports both one-shot STRIDE + OWASP audit and the red-team-personas iterative discovery loop (closed in #730).
+
+See `/ck:autoresearch` for the full family map.
