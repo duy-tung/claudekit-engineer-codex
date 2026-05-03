@@ -66,6 +66,12 @@ Delete only when: (a) audit confirms zero unique capability, AND (b) routing fix
 
 **Affected files:** `scripts/check-skill-routing.js`, `scripts/skill-routing-allowlist.json`, `claude/rules/skill-domain-routing.md`, `claude/rules/skill-workflow-routing.md`
 
+### Allowlist `reason` quality (both lints)
+
+Both `skill-routing-allowlist.json` and `skill-description-lint-allowlist.json` enforce a minimum reason length of **20 characters** (post-trim) via the shared `scripts/lib/validate-allowlist-reason.js` helper. Placeholder strings (`"ok"`, `"tbd"`, `"."`) error out at load. The audit-trail purpose of allowlists demands a real justification — link a follow-up issue, name the constraint, or describe the use case.
+
+**Affected files:** `scripts/lib/validate-allowlist-reason.js`
+
 ## Skill Description Lint (warn-only)
 
 CI runs `node scripts/check-skill-descriptions.js` on every PR as a non-blocking job (`continue-on-error: true` in the workflow). It surfaces frontmatter `description:` patterns that hurt user discoverability:

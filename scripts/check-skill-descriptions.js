@@ -29,6 +29,7 @@
 
 const { readFileSync, readdirSync, lstatSync } = require('fs');
 const path = require('path');
+const { validateReason } = require('./lib/validate-allowlist-reason.js');
 
 const repoRoot = path.resolve(__dirname, '..');
 const claudeDir = path.join(repoRoot, 'claude');
@@ -178,10 +179,9 @@ function loadAllowlist() {
     for (const entry of parsed.allowed) {
       if (!entry || typeof entry.skill !== 'string') continue;
       if (!Array.isArray(entry.rules)) continue;
-      if (typeof entry.reason !== 'string' || entry.reason.trim() === '') {
-        console.error(
-          `[X] Allowlist entry "${entry.skill}" missing required "reason" field.`
-        );
+      const reasonResult = validateReason(entry.reason);
+      if (!reasonResult.ok) {
+        console.error(`[X] Allowlist entry "${entry.skill}" ${reasonResult.error}`);
         process.exit(1);
       }
       // Validate rule IDs — catch typos before they silently allow nothing.
