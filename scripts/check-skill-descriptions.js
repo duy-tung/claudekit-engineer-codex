@@ -9,13 +9,20 @@
  *   - Maintainer-only markers ([KAI], "maintainer-only", etc.)
  *   - TODO / FIXME / XXX / WIP markers
  *   - Very short (<50 chars) or very long (>800 chars) descriptions
+ *   - Missing `description:` field entirely (auto-emitted as a major-severity
+ *     finding with rule id `missing-description`; allowlistable like any other rule)
  *
  * Allowlist (`scripts/skill-description-lint-allowlist.json`) lets specific
- * skills opt out of specific rules with required `reason`.
+ * skills opt out of specific rules with required `reason`. Rule IDs in
+ * allowlist entries are validated at load time — unknown IDs error out
+ * (catches typos like "too_short" vs "too-short").
  *
  * Usage: node scripts/check-skill-descriptions.js
- * Exit 0 always (warn-only mode). Flip to blocking by changing the exit at
- * the bottom once warnings are driven down. See claude/rules/quality-gates.md.
+ * Exit 0 always (warn-only mode). To flip to blocking, both:
+ *   1. Change `process.exit(0)` at the bottom to honor severity counts
+ *   2. Remove `continue-on-error: true` from the
+ *      `skill-description-lint` job in `.github/workflows/quality-gates.yml`
+ * Doing only one leaves the gate non-blocking. See claude/rules/quality-gates.md.
  */
 
 'use strict';
@@ -133,6 +140,14 @@ function extractName(content) {
   return raw.startsWith('ck:') ? raw.slice(3) : raw;
 }
 
+// Known rule IDs (RULES array + the auto-emitted missing-description finding).
+// Used to validate allowlist entries — typo'd rule IDs error out instead of
+// silently being ignored.
+const KNOWN_RULE_IDS = new Set([
+  ...RULES.map((r) => r.id),
+  'missing-description',
+]);
+
 function loadAllowlist() {
   let raw;
   try {
@@ -157,6 +172,15 @@ function loadAllowlist() {
         console.error(
           `[X] Allowlist entry "${entry.skill}" missing required "reason" field.`
         );
+        process.exit(1);
+      }
+      // Validate rule IDs — catch typos before they silently allow nothing.
+      const unknown = entry.rules.filter((id) => !KNOWN_RULE_IDS.has(id));
+      if (unknown.length > 0) {
+        console.error(
+          `[X] Allowlist entry "${entry.skill}" lists unknown rule ID(s): ${unknown.join(', ')}`
+        );
+        console.error(`    Known rule IDs: ${[...KNOWN_RULE_IDS].sort().join(', ')}`);
         process.exit(1);
       }
       map.set(entry.skill, new Set(entry.rules));
