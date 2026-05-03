@@ -63,7 +63,7 @@
   argument_hint: "[topic or problem]"
 - name: "ck-autoresearch"
   path: "ck-autoresearch/SKILL.md"
-  description: "Run autonomous optimization loops (deprecated alias for ck-loop). Use for metric-driven iteration, coverage improvement, performance tuning."
+  description: "Autoresearch family router. The upstream autoresearch meta-framework (Udit Goenka, MIT) is split locally into 4 skills (loop, predict, scenario, security). Visit this page to learn the pattern and find the right family member."
   category: "utilities"
   has_scripts: false
   has_references: true
