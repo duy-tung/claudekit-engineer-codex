@@ -31,8 +31,8 @@ The upstream framework ships 11 sub-commands. Locally, the patterns are absorbed
 |---|---|---|---|
 | `/autoresearch` (core) | `/ck:loop` | Faithful | Improving a measurable metric (coverage, bundle size, perf) over N bounded iterations |
 | `/autoresearch:predict` | `/ck:predict` | Drifted (simpler) | Multi-persona debate before risky changes (no `--chain` integration yet) |
-| `/autoresearch:scenario` | `/ck:scenario` | Drifted (one-shot) | Edge-case generation across 12 dimensions (no iterative saturation loop yet) |
-| `/autoresearch:security` | `/ck:security` | Drifted (one-shot) | STRIDE + OWASP audit with `--fix` (no red-team-personas iterative discovery yet) |
+| `/autoresearch:scenario` | `/ck:scenario` | Faithful (in scope) | Edge-case generation across 12 dimensions; supports both one-shot and iterative saturation (closed in #729) |
+| `/autoresearch:security` | `/ck:security` | Faithful (in scope) | STRIDE + OWASP audit with `--fix`; supports both one-shot and red-team-personas iterative discovery (closed in #730) |
 | `/autoresearch:plan` | — | Missing | Backfill candidate (HIGH priority) |
 | `/autoresearch:debug` | — | Missing | Backfill candidate (HIGH priority) |
 | `/autoresearch:fix` | — | Missing | Backfill candidate (MEDIUM); partly covered by `/ck:fix` |

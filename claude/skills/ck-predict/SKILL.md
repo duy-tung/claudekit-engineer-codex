@@ -119,3 +119,11 @@ Five expert personas independently analyze a proposed change, then debate confli
 /ck:predict "Add multi-tenancy to the database layer"
 /ck:predict "Replace REST API with GraphQL" --files src/api/**/*.ts
 ```
+
+---
+
+## Lineage
+
+Drifted absorption of upstream `/autoresearch:predict` ([uditgoenka/autoresearch](https://github.com/uditgoenka/autoresearch), MIT) — the local version is the simpler one-shot variant. Missing `--chain reason` and `--chain probe` integration with upstream's subjective-refinement and requirement-interrogation loops (tracked in #728).
+
+See `/ck:autoresearch` for the full family map.

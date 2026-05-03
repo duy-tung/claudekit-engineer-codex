@@ -178,3 +178,9 @@ When a reproduction command needs real credentials, write it as a *template* the
 
 - [`references/autonomous-loop-protocol.md`](references/autonomous-loop-protocol.md) — Full 8-phase loop spec, decision matrix, anti-patterns
 - [`references/git-memory-pattern.md`](references/git-memory-pattern.md) — Git as cross-iteration memory, revert vs reset, commit conventions
+
+## Lineage
+
+Faithful absorption of upstream `/autoresearch` core ([uditgoenka/autoresearch](https://github.com/uditgoenka/autoresearch), MIT). Implements Karpathy's Modify → Verify → Keep/Discard pattern with safety guardrails.
+
+See `/ck:autoresearch` for the full family map and what's not yet absorbed.
