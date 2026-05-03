@@ -130,7 +130,8 @@
     "skills/kanban/**",
     "skills/mcp-management/**",
     "agents/mcp-manager.md",
-    "skills/chrome-devtools/**"
+    "skills/chrome-devtools/**",
+    "skills/ck-autoresearch/references/**"
   ],
   "version": "2.17.0-beta.13",
   "name": "claudekit-engineer",

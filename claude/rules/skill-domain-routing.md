@@ -70,7 +70,8 @@ User wants to...
 ├── Optimize context, agent architecture, memory → /ck:context-engineering
 ├── Generate llms.txt, LLM-friendly docs         → /ck:llms
 ├── Build AI agents with Google ADK              → /ck:google-adk-python
-└── Generate/analyze images, audio, video with AI → /ck:ai-multimodal
+├── Generate/analyze images, audio, video with AI → /ck:ai-multimodal
+└── Learn the autoresearch pattern / find the right family member → /ck:autoresearch
 ```
 
 ## MCP (Model Context Protocol)

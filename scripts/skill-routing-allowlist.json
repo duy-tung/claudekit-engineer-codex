@@ -54,10 +54,6 @@
       "reason": "Project-init mega-skill; documented in README and bootstrap SKILL.md. Routes other skills internally; not domain-routed itself."
     },
     {
-      "name": "autoresearch",
-      "reason": "Deprecated alias for /ck:loop. P2 cleanup tracked in epic #711; remove allowlist entry after delete PR merges."
-    },
-    {
       "name": "coding-level",
       "reason": "P2 cleanup pending — design-first migration to claudekit-cli config (tracked in #718). Remove allowlist entry after migration."
     },
