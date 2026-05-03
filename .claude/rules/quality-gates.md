@@ -45,7 +45,13 @@ node scripts/check-skill-cross-refs.js
 
 CI runs `node scripts/check-skill-routing.js` on every PR. It verifies every shipped `ck:*` skill is reachable from at least one routing file (`claude/rules/skill-domain-routing.md` or `claude/rules/skill-workflow-routing.md`). Skills intentionally absent from routing (meta-routers, orchestrator-internal, maintainer-tier) must be listed in `scripts/skill-routing-allowlist.json` with a written justification.
 
-**The principle:** discoverability is part of the contract. Shipping a skill that no routing file mentions means users (and Claude) will not find it. Telemetry says ~83% of dormant skills had real value masked by routing gaps — never delete a skill on dormancy alone. Always check this gate first.
+**The principle (audit-route-reframe):** discoverability is part of the contract. Shipping a skill that no routing file mentions means users (and Claude) will not find it. **Telemetry zero ≠ zero value** — most dormant skills audited under epic #711 flipped to KEEP after routing or description fixes. When tempted to delete a "dormant" skill:
+
+1. **Audit:** Does the skill have unique capability (scripts, references, agents)? If yes, deletion likely loses real value.
+2. **Route:** Is it reachable from a routing file? If no, dormancy is a discoverability problem — fix the routing.
+3. **Reframe:** Does the SKILL.md `description` read like a maintainer-only utility? Rewrite with user-phrasing keywords.
+
+Delete only when: (a) audit confirms zero unique capability, AND (b) routing fix wouldn't change adoption, AND (c) use case is genuinely covered by another skill. Catalog size is an output, not a target.
 
 **When adding a new skill:**
 1. Add the skill to the appropriate domain block in `skill-domain-routing.md` (preferred — user-facing)
