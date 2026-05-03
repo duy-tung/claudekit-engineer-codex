@@ -24,7 +24,8 @@ User wants to...
 User wants to...
 ├── Quick file search, locate specific code     → /ck:scout
 ├── Onboard a new repo / dump codebase for LLM  → /ck:repomix
-└── Semantic go-to-definition, find-usages      → /ck:gkg
+├── Semantic go-to-definition, find-usages      → /ck:gkg
+└── Build a queryable knowledge graph from code → /ck:graphify
 ```
 
 ## Backend / API
@@ -102,11 +103,25 @@ User wants to...
 
 ```
 User wants to...
-├── Update project docs (codebase-summary, PDR)  → /ck:docs
-├── Search library/framework docs (context7)     → /ck:docs-seeker
-├── Build docs site with Mintlify                → /ck:mintlify
-├── Inline doc diagrams (Mermaid v11)            → /ck:mermaidjs-v11
-└── Publish-grade SVG/PNG diagrams (architecture) → /ck:tech-graph
+├── Update project docs (codebase-summary, PDR)   → /ck:docs
+├── Search library/framework docs (context7)      → /ck:docs-seeker
+├── Discover skills by capability / "is there a skill" → /ck:find-skills
+├── Build docs site with Mintlify                 → /ck:mintlify
+├── Inline doc diagrams (Mermaid v11)             → /ck:mermaidjs-v11
+├── Publish-grade SVG/PNG diagrams (architecture) → /ck:tech-graph
+├── Read long-form docs / RFCs / specs in browser → /ck:markdown-novel-viewer
+├── Generate session hand-off / EOD summary       → /ck:watzup
+└── Sprint retrospective from git history         → /ck:retro
+```
+
+## Documents / Office Files
+
+```
+User wants to...
+├── Create / edit / extract from .docx (Word)         → /ck:docx
+├── Create / edit / extract from .pdf (forms, tables) → /ck:pdf
+├── Create / edit / extract from .pptx (PowerPoint)   → /ck:pptx
+└── Create / edit / extract from .xlsx (spreadsheets) → /ck:xlsx
 ```
 
 ## Content / Copy

@@ -35,3 +35,15 @@ jobs:
 
       - name: Check skill cross-references
         run: node scripts/check-skill-cross-refs.js
+
+  skill-routing-coverage:
+    name: Skill Routing Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check skill routing coverage
+        run: node scripts/check-skill-routing.js
