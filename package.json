@@ -1,6 +1,6 @@
 {
   "name": "claudekit-engineer",
-  "version": "2.17.0-beta.18",
+  "version": "2.17.0-beta.19",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
   "main": "index.js",
   "scripts": {
