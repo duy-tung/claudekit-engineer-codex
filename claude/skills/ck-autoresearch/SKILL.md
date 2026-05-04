@@ -25,21 +25,21 @@ The **autoresearch pattern** — autonomous goal-directed iteration with safety 
 
 ## Local absorption map
 
-The upstream framework ships 11 sub-commands. Locally, the patterns are absorbed into 4 specialized skills (faithful or drifted) and 6 are not yet absorbed. **For the core loop, use `/ck:loop`.**
+The upstream framework ships 11 sub-commands. Locally, 6 are absorbed (4 standalone skills + 2 folded as chain modes) and 5 are not yet absorbed. **For the core loop, use `/ck:loop`.**
 
 | Upstream sub-command | Local skill | Status | Use when... |
 |---|---|---|---|
 | `/autoresearch` (core) | `/ck:loop` | Faithful | Improving a measurable metric (coverage, bundle size, perf) over N bounded iterations |
-| `/autoresearch:predict` | `/ck:predict` | Drifted (simpler) | Multi-persona debate before risky changes (no `--chain` integration yet) |
+| `/autoresearch:predict` | `/ck:predict` | Faithful (in scope) | Multi-persona debate before risky changes; supports `--chain reason` and `--chain probe` (closed in #728) |
 | `/autoresearch:scenario` | `/ck:scenario` | Faithful (in scope) | Edge-case generation across 12 dimensions; supports both one-shot and iterative saturation (closed in #729) |
 | `/autoresearch:security` | `/ck:security` | Faithful (in scope) | STRIDE + OWASP audit with `--fix`; supports both one-shot and red-team-personas iterative discovery (closed in #730) |
+| `/autoresearch:reason` | `/ck:predict --chain reason` | Folded | Subjective refinement loop — folded into `/ck:predict` chain modes rather than shipped as a standalone skill (closed in #728) |
+| `/autoresearch:probe` | `/ck:predict --chain probe` | Folded | Requirement interrogation — folded into `/ck:predict` chain modes rather than shipped as a standalone skill (closed in #728) |
 | `/autoresearch:plan` | — | Missing | Backfill candidate (HIGH priority) |
 | `/autoresearch:debug` | — | Missing | Backfill candidate (HIGH priority) |
 | `/autoresearch:fix` | — | Missing | Backfill candidate (MEDIUM); partly covered by `/ck:fix` |
 | `/autoresearch:ship` | — | Missing | Backfill candidate (MEDIUM); partly covered by `/ck:ship` |
 | `/autoresearch:learn` | — | Missing | Backfill candidate (LOW) — autonomous docs generator |
-| `/autoresearch:reason` | — | Missing | Backfill candidate (LOW) — subjective refinement loop |
-| `/autoresearch:probe` | — | Missing | Backfill candidate (LOW) — requirement interrogation |
 
 Drift assessments and backfill priorities come from the integration audit at `plans/reports/researcher-260502-2145-autoresearch-integration-audit.md`.
 
