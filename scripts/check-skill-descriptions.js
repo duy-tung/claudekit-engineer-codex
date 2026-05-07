@@ -11,7 +11,7 @@
  *   - Very short (<50 chars) or very long (>512 chars) descriptions
  *   - Missing `description:` field entirely (auto-emitted as a major-severity
  *     finding with rule id `missing-description`; allowlistable like any other rule)
- *   - Missing `user-invocable: false` on shipped skills
+ *   - Missing `user-invocable: true` on shipped skills
  *   - Missing or risky project skill listing budget settings
  *
  * Allowlist (`scripts/skill-description-lint-allowlist.json`) lets specific
@@ -164,7 +164,7 @@ const KNOWN_RULE_IDS = new Set([
   ...RULES.map((r) => r.id),
   'missing-description',
   'frontmatter-parse-error',
-  'missing-agent-only-visibility',
+  'missing-user-invocable-visibility',
   'missing-skill-listing-budget',
   'low-skill-listing-budget',
   'missing-skill-description-cap',
@@ -252,7 +252,7 @@ function validateSkillListingSettings(settings) {
       file,
       ruleId: 'missing-skill-listing-budget',
       severity: 'major',
-      message: `Missing skillListingBudgetFraction. Default to ${MIN_SKILL_LISTING_BUDGET_FRACTION} so all Engineer skills stay agent-visible.`,
+      message: `Missing skillListingBudgetFraction. Default to ${MIN_SKILL_LISTING_BUDGET_FRACTION} so all Engineer skills stay visible under the Claude Code skill listing budget.`,
       snippet: '',
     });
   } else if (
@@ -366,14 +366,14 @@ function main() {
 
     const skillAllowed = allowlist.get(name) || new Set();
     const userInvocable = extractFrontmatterField(content, 'user-invocable');
-    if (!skillAllowed.has('missing-agent-only-visibility') && userInvocable !== 'false') {
+    if (!skillAllowed.has('missing-user-invocable-visibility') && userInvocable !== 'true') {
       findings.push({
         label: formatSkillLabel(rawName, name),
         file: path.relative(repoRoot, filePath),
-        ruleId: 'missing-agent-only-visibility',
+        ruleId: 'missing-user-invocable-visibility',
         severity: 'major',
         message:
-          'Shipped skills must set `user-invocable: false` so they stay agent-invocable without crowding the user slash menu.',
+          'Shipped skills must set `user-invocable: true`; control listing pressure with budget settings and bounded descriptions, not hidden skills.',
         snippet: '',
       });
     }

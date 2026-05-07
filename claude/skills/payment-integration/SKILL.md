@@ -1,7 +1,7 @@
 ---
 name: ck:payment-integration
 description: Integrate payments with SePay (VietQR), Polar, Stripe, Paddle (MoR subscriptions), Creem.io (licensing). Checkout, webhooks, subscriptions, QR codes, multi-provider orders.
-user-invocable: false
+user-invocable: true
 category: backend
 keywords: [payments, stripe, polar, webhooks, qr]
 license: MIT

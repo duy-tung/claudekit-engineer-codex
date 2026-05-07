@@ -1,7 +1,7 @@
 ---
 name: ck:autoresearch
 description: "Autoresearch is the upstream meta-framework (Udit Goenka, MIT) for autonomous goal-directed iteration with safety guardrails. Locally split into 4 specialized skills. Start here to learn the pattern, then route to the right specialized skill."
-user-invocable: false
+user-invocable: true
 category: utilities
 keywords: [autoresearch, autonomous, iteration, karpathy, framework, lineage, router, umbrella]
 related: [ck-loop, ck-predict, ck-scenario, ck-security]

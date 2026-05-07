@@ -1,7 +1,7 @@
 ---
 name: ck:agent-browser
 description: Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent.
-user-invocable: false
+user-invocable: true
 category: dev-tools
 keywords: [browser, automation, playwright, testing, e2e, browserbase, autonomous, headless, electron, slack, dogfood, agentcore, vercel-sandbox]
 license: Apache-2.0

@@ -1,7 +1,7 @@
 ---
 name: ck:threejs
 description: "Build 3D web experiences with Three.js. Use for WebGL/WebGPU scenes, GLTF models, animations, physics, VR/XR. Supports 556 searchable examples."
-user-invocable: false
+user-invocable: true
 category: frontend
 keywords: [threejs, 3d, webgl, webgpu, gltf]
 license: MIT

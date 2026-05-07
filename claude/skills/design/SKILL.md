@@ -1,7 +1,7 @@
 ---
 name: ckm:design
 description: "Design brand identity, logos, banners, and visual assets. Use for brand systems, design tokens, corporate identity programs. Not for UI code patterns."
-user-invocable: false
+user-invocable: true
 category: frontend
 keywords: [brand, logo, CIP, banners, identity]
 argument-hint: "[design-type] [context]"

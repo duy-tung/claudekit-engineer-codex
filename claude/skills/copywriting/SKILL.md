@@ -1,7 +1,7 @@
 ---
 name: ck:copywriting
 description: Conversion copywriting formulas, headline templates, email copy patterns, landing page structures, CTA optimization, and writing style extraction. Activate for writing high-converting copy, crafting headlines, email campaigns, landing pages, or applying custom writing styles from assets/writing-styles/ directory.
-user-invocable: false
+user-invocable: true
 category: utilities
 keywords: [copy, headlines, email, landing-page]
 license: MIT

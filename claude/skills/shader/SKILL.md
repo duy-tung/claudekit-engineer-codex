@@ -1,7 +1,7 @@
 ---
 name: ck:shader
 description: "Write GLSL fragment shaders for procedural graphics. Topics: shapes (SDF), patterns, noise (Perlin/simplex/cellular), fBm, colors (HSB/RGB), matrices, gradients, animations. Use for generative art, textures, visual effects, WebGL, Three.js shaders."
-user-invocable: false
+user-invocable: true
 category: frontend
 keywords: [glsl, shaders, procedural, webgl]
 argument-hint: "[effect or pattern]"

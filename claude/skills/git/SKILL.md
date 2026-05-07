@@ -1,7 +1,7 @@
 ---
 name: ck:git
 description: "Git operations with conventional commits. Use for staging, committing, pushing, PRs, merges. Auto-splits commits by type/scope. Security scans for secrets."
-user-invocable: false
+user-invocable: true
 category: dev-tools
 keywords: [git, commits, staging, PR, merge]
 argument-hint: "cm|cp|pr|merge [args]"

@@ -1,7 +1,7 @@
 ---
 name: ck:retro
 description: "Generate data-driven sprint retrospectives from any git history. Use for sprint reviews, commit analysis, code-health indicators, team-velocity reporting, and quarterly engineering reviews. Works on solo or team repos."
-user-invocable: false
+user-invocable: true
 category: utilities
 keywords: [retrospective, sprint, metrics, review]
 license: MIT

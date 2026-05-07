@@ -1,7 +1,7 @@
 ---
 name: ck:security
 description: "STRIDE + OWASP-based security audit with optional red-team persona discovery loop and auto-fix. Scans code for vulnerabilities from multiple attacker perspectives (auth attacker, supply chain, insider, infrastructure), categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern."
-user-invocable: false
+user-invocable: true
 category: utilities
 keywords: [security, STRIDE, OWASP, audit, red-team, penetration-testing, vulnerability-discovery]
 argument-hint: "<scope glob or 'full'> [--fix] [--red-team] [--iterations N]"
