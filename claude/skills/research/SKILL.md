@@ -2,6 +2,7 @@
 name: ck:research
 description: "Research technical solutions, analyze architectures, gather requirements thoroughly. Use for technology evaluation, best practices research, solution design, scalability/security/maintainability analysis."
 user-invocable: true
+when_to_use: "Invoke for deep technical research before implementation."
 category: utilities
 keywords: [research, evaluation, analysis, solutions]
 license: MIT

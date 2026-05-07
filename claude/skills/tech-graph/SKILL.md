@@ -8,6 +8,7 @@ description: >-
   Pairs with /ck:preview --diagram for visual self-review and /ck:mermaidjs-v11
   for inline-doc diagrams; this skill is the publish-grade output mode.
 user-invocable: true
+when_to_use: "Invoke for publish-grade architecture or flow diagrams."
 category: dev-tools
 keywords: [diagrams, architecture, flowchart, sequence, svg, png, agent, memory, visualization]
 argument-hint: "[diagram-type or system description]"

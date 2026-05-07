@@ -2,6 +2,7 @@
 name: ck:graphify
 description: "Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation."
 user-invocable: true
+when_to_use: "Invoke to turn code or docs into a queryable graph."
 category: dev-tools
 keywords: [knowledge-graph, code-analysis, tree-sitter, codebase-understanding, ast]
 argument-hint: "[path] [--mcp|--report|--watch]"

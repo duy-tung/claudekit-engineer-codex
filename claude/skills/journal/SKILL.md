@@ -2,6 +2,7 @@
 name: ck:journal
 description: "Write technical journal entries analyzing recent changes. Use for session reflections, change analysis, decision documentation."
 user-invocable: true
+when_to_use: "Invoke for technical session reflection or decision records."
 category: utilities
 keywords: [journal, reflection, changes, session]
 argument-hint: "[topic or reflection]"

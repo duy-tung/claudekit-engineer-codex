@@ -2,6 +2,7 @@
 name: ck:loop
 description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."
 user-invocable: true
+when_to_use: "Invoke only when an objective metric can drive repeated trials."
 category: utilities
 keywords: [optimization, iteration, metrics, loop]
 argument-hint: "[Goal/Metric description] or inline config block"

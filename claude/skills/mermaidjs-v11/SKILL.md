@@ -2,6 +2,7 @@
 name: ck:mermaidjs-v11
 description: Create diagrams with Mermaid.js v11 syntax. Use for flowcharts, sequence diagrams, class diagrams, ER diagrams, Gantt charts, state diagrams, architecture diagrams, timelines, user journeys.
 user-invocable: true
+when_to_use: "Invoke when inline Mermaid v11 diagrams are needed."
 category: utilities
 keywords: [mermaid, diagrams, flowcharts, charts]
 argument-hint: "[diagram-type or description]"

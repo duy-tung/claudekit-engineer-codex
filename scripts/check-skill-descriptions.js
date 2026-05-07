@@ -164,6 +164,7 @@ function extractName(content) {
 const KNOWN_RULE_IDS = new Set([
   ...RULES.map((r) => r.id),
   'missing-description',
+  'missing-when-to-use',
   'frontmatter-parse-error',
   'missing-user-invocable-visibility',
   'disabled-model-invocation',
@@ -416,6 +417,17 @@ function main() {
     }
     scanned++;
     const whenToUse = extractFrontmatterField(content, 'when_to_use');
+    if (!whenToUse || whenToUse === FRONTMATTER_PARSE_ERROR) {
+      findings.push({
+        label: formatSkillLabel(rawName, name),
+        file: path.relative(repoRoot, filePath),
+        ruleId: 'missing-when-to-use',
+        severity: 'major',
+        message:
+          'Shipped skills must set concise `when_to_use` metadata so agent routing context stays explicit and budgeted.',
+        snippet: '',
+      });
+    }
     const listingText = combineListingText(description, whenToUse);
     descriptions.push(listingText);
     skillEntries.push({ name: rawName, description: listingText });
@@ -537,6 +549,7 @@ if (require.main === module) {
 
 module.exports = {
   RULES,
+  KNOWN_RULE_IDS,
   FRONTMATTER_PARSE_ERROR,
   CONTEXT_FLOOR_TOKENS,
   CHARS_PER_TOKEN,

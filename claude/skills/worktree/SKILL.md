@@ -2,6 +2,7 @@
 name: ck:worktree
 description: "Create, inspect, and clean isolated git worktrees. Use for feature isolation, worktree health audits, stale cleanup, and monorepo or submodule workflows."
 user-invocable: true
+when_to_use: "Invoke for isolated worktrees, stale cleanup, or worktree audits."
 category: dev-tools
 keywords: [worktree, parallel, monorepo, isolation]
 argument-hint: "[feature-description] OR [project] [feature]"

@@ -8,6 +8,7 @@ description: >-
   rendering. Also supports zero-config codebase auto-diagramming — just say
   "diagram this repo" or "visualize the architecture".
 user-invocable: true
+when_to_use: "Invoke for editable canvas diagrams or codebase visual maps."
 category: dev-tools
 keywords: [diagrams, architecture, flowcharts, whiteboard, SVG]
 metadata:

@@ -4,7 +4,7 @@
   "title": "ClaudeKit Skill Frontmatter",
   "description": "JSON Schema for SKILL.md YAML frontmatter validation",
   "type": "object",
-  "required": ["name", "description", "user-invocable"],
+  "required": ["name", "description", "when_to_use", "user-invocable"],
   "additionalProperties": false,
   "properties": {
     "name": {
@@ -17,7 +17,7 @@
       "type": "string",
       "minLength": 10,
       "maxLength": 512,
-      "description": "Human-readable description of the skill and when to use it"
+      "description": "Human-readable capability description for the skill"
     },
     "when_to_use": {
       "type": "string",
