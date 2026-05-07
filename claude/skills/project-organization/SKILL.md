@@ -1,6 +1,7 @@
 ---
 name: ck:project-organization
 description: Organize files, directories, and content structure in any project. Use when creating files, determining output paths, organizing existing assets, or standardizing project layout.
+user-invocable: false
 category: utilities
 keywords: [files, directories, structure, layout]
 argument-hint: "[directories or files to organize]"

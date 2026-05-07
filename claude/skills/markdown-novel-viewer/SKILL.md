@@ -1,6 +1,7 @@
 ---
 name: ck:markdown-novel-viewer
 description: View markdown files in a calm, book-like reader served via HTTP. Use for long-form content review — RFCs, runbooks, design docs, reports, specs, novels — anywhere you want a distraction-free reading mode in the browser.
+user-invocable: false
 category: utilities
 keywords: [markdown, viewer, reading, preview]
 argument-hint: "[file-or-directory]"

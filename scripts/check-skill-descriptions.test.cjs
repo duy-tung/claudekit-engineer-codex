@@ -11,6 +11,7 @@ const {
 } = require('./check-skill-descriptions.js');
 
 const useThisRule = RULES.find((r) => r.id === 'use-this-prefix');
+const tooLongRule = RULES.find((r) => r.id === 'too-long');
 
 test('use-this-prefix: catches "Use this when"', () => {
   assert.equal(useThisRule.test('Use this when X happens'), true);
@@ -37,6 +38,14 @@ test('use-this-prefix: does NOT match "Use this" with no preposition (still kept
   // After widening: any of when|skill|for|to followed by word boundary.
   // "Use this approach" has none of the four — should NOT match.
   assert.equal(useThisRule.test('Use this approach to coding'), false);
+});
+
+test('too-long: catches descriptions above Claude Code listing cap', () => {
+  assert.equal(tooLongRule.test('x'.repeat(513)), true);
+});
+
+test('too-long: allows descriptions at Claude Code listing cap', () => {
+  assert.equal(tooLongRule.test('x'.repeat(512)), false);
 });
 
 test('extractFrontmatterField: returns sentinel when frontmatter block absent', () => {

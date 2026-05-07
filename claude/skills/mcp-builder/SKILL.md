@@ -1,6 +1,7 @@
 ---
 name: ck:mcp-builder
 description: Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers.
+user-invocable: false
 category: dev-tools
 keywords: [MCP, server, tools, integration]
 license: Complete terms in LICENSE.txt

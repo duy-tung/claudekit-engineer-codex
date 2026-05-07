@@ -2,15 +2,17 @@
 /**
  * check-skill-descriptions.js
  *
- * Warn-only lint over claude/skills/<name>/SKILL.md frontmatter `description:`
- * fields. Surfaces patterns that hurt user discoverability:
+ * Warn-only lint over claude/skills/<name>/SKILL.md frontmatter metadata.
+ * Surfaces patterns that hurt agent routing or Claude Code skill listing budget:
  *
  *   - "Use this when..." / "Use this skill..." (instructional, not capability-led)
  *   - Maintainer-only markers ([KAI], "maintainer-only", etc.)
  *   - TODO / FIXME / XXX / WIP markers
- *   - Very short (<50 chars) or very long (>800 chars) descriptions
+ *   - Very short (<50 chars) or very long (>512 chars) descriptions
  *   - Missing `description:` field entirely (auto-emitted as a major-severity
  *     finding with rule id `missing-description`; allowlistable like any other rule)
+ *   - Missing `user-invocable: false` on shipped skills
+ *   - Missing or risky project skill listing budget settings
  *
  * Allowlist (`scripts/skill-description-lint-allowlist.json`) lets specific
  * skills opt out of specific rules with required `reason`. Rule IDs in
@@ -34,6 +36,11 @@ const { validateReason } = require('./lib/validate-allowlist-reason.js');
 const repoRoot = path.resolve(__dirname, '..');
 const claudeDir = path.join(repoRoot, 'claude');
 const allowlistPath = path.join(__dirname, 'skill-description-lint-allowlist.json');
+const settingsPath = path.join(claudeDir, 'settings.json');
+
+const RECOMMENDED_DESC_CHARS = 200;
+const MAX_LISTING_DESC_CHARS = 512;
+const MIN_SKILL_LISTING_BUDGET_FRACTION = 0.03;
 
 const RULES = [
   {
@@ -66,9 +73,9 @@ const RULES = [
   {
     id: 'too-long',
     severity: 'minor',
-    test: (desc) => desc.trim().length > 800,
+    test: (desc) => desc.trim().length > MAX_LISTING_DESC_CHARS,
     message:
-      'Very long (>800 chars). First 1-2 sentences should convey core value; trim the rest.',
+      `Very long (>${MAX_LISTING_DESC_CHARS} chars). Claude Code may truncate or omit it from the skill listing; trim to the routing signal.`,
   },
 ];
 
@@ -147,7 +154,7 @@ function extractFrontmatterField(content, field) {
 function extractName(content) {
   const raw = extractFrontmatterField(content, 'name');
   if (!raw || raw === FRONTMATTER_PARSE_ERROR) return null;
-  return raw.startsWith('ck:') ? raw.slice(3) : raw;
+  return normalizeSkillName(raw);
 }
 
 // Known rule IDs (RULES array + auto-emitted findings).
@@ -157,6 +164,11 @@ const KNOWN_RULE_IDS = new Set([
   ...RULES.map((r) => r.id),
   'missing-description',
   'frontmatter-parse-error',
+  'missing-agent-only-visibility',
+  'missing-skill-listing-budget',
+  'low-skill-listing-budget',
+  'missing-skill-description-cap',
+  'high-skill-description-cap',
 ]);
 
 function loadAllowlist() {
@@ -199,13 +211,98 @@ function loadAllowlist() {
   return map;
 }
 
+function normalizeSkillName(rawName) {
+  if (!rawName || rawName === FRONTMATTER_PARSE_ERROR) return null;
+  return rawName.startsWith('ck:') ? rawName.slice(3) : rawName;
+}
+
+function formatSkillLabel(rawName, normalizedName) {
+  if (rawName.startsWith('ck:')) return `/ck:${normalizedName}`;
+  return rawName;
+}
+
+function readSettings() {
+  try {
+    return JSON.parse(readFileSync(settingsPath, 'utf8'));
+  } catch (err) {
+    return { __readError: err.message };
+  }
+}
+
+function validateSkillListingSettings(settings) {
+  const findings = [];
+  const file = path.relative(repoRoot, settingsPath);
+
+  if (settings.__readError) {
+    findings.push({
+      label: 'claude/settings.json',
+      file,
+      ruleId: 'missing-skill-listing-budget',
+      severity: 'major',
+      message: `Could not read skill listing settings: ${settings.__readError}`,
+      snippet: '',
+    });
+    return findings;
+  }
+
+  const budgetFraction = settings.skillListingBudgetFraction;
+  if (budgetFraction === undefined) {
+    findings.push({
+      label: 'claude/settings.json',
+      file,
+      ruleId: 'missing-skill-listing-budget',
+      severity: 'major',
+      message: `Missing skillListingBudgetFraction. Default to ${MIN_SKILL_LISTING_BUDGET_FRACTION} so all Engineer skills stay agent-visible.`,
+      snippet: '',
+    });
+  } else if (
+    typeof budgetFraction !== 'number' ||
+    budgetFraction < MIN_SKILL_LISTING_BUDGET_FRACTION
+  ) {
+    findings.push({
+      label: 'claude/settings.json',
+      file,
+      ruleId: 'low-skill-listing-budget',
+      severity: 'major',
+      message: `skillListingBudgetFraction must be >= ${MIN_SKILL_LISTING_BUDGET_FRACTION}; got ${JSON.stringify(budgetFraction)}.`,
+      snippet: '',
+    });
+  }
+
+  const maxDescChars = settings.skillListingMaxDescChars;
+  if (maxDescChars === undefined) {
+    findings.push({
+      label: 'claude/settings.json',
+      file,
+      ruleId: 'missing-skill-description-cap',
+      severity: 'major',
+      message: `Missing skillListingMaxDescChars. Default to ${MAX_LISTING_DESC_CHARS} to keep individual descriptions bounded.`,
+      snippet: '',
+    });
+  } else if (typeof maxDescChars !== 'number' || maxDescChars > MAX_LISTING_DESC_CHARS) {
+    findings.push({
+      label: 'claude/settings.json',
+      file,
+      ruleId: 'high-skill-description-cap',
+      severity: 'major',
+      message: `skillListingMaxDescChars must be <= ${MAX_LISTING_DESC_CHARS}; got ${JSON.stringify(maxDescChars)}.`,
+      snippet: '',
+    });
+  }
+
+  return findings;
+}
+
 function main() {
   const skillsDir = path.join(claudeDir, 'skills');
   const skillFiles = findFiles(skillsDir, (entry) => entry === 'SKILL.md');
   const allowlist = loadAllowlist();
+  const settings = readSettings();
 
   const findings = []; // {skill, file, ruleId, severity, message, snippet}
+  findings.push(...validateSkillListingSettings(settings));
   let scanned = 0;
+  const descriptions = [];
 
   for (const filePath of skillFiles) {
     let content;
@@ -215,16 +312,16 @@ function main() {
       console.error(`[!] Could not read ${filePath}: ${err.message}`);
       continue;
     }
-    const name = extractName(content);
+    const rawName = extractFrontmatterField(content, 'name');
+    const name = normalizeSkillName(rawName);
     if (!name) {
       // Could be a non-ck: skill OR malformed frontmatter. Distinguish: try
       // to read the name field directly. If extractFrontmatterField returns
       // the sentinel, the frontmatter block itself failed to parse — emit a
       // distinct finding so authors can debug instead of silently skipping.
-      const rawName = extractFrontmatterField(content, 'name');
       if (rawName === FRONTMATTER_PARSE_ERROR) {
         findings.push({
-          skill: path.basename(path.dirname(filePath)),
+          label: path.basename(path.dirname(filePath)),
           file: path.relative(repoRoot, filePath),
           ruleId: 'frontmatter-parse-error',
           severity: 'major',
@@ -236,16 +333,13 @@ function main() {
       }
       continue;
     }
-    // ck:* namespace only
-    const rawName = extractFrontmatterField(content, 'name') || '';
-    if (!rawName.startsWith('ck:')) continue;
 
     const description = extractFrontmatterField(content, 'description');
     if (description === FRONTMATTER_PARSE_ERROR) {
       // Defensive — extractName already handled this above, but keep the
       // branch for clarity if call order ever changes.
       findings.push({
-        skill: name,
+        label: formatSkillLabel(rawName, name),
         file: path.relative(repoRoot, filePath),
         ruleId: 'frontmatter-parse-error',
         severity: 'major',
@@ -257,7 +351,7 @@ function main() {
     }
     if (!description) {
       findings.push({
-        skill: name,
+        label: formatSkillLabel(rawName, name),
         file: path.relative(repoRoot, filePath),
         ruleId: 'missing-description',
         severity: 'major',
@@ -268,13 +362,27 @@ function main() {
       continue;
     }
     scanned++;
+    descriptions.push(description);
 
     const skillAllowed = allowlist.get(name) || new Set();
+    const userInvocable = extractFrontmatterField(content, 'user-invocable');
+    if (!skillAllowed.has('missing-agent-only-visibility') && userInvocable !== 'false') {
+      findings.push({
+        label: formatSkillLabel(rawName, name),
+        file: path.relative(repoRoot, filePath),
+        ruleId: 'missing-agent-only-visibility',
+        severity: 'major',
+        message:
+          'Shipped skills must set `user-invocable: false` so they stay agent-invocable without crowding the user slash menu.',
+        snippet: '',
+      });
+    }
+
     for (const rule of RULES) {
       if (skillAllowed.has(rule.id)) continue;
       if (rule.test(description)) {
         findings.push({
-          skill: name,
+          label: formatSkillLabel(rawName, name),
           file: path.relative(repoRoot, filePath),
           ruleId: rule.id,
           severity: rule.severity,
@@ -288,10 +396,24 @@ function main() {
   // Group by severity
   const major = findings.filter((f) => f.severity === 'major');
   const minor = findings.filter((f) => f.severity === 'minor');
+  const totalDescChars = descriptions.reduce((sum, desc) => sum + desc.length, 0);
+  const cappedDescChars = descriptions.reduce(
+    (sum, desc) => sum + Math.min(desc.length, settings.skillListingMaxDescChars || desc.length),
+    0
+  );
+  const overRecommended = descriptions.filter((desc) => desc.length > RECOMMENDED_DESC_CHARS).length;
+  const overCap = descriptions.filter((desc) => desc.length > MAX_LISTING_DESC_CHARS).length;
+
+  console.log(
+    `[i] skill inventory: ${scanned} skill description(s), ${totalDescChars} char(s) total, ${overRecommended} over ${RECOMMENDED_DESC_CHARS} chars, ${overCap} over ${MAX_LISTING_DESC_CHARS} chars.`
+  );
+  console.log(
+    `[i] skill listing settings: skillListingBudgetFraction=${JSON.stringify(settings.skillListingBudgetFraction)}, skillListingMaxDescChars=${JSON.stringify(settings.skillListingMaxDescChars)}, projected listed description chars=${cappedDescChars}.\n`
+  );
 
   if (findings.length === 0) {
     console.log(
-      `[OK] skill-descriptions: ${scanned} ck:* description(s) scanned — no warnings.`
+      `[OK] skill-descriptions: ${scanned} skill description(s) scanned — no warnings.`
     );
     process.exit(0);
   }
@@ -303,7 +425,7 @@ function main() {
   if (major.length > 0) {
     console.log(`[!] Major warnings (${major.length}):`);
     for (const f of major) {
-      console.log(`  - /ck:${f.skill}  [${f.ruleId}]  ${f.message}`);
+      console.log(`  - ${f.label}  [${f.ruleId}]  ${f.message}`);
       console.log(`    ${f.file}`);
       if (f.snippet) console.log(`    > ${f.snippet}`);
     }
@@ -313,7 +435,7 @@ function main() {
   if (minor.length > 0) {
     console.log(`[i] Minor warnings (${minor.length}):`);
     for (const f of minor) {
-      console.log(`  - /ck:${f.skill}  [${f.ruleId}]  ${f.message}`);
+      console.log(`  - ${f.label}  [${f.ruleId}]  ${f.message}`);
       console.log(`    ${f.file}`);
       if (f.snippet) console.log(`    > ${f.snippet}`);
     }

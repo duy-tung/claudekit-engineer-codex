@@ -22,7 +22,7 @@ _SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schemas" / "skill-schema.j
 
 CATEGORY_ORDER = [
     "ai-ml", "frontend", "backend", "infrastructure", "database",
-    "dev-tools", "multimedia", "frameworks", "utilities", "other",
+    "dev-tools", "multimedia", "frameworks", "security", "utilities", "other",
 ]
 CATEGORY_NAMES = {
     "ai-ml": "AI & Machine Learning",
@@ -33,6 +33,7 @@ CATEGORY_NAMES = {
     "dev-tools": "Development Tools",
     "multimedia": "Multimedia & Processing",
     "frameworks": "Frameworks & Platforms",
+    "security": "Security & Intelligence",
     "utilities": "Utilities & Helpers",
     "other": "Other",
 }
@@ -60,7 +61,7 @@ EXACT_CATEGORY_MAP: dict[str, str] = {
     "tanstack": "frameworks",
     "deploy": "infrastructure",
     "agent-browser": "multimedia", "web-testing": "multimedia",
-    "ck-security": "utilities", "security-scan": "utilities",
+    "ck-security": "security", "cti-expert": "security", "security-scan": "security",
 }
 
 # Category enum for fast validation without jsonschema dep
@@ -104,9 +105,9 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
     description = frontmatter.get("description")
     if not description:
         errors.append(f"{prefix}missing required field 'description'")
-    elif not isinstance(description, str) or not (10 <= len(description) <= 500):
+    elif not isinstance(description, str) or not (10 <= len(description) <= 512):
         errors.append(
-            f"{prefix}'description' must be 10-500 chars, got {len(str(description))}"
+            f"{prefix}'description' must be 10-512 chars, got {len(str(description))}"
         )
 
     # ── Optional scalar fields ────────────────────────────────────────────────
@@ -128,6 +129,10 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
             errors.append(
                 f"{prefix}'maturity' must be one of {sorted(VALID_MATURITIES)}, got '{maturity}'"
             )
+
+    user_invocable = frontmatter.get("user-invocable")
+    if user_invocable is not None and not isinstance(user_invocable, bool):
+        errors.append(f"{prefix}'user-invocable' must be a boolean")
 
     # ── Array fields ─────────────────────────────────────────────────────────
     keywords = frontmatter.get("keywords")
@@ -161,7 +166,7 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
     _KNOWN_KEYS = frozenset({
         "name", "description", "argument-hint", "license", "languages",
         "allowed-tools", "category", "keywords", "requires", "related",
-        "maturity", "metadata",
+        "maturity", "metadata", "user-invocable",
     })
     unknown = set(frontmatter.keys()) - _KNOWN_KEYS
     if unknown:

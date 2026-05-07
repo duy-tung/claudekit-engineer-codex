@@ -1,6 +1,7 @@
 ---
 name: ck:repomix
 description: Pack repositories into AI-friendly files with Repomix (XML, Markdown, plain text). Use for new-project onboarding, codebase snapshots, LLM context preparation, security audits, third-party library analysis.
+user-invocable: false
 category: dev-tools
 keywords: [codebase, pack, snapshot, llm-context]
 argument-hint: "[path] [--style xml|markdown|plain|json]"

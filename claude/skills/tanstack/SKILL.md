@@ -1,6 +1,7 @@
 ---
 name: ck:tanstack
 description: "Build with TanStack Start (full-stack React framework), TanStack Form (headless form management), and TanStack AI (AI streaming/chat). Use when creating TanStack projects, routes, server functions, forms, validation, or AI chat features."
+user-invocable: false
 category: frameworks
 keywords: [tanstack, start, form, ai, router]
 argument-hint: "[framework] [feature]"

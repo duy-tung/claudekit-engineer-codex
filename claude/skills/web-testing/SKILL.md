@@ -1,6 +1,7 @@
 ---
 name: ck:web-testing
 description: Web testing with Playwright, Vitest, k6. E2E/unit/integration/load/security/visual/a11y testing. Use for test automation, flakiness, Core Web Vitals, mobile gestures, cross-browser.
+user-invocable: false
 category: dev-tools
 keywords: [Playwright, Vitest, k6, e2e, load-testing]
 license: Apache-2.0

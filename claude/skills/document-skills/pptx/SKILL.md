@@ -1,6 +1,7 @@
 ---
 name: ck:pptx
 description: Create, edit, analyze .pptx PowerPoint files. Use for presentations, slides, layouts, speaker notes, template modification, content extraction, slide generation.
+user-invocable: false
 category: multimedia
 keywords: [pptx, powerpoint, slides, office]
 license: Proprietary. LICENSE.txt has complete terms

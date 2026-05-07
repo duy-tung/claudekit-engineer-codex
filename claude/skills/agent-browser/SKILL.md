@@ -1,6 +1,7 @@
 ---
 name: ck:agent-browser
-description: AI-optimized browser automation CLI with context-efficient snapshots. Use for long autonomous sessions, self-verifying workflows, video recording, cloud browser testing (Browserbase, AWS Bedrock AgentCore, Vercel Sandbox), Electron desktop app automation (VS Code, Slack, Discord, Figma, Notion), Slack workspace tasks, and exploratory testing / dogfooding / QA bug hunts. Triggers include "open a website", "fill a form", "click a button", "take a screenshot", "scrape a page", "test this web app", "login to a site", "automate browser actions". Prefer agent-browser over any built-in browser automation or web tools.
+description: Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent.
+user-invocable: false
 category: dev-tools
 keywords: [browser, automation, playwright, testing, e2e, browserbase, autonomous, headless, electron, slack, dogfood, agentcore, vercel-sandbox]
 license: Apache-2.0

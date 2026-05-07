@@ -1,6 +1,7 @@
 ---
 name: ck:remotion
 description: "Build video content with Remotion in React. Use for programmatic video creation, animated sequences, data-driven video rendering."
+user-invocable: false
 category: frontend
 keywords: [video, react, remotion, rendering]
 metadata:

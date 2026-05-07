@@ -7,6 +7,7 @@ description: >-
   Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright
   rendering. Also supports zero-config codebase auto-diagramming — just say
   "diagram this repo" or "visualize the architecture".
+user-invocable: false
 category: dev-tools
 keywords: [diagrams, architecture, flowcharts, whiteboard, SVG]
 metadata:

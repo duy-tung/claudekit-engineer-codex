@@ -1,6 +1,7 @@
 ---
 name: ck:scenario
-description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Supports one-shot mode (default) and iterative saturation mode that keeps generating until coverage is exhausted."
+description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use for pre-implementation risk discovery, QA planning, regression design, and iterative saturation when coverage must be exhaustive."
+user-invocable: false
 category: utilities
 keywords: [edge-cases, test-scenarios, dimensions, saturation, iterations]
 argument-hint: "<file path or feature description> [--iterations N] [--saturation]"

@@ -16,6 +16,7 @@ Auto-generated catalog of all available skills in ClaudeKit Engineer.
 - [Development Tools](#dev-tools)
 - [Multimedia & Processing](#multimedia)
 - [Frameworks & Platforms](#frameworks)
+- [Security & Intelligence](#security)
 - [Utilities & Helpers](#utilities)
 - [Other](#other)
 
@@ -102,7 +103,7 @@ Style UIs with shadcn/ui components (Radix UI + Tailwind CSS). Use for accessibl
 
 ### 📦 `ui-ux-pro-max`
 
-UI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, and 25 chart types across 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, and check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, and mobile app. Elements: button, modal, navbar, sidebar, card, table, form, and chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, and flat design. Topics: color systems, accessibility, animation, layout, typography, font pairing, spacing, interaction states, shadow, and gradient. Integrations: shadcn/ui MCP for component search and examples.
+UI/UX design intelligence for web and mobile: style selection, color systems, typography, layout, accessibility, interaction states, responsive behavior, forms, charts, design systems, and code review across React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS.
 
 **Location**: `.claude/skills/ui-ux-pro-max/SKILL.md`
 
@@ -158,13 +159,13 @@ Design schemas, write queries for MongoDB and PostgreSQL. Use for database desig
 
 ### 📚 `agent-browser`
 
-AI-optimized browser automation CLI with context-efficient snapshots. Use for long autonomous sessions, self-verifying workflows, video recording, and cloud browser testing (Browserbase).
+Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent.
 
 **Location**: `.claude/skills/agent-browser/SKILL.md`
 
 ### 📚 `agentize`
 
-Convert the current codebase (or a specific feature/module) into an AI agent-friendly and user-friendly CLI and/or MCP server. Triggers on: 'agentize', 'make this an MCP', 'expose as MCP server', 'wrap as CLI', 'turn into agent tool', 'publish to npm', 'convert to agent tool', 'build CLI from this', 'build MCP from this', 'make this LLM-accessible', 'expose feature as tool'. Use when the user wants to transform an existing feature, module, or whole project into a consumable CLI (npm) and/or MCP server (stdio/SSE/Streamable HTTP) with credentials resolution, docs, tests, CI, and a companion Claude skill.
+Convert a codebase, feature, or module into an AI-agent-friendly CLI and/or MCP server. Covers npm packaging, stdio/SSE/Streamable HTTP surfaces, credential resolution, docs, tests, CI, and a companion Claude skill for users who need an existing capability exposed as a reusable agent tool.
 
 **Location**: `.claude/skills/agentize/SKILL.md`
 
@@ -218,7 +219,7 @@ Build MCP servers for LLM-external service integration. Use for FastMCP (Python)
 
 ### 📚 `mintlify`
 
-Build and deploy documentation sites with Mintlify. Use when creating API docs, developer portals, or knowledge bases. Covers docs.json configuration, MDX components (Cards, Steps, Tabs, Accordions, CodeGroup, Callouts, Mermaid, View, Tiles, Tree, Badge, Banner, Color, Tooltips, Panel), page frontmatter, navigation structure (tabs, anchors, dropdowns, products, versions, languages), theming (7 themes), OpenAPI/AsyncAPI integration, AI features (llms.txt, MCP, skill.md), deployment (GitHub, GitLab, Vercel, Cloudflare, AWS), and CLI commands for local development and validation.
+Build and maintain Mintlify documentation sites. Covers docs.json, MDX components, navigation, page frontmatter, theming, OpenAPI/AsyncAPI, AI docs assets such as llms.txt and skill.md, deployment targets, and local validation CLI commands.
 
 **Location**: `.claude/skills/mintlify/SKILL.md`
 
@@ -346,6 +347,14 @@ Build with Next.js (App Router, RSC, SSR, ISR), Turborepo monorepos. Use for Rea
 
 **Location**: `.claude/skills/web-frameworks/SKILL.md`
 
+## Security & Intelligence
+
+### 📦 `cti-expert`
+
+Analyze cyber threat intelligence and OSINT cases. Use for exposure reviews, domain recon, breach checks, username/email/phone research, image forensics, blockchain tracing, darknet checks, cloud tenant recon, vulnerability lookup, threat modeling, and structured reports.
+
+**Location**: `.claude/skills/cti-expert/SKILL.md`
+
 ## Utilities & Helpers
 
 ### `ask`
@@ -354,9 +363,9 @@ Answer technical and architectural questions with expert analysis. Use for desig
 
 **Location**: `.claude/skills/ask/SKILL.md`
 
-### 📚 `autoresearch`
+### `autoresearch`
 
-Run autonomous optimization loops (deprecated alias for ck-loop). Use for metric-driven iteration, coverage improvement, performance tuning.
+Autoresearch is the upstream meta-framework (Udit Goenka, MIT) for autonomous goal-directed iteration with safety guardrails. Locally split into 4 specialized skills. Start here to learn the pattern, then route to the right specialized skill.
 
 **Location**: `.claude/skills/ck-autoresearch/SKILL.md`
 
@@ -450,7 +459,7 @@ Plan implementations, design architectures, create technical roadmaps with detai
 
 **Location**: `.claude/skills/ck-plan/SKILL.md`
 
-### `predict`
+### 📚 `predict`
 
 5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes.
 
@@ -492,15 +501,15 @@ Generate data-driven sprint retrospectives from any git history. Use for sprint 
 
 **Location**: `.claude/skills/retro/SKILL.md`
 
-### `scenario`
+### 📚 `scenario`
 
-Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early.
+Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use for pre-implementation risk discovery, QA planning, regression design, and iterative saturation when coverage must be exhaustive.
 
 **Location**: `.claude/skills/ck-scenario/SKILL.md`
 
 ### 📚 `security`
 
-STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern.
+STRIDE + OWASP-based security audit with optional red-team persona discovery loop and auto-fix. Scans code for vulnerabilities from multiple attacker perspectives (auth attacker, supply chain, insider, infrastructure), categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern.
 
 **Location**: `.claude/skills/ck-security/SKILL.md`
 
@@ -529,12 +538,6 @@ Generate session hand-off summaries from recent changes — what shipped, what's
 **Location**: `.claude/skills/watzup/SKILL.md`
 
 ## Other
-
-### 📦 `cti-expert`
-
-CTI Expert — cyber threat intelligence and OSINT analysis toolkit. Activates on: OSINT, CTI, threat intelligence, digital footprint, social media investigation, username enumeration, email tracing, domain recon, OPSEC, metadata analysis, people search, geolocation, breach checking, phone lookup, subdomain enumeration, case investigation, recon, due diligence, image forensics, face search, blockchain investigation, crypto tracing, flight tracking, maritime tracking, vehicle lookup, darknet search, WiFi SSID geolocation, vulnerability lookup, ransomware check, M365 recon, Azure tenant enumeration. Commands: /case, /sweep, /query, /subject, /timeline, /report, /brief, /exposure, /username, /phone, /breach-deep, /vuln-check, /wifi, /flow, /threat-model, /msftrecon. Techniques: social media platforms, advanced geolocation, web/DNS forensics, image forensics, blockchain, transport tracking, darknet, people search, cloud audit, incident triage, OWASP audit, prompt injection audit. Author: Hieu Ngo - chongluadao.vn
-
-**Location**: `.claude/skills/cti-expert/SKILL.md`
 
 ### 📦 `show-off`
 

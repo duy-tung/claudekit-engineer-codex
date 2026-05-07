@@ -1,6 +1,7 @@
 ---
 name: ck:fix
 description: "Fix bugs, errors, test failures, and CI/CD issues with intelligent routing. Use for type errors, lint issues, log errors, UI bugs, code problems."
+user-invocable: false
 category: utilities
 keywords: [bugfix, error, test-failure, CI, lint]
 argument-hint: "[issue] --auto|--review|--quick|--parallel"

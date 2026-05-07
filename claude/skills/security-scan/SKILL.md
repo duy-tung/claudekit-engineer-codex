@@ -1,6 +1,7 @@
 ---
 name: ck:security-scan
 description: "Scan codebase for security vulnerabilities, hardcoded secrets, dependency issues, and OWASP patterns. Use when asked to 'security scan', 'check for secrets', 'audit security', or before major releases."
+user-invocable: false
 category: utilities
 keywords: [security, secrets, vulnerabilities, OWASP]
 argument-hint: "[scope] [--secrets-only] [--deps-only] [--full]"

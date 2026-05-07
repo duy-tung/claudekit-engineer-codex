@@ -1,6 +1,7 @@
 ---
 name: ck:docs
 description: "Analyze codebase and manage project documentation. Use for doc initialization, updates, summaries, codebase analysis."
+user-invocable: false
 category: utilities
 keywords: [documentation, init, update, summarize]
 argument-hint: "init|update|summarize"
