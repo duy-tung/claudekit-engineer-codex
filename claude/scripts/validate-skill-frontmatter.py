@@ -111,10 +111,60 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
         )
 
     # ── Optional scalar fields ────────────────────────────────────────────────
+    when_to_use = frontmatter.get("when_to_use")
+    if when_to_use is not None:
+        if not isinstance(when_to_use, str) or len(when_to_use) > 1024:
+            errors.append(f"{prefix}'when_to_use' must be a string <= 1024 chars")
+
     argument_hint = frontmatter.get("argument-hint")
     if argument_hint is not None:
         if not isinstance(argument_hint, str) or len(argument_hint) > 200:
             errors.append(f"{prefix}'argument-hint' must be a string <= 200 chars")
+
+    arguments = frontmatter.get("arguments")
+    if arguments is not None:
+        if isinstance(arguments, str):
+            pass
+        elif isinstance(arguments, list) and all(isinstance(item, str) for item in arguments):
+            if len(arguments) > 20:
+                errors.append(f"{prefix}'arguments' exceeds max 20 items ({len(arguments)} given)")
+        else:
+            errors.append(f"{prefix}'arguments' must be a string or string array")
+
+    allowed_tools = frontmatter.get("allowed-tools")
+    if allowed_tools is not None:
+        if isinstance(allowed_tools, str):
+            pass
+        elif isinstance(allowed_tools, list) and all(isinstance(item, str) for item in allowed_tools):
+            if len(allowed_tools) > 50:
+                errors.append(
+                    f"{prefix}'allowed-tools' exceeds max 50 items ({len(allowed_tools)} given)"
+                )
+        else:
+            errors.append(f"{prefix}'allowed-tools' must be a string or string array")
+
+    for field in ("model", "context", "agent", "shell"):
+        value = frontmatter.get(field)
+        if value is not None and not isinstance(value, str):
+            errors.append(f"{prefix}'{field}' must be a string")
+
+    effort = frontmatter.get("effort")
+    if effort is not None and effort not in {"low", "medium", "high", "xhigh", "max"}:
+        errors.append(f"{prefix}'effort' must be one of ['low', 'medium', 'high', 'xhigh', 'max']")
+
+    paths = frontmatter.get("paths")
+    if paths is not None:
+        if isinstance(paths, str):
+            pass
+        elif isinstance(paths, list) and all(isinstance(item, str) for item in paths):
+            if len(paths) > 50:
+                errors.append(f"{prefix}'paths' exceeds max 50 items ({len(paths)} given)")
+        else:
+            errors.append(f"{prefix}'paths' must be a string or string array")
+
+    hooks = frontmatter.get("hooks")
+    if hooks is not None and not isinstance(hooks, dict):
+        errors.append(f"{prefix}'hooks' must be an object")
 
     category = frontmatter.get("category")
     if category is not None:
@@ -131,8 +181,17 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
             )
 
     user_invocable = frontmatter.get("user-invocable")
-    if user_invocable is not None and not isinstance(user_invocable, bool):
-        errors.append(f"{prefix}'user-invocable' must be a boolean")
+    if user_invocable is not True:
+        errors.append(f"{prefix}'user-invocable' must be true for shipped ClaudeKit skills")
+
+    disable_model_invocation = frontmatter.get("disable-model-invocation")
+    if disable_model_invocation is not None:
+        if not isinstance(disable_model_invocation, bool):
+            errors.append(f"{prefix}'disable-model-invocation' must be a boolean")
+        elif disable_model_invocation:
+            errors.append(
+                f"{prefix}'disable-model-invocation' must be false for shipped ClaudeKit skills"
+            )
 
     # ── Array fields ─────────────────────────────────────────────────────────
     keywords = frontmatter.get("keywords")
@@ -164,9 +223,10 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
 
     # ── Unknown fields (additionalProperties: false at top level) ────────────
     _KNOWN_KEYS = frozenset({
-        "name", "description", "argument-hint", "license", "languages",
-        "allowed-tools", "category", "keywords", "requires", "related",
-        "maturity", "metadata", "user-invocable",
+        "name", "description", "when_to_use", "argument-hint", "arguments", "license",
+        "languages", "allowed-tools", "model", "effort", "context", "agent", "shell",
+        "paths", "hooks", "category", "keywords", "requires", "related",
+        "maturity", "metadata", "user-invocable", "disable-model-invocation",
     })
     unknown = set(frontmatter.keys()) - _KNOWN_KEYS
     if unknown:
@@ -220,7 +280,9 @@ def main() -> None:
         if not is_valid:
             invalid += 1
 
-    print(f"\nValidated {total} skills: {total - invalid} valid, {invalid} with warnings")
+    print(f"\nValidated {total} skills: {total - invalid} valid, {invalid} with errors")
+    if invalid:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

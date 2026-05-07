@@ -6,6 +6,14 @@ const assert = require('node:assert/strict');
 const {
   RULES,
   FRONTMATTER_PARSE_ERROR,
+  CONTEXT_FLOOR_TOKENS,
+  CHARS_PER_TOKEN,
+  MAX_LISTING_DESC_CHARS,
+  MIN_SKILL_LISTING_BUDGET_FRACTION,
+  combineListingText,
+  estimateListingChars,
+  requiredBudgetFraction,
+  validateSkillListingSettings,
   extractFrontmatterField,
   extractName,
 } = require('./check-skill-descriptions.js');
@@ -40,12 +48,79 @@ test('use-this-prefix: does NOT match "Use this" with no preposition (still kept
   assert.equal(useThisRule.test('Use this approach to coding'), false);
 });
 
-test('too-long: catches descriptions above Claude Code listing cap', () => {
+test('too-long: catches descriptions above ClaudeKit recommended listing cap', () => {
   assert.equal(tooLongRule.test('x'.repeat(513)), true);
 });
 
-test('too-long: allows descriptions at Claude Code listing cap', () => {
+test('too-long: allows descriptions at ClaudeKit recommended listing cap', () => {
   assert.equal(tooLongRule.test('x'.repeat(512)), false);
+});
+
+test('estimateListingChars: includes skill ids, separators, and capped descriptions', () => {
+  const skills = [
+    { name: 'ck:cook', description: 'x'.repeat(600) },
+    { name: 'ck:test', description: 'short' },
+  ];
+
+  assert.equal(
+    estimateListingChars(skills, MAX_LISTING_DESC_CHARS),
+    'ck:cook'.length + 4 + MAX_LISTING_DESC_CHARS + 1 + 'ck:test'.length + 4 + 'short'.length
+  );
+});
+
+test('requiredBudgetFraction: keeps the 3 percent floor for current-sized inventories', () => {
+  assert.equal(requiredBudgetFraction(18_623), MIN_SKILL_LISTING_BUDGET_FRACTION);
+});
+
+test('requiredBudgetFraction: rounds larger inventories up against the 200k context floor', () => {
+  const listingChars = Math.ceil(CONTEXT_FLOOR_TOKENS * CHARS_PER_TOKEN * 0.0381);
+
+  assert.equal(requiredBudgetFraction(listingChars), 0.039);
+});
+
+test('combineListingText: includes when_to_use in the listing estimate', () => {
+  assert.equal(
+    combineListingText('Build and test APIs.', 'Use when changing backend endpoints.'),
+    'Build and test APIs. Use when changing backend endpoints.'
+  );
+});
+
+test('validateSkillListingSettings: rejects missing listing settings', () => {
+  const findings = validateSkillListingSettings({}, [
+    { name: 'ck:cook', description: 'x'.repeat(100) },
+  ]);
+
+  assert.deepEqual(
+    findings.map((finding) => finding.ruleId).sort(),
+    ['missing-skill-description-cap', 'missing-skill-listing-budget']
+  );
+});
+
+test('validateSkillListingSettings: rejects low listing budget computed from inventory size', () => {
+  const skills = Array.from({ length: 60 }, (_, index) => ({
+    name: `ck:skill-${index}`,
+    description: 'x'.repeat(500),
+  }));
+  const findings = validateSkillListingSettings(
+    { skillListingBudgetFraction: 0.03, skillListingMaxDescChars: 512 },
+    skills
+  );
+
+  assert.equal(findings.some((finding) => finding.ruleId === 'low-skill-listing-budget'), true);
+  assert.match(findings[0].message, />= 0\.039/);
+});
+
+test('validateSkillListingSettings: rejects skillOverrides policy', () => {
+  const findings = validateSkillListingSettings(
+    {
+      skillListingBudgetFraction: 0.03,
+      skillListingMaxDescChars: 512,
+      skillOverrides: { cook: { enabled: false } },
+    },
+    [{ name: 'ck:cook', description: 'x'.repeat(100) }]
+  );
+
+  assert.equal(findings.some((finding) => finding.ruleId === 'forbidden-skill-overrides'), true);
 });
 
 test('extractFrontmatterField: returns sentinel when frontmatter block absent', () => {

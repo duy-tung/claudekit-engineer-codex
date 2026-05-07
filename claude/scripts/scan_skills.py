@@ -108,8 +108,8 @@ def extract_frontmatter(content: str) -> dict:
             return {}
         result: dict = {}
         for key, val in data.items():
-            if isinstance(val, (dict, list)):
-                result[key] = val          # preserve metadata objects and arrays
+            if isinstance(val, (dict, list, bool, int, float)):
+                result[key] = val          # preserve typed metadata values
             else:
                 result[key] = str(val) if val is not None else ""
         return result
