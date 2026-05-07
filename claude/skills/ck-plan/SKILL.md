@@ -2,6 +2,7 @@
 name: ck:plan
 description: "Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
 user-invocable: true
+when_to_use: "Invoke when work needs phases, architecture, or a roadmap."
 category: utilities
 keywords: [planning, architecture, phases, roadmap]
 argument-hint: "[task] [--fast|--hard|--deep|--parallel|--two] [--tdd|--no-tasks] OR [archive|red-team|validate]"

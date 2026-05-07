@@ -2,6 +2,7 @@
 name: ck:scenario
 description: "Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use for pre-implementation risk discovery, QA planning, regression design, and iterative saturation when coverage must be exhaustive."
 user-invocable: true
+when_to_use: "Invoke to expand requirements into edge cases and QA scenarios."
 category: utilities
 keywords: [edge-cases, test-scenarios, dimensions, saturation, iterations]
 argument-hint: "<file path or feature description> [--iterations N] [--saturation]"

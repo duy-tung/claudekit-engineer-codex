@@ -2,6 +2,7 @@
 name: ck:show-off
 description: "Create stunning self-contained HTML pages to showcase work. Use for demos, visual presentations, interactive showcases."
 user-invocable: true
+when_to_use: "Invoke to create a self-contained showcase or demo page."
 category: other
 keywords: [HTML, showcase, demo, presentation]
 argument-hint: "[markdown-or-prompt]"

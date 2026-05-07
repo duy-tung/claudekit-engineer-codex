@@ -2,6 +2,7 @@
 name: ck:ai-multimodal
 description: Analyze images/audio/video with Gemini API (better vision than Claude). Generate images (Imagen 4, Nano Banana 2, MiniMax), videos (Veo 3, Hailuo), speech (MiniMax TTS), music (MiniMax). Use for vision analysis, transcription, OCR, design extraction, multimodal AI.
 user-invocable: true
+when_to_use: "Invoke for Gemini vision, OCR, media generation, or transcription."
 category: ai-ml
 keywords: [vision, image, video, audio, Gemini]
 license: MIT

@@ -16,6 +16,7 @@ const {
   validateSkillListingSettings,
   extractFrontmatterField,
   extractName,
+  KNOWN_RULE_IDS,
 } = require('./check-skill-descriptions.js');
 
 const useThisRule = RULES.find((r) => r.id === 'use-this-prefix');
@@ -83,6 +84,10 @@ test('combineListingText: includes when_to_use in the listing estimate', () => {
     combineListingText('Build and test APIs.', 'Use when changing backend endpoints.'),
     'Build and test APIs. Use when changing backend endpoints.'
   );
+});
+
+test('known rule ids include missing when_to_use policy', () => {
+  assert.equal(KNOWN_RULE_IDS.has('missing-when-to-use'), true);
 });
 
 test('validateSkillListingSettings: rejects missing listing settings', () => {

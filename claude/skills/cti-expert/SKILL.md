@@ -2,6 +2,7 @@
 name: ck:cti-expert
 description: "Analyze cyber threat intelligence and OSINT cases. Use for exposure reviews, domain recon, breach checks, username/email/phone research, image forensics, blockchain tracing, darknet checks, cloud tenant recon, vulnerability lookup, threat modeling, and structured reports."
 user-invocable: true
+when_to_use: "Invoke for OSINT, exposure review, or threat intelligence reports."
 category: security
 keywords: [osint, cti, threat-intelligence, recon, investigation, darknet, breach, forensics]
 argument-hint: "[target] [--yolo] [--case|--sweep|--query|--flow]"

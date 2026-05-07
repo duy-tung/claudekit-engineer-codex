@@ -2,6 +2,7 @@
 name: ck:bootstrap
 description: "Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (default interactive), auto (explicit autonomous), fast (skip research), parallel (multi-agent)."
 user-invocable: true
+when_to_use: "Invoke to start a new project or full-stack setup from scratch."
 category: utilities
 keywords: [scaffold, project, setup, boilerplate]
 license: MIT

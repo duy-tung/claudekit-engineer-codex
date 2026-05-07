@@ -2,6 +2,7 @@
 name: ck:test
 description: "Run unit, integration, e2e, and UI tests. Use for test execution, coverage analysis, build verification, visual regression, and QA reports."
 user-invocable: true
+when_to_use: "Invoke for running or designing validation suites."
 category: utilities
 keywords: [test, unit, integration, e2e, coverage]
 argument-hint: "[context] OR ui [url]"

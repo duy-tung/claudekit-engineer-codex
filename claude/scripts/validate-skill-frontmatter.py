@@ -110,12 +110,14 @@ def validate_frontmatter(frontmatter: dict[str, Any], skill_path: str = "") -> l
             f"{prefix}'description' must be 10-512 chars, got {len(str(description))}"
         )
 
-    # ── Optional scalar fields ────────────────────────────────────────────────
+    # ── Required shipped-skill routing metadata ───────────────────────────────
     when_to_use = frontmatter.get("when_to_use")
-    if when_to_use is not None:
-        if not isinstance(when_to_use, str) or len(when_to_use) > 1024:
-            errors.append(f"{prefix}'when_to_use' must be a string <= 1024 chars")
+    if not when_to_use:
+        errors.append(f"{prefix}missing required field 'when_to_use'")
+    elif not isinstance(when_to_use, str) or len(when_to_use) > 1024:
+        errors.append(f"{prefix}'when_to_use' must be a string <= 1024 chars")
 
+    # ── Optional scalar fields ────────────────────────────────────────────────
     argument_hint = frontmatter.get("argument-hint")
     if argument_hint is not None:
         if not isinstance(argument_hint, str) or len(argument_hint) > 200:

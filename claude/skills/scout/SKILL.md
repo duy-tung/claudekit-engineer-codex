@@ -2,6 +2,7 @@
 name: ck:scout
 description: "Fast codebase scouting using parallel agents. Use for file discovery, task context gathering, quick searches across directories. Supports internal (Explore) and external (Gemini/OpenCode) agents."
 user-invocable: true
+when_to_use: "Invoke for fast file discovery and codebase orientation."
 category: dev-tools
 keywords: [codebase, scouting, file-discovery, search]
 argument-hint: "[search-target] [ext]"

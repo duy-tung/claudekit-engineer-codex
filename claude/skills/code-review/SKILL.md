@@ -2,6 +2,7 @@
 name: ck:code-review
 description: "Review code quality with adversarial rigor. Supports input modes: pending changes, PR number, commit hash, codebase scan. Always-on red-team analysis finds security holes, false assumptions, and failure modes."
 user-invocable: true
+when_to_use: "Invoke to review diffs, PRs, commits, or full codebases."
 category: utilities
 keywords: [review, quality, red-team, security]
 argument-hint: "[#PR | COMMIT | --pending | codebase [parallel]]"
