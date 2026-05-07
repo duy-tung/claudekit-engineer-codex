@@ -77,9 +77,21 @@ def _fallback_frontmatter(content: str) -> dict:
             continue
         if value:
             v = value.strip()
-            if len(v) >= 2 and v[0] == v[-1] and v[0] in {"'", '"'}:
+            is_quoted = len(v) >= 2 and v[0] == v[-1] and v[0] in {"'", '"'}
+            if is_quoted:
                 v = v[1:-1]
-            result[key] = v
+            if v == "true":
+                result[key] = True
+            elif v == "false":
+                result[key] = False
+            elif not is_quoted and v.startswith("[") and v.endswith("]"):
+                result[key] = [
+                    item.strip().strip("'\"")
+                    for item in v[1:-1].split(",")
+                    if item.strip()
+                ]
+            else:
+                result[key] = v
         idx += 1
     return result
 
@@ -97,8 +109,8 @@ def extract_frontmatter(content: str) -> dict:
             return {}
         result: dict = {}
         for key, val in data.items():
-            if isinstance(val, (dict, list)):
-                result[key] = val          # preserve metadata objects and arrays
+            if isinstance(val, (dict, list, bool, int, float)):
+                result[key] = val          # preserve typed metadata values
             else:
                 result[key] = str(val) if val is not None else ""
         return result

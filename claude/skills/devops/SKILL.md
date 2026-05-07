@@ -1,6 +1,7 @@
 ---
 name: ck:devops
 description: Deploy to Cloudflare (Workers, R2, D1), Docker, GCP (Cloud Run, GKE), Kubernetes (kubectl, Helm). Use for serverless, containers, CI/CD, GitOps, security audit.
+user-invocable: true
 category: infrastructure
 keywords: [cloudflare, docker, gcp, kubernetes, cicd]
 license: MIT

@@ -1,6 +1,7 @@
 ---
 name: ck:use-mcp
 description: "Discover and execute MCP server tools. Two execution paths: Gemini CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server). Use for MCP integrations, tool execution, capability discovery, persistent tool catalog."
+user-invocable: true
 category: dev-tools
 keywords: [MCP, tools, execute, discovery, gemini, mcp-client]
 argument-hint: "[task]"

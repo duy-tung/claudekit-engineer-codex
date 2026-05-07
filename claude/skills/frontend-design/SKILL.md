@@ -1,6 +1,7 @@
 ---
 name: ck:frontend-design
 description: Create polished frontend interfaces from designs/screenshots/videos. Use for web components, 3D experiences, replicating UI designs, quick prototypes, immersive interfaces, avoiding AI slop.
+user-invocable: true
 category: frontend
 keywords: [ui, design, screenshots, prototyping]
 license: Complete terms in LICENSE.txt

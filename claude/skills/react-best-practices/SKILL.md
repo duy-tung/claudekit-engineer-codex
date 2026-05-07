@@ -1,6 +1,7 @@
 ---
 name: ck:react-best-practices
 description: "Apply React and Next.js performance optimization patterns from Vercel Engineering. Use for component optimization, rendering performance, bundle analysis."
+user-invocable: true
 category: frontend
 keywords: [react, nextjs, performance, vercel]
 argument-hint: "[component or pattern]"

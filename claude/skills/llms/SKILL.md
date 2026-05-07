@@ -1,6 +1,7 @@
 ---
 name: ck:llms
 description: "Generate llms.txt files from docs or codebase scanning. Follows llmstxt.org spec. Use for LLM-friendly site indexes, documentation summaries, AI context optimization."
+user-invocable: true
 category: dev-tools
 keywords: [llms-txt, documentation, AI-context]
 argument-hint: "[path|url] [--full] [--output path]"

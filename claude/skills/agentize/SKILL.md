@@ -1,6 +1,7 @@
 ---
 name: ck:agentize
-description: "Convert the current codebase (or a specific feature/module) into an AI agent-friendly and user-friendly CLI and/or MCP server. Triggers on: 'agentize', 'make this an MCP', 'expose as MCP server', 'wrap as CLI', 'turn into agent tool', 'publish to npm', 'convert to agent tool', 'build CLI from this', 'build MCP from this', 'make this LLM-accessible', 'expose feature as tool'. Use when the user wants to transform an existing feature, module, or whole project into a consumable CLI (npm) and/or MCP server (stdio/SSE/Streamable HTTP) with credentials resolution, docs, tests, CI, and a companion Claude skill."
+description: "Convert a codebase, feature, or module into an AI-agent-friendly CLI and/or MCP server. Covers npm packaging, stdio/SSE/Streamable HTTP surfaces, credential resolution, docs, tests, CI, and a companion Claude skill for users who need an existing capability exposed as a reusable agent tool."
+user-invocable: true
 category: dev-tools
 keywords: [agentize, mcp, cli, monorepo, npm, cloudflare, docker, agent-tool]
 argument-hint: "[feature-or-module] [--both|--mcp|--cli] [--auto|--ask]"

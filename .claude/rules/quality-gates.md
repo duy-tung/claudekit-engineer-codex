@@ -72,9 +72,11 @@ Both `skill-routing-allowlist.json` and `skill-description-lint-allowlist.json` 
 
 **Affected files:** `scripts/lib/validate-allowlist-reason.js`
 
-## Skill Description Lint (warn-only)
+## Skill Description and Listing Policy
 
-CI runs `node scripts/check-skill-descriptions.js` on every PR as a non-blocking job (`continue-on-error: true` in the workflow). It surfaces frontmatter `description:` patterns that hurt user discoverability:
+CI also runs `python3 claude/scripts/validate-skill-frontmatter.py` as a blocking `skill-frontmatter-contract` job. That validator enforces the hard shipped-skill schema, including `user-invocable: true`.
+
+CI runs `node scripts/check-skill-descriptions.js` on every PR as a blocking major-policy gate. Major findings fail CI; minor description guidance remains non-blocking. It surfaces frontmatter `description:` / `when_to_use:` patterns that hurt user discoverability:
 
 | Rule | Severity | Catches |
 |---|---|---|
@@ -82,22 +84,24 @@ CI runs `node scripts/check-skill-descriptions.js` on every PR as a non-blocking
 | `maintainer-marker` | major | Description contains `[KAI]`, `maintainer-only`, `for kai` — should be removed if shipped to all users |
 | `todo-marker` | major | Description contains TODO / FIXME / XXX / WIP — resolve before shipping |
 | `too-short` | minor | Description <50 chars — add trigger keywords / use cases |
-| `too-long` | minor | Description >800 chars — first 1-2 sentences should convey core value |
+| `too-long` | minor | Description >512 chars — keep frontmatter to routing signal; move detail into the skill body |
 | `missing-description` | major | Frontmatter parsed but no `description:` field (auto-emitted) |
 | `frontmatter-parse-error` | major | Frontmatter block missing or unclosed (auto-emitted; distinct from missing-description so authors can debug) |
+| `missing-user-invocable-visibility` | major | Shipped skill is missing `user-invocable: true` |
+| `disabled-model-invocation` | major | Shipped skill sets `disable-model-invocation: true` |
+| `missing-skill-listing-budget` | major | Project settings do not define the skill listing budget settings |
+| `low-skill-listing-budget` | major | `skillListingBudgetFraction` is invalid or too low for the projected shipped-skill listing on a 200k context floor |
+| `missing-skill-description-cap` | major | Project settings do not define `skillListingMaxDescChars` |
+| `high-skill-description-cap` | major | `skillListingMaxDescChars` is invalid or above the 512-character ClaudeKit recommendation |
+| `forbidden-skill-overrides` | major | Project settings define `skillOverrides`; keep skills visible and manage pressure through budget/caps |
 
 Allowlist (`scripts/skill-description-lint-allowlist.json`) lets specific skills opt out of specific rules with required `reason`. Rule IDs in allowlist entries are validated at load — typos like `too_short` vs `too-short` error out instead of silently allowing nothing.
 
-**Why warn-only initially:** at introduction, the lint surfaced 2 minor warnings (both legitimate `too-long`). Goal is to drive that to zero, then flip to blocking. **Two-step transition** — both required, otherwise the gate stays non-blocking:
-
-1. Change `process.exit(0)` at the bottom of `scripts/check-skill-descriptions.js` to honor severity counts
-2. Remove `continue-on-error: true` from the `skill-description-lint` job in `.github/workflows/quality-gates.yml`
-
-Doing only one leaves the gate non-blocking — the script may exit 1 but the job-level `continue-on-error` swallows the failure (or vice versa).
+`python3 claude/scripts/validate-skill-frontmatter.py` remains the blocking frontmatter contract. It requires `user-invocable: true` and rejects `disable-model-invocation: true` for shipped ClaudeKit skills; listing pressure must be handled through `skillListingBudgetFraction`, `skillListingMaxDescChars`, and tighter descriptions.
 
 **When the lint flags a description:**
 - For "minor" rules: review the description, rewrite if the warning is fair, OR allowlist with justification
-- For "major" rules: fix immediately. These usually indicate ship-blockers (TODO left in, or maintainer-only marker on a user-shipped skill)
+- For "major" rules: fix immediately. These are ship-blockers (hidden skills, missing budget settings, TODO left in, maintainer-only marker on a user-shipped skill)
 
 **Affected files:** `scripts/check-skill-descriptions.js`, `scripts/skill-description-lint-allowlist.json`
 

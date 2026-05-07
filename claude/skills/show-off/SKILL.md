@@ -1,9 +1,10 @@
 ---
 name: ck:show-off
 description: "Create stunning self-contained HTML pages to showcase work. Use for demos, visual presentations, interactive showcases."
+user-invocable: true
 category: other
 keywords: [HTML, showcase, demo, presentation]
-argument-hint: [markdown-or-prompt]
+argument-hint: "[markdown-or-prompt]"
 license: Complete terms in LICENSE.txt
 metadata:
   author: claudekit
