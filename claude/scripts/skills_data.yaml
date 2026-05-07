@@ -75,6 +75,14 @@
   has_scripts: true
   has_references: true
   argument_hint: "[error or issue description]"
+- name: "ck-graphify"
+  path: "ck-graphify/SKILL.md"
+  description: "Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation."
+  category: "dev-tools"
+  has_scripts: false
+  has_references: false
+  argument_hint: "[path] [--mcp|--report|--watch]"
+  maturity: "beta"
 - name: "ck-loop"
   path: "ck-loop/SKILL.md"
   description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."
@@ -272,14 +280,6 @@
   has_scripts: false
   has_references: true
   argument_hint: "[agent or feature]"
-- name: "graphify"
-  path: "graphify/SKILL.md"
-  description: "Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation."
-  category: "dev-tools"
-  has_scripts: false
-  has_references: false
-  argument_hint: "[path] [--mcp|--report|--watch]"
-  maturity: "beta"
 - name: "journal"
   path: "journal/SKILL.md"
   description: "Write technical journal entries analyzing recent changes. Use for session reflections, change analysis, decision documentation."

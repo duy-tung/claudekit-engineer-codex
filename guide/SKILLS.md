@@ -2,7 +2,7 @@
 
 Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
-**Last Updated**: 2026-04-30
+**Last Updated**: 2026-05-07
 
 **Total Skills**: 83
 
@@ -202,7 +202,7 @@ Semantic code analysis with GitLab Knowledge Graph. Use for go-to-definition, fi
 
 Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation.
 
-**Location**: `.claude/skills/graphify/SKILL.md`
+**Location**: `.claude/skills/ck-graphify/SKILL.md`
 
 ### 📦 📚 `llms`
 

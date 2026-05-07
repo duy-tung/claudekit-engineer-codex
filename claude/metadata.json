@@ -117,6 +117,7 @@
     "skills/debug",
     "skills/plan",
     "skills/ck-help",
+    "skills/graphify/SKILL.md",
     "scripts/generate_catalogs.py",
     "scripts/skills_data.yaml",
     "scripts/commands_data.yaml",

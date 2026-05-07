@@ -27,12 +27,13 @@ Turn any folder of code, docs, papers, or images into a queryable knowledge grap
 
 **Note:** The PyPI package is `graphifyy` (double-y). Other `graphify*` packages on PyPI are unaffiliated.
 
-`graphify install` downloads tree-sitter grammars for AST parsing.
+CK already bundles this skill at `.claude/skills/ck-graphify/`. Do not run
+`graphify install` for CK setup: upstream uses that command to install its
+standalone Claude skill at `~/.claude/skills/graphify/SKILL.md`.
 
 ```bash
 # Core install
 pip install graphifyy
-graphify install
 
 # With MCP server support
 pip install 'graphifyy[mcp]'

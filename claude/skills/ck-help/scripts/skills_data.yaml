@@ -273,7 +273,7 @@
   has_references: true
   argument_hint: "[agent or feature]"
 - name: "graphify"
-  path: "graphify/SKILL.md"
+  path: "ck-graphify/SKILL.md"
   description: "Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation."
   category: "dev-tools"
   has_scripts: false
