@@ -4,7 +4,7 @@ description: "Create stunning self-contained HTML pages to showcase work. Use fo
 user-invocable: true
 category: other
 keywords: [HTML, showcase, demo, presentation]
-argument-hint: [markdown-or-prompt]
+argument-hint: "[markdown-or-prompt]"
 license: Complete terms in LICENSE.txt
 metadata:
   author: claudekit

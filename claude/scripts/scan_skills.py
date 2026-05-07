@@ -77,13 +77,14 @@ def _fallback_frontmatter(content: str) -> dict:
             continue
         if value:
             v = value.strip()
-            if len(v) >= 2 and v[0] == v[-1] and v[0] in {"'", '"'}:
+            is_quoted = len(v) >= 2 and v[0] == v[-1] and v[0] in {"'", '"'}
+            if is_quoted:
                 v = v[1:-1]
             if v == "true":
                 result[key] = True
             elif v == "false":
                 result[key] = False
-            elif key in {"keywords", "requires", "related"} and v.startswith("[") and v.endswith("]"):
+            elif not is_quoted and v.startswith("[") and v.endswith("]"):
                 result[key] = [
                     item.strip().strip("'\"")
                     for item in v[1:-1].split(",")
