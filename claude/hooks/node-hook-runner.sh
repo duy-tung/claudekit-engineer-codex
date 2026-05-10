@@ -13,6 +13,7 @@ shift || true
 
 run_with_node() {
   local node_bin="$1"
+  shift || true
   if [ -z "$node_bin" ]; then
     return 1
   fi
@@ -38,6 +39,7 @@ to_posix_path() {
 
 try_windows_node_path() {
   local candidate="$1"
+  shift || true
   if [ -z "$candidate" ]; then
     return 1
   fi
