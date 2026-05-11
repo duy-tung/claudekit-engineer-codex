@@ -729,7 +729,8 @@ function Try-PipInstall {
     $packageName = ($PackageSpec -split '[=<>]')[0]
 
     # Phase 1: Try with prefer-binary (wheels first)
-    $output = pip install $PackageSpec --prefer-binary 2>&1
+    $pipArgs = @("install", $PackageSpec, "--prefer-binary")
+    $output = & python -m pip @pipArgs 2>&1
     $output | Out-File -Append $LogFile -Encoding UTF8
     if ($LASTEXITCODE -eq 0) {
         return $true
@@ -744,7 +745,8 @@ function Try-PipInstall {
 
     # Phase 3: Try source build
     Write-Info "Trying source build for $packageName..."
-    $output = pip install $PackageSpec --no-binary $packageName 2>&1
+    $pipArgs = @("install", $PackageSpec, "--no-binary", $packageName)
+    $output = & python -m pip @pipArgs 2>&1
     $output | Out-File -Append $LogFile -Encoding UTF8
     if ($LASTEXITCODE -eq 0) {
         Write-Success "$packageName installed (source build)"
@@ -1036,6 +1038,39 @@ function Test-Installations {
 # Final Report Functions
 # ============================================================================
 
+function Split-FailureItem {
+    param(
+        [string]$Item
+    )
+
+    $firstColon = $Item.IndexOf(':')
+    if ($firstColon -lt 0) {
+        return @{
+            Name = $Item.Trim()
+            Package = ""
+            Reason = ""
+        }
+    }
+
+    $name = $Item.Substring(0, $firstColon).Trim()
+    $details = $Item.Substring($firstColon + 1).Trim()
+    $reasonColon = $details.LastIndexOf(': ')
+
+    if ($reasonColon -lt 0) {
+        return @{
+            Name = $name
+            Package = ""
+            Reason = $details
+        }
+    }
+
+    return @{
+        Name = $name
+        Package = $details.Substring(0, $reasonColon).Trim()
+        Reason = $details.Substring($reasonColon + 2).Trim()
+    }
+}
+
 function Get-RemediationCommands {
     $hasSudoSkipped = $Script:SKIPPED_ADMIN.Count -gt 0
     $hasPythonFailed = $Script:FAILED_OPTIONAL.Count -gt 0
@@ -1069,12 +1104,12 @@ function Get-RemediationCommands {
         Write-Host ".\.claude\skills\.venv\Scripts\Activate.ps1"
 
         foreach ($item in $Script:FAILED_OPTIONAL) {
-            $pkg = ($item -split ':')[0]
-            # Extract package name from skill:package format
-            if ($pkg -match ':') {
-                $pkg = ($pkg -split ':')[1]
+            $failure = Split-FailureItem -Item $item
+            $pkg = $failure.Package
+            if ([string]::IsNullOrWhiteSpace($pkg)) {
+                $pkg = $failure.Name
             }
-            Write-Host "pip install $pkg"
+            Write-Host "python -m pip install `"$pkg`""
         }
         Write-Host ""
     }
@@ -1115,8 +1150,16 @@ function Write-FinalReport {
     if ($Script:FAILED_OPTIONAL.Count -gt 0) {
         Write-Host "Degraded ($($Script:FAILED_OPTIONAL.Count)):" -ForegroundColor Red
         foreach ($item in $Script:FAILED_OPTIONAL) {
-            $name = ($item -split ':')[0]
-            $reason = ($item -split ':')[1]
+            $failure = Split-FailureItem -Item $item
+            $name = $failure.Name
+            $reason = $failure.Reason
+            if (-not [string]::IsNullOrWhiteSpace($failure.Package)) {
+                if ([string]::IsNullOrWhiteSpace($reason)) {
+                    $reason = $failure.Package
+                } else {
+                    $reason = "$($failure.Package): $reason"
+                }
+            }
             Write-Host "  [!] $name ($reason)" -ForegroundColor Red
         }
         Write-Host ""
@@ -1152,7 +1195,7 @@ function Write-ErrorSummary {
         remediation = @{
             winget_packages = "winget install Gyan.FFmpeg ImageMagick.ImageMagick"
             build_tools = "https://visualstudio.microsoft.com/visual-cpp-build-tools/"
-            pip_retry = ".\.claude\skills\.venv\Scripts\Activate.ps1; pip install <package>"
+            pip_retry = ".\.claude\skills\.venv\Scripts\Activate.ps1; python -m pip install `"<package>`""
         }
     }
 
