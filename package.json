@@ -1,10 +1,10 @@
 {
   "name": "claudekit-engineer",
-  "version": "2.17.0",
+  "version": "2.17.0-beta.25",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Warning: no test specified\" && exit 0",
+    "test": "node --test scripts/release-bookkeeping.test.cjs scripts/install-ps1-safety.test.cjs",
     "lint": "echo \"Linting passed\"",
     "semantic-release": "semantic-release",
     "prepare": "husky install || true",

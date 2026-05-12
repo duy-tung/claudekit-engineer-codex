@@ -1,6 +1,8 @@
 ---
 name: ck:stitch
 description: "AI design generation with Google Stitch. Generate UI designs from text prompts, export Tailwind/HTML/DESIGN.md, orchestrate design-to-code pipeline. Use for rapid prototyping, UI generation, design exploration."
+user-invocable: true
+when_to_use: "Invoke for AI-generated UI designs and design-to-code handoff."
 category: frontend
 keywords: [Stitch, UI-generation, prototyping, Tailwind]
 license: MIT

@@ -23,8 +23,9 @@ User wants to...
 ```
 User wants to...
 ├── Quick file search, locate specific code     → /ck:scout
-├── Full codebase dump for LLM context          → /ck:repomix
-└── Semantic go-to-definition, find-usages      → /ck:gkg
+├── Onboard a new repo / dump codebase for LLM  → /ck:repomix
+├── Semantic go-to-definition, find-usages      → /ck:gkg
+└── Build a queryable knowledge graph from code → /ck:graphify
 ```
 
 ## Backend / API
@@ -58,7 +59,8 @@ User wants to...
 ```
 User wants to...
 ├── STRIDE/OWASP security audit with auto-fix    → /ck:security
-└── Scan for secrets, vulnerabilities, OWASP patterns → /ck:security-scan
+├── Scan for secrets, vulnerabilities, OWASP patterns → /ck:security-scan
+└── OSINT / CTI / threat-intel investigation     → /ck:cti-expert
 ```
 
 ## AI / LLM
@@ -68,7 +70,8 @@ User wants to...
 ├── Optimize context, agent architecture, memory → /ck:context-engineering
 ├── Generate llms.txt, LLM-friendly docs         → /ck:llms
 ├── Build AI agents with Google ADK              → /ck:google-adk-python
-└── Generate/analyze images, audio, video with AI → /ck:ai-multimodal
+├── Generate/analyze images, audio, video with AI → /ck:ai-multimodal
+└── Learn the autoresearch pattern / find the right family member → /ck:autoresearch
 ```
 
 ## MCP (Model Context Protocol)
@@ -76,18 +79,17 @@ User wants to...
 ```
 User wants to...
 ├── Build a new MCP server                       → /ck:mcp-builder
-├── Discover and manage existing MCP tools       → /ck:mcp-management
-└── Execute MCP tools directly                   → /ck:use-mcp
+├── Convert existing code into CLI/MCP server    → /ck:agentize
+└── Discover and execute MCP tools               → /ck:use-mcp
 ```
 
 ## Testing / Browser
 
 ```
 User wants to...
-├── Run test suites, coverage reports, TDD       → /ck:test
-├── Web-specific testing (Playwright, k6, a11y)  → /ck:web-testing
-├── Puppeteer automation, screenshots, scraping  → /ck:chrome-devtools
-└── AI-driven browser sessions, Browserbase cloud → /ck:agent-browser
+├── Run test suites, coverage reports, TDD          → /ck:test
+├── Test strategy + Playwright/Vitest/k6 runner     → /ck:web-testing
+└── Drive a live browser                            → /ck:agent-browser
 ```
 
 ## Media
@@ -102,10 +104,25 @@ User wants to...
 
 ```
 User wants to...
-├── Update project docs (codebase-summary, PDR)  → /ck:docs
-├── Search library/framework docs (context7)     → /ck:docs-seeker
-├── Build docs site with Mintlify                → /ck:mintlify
-└── Create diagrams (Mermaid v11 syntax)         → /ck:mermaidjs-v11
+├── Update project docs (codebase-summary, PDR)   → /ck:docs
+├── Search library/framework docs (context7)      → /ck:docs-seeker
+├── Discover skills by capability / "is there a skill" → /ck:find-skills
+├── Build docs site with Mintlify                 → /ck:mintlify
+├── Inline doc diagrams (Mermaid v11)             → /ck:mermaidjs-v11
+├── Publish-grade SVG/PNG diagrams (architecture) → /ck:tech-graph
+├── Read long-form docs / RFCs / specs in browser → /ck:markdown-novel-viewer
+├── Generate session hand-off / EOD summary       → /ck:watzup
+└── Sprint retrospective from git history         → /ck:retro
+```
+
+## Documents / Office Files
+
+```
+User wants to...
+├── Create / edit / extract from .docx (Word)         → /ck:docx
+├── Create / edit / extract from .pdf (forms, tables) → /ck:pdf
+├── Create / edit / extract from .pptx (PowerPoint)   → /ck:pptx
+└── Create / edit / extract from .xlsx (spreadsheets) → /ck:xlsx
 ```
 
 ## Content / Copy

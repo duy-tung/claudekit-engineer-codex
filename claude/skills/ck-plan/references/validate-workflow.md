@@ -70,20 +70,33 @@ Load: `references/validate-question-framework.md` for recording format.
 Auto-propagate validation decisions to affected phase files.
 Add marker: `<!-- Updated: Validation Session N - {change} -->`
 
+### Step 7: Whole-Plan Consistency Sweep
+Load: `references/verification-roles.md` → "Whole-Plan Consistency Sweep".
+
+After propagation, re-read `plan.md` and every `phase-*.md` file. Check the whole plan for stale or contradictory claims caused by the validation decisions.
+
+Required checks:
+- Search all plan files for old terms, renamed fields/APIs/files, rejected assumptions, and superseded validation decisions.
+- Reconcile `plan.md` overview, phase summaries, implementation steps, success criteria, risk notes, and validation logs.
+- If the same SQL/query/API/body/contract appears as both prose and embedded draft, update both copies or mark the unresolved conflict.
+- Append `### Whole-Plan Consistency Sweep` to the current `## Validation Log`.
+- If any unresolved contradiction remains, ask the user before recommending implementation.
+
 ## Output
 - Number of questions asked
 - Key decisions confirmed
 - Phase propagation results
+- Whole-plan consistency sweep results
 - Recommendation: proceed or revise
 
-## Next Steps (MANDATORY)
-Remind user with absolute path:
+## Next Steps
+Present user-choice next steps with the absolute path:
 > **Best Practice:** Run `/clear` before implementing to start with fresh context.
-> Then run:
+> If the user chooses implementation, run:
 > ```
-> /ck:cook {--auto-or-interactive} {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
+> /ck:cook {ABSOLUTE_PATH_TO_PLAN_DIR}/plan.md
 > ```
-> **Flag selection:** If Verification Results show `Failed: 0`, use `--auto` (safe to skip review gates). If `Failed: N > 0`, use interactive mode (no `--auto`) so review gates catch unresolved issues.
+> **Flag selection:** If Verification Results show `Failed: 0`, the plan is eligible for implementation. Ask the user before proceeding. Add `--auto` only when the user explicitly asks for autonomous implementation. If `Failed: N > 0`, revise the plan before cooking.
 > **Why absolute path?** After `/clear`, the new session loses previous context.
 > Fresh context helps Claude focus solely on implementation without planning context pollution.
 
@@ -91,3 +104,4 @@ Remind user with absolute path:
 - Only ask about genuine decision points
 - If plan is simple, fewer than min questions is okay
 - Prioritize questions that could change implementation significantly
+- Never recommend cooking until the whole-plan consistency sweep has no unresolved contradictions

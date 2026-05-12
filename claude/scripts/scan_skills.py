@@ -77,9 +77,21 @@ def _fallback_frontmatter(content: str) -> dict:
             continue
         if value:
             v = value.strip()
-            if len(v) >= 2 and v[0] == v[-1] and v[0] in {"'", '"'}:
+            is_quoted = len(v) >= 2 and v[0] == v[-1] and v[0] in {"'", '"'}
+            if is_quoted:
                 v = v[1:-1]
-            result[key] = v
+            if v == "true":
+                result[key] = True
+            elif v == "false":
+                result[key] = False
+            elif not is_quoted and v.startswith("[") and v.endswith("]"):
+                result[key] = [
+                    item.strip().strip("'\"")
+                    for item in v[1:-1].split(",")
+                    if item.strip()
+                ]
+            else:
+                result[key] = v
         idx += 1
     return result
 
@@ -97,8 +109,8 @@ def extract_frontmatter(content: str) -> dict:
             return {}
         result: dict = {}
         for key, val in data.items():
-            if isinstance(val, (dict, list)):
-                result[key] = val          # preserve metadata objects and arrays
+            if isinstance(val, (dict, list, bool, int, float)):
+                result[key] = val          # preserve typed metadata values
             else:
                 result[key] = str(val) if val is not None else ""
         return result
@@ -145,7 +157,7 @@ def categorize_skill(name: str, frontmatter: dict | None = None) -> str:
         return "infrastructure"
     if any(x in lower for x in ["database", "mongodb", "postgresql", "sql"]):
         return "database"
-    if any(x in lower for x in ["media", "chrome-devtools", "document-skills"]):
+    if any(x in lower for x in ["media", "document-skills"]):
         return "multimedia"
     if any(x in lower for x in ["web-frameworks", "mobile", "shopify"]):
         return "frameworks"
@@ -174,8 +186,6 @@ def scan_skills(base_path: Path) -> list[dict]:
             continue
         skill_dir = skill_file.parent
         internal_name = skill_dir.name
-        if internal_name == "template-skill":
-            continue
         if skill_dir.parent.name != "skills":
             internal_name = f"{skill_dir.parent.name}/{internal_name}"
 

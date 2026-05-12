@@ -507,6 +507,16 @@ install_system_deps() {
     # ImageMagick (required for media-processing skill)
     install_system_package "imagemagick" "ImageMagick" "magick,convert"
 
+    # librsvg (provides rsvg-convert — required for tech-graph skill).
+    # Package name differs per distro: brew/Alpine/Arch use "librsvg",
+    # Debian uses "librsvg2-bin", RedHat uses "librsvg2-tools".
+    local rsvg_pkg="librsvg"
+    case "$DISTRO" in
+        debian) rsvg_pkg="librsvg2-bin" ;;
+        redhat) rsvg_pkg="librsvg2-tools" ;;
+    esac
+    install_system_package "$rsvg_pkg" "librsvg (rsvg-convert)" "rsvg-convert"
+
     # PostgreSQL client (optional - just check)
     if command_exists psql; then
         print_success "PostgreSQL client already installed"
@@ -621,13 +631,6 @@ install_node_deps() {
     # Install local npm packages for skills
     print_info "Installing local npm packages for skills..."
 
-    # chrome-devtools
-    if [ -d "$SCRIPT_DIR/chrome-devtools/scripts" ] && [ -f "$SCRIPT_DIR/chrome-devtools/scripts/package.json" ]; then
-        print_info "Installing chrome-devtools dependencies..."
-        (cd "$SCRIPT_DIR/chrome-devtools/scripts" && npm install --quiet)
-        print_success "chrome-devtools dependencies installed"
-    fi
-
     # sequential-thinking
     if [ -d "$SCRIPT_DIR/sequential-thinking" ] && [ -f "$SCRIPT_DIR/sequential-thinking/package.json" ]; then
         print_info "Installing sequential-thinking dependencies..."
@@ -635,18 +638,18 @@ install_node_deps() {
         print_success "sequential-thinking dependencies installed"
     fi
 
-    # mcp-management
-    if [ -d "$SCRIPT_DIR/mcp-management/scripts" ] && [ -f "$SCRIPT_DIR/mcp-management/scripts/package.json" ]; then
-        print_info "Installing mcp-management dependencies..."
-        (cd "$SCRIPT_DIR/mcp-management/scripts" && npm install --quiet)
-        print_success "mcp-management dependencies installed"
-    fi
-
     # markdown-novel-viewer (marked, highlight.js, gray-matter)
     if [ -d "$SCRIPT_DIR/markdown-novel-viewer" ] && [ -f "$SCRIPT_DIR/markdown-novel-viewer/package.json" ]; then
         print_info "Installing markdown-novel-viewer dependencies..."
         (cd "$SCRIPT_DIR/markdown-novel-viewer" && npm install --quiet)
         print_success "markdown-novel-viewer dependencies installed"
+    fi
+
+    # show-off capture script (puppeteer, sharp)
+    if [ -d "$SCRIPT_DIR/show-off/scripts" ] && [ -f "$SCRIPT_DIR/show-off/scripts/package.json" ]; then
+        print_info "Installing show-off capture dependencies..."
+        (cd "$SCRIPT_DIR/show-off/scripts" && npm install --quiet)
+        print_success "show-off capture dependencies installed"
     fi
 
     # plans-kanban launcher package

@@ -1,6 +1,8 @@
 ---
 name: ck:plan
 description: "Plan implementations, design architectures, create technical roadmaps with detailed phases. Use for feature planning, system design, solution architecture, implementation strategy, phase documentation."
+user-invocable: true
+when_to_use: "Invoke when work needs phases, architecture, or a roadmap."
 category: utilities
 keywords: [planning, architecture, phases, roadmap]
 argument-hint: "[task] [--fast|--hard|--deep|--parallel|--two] [--tdd|--no-tasks] OR [archive|red-team|validate]"
@@ -151,12 +153,12 @@ Present as options via `AskUserQuestion` with header "Planning Operation", quest
 
 ## Workflow Modes
 
-Default: `--auto` (analyze task complexity and auto-pick mode).
+Default: auto-detect planning mode (analyze task complexity and pick mode).
 
 | Flag | Mode | Research | Red Team | Validation | Cook Flag |
 |------|------|----------|----------|------------|-----------|
 | `--auto` | Auto-detect | Follows mode | Follows mode | Follows mode | Follows mode |
-| `--fast` | Fast | Skip | Skip | Skip | `--auto` |
+| `--fast` | Fast | Skip | Skip | Skip | (none) |
 | `--hard` | Hard | 2 researchers | Yes | Optional | (none) |
 | `--deep` | Deep | 2-3 researchers + per-phase scout | Yes | Yes | (none) |
 | `--parallel` | Parallel | 2 researchers | Yes | Optional | `--parallel` |
@@ -224,7 +226,7 @@ flowchart TD
     K -->|No| M[Hydrate Tasks]
     V --> L[Validation Interview]
     L --> M
-    M --> N[Output Cook Command]
+    M --> N[Present Boundary Reminder]
     N --> O[Journal]
 ```
 
@@ -243,8 +245,17 @@ flowchart TD
 6. **Red Team Review** → Run `/ck:plan red-team {plan-path}` (hard/deep/parallel/two modes)
 7. **Post-Plan Validation** → Run `/ck:plan validate {plan-path}` (hard/deep/parallel/two modes)
 8. **Hydrate Tasks** → Create Claude Tasks from phases (default on, `--no-tasks` to skip)
-9. **Context Reminder** → Output cook command with absolute path (MANDATORY)
+9. **Boundary Reminder** → Present optional next-step commands with absolute path
 10. **Journal** → Run `/ck:journal` to write a concise technical journal entry upon completion
+
+### Whole-Plan Consistency Gate
+
+This gate is mandatory after `/ck:plan validate` or `/ck:plan red-team` edits any plan file.
+Load: `references/verification-roles.md` → "Whole-Plan Consistency Sweep".
+
+Before recommending `/ck:cook`, re-read `plan.md` and every `phase-*.md` file. Search all plan files for stale terms, rejected assumptions, renamed APIs/files/fields, superseded decisions, and duplicate embedded drafts/contracts. Reconcile contradictions across the entire plan, not only the edited phase.
+
+If unresolved contradictions remain, report them and ask the user. Do not recommend cook until the whole-plan consistency sweep reports zero unresolved contradictions.
 
 ## Output Requirements
 **IMPORTANT:** Invoke "/ck:project-organization" skill to organize the outputs.
@@ -310,5 +321,5 @@ Reports: Active plans → plan-specific path. Suggested → default path.
 ## Workflow Position
 
 **Typically follows:** `/ck:brainstorm` (after exploring options), `/ck:scout` (after codebase discovery)
-**Typically precedes:** `/ck:cook` (hand off plan for implementation)
+**May precede:** `/ck:cook` after user approval (otherwise stop with plan path and next-step options)
 **Related:** `/ck:brainstorm` (explore before planning), `/ck:cook` (execute after planning)

@@ -1,12 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "skillListingBudgetFraction": 0.03,
+  "skillListingMaxDescChars": 512,
   "attribution": {
     "commit": "",
     "pr": ""
   },
   "statusLine": {
     "type": "command",
-    "command": "node .claude/statusline.cjs",
+    "command": "bash .claude/hooks/node-hook-runner.sh .claude/statusline.cjs",
     "padding": 0
   },
   "hooks": {
@@ -16,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/session-init.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/session-init.cjs"
           }
         ]
       },
@@ -25,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/usage-quota-cache-refresh.cjs",
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/usage-quota-cache-refresh.cjs",
             "timeout": 8
           }
         ]
@@ -37,11 +39,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/subagent-init.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/subagent-init.cjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/team-context-inject.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/team-context-inject.cjs"
           }
         ]
       }
@@ -52,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/cook-after-plan-reminder.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/cook-after-plan-reminder.cjs"
           }
         ]
       },
@@ -60,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/session-state.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/session-state.cjs"
           }
         ]
       }
@@ -70,15 +72,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/dev-rules-reminder.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/dev-rules-reminder.cjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/simplify-gate.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/simplify-gate.cjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/usage-quota-cache-refresh.cjs",
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/usage-quota-cache-refresh.cjs",
             "timeout": 30
           }
         ]
@@ -90,7 +92,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/descriptive-name.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/descriptive-name.cjs"
           }
         ]
       },
@@ -99,11 +101,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/scout-block.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/scout-block.cjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/privacy-block.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/privacy-block.cjs"
           }
         ]
       }
@@ -113,7 +115,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/session-state.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/session-state.cjs"
           }
         ]
       }
@@ -124,7 +126,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/session-state.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/session-state.cjs"
           }
         ]
       },
@@ -133,7 +135,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/plan-format-kanban.cjs"
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/plan-format-kanban.cjs"
           }
         ]
       },
@@ -142,7 +144,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/usage-quota-cache-refresh.cjs",
+            "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/usage-quota-cache-refresh.cjs",
             "timeout": 10
           }
         ]

@@ -1,6 +1,8 @@
 ---
 name: ck:plans-kanban
 description: Open the ClaudeKit plans dashboard in the CLI config UI. Use for plan kanban views, progress tracking, timeline checks, and quick navigation into plan files.
+user-invocable: true
+when_to_use: "Invoke to open or inspect the plans dashboard."
 category: dev-tools
 keywords: [plans, dashboard, kanban, progress, timeline]
 argument-hint: "[deprecated flags are accepted with warnings]"

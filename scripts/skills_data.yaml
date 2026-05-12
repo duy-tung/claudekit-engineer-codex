@@ -44,14 +44,6 @@
   has_scripts: true
   name: better-auth
   path: better-auth/SKILL.md
-- category: multimedia
-  description: Browser automation, debugging, and performance analysis using Puppeteer
-    CLI scripts. Use for automating browsers, taking screenshots, analyzing performance,
-    monitoring network traffic, web scraping, form automation, and JavaScript debugging.
-  has_references: true
-  has_scripts: true
-  name: chrome-devtools
-  path: chrome-devtools/SKILL.md
 - category: utilities
   description: Use when receiving code review feedback (especially if unclear or technically
     questionable), when completing tasks or major features requiring review before
@@ -193,17 +185,6 @@
   has_scripts: true
   name: mcp-builder
   path: mcp-builder/SKILL.md
-- category: dev-tools
-  description: Manage Model Context Protocol (MCP) servers - discover, analyze, and
-    execute tools/prompts/resources from configured MCP servers. Use when working
-    with MCP integrations, need to discover available MCP capabilities, filter MCP
-    tools for specific tasks, execute MCP tools programmatically, access MCP prompts/resources,
-    or implement MCP client functionality. Supports intelligent tool selection, multi-server
-    management, and context-efficient capability discovery.
-  has_references: true
-  has_scripts: true
-  name: mcp-management
-  path: mcp-management/SKILL.md
 - category: multimedia
   description: Process multimedia files with FFmpeg (video/audio encoding, conversion,
     streaming, filtering, hardware acceleration), ImageMagick (image manipulation,

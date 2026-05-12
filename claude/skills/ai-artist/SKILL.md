@@ -1,6 +1,8 @@
 ---
 name: ck:ai-artist
-description: "Generate images via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent."
+description: "Generate product mockups, marketing assets, brand visuals, and concept art via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent."
+user-invocable: true
+when_to_use: "Invoke for visual assets, prompt search, or mockups."
 category: ai-ml
 keywords: [image, generation, prompts, styles]
 metadata:

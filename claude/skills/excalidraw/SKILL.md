@@ -7,8 +7,13 @@ description: >-
   Supports two modes: live MCP canvas (real-time) or file-based JSON + Playwright
   rendering. Also supports zero-config codebase auto-diagramming — just say
   "diagram this repo" or "visualize the architecture".
+user-invocable: true
+when_to_use: "Invoke for editable canvas diagrams or codebase visual maps."
 category: dev-tools
 keywords: [diagrams, architecture, flowcharts, whiteboard, SVG]
+metadata:
+  author: claudekit
+  version: "1.2.0"
 ---
 
 # Excalidraw Diagram Skill
@@ -201,3 +206,5 @@ After generating, validate before presenting:
 | `references/color-palette.md` | All colors: semantic, platform (AWS/Azure/GCP/K8s), text hierarchy |
 | `references/element-templates.md` | Copy-paste JSON templates for file-based mode |
 | `references/json-schema.md` | Excalidraw JSON format reference |
+
+For universal SVG layout rules (component spacing, arrow routing, label placement, z-index ordering, anti-pattern catalog) that apply across any rendered SVG output, see `/ck:tech-graph`'s `references/svg-layout-best-practices.md`. Useful when reviewing exported Excalidraw SVGs for collisions or unreadable labels.

@@ -68,7 +68,6 @@ claudekit-engineer/
 - `brainstormer.md` - Solution ideation
 - `project-manager.md` - Project tracking
 - `ui-ux-designer.md` - UI/UX design
-- `mcp-manager.md` - MCP server management
 - `code-simplifier.md` - Code optimization and simplification
 
 ### 2. Slash Commands System (Skill-Backed)
@@ -104,14 +103,14 @@ claudekit-engineer/
 
 **Current Skills** (47+ Total):
 - ai-artist, ai-multimodal, agent-browser, backend-development, better-auth
-- brainstorm, chrome-devtools, code-review, common, context-engineering
+- brainstorm, code-review, common, context-engineering
 - cook, copywriting, databases, debug, devops
 - docs-seeker, document-skills, find-skills, frontend-design, frontend-development
 - git, gkg, google-adk-python, markdown-novel-viewer, mcp-builder
-- mcp-management, media-processing, mermaidjs-v11, mobile-development, payment-integration
+- media-processing, mermaidjs-v11, mobile-development, payment-integration
 - ck-plan, plans-kanban, problem-solving, react-best-practices, remotion
 - repomix, research, scout, sequential-thinking, shader
-- shopify, skill-creator, template-skill, threejs, ui-styling
+- shopify, skill-creator, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
 
 ### 4. Hook System (9+ Core Hooks)

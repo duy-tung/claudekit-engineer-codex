@@ -1,6 +1,8 @@
 ---
 name: ck:ai-multimodal
 description: Analyze images/audio/video with Gemini API (better vision than Claude). Generate images (Imagen 4, Nano Banana 2, MiniMax), videos (Veo 3, Hailuo), speech (MiniMax TTS), music (MiniMax). Use for vision analysis, transcription, OCR, design extraction, multimodal AI.
+user-invocable: true
+when_to_use: "Invoke for Gemini vision, OCR, media generation, or transcription."
 category: ai-ml
 keywords: [vision, image, video, audio, Gemini]
 license: MIT
@@ -41,7 +43,7 @@ export GEMINI_API_KEY_2="key2"  # auto-rotates on rate limit
 
 **Verify setup**: `python scripts/check_setup.py`
 **Analyze media**: `python scripts/gemini_batch_process.py --files <file> --task <analyze|transcribe|extract>`
-  - TIP: When you're asked to analyze an image, check if `gemini` command is available, then use `echo "<prompt to analyze image>" | gemini -y -m <gemini.model>` command (read model from `$HOME/.claude/.ck.json`: `gemini.model`). If gemini fails (exit code != 0, or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`) OR is not available, fall back to `python scripts/gemini_batch_process.py --files <file> --task analyze`.
+  - TIP: When you're asked to analyze an image, check if `gemini` command is available, then use `echo "<prompt to analyze image>" | gemini -y -m <gemini.model>` command (read model from `$HOME/.claude/.ck.json`: `gemini.model`). If gemini fails (exit code != 0, or output contains `GaxiosError`/`RESOURCE_EXHAUSTED`/`MODEL_CAPACITY_EXHAUSTED`/`PERMISSION_DENIED`/`UNAUTHENTICATED`) OR is not available, fall back to `python scripts/gemini_batch_process.py --files <file> --task analyze`.
 **Generate (Google)**: `python scripts/gemini_batch_process.py --task <generate|generate-video> --prompt "desc"`
 **Generate (OpenRouter)**: `python scripts/gemini_batch_process.py --task generate --provider openrouter --model google/gemini-3.1-flash-image-preview --prompt "desc"`
 **Generate (MiniMax via provider routing)**: `python scripts/gemini_batch_process.py --task generate --provider minimax --model image-01 --prompt "desc"`

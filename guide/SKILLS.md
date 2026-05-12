@@ -2,9 +2,9 @@
 
 Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
-**Last Updated**: 2026-04-10
+**Last Updated**: 2026-05-07
 
-**Total Skills**: 82
+**Total Skills**: 83
 
 ## Categories
 
@@ -16,6 +16,7 @@ Auto-generated catalog of all available skills in ClaudeKit Engineer.
 - [Development Tools](#dev-tools)
 - [Multimedia & Processing](#multimedia)
 - [Frameworks & Platforms](#frameworks)
+- [Security & Intelligence](#security)
 - [Utilities & Helpers](#utilities)
 - [Other](#other)
 
@@ -28,7 +29,7 @@ Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
 ### 📦 📚 `ai-artist`
 
-Generate images via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent.
+Generate product mockups, marketing assets, brand visuals, and concept art via Nano Banana with 129 curated prompts. Mandatory validation interview refines style/mood/colors (use --skip to bypass). 3 modes: search, creative, wild. Styles: Ukiyo-e, Bento grid, cyberpunk, cinematic, vintage patent.
 
 **Location**: `.claude/skills/ai-artist/SKILL.md`
 
@@ -102,7 +103,7 @@ Style UIs with shadcn/ui components (Radix UI + Tailwind CSS). Use for accessibl
 
 ### 📦 `ui-ux-pro-max`
 
-UI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, and 25 chart types across 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, and check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, and mobile app. Elements: button, modal, navbar, sidebar, card, table, form, and chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, and flat design. Topics: color systems, accessibility, animation, layout, typography, font pairing, spacing, interaction states, shadow, and gradient. Integrations: shadcn/ui MCP for component search and examples.
+UI/UX design intelligence for web and mobile: style selection, color systems, typography, layout, accessibility, interaction states, responsive behavior, forms, charts, design systems, and code review across React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS.
 
 **Location**: `.claude/skills/ui-ux-pro-max/SKILL.md`
 
@@ -158,9 +159,15 @@ Design schemas, write queries for MongoDB and PostgreSQL. Use for database desig
 
 ### 📚 `agent-browser`
 
-AI-optimized browser automation CLI with context-efficient snapshots. Use for long autonomous sessions, self-verifying workflows, video recording, and cloud browser testing (Browserbase).
+Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent.
 
 **Location**: `.claude/skills/agent-browser/SKILL.md`
+
+### 📚 `agentize`
+
+Convert a codebase, feature, or module into an AI-agent-friendly CLI and/or MCP server. Covers npm packaging, stdio/SSE/Streamable HTTP surfaces, credential resolution, docs, tests, CI, and a companion Claude skill for users who need an existing capability exposed as a reusable agent tool.
+
+**Location**: `.claude/skills/agentize/SKILL.md`
 
 ### 📦 📚 `docs-seeker`
 
@@ -192,11 +199,11 @@ Semantic code analysis with GitLab Knowledge Graph. Use for go-to-definition, fi
 
 **Location**: `.claude/skills/gkg/SKILL.md`
 
-### `kanban`
+### `graphify`
 
-Alias launcher for the ClaudeKit plans dashboard. Use for visual plan boards, progress tracking, and quick navigation into plan files.
+Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation.
 
-**Location**: `.claude/skills/kanban/SKILL.md`
+**Location**: `.claude/skills/ck-graphify/SKILL.md`
 
 ### 📦 📚 `llms`
 
@@ -210,15 +217,9 @@ Build MCP servers for LLM-external service integration. Use for FastMCP (Python)
 
 **Location**: `.claude/skills/mcp-builder/SKILL.md`
 
-### 📦 📚 `mcp-management`
-
-Manage MCP servers - discover, analyze, execute tools/prompts/resources. Use for MCP integrations, intelligent tool selection, multi-server management, context-efficient capability discovery.
-
-**Location**: `.claude/skills/mcp-management/SKILL.md`
-
 ### 📚 `mintlify`
 
-Build and deploy documentation sites with Mintlify. Use when creating API docs, developer portals, or knowledge bases. Covers docs.json configuration, MDX components (Cards, Steps, Tabs, Accordions, CodeGroup, Callouts, Mermaid, View, Tiles, Tree, Badge, Banner, Color, Tooltips, Panel), page frontmatter, navigation structure (tabs, anchors, dropdowns, products, versions, languages), theming (7 themes), OpenAPI/AsyncAPI integration, AI features (llms.txt, MCP, skill.md), deployment (GitHub, GitLab, Vercel, Cloudflare, AWS), and CLI commands for local development and validation.
+Build and maintain Mintlify documentation sites. Covers docs.json, MDX components, navigation, page frontmatter, theming, OpenAPI/AsyncAPI, AI docs assets such as llms.txt and skill.md, deployment targets, and local validation CLI commands.
 
 **Location**: `.claude/skills/mintlify/SKILL.md`
 
@@ -230,7 +231,7 @@ Open the ClaudeKit plans dashboard in the CLI config UI. Use for plan kanban vie
 
 ### 📦 📚 `repomix`
 
-Pack repositories into AI-friendly files with Repomix (XML, Markdown, plain text). Use for codebase snapshots, LLM context preparation, security audits, third-party library analysis.
+Pack repositories into AI-friendly files with Repomix (XML, Markdown, plain text). Use for new-project onboarding, codebase snapshots, LLM context preparation, security audits, third-party library analysis.
 
 **Location**: `.claude/skills/repomix/SKILL.md`
 
@@ -258,9 +259,15 @@ Orchestrate Agent Teams for parallel multi-session collaboration. Use for resear
 
 **Location**: `.claude/skills/team/SKILL.md`
 
-### `use-mcp`
+### 📦 📚 `tech-graph`
 
-Execute MCP server tools with intelligent discovery and filtering. Use for MCP integrations, tool execution, capability discovery.
+Generate production-quality SVG+PNG technical diagrams — architecture, data flow, flowchart, sequence, agent/memory, or concept maps — across 7 visual styles. Use when user wants "generate diagram", "draw diagram", "visualize", "architecture diagram", "flowchart", or any system/flow they want illustrated. Pairs with /ck:preview --diagram for visual self-review and /ck:mermaidjs-v11 for inline-doc diagrams; this skill is the publish-grade output mode.
+
+**Location**: `.claude/skills/tech-graph/SKILL.md`
+
+### 📦 📚 `use-mcp`
+
+Discover and execute MCP server tools. Two execution paths: Gemini CLI (LLM-driven, all tasks) or direct scripts (deterministic, specific tool/server). Use for MCP integrations, tool execution, capability discovery, persistent tool catalog.
 
 **Location**: `.claude/skills/use-mcp/SKILL.md`
 
@@ -283,12 +290,6 @@ Extract, compare, port, or adapt a feature from a GitHub repository or local rep
 **Location**: `.claude/skills/xia/SKILL.md`
 
 ## Multimedia & Processing
-
-### 📦 📚 `chrome-devtools`
-
-Automate browsers with Puppeteer CLI scripts and persistent sessions. Use for screenshots, performance analysis, network monitoring, web scraping, form automation, JavaScript debugging.
-
-**Location**: `.claude/skills/chrome-devtools/SKILL.md`
 
 ### 📦 `docx`
 
@@ -346,6 +347,14 @@ Build with Next.js (App Router, RSC, SSR, ISR), Turborepo monorepos. Use for Rea
 
 **Location**: `.claude/skills/web-frameworks/SKILL.md`
 
+## Security & Intelligence
+
+### 📦 `cti-expert`
+
+Analyze cyber threat intelligence and OSINT cases. Use for exposure reviews, domain recon, breach checks, username/email/phone research, image forensics, blockchain tracing, darknet checks, cloud tenant recon, vulnerability lookup, threat modeling, and structured reports.
+
+**Location**: `.claude/skills/cti-expert/SKILL.md`
+
 ## Utilities & Helpers
 
 ### `ask`
@@ -354,15 +363,15 @@ Answer technical and architectural questions with expert analysis. Use for desig
 
 **Location**: `.claude/skills/ask/SKILL.md`
 
-### 📚 `autoresearch`
+### `autoresearch`
 
-Run autonomous optimization loops (deprecated alias for ck-loop). Use for metric-driven iteration, coverage improvement, performance tuning.
+Autoresearch is the upstream meta-framework (Udit Goenka, MIT) for autonomous goal-directed iteration with safety guardrails. Locally split into 4 specialized skills. Start here to learn the pattern, then route to the right specialized skill.
 
 **Location**: `.claude/skills/ck-autoresearch/SKILL.md`
 
 ### 📚 `bootstrap`
 
-Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (interactive), auto (default), fast (skip research), parallel (multi-agent).
+Bootstrap new projects with research, tech stack, design, planning, and implementation. Modes: full (default interactive), auto (explicit autonomous), fast (skip research), parallel (multi-agent).
 
 **Location**: `.claude/skills/bootstrap/SKILL.md`
 
@@ -434,7 +443,7 @@ Autonomous iterative optimization loop — run N iterations against a mechanical
 
 ### 📦 `markdown-novel-viewer`
 
-View markdown files with calm, book-like reading experience via HTTP server. Use for long-form content, documentation preview, novel reading, report viewing, distraction-free reading.
+View markdown files in a calm, book-like reader served via HTTP. Use for long-form content review — RFCs, runbooks, design docs, reports, specs, novels — anywhere you want a distraction-free reading mode in the browser.
 
 **Location**: `.claude/skills/markdown-novel-viewer/SKILL.md`
 
@@ -450,7 +459,7 @@ Plan implementations, design architectures, create technical roadmaps with detai
 
 **Location**: `.claude/skills/ck-plan/SKILL.md`
 
-### `predict`
+### 📚 `predict`
 
 5 expert personas debate proposed changes before implementation. Catches architectural, security, performance, and UX issues early. Use before major features or risky changes.
 
@@ -488,19 +497,19 @@ Research technical solutions, analyze architectures, gather requirements thoroug
 
 ### 📚 `retro`
 
-Generate data-driven sprint retrospectives from git metrics. Use for sprint reviews, commit analysis, code health indicators, team velocity.
+Generate data-driven sprint retrospectives from any git history. Use for sprint reviews, commit analysis, code-health indicators, team-velocity reporting, and quarterly engineering reviews. Works on solo or team repos.
 
 **Location**: `.claude/skills/retro/SKILL.md`
 
-### `scenario`
+### 📚 `scenario`
 
-Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use before implementation or testing to catch issues early.
+Generate comprehensive edge cases and test scenarios by decomposing features across 12 dimensions. Use for pre-implementation risk discovery, QA planning, regression design, and iterative saturation when coverage must be exhaustive.
 
 **Location**: `.claude/skills/ck-scenario/SKILL.md`
 
 ### 📚 `security`
 
-STRIDE + OWASP-based security audit with optional auto-fix. Scans code for vulnerabilities, categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern.
+STRIDE + OWASP-based security audit with optional red-team persona discovery loop and auto-fix. Scans code for vulnerabilities from multiple attacker perspectives (auth attacker, supply chain, insider, infrastructure), categorizes by severity, and can iteratively fix findings using ck:autoresearch pattern.
 
 **Location**: `.claude/skills/ck-security/SKILL.md`
 
@@ -524,7 +533,7 @@ Run unit, integration, e2e, and UI tests. Use for test execution, coverage analy
 
 ### `watzup`
 
-Review recent changes and wrap up the current work session. Use for session summaries, change review, progress tracking.
+Generate session hand-off summaries from recent changes — what shipped, what's in flight, what's next. Use at end-of-day, before context handoff to a teammate or new session, or to produce a quick progress-tracking report on any active project.
 
 **Location**: `.claude/skills/watzup/SKILL.md`
 

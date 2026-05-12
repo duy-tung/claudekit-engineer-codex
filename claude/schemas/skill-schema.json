@@ -4,7 +4,7 @@
   "title": "ClaudeKit Skill Frontmatter",
   "description": "JSON Schema for SKILL.md YAML frontmatter validation",
   "type": "object",
-  "required": ["name", "description"],
+  "required": ["name", "description", "when_to_use", "user-invocable"],
   "additionalProperties": false,
   "properties": {
     "name": {
@@ -16,13 +16,39 @@
     "description": {
       "type": "string",
       "minLength": 10,
-      "maxLength": 500,
-      "description": "Human-readable description of the skill and when to use it"
+      "maxLength": 512,
+      "description": "Human-readable capability description for the skill"
+    },
+    "when_to_use": {
+      "type": "string",
+      "maxLength": 1024,
+      "description": "Additional invocation context. ClaudeKit caps the combined description and when_to_use listing text through inventory checks."
+    },
+    "user-invocable": {
+      "type": "boolean",
+      "const": true,
+      "description": "Shipped ClaudeKit skills must remain user-invocable. Control listing pressure with settings and bounded descriptions, not hidden skills."
+    },
+    "disable-model-invocation": {
+      "type": "boolean",
+      "const": false,
+      "description": "Shipped ClaudeKit skills must remain agent-invocable. Omit this field or set it to false."
     },
     "argument-hint": {
       "type": "string",
       "maxLength": 200,
       "description": "Short hint shown to the user about what argument the skill accepts"
+    },
+    "arguments": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "maxItems": 20
+        }
+      ],
+      "description": "Named positional arguments for skill invocation"
     },
     "license": {
       "type": "string",
@@ -33,8 +59,52 @@
       "description": "Comma-separated list of programming languages supported"
     },
     "allowed-tools": {
-      "type": "string",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "maxItems": 50
+        }
+      ],
       "description": "Comma-separated list of Claude tools the skill is allowed to use"
+    },
+    "model": {
+      "type": "string",
+      "description": "Optional Claude Code model override for the skill"
+    },
+    "effort": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "xhigh", "max"],
+      "description": "Optional Claude Code reasoning effort override for the skill"
+    },
+    "context": {
+      "type": "string",
+      "description": "Optional Claude Code execution context for the skill"
+    },
+    "agent": {
+      "type": "string",
+      "description": "Optional Claude Code subagent used to execute the skill"
+    },
+    "shell": {
+      "type": "string",
+      "description": "Optional shell hint for command-oriented skills"
+    },
+    "paths": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "maxItems": 50
+        }
+      ],
+      "description": "Optional path hints for skills that target specific files"
+    },
+    "hooks": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional hook metadata for skills that integrate with Claude Code hooks"
     },
     "category": {
       "type": "string",
@@ -47,6 +117,7 @@
         "dev-tools",
         "multimedia",
         "frameworks",
+        "security",
         "utilities",
         "other"
       ],
