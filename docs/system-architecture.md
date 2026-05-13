@@ -1,7 +1,7 @@
 # System Architecture
 
-**Last Updated**: 2026-01-28
-**Version**: 2.9.0-beta.2
+**Last Updated**: 2026-05-13
+**Version**: 2.18.1-beta.3
 **Project**: ClaudeKit Engineer
 
 ## Overview
@@ -64,9 +64,9 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 **Responsibility**: Persist structured hook execution telemetry for local inspection and downstream dashboard consumption
 **Current Coverage**:
 - `PreToolUse`: `scout-block`, `privacy-block`, `descriptive-name`
-- `PostToolUse`: `post-edit-simplify-reminder`, `plan-format-kanban`, `usage-quota-cache-refresh`
-- `UserPromptSubmit`: `dev-rules-reminder`, `usage-quota-cache-refresh`
-- `SessionStart`: `session-init`, `usage-quota-cache-refresh`
+- `UserPromptSubmit`: `simplify-gate`
+
+Generated context hooks (`session-init`, `session-state`, `subagent-init`, `team-context-inject`, `dev-rules-reminder`, `plan-format-kanban`, `cook-after-plan-reminder`, `usage-context-awareness`, `usage-quota-cache-refresh`) are not registered by default. Upgrade metadata prunes those stale registrations and files from existing installs.
 
 **Log Contract**:
 - One JSON object per line
@@ -309,51 +309,20 @@ Planner incorporates into plan
 
 ### 6. Integration Layer
 
-#### 6.1 Hook System (8 Core Hooks)
+#### 6.1 Hook System
 
 **Purpose**: Intercept and control Claude Code operations for performance, context management, and security
 
 **Hook Architecture**:
 All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit code 0 (non-blocking)
 
-**Additional Hooks**:
+**Default Hooks**:
 - `privacy-block.cjs` - Sensitive file access control
 - `descriptive-name.cjs` - Naming conventions enforcement
-- `post-edit-simplify-reminder.cjs` - Post-edit optimization hints
-- `usage-context-awareness.cjs` - Gated prompt-awareness wrapper for usage-based injection
-- `usage-quota-cache-refresh.cjs` - Cosmetic 5h / wk statusline cache warming
+- `scout-block.cjs` - Blocks heavy directory access
+- `simplify-gate.cjs` - Stateless prompt-time simplification gate
 
-**1. Session-Init Hook** (`session-init.cjs`)
-- **Trigger**: Session startup
-- **Purpose**: Initialize session state and context
-- **Functionality**:
-  - Detects project type (monorepo vs library)
-  - Identifies package manager (pnpm/npm/yarn)
-  - Detects framework (Next.js, React, etc.)
-  - Writes 25+ environment variables for context cascade
-  - Enables efficient context reuse across agents
-
-**2. Dev-Rules-Reminder Hook** (`dev-rules-reminder.cjs`)
-- **Trigger**: Every user prompt
-- **Purpose**: Inject development context and rules
-- **Functionality**:
-  - Injects current development rules from `.claude/rules/`
-  - Smart deduplication prevents redundant context
-  - Suggests branch-matched workflows
-  - Optimized for minimal token overhead
-  - Enables consistent behavior across team
-
-**3. Subagent-Init Hook** (`subagent-init.cjs`)
-- **Trigger**: When spawning subagents
-- **Purpose**: Provide minimal context to subagents
-- **Functionality**:
-  - Injects ~200 tokens of essential context
-  - Eliminates need for full context retransmission
-  - Enables efficient agent-to-agent communication
-  - Reduces token consumption for delegation patterns
-  - Recent optimization: v1.20.0-beta.12 tuned for token efficiency
-
-**4. Scout-Block Hook** (`scout-block.cjs` - Cross-Platform)
+**1. Scout-Block Hook** (`scout-block.cjs` - Cross-Platform)
 - **Trigger**: Before bash/command execution
 - **Purpose**: Block access to heavy directories for performance
 - **Architecture**:
@@ -371,55 +340,44 @@ All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit 
 **Testing**:
 - Validates: blocked/allowed patterns, error handling, edge cases, JSON validation
 
-**5. Session-State Hook** (`session-state.cjs`)
+**2. Generated Context Hooks (Disabled by Default)**
 
-- **Trigger**: PostToolUse (`Task|TaskCreate|TaskUpdate|TodoWrite`), Stop (persist), SubagentStop (append)
-- **Purpose**: Persist session progress and keep the statusline cache current off the startup path
-- **Functionality**:
-  - **PostToolUse**: Refreshes cached todo/agent activity from the latest transcript after task/todo mutations
-  - **Stop**: Finalizes and archives current session state (keeps last 5 archives)
-  - **SubagentStop**: Appends subagent completion results to ongoing session state
-  - Falls back to cached transcript paths and event metadata when hook payloads omit `transcript_path`
-  - Extracts todos from cached session state first, then transcript, plus branch info, active plan, and modified files
-  - Structured markdown output with completed/pending tasks separation
-  - Auto-expiry: States older than 7 days are not loaded
-  - Atomic writes: Safe concurrent access with temp-file-then-rename pattern
-  - Storage: Project-level (`.claude/session-state/`) with global fallback for non-CK projects
+The following hooks previously injected session state, generated prompt context, team context, or usage context and are now pruned from default installs to avoid startup/context bloat:
 
-**SessionStart Recovery** (`session-init.cjs`):
+- `session-init.cjs`
+- `session-state.cjs`
+- `subagent-init.cjs`
+- `team-context-inject.cjs`
+- `dev-rules-reminder.cjs`
+- `plan-format-kanban.cjs`
+- `cook-after-plan-reminder.cjs`
+- `usage-context-awareness.cjs`
+- `usage-quota-cache-refresh.cjs`
 
-- Loads previous markdown session state on `startup` and `compact`
-- Rehydrates the statusline cache on `startup`, `resume`, or `compact` when the temp session cache is missing or cold
-- Keeps startup limited to env wiring, cheap context output, and one-shot orphaned `.shadowed` skill recovery
-
-**Storage & Archival**:
-
-- Primary: `.claude/session-state/latest.md` (current session state)
-- Archive: `.claude/session-state/archive/` (timestamped backups with rotation)
-- Archive Format: `YYYYMMDD-HHMM.md` timestamps
-- Rotation: Keeps 5 most recent archives, auto-deletes older ones
-- Fallback: `~/.claude/session-states/{hash}/` for non-CK projects (path-based hash)
-
-**Hook Configuration** (`.claude/settings.json`):
+**Default Hook Configuration** (`.claude/settings.json`):
 ```json
 {
   "hooks": {
-    "PostToolUse": [{
-      "matcher": "Task|TaskCreate|TaskUpdate|TodoWrite",
+    "UserPromptSubmit": [{
       "hooks": [
-        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
+        {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/simplify-gate.cjs"}
       ]
     }],
-    "SubagentStop": [{
-      "hooks": [
-        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
-      ]
-    }],
-    "Stop": [{
-      "hooks": [
-        {"type": "command", "command": "node .claude/hooks/session-state.cjs"}
-      ]
-    }]
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/descriptive-name.cjs"}
+        ]
+      },
+      {
+        "matcher": "Bash|Glob|Grep|Read|Edit|Write",
+        "hooks": [
+          {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/scout-block.cjs"},
+          {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/privacy-block.cjs"}
+        ]
+      }
+    ]
   }
 }
 ```
