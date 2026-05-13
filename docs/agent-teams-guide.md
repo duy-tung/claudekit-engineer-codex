@@ -80,7 +80,7 @@ It automatically integrates with the CK workflow stack:
 | `/ck:team review` | `/ck:code-review` | Evidence gates, severity ratings |
 | `/ck:team debug` | `/ck:fix` | Root-cause-first, adversarial hypotheses |
 
-Teammates automatically receive CK context (reports path, naming pattern, branch, commit conventions) via the SubagentStart hook (`team-context-inject.cjs`).
+Teammates receive CK context from the lead prompt and task instructions by default. The old SubagentStart context-injection hook (`team-context-inject.cjs`) is disabled unless explicitly opted in.
 
 ## Subagents vs Agent Teams
 
@@ -479,12 +479,12 @@ All teammates inherit the lead's permission settings at spawn. If lead has `--da
 
 | Hook | Event | Purpose |
 |------|-------|---------|
-| `team-context-inject.cjs` | SubagentStart | Injects team context (peers, tasks) + CK context (reports, naming, branch) |
 | `task-completed-handler.cjs` | TaskCompleted | Progress tracking, completion logging, shutdown hints |
 | `teammate-idle-handler.cjs` | TeammateIdle | Available task detection, assignment/shutdown suggestions |
-| `session-init.cjs` | SessionStart | Sets `CK_AGENT_TEAM`, `CK_AGENT_TEAM_MEMBERS` env vars |
 
-All hooks follow fail-open design (exit 0 always) and are gated by `isHookEnabled()` in `ck-config-utils.cjs`.
+`team-context-inject.cjs` and `session-init.cjs` are generated context hooks and are not registered by default. Upgrade metadata removes their installed files from existing installs, so team workflows must pass needed context explicitly or opt back in by restoring the hook files and settings entries deliberately.
+
+All hook sources follow fail-open design (exit 0 always) and are gated by `isHookEnabled()` in `ck-config-utils.cjs`.
 
 ## Related Files
 
@@ -494,10 +494,8 @@ All hooks follow fail-open design (exit 0 always) and are gated by `isHookEnable
 | `.claude/skills/team/references/` | Official docs reference (hooks, memory, restrictions) |
 | `.claude/rules/team-coordination-rules.md` | Teammate behavior rules + CK conventions |
 | `.claude/rules/orchestration-protocol.md` | Decision matrix, file ownership rules |
-| `.claude/hooks/team-context-inject.cjs` | Team + CK context injection (SubagentStart) |
 | `.claude/hooks/task-completed-handler.cjs` | Progress tracking + completion logging (TaskCompleted) |
 | `.claude/hooks/teammate-idle-handler.cjs` | Task availability detection (TeammateIdle) |
-| `.claude/hooks/session-init.cjs` | Team detection and env injection |
 
 ## Quick Start
 

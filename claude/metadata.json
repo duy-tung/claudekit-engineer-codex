@@ -108,6 +108,15 @@
     "hooks/scout-block.ps1",
     "hooks/scout-block.js",
     "hooks/tests/test-scout-block.js",
+    "hooks/cook-after-plan-reminder.cjs",
+    "hooks/dev-rules-reminder.cjs",
+    "hooks/plan-format-kanban.cjs",
+    "hooks/session-init.cjs",
+    "hooks/session-state.cjs",
+    "hooks/subagent-init.cjs",
+    "hooks/team-context-inject.cjs",
+    "hooks/usage-context-awareness.cjs",
+    "hooks/usage-quota-cache-refresh.cjs",
     "hooks/session-end.cjs",
     "hooks/write-compact-marker.cjs",
     "hooks/lib/ck-paths.cjs",
@@ -134,10 +143,10 @@
     "skills/chrome-devtools/**",
     "skills/ck-autoresearch/references/**"
   ],
-  "version": "2.18.0",
+  "version": "2.18.1-beta.4",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
-  "buildDate": "2026-05-12T15:34:40.766Z",
+  "buildDate": "2026-05-13T16:00:20.003Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"

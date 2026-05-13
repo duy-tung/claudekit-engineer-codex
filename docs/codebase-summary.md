@@ -113,49 +113,33 @@ claudekit-engineer/
 - shopify, skill-creator, threejs, ui-styling
 - ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
 
-### 4. Hook System (9+ Core Hooks)
+### 4. Hook System
 
 **Location**: `.claude/hooks/`
 
-**Core Hooks:**
+**Default Hooks:**
 
-1. **session-init.cjs** - Session Initialization
-   - Detects project type (monorepo/library)
-   - Identifies package manager (pnpm/npm/yarn)
-   - Detects framework (Next/React/etc)
-   - Writes 25+ environment variables for context cascade
-
-2. **dev-rules-reminder.cjs** - Development Context Injection
-   - Injects dev rules & context on every prompt
-   - Smart deduplication prevents redundancy
-   - Provides branch-matched workflow suggestions
-   - Optimized for token efficiency
-
-3. **subagent-init.cjs** - Subagent Context Injection
-   - Injects compact context (~200 tokens) when spawning subagents
-   - Minimizes token overhead during delegation
-   - Enables efficient agent-to-agent communication
-
-4. **scout-block.cjs** - Cross-Platform Performance Optimization
+1. **scout-block.cjs** - Cross-Platform Performance Optimization
    - Blocks access to heavy directories (node_modules, .git, __pycache__, dist/, build/)
    - Pure Node.js implementation (`scout-block.cjs`) — cross-platform
    - Modular internals: `scout-block/` (pattern-matcher, path-extractor, error-formatter, broad-pattern-detector)
    - Improves AI response time and token efficiency
 
-5. **session-state.cjs** - Session State Persistence
-   - Persists session progress across sessions and context compactions
-   - Refreshes cached statusline activity on task/todo `PostToolUse` events
-   - Finalizes and archives session state on `Stop`, appends subagent results on `SubagentStop`
-   - Archives old states with rotation (keeps 5)
-   - Extracts todos, modified files, branch, and plan info
-   - 7-day auto-expiry, atomic writes, fail-safe
-   - Startup and post-compaction recovery messaging is handled by `session-init.cjs`
+2. **privacy-block.cjs** - Sensitive File Access Control
+3. **descriptive-name.cjs** - Naming conventions enforcement
+4. **simplify-gate.cjs** - Stateless prompt-time simplification gate
 
-6. **privacy-block.cjs** - Sensitive File Access Control
-7. **descriptive-name.cjs** - Naming conventions enforcement
-8. **post-edit-simplify-reminder.cjs** - Post-edit optimization hints
-9. **usage-context-awareness.cjs** - Gated prompt-awareness wrapper for usage-based injection
-10. **usage-quota-cache-refresh.cjs** - Cosmetic 5h / wk cache warmer for the statusline
+**Generated Context Hooks Disabled by Default:**
+
+- `session-init.cjs`
+- `session-state.cjs`
+- `subagent-init.cjs`
+- `team-context-inject.cjs`
+- `dev-rules-reminder.cjs`
+- `plan-format-kanban.cjs`
+- `cook-after-plan-reminder.cjs`
+- `usage-context-awareness.cjs`
+- `usage-quota-cache-refresh.cjs`
 
 **Hook Features:**
 - Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation

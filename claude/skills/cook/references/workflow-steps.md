@@ -167,7 +167,12 @@ Skip the step entirely when `CK_SIMPLIFY_DISABLED=1` or
 ## Step 5: Code Review
 
 **All modes - MANDATORY subagent:**
-- **MUST** spawn `code-reviewer` subagent: `Task(subagent_type="code-reviewer", prompt="Review changes. Return score, critical issues, warnings.", description="Code review")`
+- **MUST** spawn `code-reviewer` subagent with explicit (a-e) checks and scout/acceptance context:
+  ```
+  Task(subagent_type="code-reviewer",
+       prompt="Review changes against these MANDATORY checks: (a) every acceptance criterion met; (b) no regression to business logic in touchpoints/blast-radius from scout; (c) no breaking changes to public contracts (signatures, schemas, APIs, env vars) unless explicitly called out; (d) follows existing patterns from scout; (e) no new lint/type/build errors anywhere. CONTEXT — scout summary: <scout-summary>; acceptance criteria: <acceptance-criteria>. Return score (X/10), critical, warnings, suggestions, and explicitly flag any side effects to trigger HARD-GATE-NO-SIDE-EFFECTS.",
+       description="Code review")
+  ```
 - **DO NOT** review code yourself - delegate to subagent
 
 **Interactive/Parallel/Code/No-test:**
@@ -188,10 +193,10 @@ Skip the step entirely when `CK_SIMPLIFY_DISABLED=1` or
 ## Step 6: Finalize
 
 **All modes - MANDATORY subagents (NON-NEGOTIABLE):**
-1. **MUST** spawn these subagents in parallel:
-   - `Task(subagent_type="project-manager", prompt="Run full sync-back for [plan-path]: reconcile all completed Claude Tasks with all phase files, backfill stale completed checkboxes across every phase, then update plan.md frontmatter/table progress. Do NOT only mark current phase.", description="Update plan")`
+1. **MUST** activate `/ck:project-management` skill (MANDATORY) — run full sync-back for [plan-path]: reconcile all completed Claude Tasks with all phase files, backfill stale completed checkboxes across every phase, then update plan.md frontmatter/table progress. Do NOT only mark current phase.
+2. **MUST** spawn in parallel:
    - `Task(subagent_type="docs-manager", prompt="Update docs for changes.", description="Update docs")`
-2. Project-manager sync-back MUST include:
+3. Project-management sync-back MUST include:
 
 ### Status Sync (Finalize)
 
@@ -214,11 +219,11 @@ only change the Status column cell, preserve table structure.
    - Mark every completed item `[ ] → [x]` based on completed tasks (including earlier phases finished before current phase).
    - Update `plan.md` status/progress (`pending`/`in-progress`/`completed`) from actual checkbox state.
    - Return unresolved mappings if any completed task cannot be matched to a phase file.
-3. Use `TaskUpdate` to mark Claude Tasks complete after sync-back confirmation.
-4. Onboarding check (API keys, env vars)
-5. **MUST** spawn git subagent: `Task(subagent_type="git-manager", prompt="Stage and commit changes", description="Commit")`
+4. Use `TaskUpdate` to mark Claude Tasks complete after sync-back confirmation.
+5. Onboarding check (API keys, env vars)
+6. **MUST** spawn git subagent: `Task(subagent_type="git-manager", prompt="Stage and commit changes", description="Commit")`
 
-**CRITICAL:** Step 6 is INCOMPLETE without spawning all 3 subagents. DO NOT skip subagent delegation.
+**CRITICAL:** Step 6 is INCOMPLETE without activating `/ck:project-management` skill AND spawning `docs-manager` + `git-manager` subagents. DO NOT skip.
 
 **Auto mode:** Continue to next phase automatically, start from **Step 3**.
 **Others:** Ask user before next phase
@@ -243,10 +248,10 @@ code:        0 → skip → skip → 3 → [R] → 4 → [R] → 5(user) → 6
 ## Critical Rules
 
 - Never skip steps without mode justification
-- **MANDATORY SUBAGENT DELEGATION:** Steps 4, 5, 6 MUST spawn subagents via Task tool. DO NOT implement directly.
+- **MANDATORY DELEGATION:** Steps 4, 5, 6 MUST delegate via Task tool / skill activation. DO NOT implement directly.
   - Step 4: `tester` (and `debugger` if failures)
   - Step 5: `code-reviewer`
-  - Step 6: `project-manager`, `docs-manager`, `git-manager`
+  - Step 6: `/ck:project-management` skill, `docs-manager`, `git-manager`
 - Use `TaskCreate` to create Claude Tasks for each unchecked item with priority order and dependencies (or `TodoWrite` if Task tools unavailable).
 - Use `TaskUpdate` to mark Claude Tasks `in_progress` when picking up a task (skip if Task tools unavailable).
 - Use `TaskUpdate` to mark Claude Tasks `complete` immediately after finalizing the task (skip if Task tools unavailable).
