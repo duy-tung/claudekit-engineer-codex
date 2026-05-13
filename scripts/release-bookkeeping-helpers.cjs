@@ -31,21 +31,39 @@ function findLatestStableVersion(tags) {
 
 function computeNextBetaVersion(stableVersion, existingTags) {
   const stable = parseStableVersion(stableVersion);
-  const maxBeta = existingTags.reduce((max, tag) => {
+
+  let base = null;
+  let maxBeta = 0;
+  for (const tag of existingTags) {
     const match = String(tag).match(BETA_TAG_RE);
     if (!match) {
-      return max;
+      continue;
     }
-    const [, major, minor, patch, beta] = match.map(Number);
-    if (major !== stable.major || minor !== stable.minor || patch !== stable.patch) {
-      return max;
+    const candidate = {
+      major: Number(match[1]),
+      minor: Number(match[2]),
+      patch: Number(match[3]),
+    };
+    const betaNumber = Number(match[4]);
+    const cmp = base ? compareVersions(candidate, base) : 1;
+    if (cmp > 0) {
+      base = candidate;
+      maxBeta = betaNumber;
+    } else if (cmp === 0) {
+      maxBeta = Math.max(maxBeta, betaNumber);
     }
-    return Math.max(max, beta);
-  }, 0);
+  }
+
+  // Beta line must be strictly ahead of latest stable. If the existing beta
+  // base has been overtaken (or there is none), advance to stable.patch + 1.
+  if (!base || compareVersions(base, stable) <= 0) {
+    base = { major: stable.major, minor: stable.minor, patch: stable.patch + 1 };
+    maxBeta = 0;
+  }
 
   return {
     stable: `${stable.major}.${stable.minor}.${stable.patch}`,
-    version: `${stable.major}.${stable.minor}.${stable.patch}-beta.${maxBeta + 1}`,
+    version: `${base.major}.${base.minor}.${base.patch}-beta.${maxBeta + 1}`,
   };
 }
 
