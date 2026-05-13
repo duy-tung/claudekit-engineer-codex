@@ -197,7 +197,7 @@ Classify before routing. See `references/complexity-assessment.md`.
 
 **If verification fails OR a side effect is detected:** Use `AskUserQuestion` per HARD-GATE-NO-SIDE-EFFECTS — present what broke, why, and 2-4 concrete options (revert, narrow scope, update dependents, accept). Never silently patch.
 
-**If verification fails (3+ attempts):** Loop back to Step 2 (re-diagnose). After 3 failures → question architecture, discuss with user.
+**If verification fails:** Loop back to Step 2 (re-diagnose). After 3 failures → question architecture, discuss with user.
 
 See `references/prevention-gate.md` for prevention requirements.
 

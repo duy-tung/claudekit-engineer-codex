@@ -227,7 +227,8 @@ flowchart TD
     V --> L[Validation Interview]
     L --> M
     M --> N[Present Boundary Reminder]
-    N --> O[Journal]
+    N --> P[Post-Plan Handoff<br/>AskUserQuestion: skip gates already auto-run]
+    P --> O[Journal]
 ```
 
 **This diagram is the authoritative workflow.** Prose sections below provide detail for each node.
@@ -322,6 +323,11 @@ After `plan.md` + phase files are written and the user has reviewed/approved the
 **Skip this step ONLY when:**
 - The current invocation IS already a subcommand (`validate`, `red-team`, `archive`) — those have their own terminal handoff.
 - User explicitly said "just plan, don't suggest next step".
+
+**Skip an individual option ONLY when the active mode already auto-ran that gate (per Workflow Process Steps 6-7):**
+- Omit `/ck:plan red-team` from the offered options when mode is `--hard`, `--deep`, `--parallel`, or `--two` (Step 6 already ran adversarial review).
+- Omit `/ck:plan validate` from the offered options when mode is `--deep` (Step 7 already ran validation).
+- If both gates already ran, the Post-Plan Handoff still fires but offers only `/ck:cook <plan-path>` and `End session`.
 
 After selection: invoke the chosen command with the plan path as argument for continuity.
 

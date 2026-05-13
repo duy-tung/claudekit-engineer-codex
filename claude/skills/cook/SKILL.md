@@ -82,6 +82,8 @@ Implementation is NOT done until verified to be side-effect-free. Code-review an
 4. No new lint/type/build errors anywhere in the repo.
 5. Public contracts unchanged unless intentional and called out (function signatures, exported types, API responses, DB schemas, env vars, config keys).
 
+User override: If user invoked `--no-test`, item 2 is downgraded to a warning. Surface the unverified-tests risk in the finalize `AskUserQuestion` so the user accepts the trade-off rather than having it silently chosen. Items 1, 3, 4, 5 remain enforceable via the mandatory `code-reviewer` subagent.
+
 If review/testing reveals a side effect, regression, or broken workflow, STOP. Use `AskUserQuestion` to present:
 - What broke (file, test, workflow, user-facing behavior)
 - Why this implementation caused it (1-line cause)
@@ -126,7 +128,11 @@ flowchart TD
     B -->|Yes| F[Load Plan]
     B -->|No| C{Mode?}
     C -->|fast| D[Scout → Plan → Code]
-    C -->|interactive/auto| E[Research → Review → Plan]
+    C -->|interactive/auto| SC[Scout Codebase MANDATORY]
+    SC --> SR[Summarize Findings to User]
+    SR --> RQ{Exact requirements captured?<br/>output, acceptance, scope, constraints, touchpoints}
+    RQ -->|No| SR
+    RQ -->|Yes| E[Research → Review → Plan]
     E --> F
     D --> F
     F --> G[Review Gate]

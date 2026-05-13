@@ -149,7 +149,7 @@ flowchart TD
 
    Format: use `AskUserQuestion` with the recommended option listed FIRST and labelled "(Recommended)". Tailor the recommendation to the agreed solution.
 
-   **Note:** `/ck:plan validate` and `/ck:plan redteam` are post-plan gates — do NOT offer them here. They are surfaced by `/ck:plan` itself after the plan is produced.
+   **Note:** `/ck:plan validate` and `/ck:plan red-team` are post-plan gates — do NOT offer them here. They are surfaced by `/ck:plan` itself after the plan is produced.
 
    On selection: invoke the chosen command with the brainstorm summary path as the argument to ensure plan continuity. **CRITICAL:** The invoked plan command will create `plan.md` with YAML frontmatter including `status: pending`.
 10. **Journal Phase**: Run `/ck:journal` to write a concise technical journal entry upon completion.
