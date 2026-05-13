@@ -1,3 +1,18 @@
+## [2.19.0](https://github.com/claudekit/claudekit-engineer/compare/v2.18.0...v2.19.0) (2026-05-13)
+
+
+### 🚀 Features
+
+* **skills:** enforce scout-first, exact-requirements, and no-side-effects gates ([#757](https://github.com/claudekit/claudekit-engineer/issues/757)) ([ab30a7e](https://github.com/claudekit/claudekit-engineer/commit/ab30a7e2857385b4c7651aadd53e84d92ae6a815))
+
+
+### 🐞 Bug Fixes
+
+* disable generated context hooks by default ([#760](https://github.com/claudekit/claudekit-engineer/issues/760)) ([d897c6c](https://github.com/claudekit/claudekit-engineer/commit/d897c6cbdef1f0daadaa4299b167109d81bebd32))
+* handle Windows rsvg-convert remediation ([9521767](https://github.com/claudekit/claudekit-engineer/commit/95217676570799c749868542e9eeb4345d12ef5b))
+* **release:** advance beta patch when stable catches up to beta base ([d7175c0](https://github.com/claudekit/claudekit-engineer/commit/d7175c0808e8dd8d77a445b567548490eeb3afed))
+* **skills:** address claude[bot] reviews from merged PR [#757](https://github.com/claudekit/claudekit-engineer/issues/757) ([#758](https://github.com/claudekit/claudekit-engineer/issues/758)) ([f8c34fe](https://github.com/claudekit/claudekit-engineer/commit/f8c34fec599df649798f341a9665d2e36547ba96))
+
 ## [2.18.0](https://github.com/claudekit/claudekit-engineer/compare/v2.17.0...v2.18.0) (2026-05-12)
 
 

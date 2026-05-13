@@ -143,10 +143,10 @@
     "skills/chrome-devtools/**",
     "skills/ck-autoresearch/references/**"
   ],
-  "version": "2.18.1-beta.4",
+  "version": "2.19.0",
   "name": "claudekit-engineer",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
-  "buildDate": "2026-05-13T16:00:20.003Z",
+  "buildDate": "2026-05-13T16:04:33.507Z",
   "repository": {
     "type": "git",
     "url": "https://github.com/claudekit/claudekit-engineer.git"
