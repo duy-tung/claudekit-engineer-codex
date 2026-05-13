@@ -26,6 +26,25 @@ test('PowerShell remediation reports failed requirements, not skill names', () =
   assert.match(installScript, /python -m pip install `"\$pkg`"/);
   assert.match(
     installScript,
-    /foreach \(\$item in \$Script:FAILED_OPTIONAL\) \{\s+\$failure = Split-FailureItem -Item \$item/s,
+    /\$pythonFailures = @\(Get-PythonFailureItems\)/,
   );
+  assert.match(installScript, /foreach \(\$item in \$pythonFailures\) \{\s+\$failure = Split-FailureItem -Item \$item/s);
+});
+
+test('PowerShell installer does not suggest nonexistent librsvg winget or Scoop packages', () => {
+  assert.match(installScript, /function Install-RsvgConvert/);
+  assert.doesNotMatch(installScript, /GNOME\.librsvg/);
+  assert.doesNotMatch(installScript, /-ScoopName "librsvg"/);
+  assert.match(installScript, /choco install rsvg-convert -y/);
+  assert.match(installScript, /pacman -S mingw-w64-x86_64-librsvg/);
+  assert.match(installScript, /rsvg-convert is not available via winget or Scoop/);
+});
+
+test('PowerShell installer records critical failure details in the summary', () => {
+  assert.match(installScript, /\$Script:FAILED_CRITICAL = \[System\.Collections\.ArrayList\]::new\(\)/);
+  assert.match(
+    installScript,
+    /\[void\]\$Script:FAILED_CRITICAL\.Add\("\$\{Name\}: \$\{Reason\}"\)/,
+  );
+  assert.match(installScript, /critical_failures = @\(\$Script:FAILED_CRITICAL\)/);
 });
