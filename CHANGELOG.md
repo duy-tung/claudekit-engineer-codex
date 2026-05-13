@@ -1,3 +1,65 @@
+## [2.18.0](https://github.com/claudekit/claudekit-engineer/compare/v2.17.0...v2.18.0) (2026-05-12)
+
+
+### 🚀 Features
+
+* **docs:** cross-reference SVG layout rules for system-architecture diagrams ([804c099](https://github.com/claudekit/claudekit-engineer/commit/804c099fb73a987020fc7a4aeb30eab370b502d5))
+* **excalidraw:** cross-reference SVG layout best-practices ([ac509c1](https://github.com/claudekit/claudekit-engineer/commit/ac509c1d9b0bb4d0e4f3e9b6de9e2c1f8326cfc2))
+* harden skill listing budget ([ef0a809](https://github.com/claudekit/claudekit-engineer/commit/ef0a8095741c30e529358701c048189a3b979474))
+* **install:** add librsvg (rsvg-convert) for tech-graph skill ([842bedd](https://github.com/claudekit/claudekit-engineer/commit/842bedd15031121ed5c5d6cc44e755ba66100eb9))
+* **maintainer:** add skill description lint as warn-only CI gate ([5d47d42](https://github.com/claudekit/claudekit-engineer/commit/5d47d42f18feeaff1aaa991f7e4c162daf0b3ab2)), closes [#711](https://github.com/claudekit/claudekit-engineer/issues/711) [#725](https://github.com/claudekit/claudekit-engineer/issues/725)
+* **maintainer:** add skill routing coverage CI gate ([14ba73b](https://github.com/claudekit/claudekit-engineer/commit/14ba73b4ef23a209fe37078ef53f1995752483cd)), closes [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+* **maintainer:** enforce minimum reason quality in allowlists ([c4eb666](https://github.com/claudekit/claudekit-engineer/commit/c4eb666224f002ee5eea3887ad81ce34a5db6206)), closes [#725](https://github.com/claudekit/claudekit-engineer/issues/725) [#735](https://github.com/claudekit/claudekit-engineer/issues/735) [#737](https://github.com/claudekit/claudekit-engineer/issues/737)
+* **maintainer:** harden skill-description-lint robustness ([245dcce](https://github.com/claudekit/claudekit-engineer/commit/245dcce4ab6c754fe6e2d70b7d2829df1ccf3ccd)), closes [#735](https://github.com/claudekit/claudekit-engineer/issues/735) [#736](https://github.com/claudekit/claudekit-engineer/issues/736)
+* **mermaidjs-v11:** add SVG layout best-practices reference ([1c4d5c0](https://github.com/claudekit/claudekit-engineer/commit/1c4d5c08a55c2aeee7d6d06bcb3a88debfdd627c))
+* **mermaidjs-v11:** redirect SVG layout cross-ref to ck:tech-graph ([a75c84c](https://github.com/claudekit/claudekit-engineer/commit/a75c84cdde4094c99a6a112f71ab30913b802f18)), closes [#703](https://github.com/claudekit/claudekit-engineer/issues/703) [#702](https://github.com/claudekit/claudekit-engineer/issues/702)
+* **preview:** add visual self-review step for diagram generation ([252d878](https://github.com/claudekit/claudekit-engineer/commit/252d878482d7735a2fac5e106c9cf1c0fbba194d)), closes [#16](https://github.com/claudekit/claudekit-engineer/issues/16)
+* **skill:** add --chain reason / --chain probe to ck:predict ([2fd6ab3](https://github.com/claudekit/claudekit-engineer/commit/2fd6ab33face80087cb19045c2bcc4c61487b8fb)), closes [#728](https://github.com/claudekit/claudekit-engineer/issues/728)
+* **skill:** add iterative saturation mode to ck:scenario ([a587615](https://github.com/claudekit/claudekit-engineer/commit/a58761525e2c1530ffc93a7b2a934f6f9b372134)), closes [#729](https://github.com/claudekit/claudekit-engineer/issues/729) [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+* **skill:** add red-team personas iterative discovery to ck:security ([4c74169](https://github.com/claudekit/claudekit-engineer/commit/4c74169246763c496fe127523d7dcd954097ba16)), closes [#730](https://github.com/claudekit/claudekit-engineer/issues/730) [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+* **skill:** refactor agent-browser to discovery stub ([52e979b](https://github.com/claudekit/claudekit-engineer/commit/52e979b6fda27f3a3855f02cbabc7413f6f54ea4))
+* **skill:** reframe ck:autoresearch as autoresearch family router ([f10f00a](https://github.com/claudekit/claudekit-engineer/commit/f10f00af563d3bf8a21e5863577fdaaa5aa2a61e))
+* **skills:** redirect SVG layout cross-refs to ck:tech-graph ([dd11748](https://github.com/claudekit/claudekit-engineer/commit/dd117484b227dc6487e28a90acdbffd941afd4c3))
+* **skill:** surface drift status in absorbing skills' SKILL.md ([9b01a04](https://github.com/claudekit/claudekit-engineer/commit/9b01a04870bfa1edb5a8ef2ceae4002fde2ce922)), closes [#728](https://github.com/claudekit/claudekit-engineer/issues/728) [#729](https://github.com/claudekit/claudekit-engineer/issues/729) [#730](https://github.com/claudekit/claudekit-engineer/issues/730) [#738](https://github.com/claudekit/claudekit-engineer/issues/738)
+* **skill:** surface verify-safety + credential-masking sections in ck:loop ([6cb5385](https://github.com/claudekit/claudekit-engineer/commit/6cb5385b35b934570fd089b709d80181f841e658)), closes [#727](https://github.com/claudekit/claudekit-engineer/issues/727)
+* **tech-graph:** vendor fireworks-tech-graph as ck:tech-graph skill ([44efa0f](https://github.com/claudekit/claudekit-engineer/commit/44efa0faab282ab6934e02858b75bc86d67406cb))
+
+
+### 🐞 Bug Fixes
+
+* **agents,skills:** standardize Gemini CLI error markers across all callers ([5fe33c7](https://github.com/claudekit/claudekit-engineer/commit/5fe33c760e22492d29c094b68370509c2a31c85a)), closes [#632](https://github.com/claudekit/claudekit-engineer/issues/632) [#709](https://github.com/claudekit/claudekit-engineer/issues/709)
+* align skill frontmatter parsing with ci ([46c0b9f](https://github.com/claudekit/claudekit-engineer/commit/46c0b9f4aa015a3857476807fc5f3e7b3566e84c))
+* **docs:** correct outdated Gemini model claims and skill references ([a2c3857](https://github.com/claudekit/claudekit-engineer/commit/a2c3857c76e0832c95dd3435fa7e04b4ab717828)), closes [#709](https://github.com/claudekit/claudekit-engineer/issues/709)
+* enforce advisory workflow boundaries ([965b3ff](https://github.com/claudekit/claudekit-engineer/commit/965b3ff456926b8ea438abcedaffbd9df6ecfa7e))
+* enforce skill listing budget policy ([e733bf4](https://github.com/claudekit/claudekit-engineer/commit/e733bf4d2c972ce442b21ba89d173c3e09ccc0ab))
+* enforce whole-plan consistency sweeps ([07086d7](https://github.com/claudekit/claudekit-engineer/commit/07086d74d50ecb81cd7d20febc45ab22f9d4f7e6))
+* **graphify:** avoid standalone installer path collision ([46959cc](https://github.com/claudekit/claudekit-engineer/commit/46959cc6b53d9148d4bfb8452977b2632a89df35))
+* harden Windows skills pip installs ([d014e29](https://github.com/claudekit/claudekit-engineer/commit/d014e29a16cfa1a314fc7ce7f6f05d4293f57cd1))
+* **hooks:** drop node-bin from argv forwarded to hook scripts ([ab5af75](https://github.com/claudekit/claudekit-engineer/commit/ab5af757b2d96c421dad629c5d3fc711492e6626))
+* **hooks:** stop SessionStart crash loop on Windows when node missing ([2eaebbd](https://github.com/claudekit/claudekit-engineer/commit/2eaebbd627d25e7db23414aef3a9513d8240c0cf)), closes [#750](https://github.com/claudekit/claudekit-engineer/issues/750)
+* keep beta releases on stable version train ([be04596](https://github.com/claudekit/claudekit-engineer/commit/be045964f042b07db45b626ff522c1189abfb1f0))
+* keep skills user-invocable ([8a3dc7a](https://github.com/claudekit/claudekit-engineer/commit/8a3dc7aa37b2bb62aca47d43c31e0012e3d30f51))
+* **maintainer:** close 3 red-team findings in skill description lint ([313d46c](https://github.com/claudekit/claudekit-engineer/commit/313d46c7c7ebfe860d4cf3799301e5002d353771)), closes [#735](https://github.com/claudekit/claudekit-engineer/issues/735)
+* **maintainer:** move audit-route-reframe principle out of user-shipped CLAUDE.md ([db9726d](https://github.com/claudekit/claudekit-engineer/commit/db9726db1de5902beb9718da1d927a7caf390718))
+* **manifest:** reverse skill path migrations for windsurf+cursor ([49f8f04](https://github.com/claudekit/claudekit-engineer/commit/49f8f0400476e0f2e037fc791b84e03bf114adb5)), closes [claudekit-cli#755](https://github.com/claudekit/claudekit-cli/issues/755) [claudekit-cli#754](https://github.com/claudekit/claudekit-cli/issues/754)
+* mark dev release issues in beta workflow ([309bb28](https://github.com/claudekit/claudekit-engineer/commit/309bb285abadfa2fe47abdcf04fca0733343a6b6))
+* **mcp-management:** correct npm install command in SKILL.md ([08144f3](https://github.com/claudekit/claudekit-engineer/commit/08144f33be9458a6657527aa9a12460e66ef5c70)), closes [#709](https://github.com/claudekit/claudekit-engineer/issues/709)
+* **mcp-management:** refresh Gemini CLI integration guide for v0.40 ([c14337b](https://github.com/claudekit/claudekit-engineer/commit/c14337b6137d67818e6a9181d829c63825afd589)), closes [#709](https://github.com/claudekit/claudekit-engineer/issues/709)
+* promote agent-browser as default browser interaction entry ([54f4dc9](https://github.com/claudekit/claudekit-engineer/commit/54f4dc93b2dfe4c178dcc87fb81e1f29523869ec)), closes [#77](https://github.com/claudekit/claudekit-engineer/issues/77) [#77](https://github.com/claudekit/claudekit-engineer/issues/77) [#713](https://github.com/claudekit/claudekit-engineer/issues/713) [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+* **schema,skills:** align Gemini model norms — drop 2.0-flash, rename pro preview ([480cfa2](https://github.com/claudekit/claudekit-engineer/commit/480cfa2181a65363640ada04f6329fa47cd8ae24)), closes [#709](https://github.com/claudekit/claudekit-engineer/issues/709)
+* sharpen Testing/Browser routing by paradigm ([03df080](https://github.com/claudekit/claudekit-engineer/commit/03df080b343e982b052e22fa971f565d85958719)), closes [#713](https://github.com/claudekit/claudekit-engineer/issues/713) [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+* surface dormant skills via routing rules ([dc56b80](https://github.com/claudekit/claudekit-engineer/commit/dc56b805470ed8b30efac64f981434516f0a996a)), closes [#713](https://github.com/claudekit/claudekit-engineer/issues/713) [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+* **use-mcp:** recover lost tools.json + add e2e smoke test ([#711](https://github.com/claudekit/claudekit-engineer/issues/711)) ([2a33a66](https://github.com/claudekit/claudekit-engineer/commit/2a33a664eb3527899c47c1fffd04b60d3ec2be2d))
+
+
+### ♻️ Code Refactoring
+
+* delete chrome-devtools skill ([539799c](https://github.com/claudekit/claudekit-engineer/commit/539799c3a29103b0b11787679c141fed3702a27e))
+* skill catalog cleanup — frontmatter polish + template-skill delete ([07b4a86](https://github.com/claudekit/claudekit-engineer/commit/07b4a8655b9cf094019d93f46b7fc9ab5db00dd8)), closes [#716](https://github.com/claudekit/claudekit-engineer/issues/716) [#717](https://github.com/claudekit/claudekit-engineer/issues/717) [#711](https://github.com/claudekit/claudekit-engineer/issues/711) [#718](https://github.com/claudekit/claudekit-engineer/issues/718)
+* **skills:** drop kanban + mcp-management duplicates ([#711](https://github.com/claudekit/claudekit-engineer/issues/711)) ([875ae9c](https://github.com/claudekit/claudekit-engineer/commit/875ae9c4fc0b2210ddc16874b34e857721328b5e))
+* **use-mcp:** absorb mcp-management scripts + references ([#711](https://github.com/claudekit/claudekit-engineer/issues/711)) ([a73e151](https://github.com/claudekit/claudekit-engineer/commit/a73e1510e9674530b75e42df95b5886e10833ab5)), closes [#712](https://github.com/claudekit/claudekit-engineer/issues/712)
+* **use-mcp:** final audit cleanup — sync catalog flags + client name ([d39d4c2](https://github.com/claudekit/claudekit-engineer/commit/d39d4c2a00759514323012bca0788b8ce01fe924)), closes [#712](https://github.com/claudekit/claudekit-engineer/issues/712) [#711](https://github.com/claudekit/claudekit-engineer/issues/711)
+
 ## [2.17.0](https://github.com/claudekit/claudekit-engineer/compare/v2.16.0...v2.17.0) (2026-04-28)
 
 

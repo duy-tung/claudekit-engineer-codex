@@ -9,7 +9,7 @@ argument-hint: "[task] [--fast|--hard|--deep|--parallel|--two] [--tdd|--no-tasks
 license: MIT
 metadata:
   author: claudekit
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Planning
@@ -307,6 +307,23 @@ Reports: Active plans → plan-specific path. Suggested → default path.
 | `/ck:plan archive` | `references/archive-workflow.md` | Archive plans + write journal entries |
 | `/ck:plan red-team` | `references/red-team-workflow.md` | Adversarial plan review with hostile reviewers |
 | `/ck:plan validate` | `references/validate-workflow.md` | Validate plan with critical questions interview |
+
+## Post-Plan Handoff (MANDATORY at session end)
+
+After `plan.md` + phase files are written and the user has reviewed/approved them, use `AskUserQuestion` to offer the appropriate next step. Recommend the option that best fits the plan's risk/scope; recommended option listed FIRST and labelled "(Recommended)".
+
+| Option | Recommend When | Why |
+|--------|----------------|-----|
+| `/ck:plan validate` | Plan is moderate-to-complex; user wants critical-questions interview before implementation | Cheapest gate — surfaces unspecified assumptions, missing acceptance criteria, hand-wavy phases |
+| `/ck:plan red-team` | Plan touches security, auth, payments, data integrity, public APIs, infra, or has high blast radius | Adversarial reviewers stress-test the plan for failure modes, attack vectors, and missing edge cases |
+| `/ck:cook <plan-path>` | Plan is small / well-understood / low-risk and user wants to start implementation | Skip extra gates; go straight to implementation |
+| End session | User wants to review/share plan before deciding | Stop with plan path returned |
+
+**Skip this step ONLY when:**
+- The current invocation IS already a subcommand (`validate`, `red-team`, `archive`) — those have their own terminal handoff.
+- User explicitly said "just plan, don't suggest next step".
+
+After selection: invoke the chosen command with the plan path as argument for continuity.
 
 ## Quality Standards
 
