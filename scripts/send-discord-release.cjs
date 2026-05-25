@@ -10,28 +10,16 @@
  * Env:
  *   DISCORD_WEBHOOK_URL: Discord webhook URL (read from env, not CLI args)
  *
- * NOTE: Version gate relies on @semantic-release/npm updating package.json.
- * If the release config changes to skip that step, the workflow gate will
- * silently fail to detect new releases.
+ * Production notifications are gated on the release tag created by
+ * semantic-release pointing at the workflow HEAD. This prevents a successful
+ * no-op release run from reposting the latest CHANGELOG entry.
  */
 
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { URL } = require('url');
-
-const releaseType = process.argv[2];
-const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-
-if (!['production', 'beta'].includes(releaseType)) {
-  console.error(`[X] Invalid release type: "${releaseType}". Must be 'production' or 'beta'`);
-  process.exit(1);
-}
-
-if (!webhookUrl) {
-  console.error('[X] DISCORD_WEBHOOK_URL env var not set');
-  process.exit(1);
-}
+const { execFileSync } = require('child_process');
 
 // Read CHANGELOG.md and extract the latest release notes
 function extractLatestRelease() {
@@ -88,7 +76,7 @@ function extractLatestRelease() {
  * Section names from CHANGELOG may already include emojis (e.g., "🚀 Features")
  * from .releaserc presetConfig — detect and avoid double-prepending.
  */
-function createEmbed(release) {
+function createEmbed(release, releaseType) {
   const isBeta = releaseType === 'beta';
   const color = isBeta ? 0xF59E0B : 0x10B981;
   const title = isBeta ? `🧪 Beta Release ${release.version}` : `🚀 Release ${release.version}`;
@@ -146,7 +134,7 @@ function createEmbed(release) {
 }
 
 // Send to Discord
-function sendToDiscord(embed) {
+function sendToDiscord(embed, releaseType, webhookUrl) {
   const payload = {
     username: releaseType === 'beta' ? 'ClaudeKit Beta Release Bot' : 'ClaudeKit Release Bot',
     avatar_url: 'https://github.com/claudekit.png',
@@ -199,8 +187,6 @@ function extractBetaRelease() {
   const pkgPath = path.resolve(__dirname, '../package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   const version = pkg.version;
-
-  const { execFileSync } = require('child_process');
 
   // Find previous tag to scope commits (avoid repeating old entries).
   // In CI, the current release tag is already pushed before this script runs.
@@ -270,21 +256,74 @@ function extractBetaRelease() {
   return { version, date: new Date().toISOString().split('T')[0], sections };
 }
 
-// Main execution
-try {
-  const isBeta = releaseType === 'beta';
-  const release = isBeta ? extractBetaRelease() : extractLatestRelease();
-  console.log(`[i] Preparing ${releaseType} release notification for v${release.version}`);
+function getHeadTags(execFile = execFileSync) {
+  try {
+    return execFile('git', ['tag', '--points-at', 'HEAD'], { encoding: 'utf8' })
+      .split(/\r?\n/)
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
 
-  const sectionCount = Object.values(release.sections).flat().length;
-  if (sectionCount === 0) {
-    console.log('[i] No changelog items found — skipping Discord notification');
-    process.exit(0);
+function hasCurrentStableReleaseTag(release, execFile = execFileSync) {
+  const version = String(release && release.version ? release.version : '').trim();
+  if (!/^\d+\.\d+\.\d+$/.test(version)) {
+    return false;
   }
 
-  const embed = createEmbed(release);
-  sendToDiscord(embed);
-} catch (error) {
-  console.error('[X] Error:', error);
-  process.exit(1);
+  return getHeadTags(execFile).includes(`v${version}`);
 }
+
+function main() {
+  const releaseType = process.argv[2];
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+
+  if (!['production', 'beta'].includes(releaseType)) {
+    console.error(`[X] Invalid release type: "${releaseType}". Must be 'production' or 'beta'`);
+    process.exit(1);
+  }
+
+  try {
+    const isBeta = releaseType === 'beta';
+    const release = isBeta ? extractBetaRelease() : extractLatestRelease();
+    console.log(`[i] Preparing ${releaseType} release notification for v${release.version}`);
+
+    if (!isBeta && !hasCurrentStableReleaseTag(release)) {
+      console.log(
+        `[i] Current HEAD is not tagged v${release.version} — skipping stale production notification`,
+      );
+      process.exit(0);
+    }
+
+    const sectionCount = Object.values(release.sections).flat().length;
+    if (sectionCount === 0) {
+      console.log('[i] No changelog items found — skipping Discord notification');
+      process.exit(0);
+    }
+
+    if (!webhookUrl) {
+      console.error('[X] DISCORD_WEBHOOK_URL env var not set');
+      process.exit(1);
+    }
+
+    const embed = createEmbed(release, releaseType);
+    sendToDiscord(embed, releaseType, webhookUrl);
+  } catch (error) {
+    console.error('[X] Error:', error);
+    process.exit(1);
+  }
+}
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  createEmbed,
+  extractBetaRelease,
+  extractLatestRelease,
+  getHeadTags,
+  hasCurrentStableReleaseTag,
+};
