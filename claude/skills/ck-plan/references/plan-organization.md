@@ -74,15 +74,21 @@ After determining phases from research/design:
      [--issue {N}]
    ```
 
-2. **Fill content sections** in plan.md via Edit tool:
+2. **Read generated files before writing content:**
+   ```bash
+   find {plan-dir} -maxdepth 1 -type f \( -name 'plan.md' -o -name 'phase-*.md' \) -print | sort
+   ```
+   Then read `plan.md` and every listed `phase-*.md` stub before any long Write/Edit. These files already exist after scaffolding; Claude Code rejects Write calls to existing files that were not read first. Reading all stubs upfront prevents late failures after a full phase body has already spent tokens.
+
+3. **Fill content sections** in plan.md via Edit tool:
    - `## Overview` — brief description
    - `## Dependencies` — cross-plan dependencies
 
-3. **Fill each phase-XX.md** with:
+4. **Fill each phase-XX.md** with:
    - Architecture, implementation steps, success criteria
    - Requirements, risk assessment, security considerations
 
-4. **NEVER edit the Phases table directly** — it's CLI-owned.
+5. **NEVER edit the Phases table directly** — it's CLI-owned.
    Use `ck plan check/uncheck/add-phase` for structural changes.
 
 **MANDATORY:** All plan creation goes through CLI. The `ck` CLI is required

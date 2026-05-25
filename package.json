@@ -1,10 +1,10 @@
 {
   "name": "claudekit-engineer",
-  "version": "2.19.0",
+  "version": "2.19.1-beta.18",
   "description": "A comprehensive boilerplate template for building professional software projects with Claude Code and ClaudeKit workflows.",
   "main": "index.js",
   "scripts": {
-    "test": "node --test scripts/release-bookkeeping.test.cjs scripts/install-ps1-safety.test.cjs",
+    "test": "node --test scripts/release-bookkeeping.test.cjs scripts/install-ps1-safety.test.cjs scripts/check-metadata-deletions.test.cjs scripts/hook-require-integrity.test.cjs claude/hooks/__tests__/descriptive-name.test.cjs claude/hooks/__tests__/workflow-artifact-gate.test.cjs claude/skills/watzup/scripts/watzup-scan.test.cjs && python3 claude/skills/chrome-profile/scripts/test_chrome_profile.py",
     "lint": "echo \"Linting passed\"",
     "semantic-release": "semantic-release",
     "prepare": "husky install || true",
@@ -38,7 +38,6 @@
   "files": [
     ".claude/",
     "plans/",
-    "CLAUDE.md",
     "README.md",
     "CHANGELOG.md",
     "LICENSE",

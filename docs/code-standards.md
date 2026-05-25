@@ -44,6 +44,7 @@ project-root/
 │   │       ├── SKILL.md      # Skill definition
 │   │       └── references/   # Supporting materials
 │   └── rules/                # Development rules and protocols
+│       └── CLAUDE.md         # Top-level ClaudeKit Engineer guidance
 ├── .github/                   # GitHub-specific files
 │   └── workflows/            # CI/CD workflows
 ├── docs/                      # Project documentation
@@ -56,7 +57,6 @@ project-root/
 ├── src/                       # Source code (if applicable)
 ├── tests/                     # Test suites (if applicable)
 ├── .gitignore                # Git ignore patterns
-├── CLAUDE.md                 # Claude-specific instructions
 ├── README.md                 # Project overview
 ├── package.json              # Node.js dependencies
 └── LICENSE                   # License file
@@ -698,7 +698,8 @@ Mistakes to avoid
 **File Organization**:
 ```
 .claude/hooks/
-└── scout-block.cjs       # Pure Node.js hook (cross-platform)
+├── scout-block.cjs              # Pure Node.js hook (cross-platform)
+└── workflow-artifact-gate.cjs   # Deterministic review artifact validator
 ```
 
 **Implementation Requirements**:
@@ -732,6 +733,16 @@ if (!data.tool_input || typeof data.tool_input.command !== 'string') {
 - Validate error handling (invalid JSON, empty input, missing fields)
 - Cross-platform test coverage
 - Clear pass/fail indicators
+- Add hook tests to `npm test` or document the exact release gate command
+- Never print raw secret-like artifact content; report only field paths
+
+### Workflow Artifact Gate Standards
+
+- Keep validator modules dependency-free and CommonJS.
+- Resolve artifact directories in this order: explicit flag, env var, active pointer, unambiguous fallback.
+- Treat score fields as advisory. Gate on structured decisions and verification proof.
+- Soft stages may warn on missing proof; hard stages block on malformed artifacts, failed policy, or high-risk auto without approval.
+- Crash handling remains fail-open, but intentional policy blocks use exit code 2.
 
 ## Configuration File Standards
 

@@ -80,7 +80,8 @@ User wants to...
 User wants to...
 ├── Build a new MCP server                       → /ck:mcp-builder
 ├── Convert existing code into CLI/MCP server    → /ck:agentize
-└── Discover and execute MCP tools               → /ck:use-mcp
+├── Discover and execute MCP tools               → /ck:use-mcp
+└── Target a real Chrome profile through browser MCP → /ck:chrome-profile
 ```
 
 ## Testing / Browser
@@ -89,7 +90,8 @@ User wants to...
 User wants to...
 ├── Run test suites, coverage reports, TDD          → /ck:test
 ├── Test strategy + Playwright/Vitest/k6 runner     → /ck:web-testing
-└── Drive a live browser                            → /ck:agent-browser
+├── Drive the user's real Chrome profile/cookies    → /ck:chrome-profile
+└── Browser automation/testing without real user cookies → /ck:agent-browser
 ```
 
 ## Media

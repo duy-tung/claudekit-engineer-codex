@@ -142,7 +142,6 @@ function stageRuntimeClaudeDir(sourceClaudeDir, runtimeClaudeDir, runtimeDirLabe
       '.gitignore',
       '.repomixignore',
       '.mcp.json',
-      'CLAUDE.md',
       'release-manifest.json',
     ];
 

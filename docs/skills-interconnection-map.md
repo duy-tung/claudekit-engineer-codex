@@ -14,9 +14,9 @@ cook (orchestrator)
 │         → scout (parallel agents)
 │         → mermaidjs-v11
 ├── scout → parallel Explore subagents
-├── debug → docs-seeker, repomix, agent-browser, problem-solving, sequential-thinking
+├── debug → docs-seeker, repomix, agent-browser, chrome-profile, problem-solving, sequential-thinking
 ├── fix → debug, code-review, problem-solving, sequential-thinking, brainstorm, context-engineering
-├── test → agent-browser, web-testing, ai-multimodal, debug, sequential-thinking
+├── test → agent-browser, chrome-profile, web-testing, ai-multimodal, debug, sequential-thinking
 ├── code-review → scout (edge-case scouting)
 ├── ui-ux-pro-max
 ├── project-management → plans-kanban
@@ -48,9 +48,9 @@ copywriting → ai-multimodal
 |-------|------|----------|-------|
 | **plan** | Architecture & planning | cook, team, bootstrap, brainstorm | research, scout, mermaidjs-v11 |
 | **scout** | Fast codebase exploration | cook, plan, brainstorm, code-review, fix | parallel Explore agents |
-| **debug** | Root cause investigation | cook, fix, test | docs-seeker, repomix, agent-browser, problem-solving, sequential-thinking |
+| **debug** | Root cause investigation | cook, fix, test | docs-seeker, repomix, agent-browser, chrome-profile, problem-solving, sequential-thinking |
 | **fix** | Bug resolution | cook, team | debug, code-review, problem-solving, sequential-thinking, brainstorm, context-engineering |
-| **test** | Validation & coverage | cook, team | agent-browser, web-testing, ai-multimodal, debug, sequential-thinking |
+| **test** | Validation & coverage | cook, team | agent-browser, chrome-profile, web-testing, ai-multimodal, debug, sequential-thinking |
 | **code-review** | Quality assurance | cook, fix, team | scout |
 | **brainstorm** | Solution ideation | fix | scout, docs-seeker, ai-multimodal, sequential-thinking, plan, research |
 
@@ -64,7 +64,8 @@ Pure capability providers — referenced by hub skills but don't call other skil
 | **sequential-thinking** | Step-by-step analysis | brainstorm, fix, test, debug |
 | **problem-solving** | Structured problem decomposition | debug, fix |
 | **ai-multimodal** | Image/video/audio analysis | frontend-design, test, copywriting, brainstorm |
-| **agent-browser** | Live browser automation | debug, test |
+| **agent-browser** | Browser testing and automation without real user cookies | debug, test |
+| **chrome-profile** | Real Chrome profile browser automation with cookies/login state | debug, test |
 | **repomix** | Repository packing | debug, gkg |
 | **context-engineering** | Token management | git, fix |
 | **mermaidjs-v11** | Diagram generation | plan |
@@ -74,7 +75,7 @@ Pure capability providers — referenced by hub skills but don't call other skil
 ### Layer 4 — Standalone Skills
 Domain-specific tools operating independently.
 
-`agent-browser` · `ai-artist` · `backend-development` · `better-auth` · `databases` · `devops` · `frontend-development` · `google-adk-python` · `markdown-novel-viewer` · `mcp-builder` · `mintlify` · `mobile-development` · `payment-integration` · `plans-kanban` · `react-best-practices` · `remotion` · `shader` · `shopify` · `tanstack` · `template-skill` · `threejs` · `ui-styling` · `web-design-guidelines` · `web-frameworks` · `web-testing`
+`agent-browser` · `chrome-profile` · `ai-artist` · `backend-development` · `better-auth` · `databases` · `devops` · `frontend-development` · `google-adk-python` · `markdown-novel-viewer` · `mcp-builder` · `mintlify` · `mobile-development` · `payment-integration` · `plans-kanban` · `react-best-practices` · `remotion` · `shader` · `shopify` · `tanstack` · `template-skill` · `threejs` · `ui-styling` · `web-design-guidelines` · `web-frameworks` · `web-testing`
 
 ## Hub Connectivity (most referenced)
 

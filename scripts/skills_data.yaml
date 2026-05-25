@@ -55,7 +55,7 @@
   has_references: true
   has_scripts: false
   name: code-review
-  path: code-review/SKILL.md
+  path: ck-code-review/SKILL.md
 - category: database
   description: Work with MongoDB (document database, BSON documents, aggregation pipelines,
     Atlas cloud) and PostgreSQL (relational database, SQL queries, psql CLI, pgAdmin).

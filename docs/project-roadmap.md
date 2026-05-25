@@ -1,12 +1,14 @@
 # ClaudeKit Engineer - Project Roadmap
 
-**Last Updated:** 2025-12-28
-**Current Version:** 2.2.0-beta.4
+**Last Updated:** 2026-05-14
+**Current Version:** 2.18.1-beta.4
 **Repository:** https://github.com/claudekit/claudekit-engineer
 
 ## Executive Summary
 
-ClaudeKit Engineer is an AI-powered development orchestration framework enabling developers to build professional software faster through intelligent agent collaboration, automated workflows, and comprehensive quality management. The project has successfully completed core foundation phases and is advancing cross-platform compatibility and advanced features.
+ClaudeKit Engineer is an AI-powered development orchestration framework enabling developers to build professional software faster through intelligent agent collaboration, automated workflows, and comprehensive quality management. The project has completed Phase 1 (foundation) and Phase 2 (cross-platform + commands→skills migration) and is now iterating on skill discoverability, hook safety, and Windows parity.
+
+> Note on architecture: as of the v2.17 release, the original `/ck:*` slash-command layer has been fully migrated to user-invocable **skills** under `claude/skills/`. References to "slash commands" in older sections of this roadmap describe routing entry points that are now skill-backed.
 
 ---
 
@@ -20,20 +22,20 @@ Established core agent orchestration framework, slash command system, automated 
 
 **Key Achievements:**
 - Multi-agent orchestration engine
-- 50+ slash commands (plan, cook, test, ask, bootstrap, debug, fix:*)
+- Initial slash-command surface (plan, cook, test, ask, bootstrap, debug, fix:*) — since migrated to skills (Phase 2)
 - Semantic versioning & automated releases
-- 20+ skills library (auth, cloud, databases, design, etc.)
+- Foundational skills library (auth, cloud, databases, design, etc.) — now grown to ~90 shipped skills
 - Documentation system with repomix integration
 - Scout Block Hook for cross-platform performance optimization
 - Git workflows with conventional commits enforcement
 
 ---
 
-### Phase 2: Cross-Platform Enhancement (NEAR COMPLETE)
-**Status:** 🔄 95% Complete | **Completion Target:** Jan 2026
-**Progress:** 95%+ (Preview Dashboard complete, skills expansion pending)
+### Phase 2: Cross-Platform Enhancement + Commands→Skills Migration (COMPLETE)
+**Status:** ✅ Complete | **Completed:** v2.18.x series (Q1–Q2 2026)
+**Progress:** 100%
 
-Expanding platform support and improving developer experience across Windows, macOS, and Linux environments. Recent focus on Preview Dashboard completion and hook optimization.
+Expanded platform support across Windows, macOS, and Linux. Migrated the slash-command system to skills (user-invocable, frontmatter-driven, CI-validated routing). Hardened hooks (scout-first gates, Windows crash-loop fixes, descriptive-name enforcement). Preview Dashboard delivered.
 
 #### Sub-Task: Windows Statusline Support
 **Status:** ✅ COMPLETE
@@ -180,15 +182,17 @@ Enterprise-grade features and deployment options.
 |-----------|--------|----------|----------|
 | Windows Statusline Support | ✅ Complete | 2025-11-11 | 100% |
 | Preview Dashboard (6 Phases) | ✅ Complete | 2025-12-11 | 100% |
-| Additional Skills Library Expansion | 📋 Pending | 2025-12-15 | 0% |
-| Enhanced Error Handling | 📋 Pending | 2025-12-31 | 0% |
+| Additional Skills Library Expansion | ✅ Complete | — | 100% (~90 skills shipped) |
+| Enhanced Error Handling | ✅ Complete | — | 100% (scout-first + hook safety gates) |
 
-### Q1 2026 Milestones
+### Q1–Q2 2026 Milestones
 | Milestone | Status | Due Date | Progress |
 |-----------|--------|----------|----------|
-| Visual Workflow Builder | 📋 Planned | 2026-03-31 | 0% |
-| Custom Agent Creator UI | 📋 Planned | 2026-03-31 | 0% |
-| Cloud Platform Integrations (GCP, AWS, Azure) | 📋 Planned | 2026-03-31 | 0% |
+| Commands → Skills migration | ✅ Complete | v2.17 | 100% |
+| Skill description/routing CI gates | ✅ Complete | v2.18 | 100% |
+| Windows hook crash-loop fixes | ✅ Complete | v2.18.x | 100% |
+| Visual Workflow Builder | 📋 Planned | TBD | 0% |
+| Custom Agent Creator UI | 📋 Planned | TBD | 0% |
 
 ---
 
@@ -225,12 +229,12 @@ Enterprise-grade features and deployment options.
 
 ### Core Features (COMPLETE)
 - ✅ Multi-agent orchestration system
-- ✅ 50+ slash commands
-- ✅ Comprehensive skills library (20+)
-- ✅ Automated release management
+- ✅ Skill-based routing (post-v2.17 migration replaces the original slash-command surface)
+- ✅ Comprehensive skills library (~90 shipped skills)
+- ✅ Automated release management (semantic-release on `main`, beta on `dev`)
 - ✅ Development workflow automation
 - ✅ Documentation system with repomix
-- ✅ Cross-platform performance optimization
+- ✅ Cross-platform performance optimization (scout-first gates, Windows hook safety)
 - ✅ Git workflow automation
 - ✅ Comprehensive error handling
 
@@ -387,20 +391,19 @@ Enterprise-grade features and deployment options.
 
 ## Changelog
 
-### Version 2.2.0-beta.4 (Current - 2025-12-28)
+### Version 2.18.1-beta.4 (Current — 2026-05-14)
 
-#### Documentation Updates
-- **Version Alignment**: Updated all docs to v2.2.0-beta.4
-- **Command Inventory**: Updated from 50+ to 75+ slash commands
-- **Skills Count**: Updated from 20+ to 38 skills
-- **Agent Count**: Explicitly documented 17+ agents
-- **Architecture**: Enhanced component descriptions
+For per-release detail, see [`CHANGELOG.md`](../CHANGELOG.md). Headline themes since v2.2:
 
-#### Key Metrics
-- 75+ slash commands across 14 categories
-- 38 skills (Phase 1 organized groups + individual skills)
-- 17+ specialized agents
-- 4 core hooks (session-init, dev-rules-reminder, subagent-init, scout-block)
+- **Commands → Skills migration** (v2.17): the `/ck:*` slash-command surface is now skill-routed; `metadata.deletions[]` cleans stale command files on user upgrade
+- **Skill CI gates** (v2.18): `check-skill-cross-refs.js`, `check-skill-descriptions.js`, `check-skill-routing.js` are blocking on every PR
+- **Hook safety** (v2.18.x): Windows SessionStart crash-loop fixed; scout-first/no-side-effects gates enforced; generated-context hooks disabled by default
+- **Review harness** (next): `ck:fix`/`ck:cook` move from score-only approval to artifact-gated review with high-risk auto stops
+- **Skills library**: ~90 shipped skills, all carrying `user-invocable: true`
+
+#### Current Metrics (approximate)
+- ~90 shipped skills under `claude/skills/`
+- Active hooks: 4 wired by default (~20 available in the kit, opt-in)
 - 5 MCP integrations (context7, memory, human-mcp, chrome-devtools, sequential-thinking)
 
 ---
@@ -529,5 +532,5 @@ Enterprise-grade features and deployment options.
 ---
 
 **Maintained By:** ClaudeKit Engineer Team
-**Last Review:** 2025-12-28
-**Next Review Target:** 2026-01-31
+**Last Review:** 2026-05-14
+**Next Review Target:** 2026-08-14

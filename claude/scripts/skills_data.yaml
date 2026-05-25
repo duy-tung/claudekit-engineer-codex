@@ -1,6 +1,6 @@
 - name: "agent-browser"
   path: "agent-browser/SKILL.md"
-  description: "Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent."
+  description: "Automate browsers and apps with agent-browser. Use for testing, screenshots, forms, scraping, Browserbase/cloud browsers, and Electron when real Chrome cookies are not required."
   category: "dev-tools"
   has_scripts: false
   has_references: true
@@ -70,6 +70,13 @@
   has_references: false
   argument_hint: "[topic or problem]"
   keywords: ["ideation", "tradeoffs", "debate", "decisions"]
+- name: "chrome-profile"
+  path: "chrome-profile/SKILL.md"
+  description: "Target a real Google Chrome profile for browser automation through Chrome DevTools MCP or claude-in-chrome. Provides a chrome-profile CLI, profile discovery, bridge diagnostics, setup playbooks, and the URL-anchor workflow for selecting the correct profile tab."
+  category: "dev-tools"
+  has_scripts: true
+  has_references: true
+  keywords: ["chrome", "browser", "profile", "mcp", "devtools", "automation", "cookies"]
 - name: "ck-autoresearch"
   path: "ck-autoresearch/SKILL.md"
   description: "Autoresearch is the upstream meta-framework (Udit Goenka, MIT) for autonomous goal-directed iteration with safety guardrails. Locally split into 4 specialized skills. Start here to learn the pattern, then route to the right specialized skill."
@@ -78,6 +85,14 @@
   has_references: false
   keywords: ["autoresearch", "autonomous", "iteration", "karpathy", "framework", "lineage", "router", "umbrella"]
   related: ["ck-loop", "ck-predict", "ck-scenario", "ck-security"]
+- name: "ck-code-review"
+  path: "ck-code-review/SKILL.md"
+  description: "Review code quality with evidence-based rigor. Supports input modes: pending changes, PR number, commit hash, and codebase scan. Focuses on bugs, regressions, maintainability, reliability, and verification gaps."
+  category: "utilities"
+  has_scripts: false
+  has_references: true
+  argument_hint: "[#PR | COMMIT | --pending | codebase [parallel]]"
+  keywords: ["review", "quality", "verification", "reliability"]
 - name: "ck-debug"
   path: "ck-debug/SKILL.md"
   description: "Debug systematically with root cause analysis before fixes. Use for bugs, test failures, unexpected behavior, performance issues, call stack tracing, multi-layer validation, log analysis, CI/CD failures, database diagnostics, system investigation."
@@ -136,14 +151,6 @@
   has_references: true
   argument_hint: "<scope glob or 'full'> [--fix] [--red-team] [--iterations N]"
   keywords: ["security", "STRIDE", "OWASP", "audit", "red-team", "penetration-testing", "vulnerability-discovery"]
-- name: "code-review"
-  path: "code-review/SKILL.md"
-  description: "Review code quality with adversarial rigor. Supports input modes: pending changes, PR number, commit hash, codebase scan. Always-on red-team analysis finds security holes, false assumptions, and failure modes."
-  category: "utilities"
-  has_scripts: false
-  has_references: true
-  argument_hint: "[#PR | COMMIT | --pending | codebase [parallel]]"
-  keywords: ["review", "quality", "red-team", "security"]
 - name: "coding-level"
   path: "coding-level/SKILL.md"
   description: "Set coding experience level for tailored output. Use for adjusting explanation depth, code complexity, and response format to user expertise."
@@ -611,11 +618,11 @@
   keywords: ["MCP", "tools", "execute", "discovery", "gemini", "mcp-client"]
 - name: "watzup"
   path: "watzup/SKILL.md"
-  description: "Generate session hand-off summaries from recent changes — what shipped, what's in flight, what's next. Use at end-of-day, before context handoff to a teammate or new session, or to produce a quick progress-tracking report on any active project."
+  description: "Generate short handoff reports from Git branches, remote refs, worktrees, and unfinished plans. Use when the user asks what's in flight, wants progress/next steps, is in a fresh worktree or detached checkout, or needs end-of-session status."
   category: "utilities"
-  has_scripts: false
+  has_scripts: true
   has_references: false
-  keywords: ["session", "wrap-up", "changes", "review"]
+  keywords: ["session", "wrap-up", "changes", "review", "worktree", "branches", "plans"]
 - name: "web-design-guidelines"
   path: "web-design-guidelines/SKILL.md"
   description: "Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\"."

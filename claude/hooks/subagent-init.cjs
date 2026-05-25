@@ -184,7 +184,9 @@ async function main() {
     // Naming templates (computed directly for reliable injection)
     lines.push(``);
     lines.push(`## Naming`);
-    lines.push(`- Report: ${path.join(reportsPath, `${agentType}-${namePattern}.md`)}`);
+    lines.push(`- Report: ${path.join(reportsPath, `${agentType}-${namePattern}-report.md`)}`);
+    lines.push(`- For workflow reports, insert a descriptive purpose before -report, e.g. ${agentType}-${namePattern}-red-team-plan-review-report.md`);
+    lines.push(`- Avoid generic report names like red-team-review.md, review.md, report.md, or notes.md`);
     lines.push(`- Plan dir: ${path.join(plansPath, namePattern)}/`);
 
     // Plan CLI commands for plan-aware agents (Issue #540)

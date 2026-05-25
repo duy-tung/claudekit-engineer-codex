@@ -18,6 +18,8 @@
 
 ### 🚀 Features
 
+* **hooks:** add opt-in workflow artifact gate for fix/cook review validation
+* **skills:** gate fix/cook auto approval on review artifacts instead of score-only review
 * **docs:** cross-reference SVG layout rules for system-architecture diagrams ([804c099](https://github.com/claudekit/claudekit-engineer/commit/804c099fb73a987020fc7a4aeb30eab370b502d5))
 * **excalidraw:** cross-reference SVG layout best-practices ([ac509c1](https://github.com/claudekit/claudekit-engineer/commit/ac509c1d9b0bb4d0e4f3e9b6de9e2c1f8326cfc2))
 * harden skill listing budget ([ef0a809](https://github.com/claudekit/claudekit-engineer/commit/ef0a8095741c30e529358701c048189a3b979474))

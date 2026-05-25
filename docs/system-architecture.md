@@ -66,7 +66,7 @@ ClaudeKit Engineer implements a multi-agent AI orchestration architecture where 
 - `PreToolUse`: `scout-block`, `privacy-block`, `descriptive-name`
 - `UserPromptSubmit`: `simplify-gate`
 
-Generated context hooks (`session-init`, `session-state`, `subagent-init`, `team-context-inject`, `dev-rules-reminder`, `plan-format-kanban`, `cook-after-plan-reminder`, `usage-context-awareness`, `usage-quota-cache-refresh`) are not registered by default. Upgrade metadata prunes those stale registrations and files from existing installs.
+Generated context hooks (`session-init`, `session-state`, `subagent-init`, `team-context-inject`, `dev-rules-reminder`, `plan-format-kanban`, `cook-after-plan-reminder`, `usage-context-awareness`, `usage-quota-cache-refresh`) are not registered by default in new installs. The hook sources stay shipped for deliberate opt-in; maintenance cleanup must remove stale registrations without deleting those source files.
 
 **Log Contract**:
 - One JSON object per line
@@ -178,7 +178,7 @@ Issues, blockers, or questions
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation workflows
 - `ck-plan/` - Planning workflow variants
-- `code-review/` - Code review workflows
+- `ck-code-review/` - Code review workflows
 - `test/` - Testing workflows
 
 #### 3.2 Command Workflow Pattern
@@ -314,13 +314,16 @@ Planner incorporates into plan
 **Purpose**: Intercept and control Claude Code operations for performance, context management, and security
 
 **Hook Architecture**:
-All hooks located in `.claude/hooks/` with consistent patterns - fail-safe exit code 0 (non-blocking)
+All hooks live in `.claude/hooks/`. Crash paths fail open so broken hook code does not strand the user. Policy gates may intentionally return exit code 2 when a configured rule blocks unsafe work.
 
 **Default Hooks**:
 - `privacy-block.cjs` - Sensitive file access control
 - `descriptive-name.cjs` - Naming conventions enforcement
 - `scout-block.cjs` - Blocks heavy directory access
 - `simplify-gate.cjs` - Stateless prompt-time simplification gate
+
+**Opt-In Policy Hooks**:
+- `workflow-artifact-gate.cjs` - Validates `ck:fix`/`ck:cook` review artifacts before finalize/commit/ship-like actions
 
 **1. Scout-Block Hook** (`scout-block.cjs` - Cross-Platform)
 - **Trigger**: Before bash/command execution
@@ -354,27 +357,50 @@ The following hooks previously injected session state, generated prompt context,
 - `usage-context-awareness.cjs`
 - `usage-quota-cache-refresh.cjs`
 
+**3. Workflow Artifact Gate (Opt-In)**
+
+`workflow-artifact-gate.cjs` validates deterministic JSON artifacts written by
+`ck:fix` and `ck:cook`:
+
+- `context-snippets.json`
+- `risk-gate.json`
+- `verification.json`
+- `review-decision.json`
+- `adversarial-validation.json`
+
+Manual validation:
+
+```bash
+node .claude/hooks/workflow-artifact-gate.cjs --stage finalize --artifact-dir <dir>
+```
+
+Locator order: `--artifact-dir`, `CK_WORKFLOW_ARTIFACT_DIR`,
+`.claude/workflow-artifacts.json`, then unambiguous recent harness fallback.
+Soft stages (`finalize`, `commit`) warn for missing proof. Hard stages (`ship`,
+`push`, `pr`, `deploy`) block when artifacts fail. Secret-like artifact content
+is reported by field path only.
+
 **Default Hook Configuration** (`.claude/settings.json`):
 ```json
 {
   "hooks": {
     "UserPromptSubmit": [{
       "hooks": [
-        {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/simplify-gate.cjs"}
+        {"type": "command", "command": "node \".claude/hooks/simplify-gate.cjs\""}
       ]
     }],
     "PreToolUse": [
       {
         "matcher": "Write",
         "hooks": [
-          {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/descriptive-name.cjs"}
+          {"type": "command", "command": "node \".claude/hooks/descriptive-name.cjs\""}
         ]
       },
       {
         "matcher": "Bash|Glob|Grep|Read|Edit|Write",
         "hooks": [
-          {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/scout-block.cjs"},
-          {"type": "command", "command": "bash .claude/hooks/node-hook-runner.sh .claude/hooks/privacy-block.cjs"}
+          {"type": "command", "command": "node \".claude/hooks/scout-block.cjs\""},
+          {"type": "command", "command": "node \".claude/hooks/privacy-block.cjs\""}
         ]
       }
     ]
@@ -383,7 +409,8 @@ The following hooks previously injected session state, generated prompt context,
 ```
 
 **Hook Features Summary**:
-- Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation
+- Crash Fail-Open: unexpected hook crashes exit 0 for graceful degradation
+- Policy Blocks: configured gates such as scout-block and workflow-artifact-gate may exit 2 intentionally
 - Performance: Optimized token consumption
 - Cross-Platform: Windows (PowerShell) & Unix (Bash) support
 - Context Cascade: Environment variables flow from session to agents

@@ -21,7 +21,7 @@ const claudeDir = path.join(repoRoot, 'claude');
 
 // Claude Code built-in commands that must not be used as skill names
 const BUILTIN_COMMANDS = new Set([
-  'help', 'clear', 'debug', 'plan', 'compact', 'review', 'search',
+  'help', 'clear', 'debug', 'plan', 'code-review', 'compact', 'review', 'search',
   'init', 'login', 'logout', 'doctor', 'mcp', 'memory', 'model',
   'permissions', 'status', 'config', 'cost', 'terminal-setup',
   'listen', 'bug', 'ide',
@@ -29,9 +29,10 @@ const BUILTIN_COMMANDS = new Set([
 
 // Skills that intentionally use ck-prefixed directory names to avoid built-in
 // collision (e.g. ck-debug, ck-plan). Their SKILL.md name: field still reads
-// "ck:debug" / "ck:plan" which normalizes to "debug" / "plan", but the actual
-// slash-command invocation is /ck:ck-debug, /ck:ck-plan — no real collision.
-const ALLOWED_BUILTIN_OVERLAPS = new Set(['ck-debug', 'ck-plan']);
+// "ck:debug" / "ck:plan" / "ck:code-review" which normalizes to the built-in
+// command name, but the actual skill directory is ck-prefixed so there is no
+// filesystem-level command collision.
+const ALLOWED_BUILTIN_OVERLAPS = new Set(['ck-code-review', 'ck-debug', 'ck-plan']);
 
 // Regex to find /ck:<name> references in markdown
 const CK_REF_RE = /\/ck:([a-z][a-z0-9-]*)/g;

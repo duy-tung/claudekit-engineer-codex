@@ -2,9 +2,9 @@
 
 Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
-**Last Updated**: 2026-05-07
+**Last Updated**: 2026-05-25
 
-**Total Skills**: 83
+**Total Skills**: 84
 
 ## Categories
 
@@ -159,7 +159,7 @@ Design schemas, write queries for MongoDB and PostgreSQL. Use for database desig
 
 ### 📚 `agent-browser`
 
-Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent.
+Automate browsers and apps with agent-browser. Use for testing, screenshots, forms, scraping, Browserbase/cloud browsers, and Electron when real Chrome cookies are not required.
 
 **Location**: `.claude/skills/agent-browser/SKILL.md`
 
@@ -168,6 +168,12 @@ Browser and desktop automation through the agent-browser CLI. Use for long auton
 Convert a codebase, feature, or module into an AI-agent-friendly CLI and/or MCP server. Covers npm packaging, stdio/SSE/Streamable HTTP surfaces, credential resolution, docs, tests, CI, and a companion Claude skill for users who need an existing capability exposed as a reusable agent tool.
 
 **Location**: `.claude/skills/agentize/SKILL.md`
+
+### 📦 📚 `chrome-profile`
+
+Target a real Google Chrome profile for browser automation through Chrome DevTools MCP or claude-in-chrome. Provides a chrome-profile CLI, profile discovery, bridge diagnostics, setup playbooks, and the URL-anchor workflow for selecting the correct profile tab.
+
+**Location**: `.claude/skills/chrome-profile/SKILL.md`
 
 ### 📦 📚 `docs-seeker`
 
@@ -383,9 +389,9 @@ Brainstorm solutions with trade-off analysis and brutal honesty. Use for ideatio
 
 ### 📚 `code-review`
 
-Review code quality with adversarial rigor. Supports input modes: pending changes, PR number, commit hash, codebase scan. Always-on red-team analysis finds security holes, false assumptions, and failure modes.
+Review code quality with evidence-based rigor. Supports input modes: pending changes, PR number, commit hash, and codebase scan. Focuses on bugs, regressions, maintainability, reliability, and verification gaps.
 
-**Location**: `.claude/skills/code-review/SKILL.md`
+**Location**: `.claude/skills/ck-code-review/SKILL.md`
 
 ### `coding-level`
 
@@ -531,9 +537,9 @@ Run unit, integration, e2e, and UI tests. Use for test execution, coverage analy
 
 **Location**: `.claude/skills/test/SKILL.md`
 
-### `watzup`
+### 📦 `watzup`
 
-Generate session hand-off summaries from recent changes — what shipped, what's in flight, what's next. Use at end-of-day, before context handoff to a teammate or new session, or to produce a quick progress-tracking report on any active project.
+Generate short handoff reports from Git branches, remote refs, worktrees, and unfinished plans. Use when the user asks what's in flight, wants progress/next steps, is in a fresh worktree or detached checkout, or needs end-of-session status.
 
 **Location**: `.claude/skills/watzup/SKILL.md`
 

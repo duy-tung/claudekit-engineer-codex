@@ -229,7 +229,7 @@ TaskCreate(subject="Analyze root cause from collected evidence",
 
 ---
 
-### 5. Code-Review Skill (`/code-review`)
+### 5. Code-Review Skill (`/ck:code-review`)
 
 **Review Pipeline as Tasks:**
 

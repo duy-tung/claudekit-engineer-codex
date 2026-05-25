@@ -12,7 +12,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
 
-const INCLUDE_FILES = ['.gitignore', '.repomixignore', '.mcp.json', 'CLAUDE.md'];
+const INCLUDE_FILES = ['.gitignore', '.repomixignore', '.mcp.json'];
 
 // Directories to skip
 const SKIP_DIRS = [

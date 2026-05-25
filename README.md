@@ -56,7 +56,7 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 - **[Skills Reference](./guide/SKILLS.md)** - Complete guide to all available skills
 
 ### 📖 Additional Resources
-- **[CLAUDE.md](./CLAUDE.md)** - Development instructions and workflows for AI agents
+- **[AI-facing Rules](./claude/rules/CLAUDE.md)** - Development instructions and workflows installed by the CK CLI
 - **[CHANGELOG.md](./CHANGELOG.md)** - Version history and release notes
 - **[Windows Statusline Support](./docs/statusline-windows-support.md)** - Windows compatibility guide for Claude Code statusline
 - **[Statusline Architecture](./docs/statusline-architecture.md)** - Technical documentation for statusline implementation
@@ -121,7 +121,8 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 │   │   ├── .logs/          # Structured hook diagnostics (hook-log.jsonl)
 │   │   └── notifications/  # Multi-provider notification system
 │   ├── skills/             # Claude Code skills
-│   └── CLAUDE.md           # Global development instructions
+│   └── rules/              # AI-facing rules installed by the CK CLI
+│       └── CLAUDE.md       # Top-level ClaudeKit Engineer guidance
 ├── docs/                   # Project documentation
 │   ├── codebase-summary.md # Auto-generated codebase overview
 │   ├── code-standards.md   # Development standards
@@ -130,7 +131,6 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 ├── plans/                  # Implementation plans and reports
 │   ├── templates/          # Plan templates
 │   └── reports/            # Agent-to-agent communication
-├── CLAUDE.md              # Project-specific Claude instructions
 └── README.md              # This file
 ```
 
@@ -317,8 +317,8 @@ repomix  # Creates ./docs/codebase-summary.md
 
 ## Configuration Files
 
-### CLAUDE.md
-Project-specific instructions for Claude Code. Customize this file to define:
+### .claude/rules/CLAUDE.md
+Installed ClaudeKit Engineer instructions for Claude Code. Customize a project-level `CLAUDE.md` only when your project needs local overrides; keep kit guidance in the rules bundle.
 - Project architecture guidelines
 - Development standards and conventions
 - Agent coordination protocols
@@ -471,6 +471,39 @@ Then add your MCP servers, below are some examples:
 }
 ```
 
+### Chrome Profile Browser Workflow
+
+Use `ck:chrome-profile` when a task needs the user's actual Google Chrome profile. It opens URLs in the user's real Chrome profile, then the agent selects that tab through Chrome DevTools MCP or the `claude-in-chrome` bridge.
+
+Use it when browser automation needs real cookies, account state, workspaces, tenants, or a specific Chrome profile:
+
+```bash
+bash .claude/skills/chrome-profile/scripts/install.sh
+chrome-profile doctor
+chrome-profile setup
+chrome-profile work "https://github.com/your-org/your-repo/pulls"
+```
+
+If `doctor` reports no readable bridge, set up one of these:
+
+1. Install and sign in to `https://claude.ai/chrome`, then restart Claude Code.
+2. Or attach `chrome-devtools-mcp` to a Chrome remote-debugging endpoint:
+
+```json
+{
+   "mcpServers": {
+      "chrome-devtools": {
+         "command": "npx",
+         "args": ["-y", "chrome-devtools-mcp@latest", "--browserUrl", "http://127.0.0.1:9222"]
+      }
+   }
+}
+```
+
+Do not use MCP `new_page` for non-default profiles. Use `chrome-profile <key> <url>`, then select the page whose URL contains `cdp-profile=<key>`.
+
+For browser testing that does not require the user's real login state or cookies, use `ck:agent-browser`, `ck:web-testing`, or the project's native Playwright/Vitest/Cypress setup instead.
+
 ## Best Practices
 
 ### Development Principles
@@ -565,7 +598,7 @@ See `.claude/hooks/notifications/docs/` for setup guides.
 ## Customization Guide
 
 ### 1. Project Setup
-- Update `CLAUDE.md` with your project specifics
+- Add or update a project-level `CLAUDE.md` only for project-specific overrides
 - Customize plan templates in `plans/templates/`
 
 ### 2. Agent Specialization

@@ -482,7 +482,7 @@ All teammates inherit the lead's permission settings at spawn. If lead has `--da
 | `task-completed-handler.cjs` | TaskCompleted | Progress tracking, completion logging, shutdown hints |
 | `teammate-idle-handler.cjs` | TeammateIdle | Available task detection, assignment/shutdown suggestions |
 
-`team-context-inject.cjs` and `session-init.cjs` are generated context hooks and are not registered by default. Upgrade metadata removes their installed files from existing installs, so team workflows must pass needed context explicitly or opt back in by restoring the hook files and settings entries deliberately.
+`team-context-inject.cjs` and `session-init.cjs` are generated context hooks and are not registered by default in new installs. Team workflows must pass needed context explicitly or opt in by restoring the settings entries deliberately.
 
 All hook sources follow fail-open design (exit 0 always) and are gated by `isHookEnabled()` in `ck-config-utils.cjs`.
 

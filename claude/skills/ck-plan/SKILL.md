@@ -55,7 +55,18 @@ Rules:
 - Use `ck plan check` / `ck plan uncheck` for phase status changes.
 - Do not hand-edit the phases table for status toggles or structural updates when CLI commands are available.
 - Use the dashboard at `http://localhost:3456/plans` for visual plan management.
-- **Overwriting phase stub files:** `ck plan create` scaffolds small boilerplate `phase-XX-*.md` stubs. Always **Read the stub before Write** — Claude Code enforces Read-before-Write on existing files; skipping the Read causes the Write to be rejected, wasting the Write's input tokens AND forcing a retry. The stubs are tiny (~15 lines), so the Read cost is trivial. Then Write the full content following the canonical template below.
+- **Generated-file write guard:** `ck plan create` creates existing `plan.md` and `phase-XX-*.md` stub files. Before composing long replacement content, run a read pass over `plan.md` and **every generated phase stub**. A directory listing is not enough. Claude Code enforces Read-before-Write on existing files; skipping any stub read causes that file's Write to be rejected after wasting the full Write payload. The stubs are tiny, so read them all first, then fill them.
+
+### Mandatory Generated-File Read Pass
+
+After `ck plan create` and before the first long Write/Edit to any generated plan file:
+
+1. Enumerate generated files: `plan.md` plus all `phase-*.md`.
+2. Read `plan.md`.
+3. Read every generated `phase-*.md` stub, including future phases you have not drafted yet.
+4. Only after the read pass, write or edit the full content for `plan.md` and each phase.
+
+Do not draft or submit a full phase body for a generated stub that has not been read in the current session.
 
 ### Canonical Phase File Template
 

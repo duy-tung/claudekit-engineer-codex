@@ -1,8 +1,8 @@
 # Project Overview & Product Development Requirements (PDR)
 
 **Project Name**: ClaudeKit Engineer
-**Version**: 2.9.0-beta.2
-**Last Updated**: 2026-01-28
+**Version**: 2.18.1-beta.4
+**Last Updated**: 2026-05-14
 **Status**: Active Development
 **Repository**: https://github.com/claudekit/claudekit-engineer
 
@@ -79,11 +79,13 @@ Provide a production-ready template that:
   - Blocks: node_modules, __pycache__, .git/, dist/, build/
   - Improves AI agent response time and token efficiency
 
-### 2. Comprehensive Slash Commands
+### 2. Skill-Routed Entry Points (post-v2.17 migration)
 
-**Core Development Commands**:
+`/ck:*` entry points are now backed by user-invocable **skills** under `claude/skills/`, not by a separate command parser. Each skill ships frontmatter (`name:`, `description:`, `user-invocable: true`) and is validated by CI gates (`check-skill-cross-refs.js`, `check-skill-descriptions.js`, `check-skill-routing.js`).
+
+**Core Development Entry Points**:
 - `/ck:plan` - Research and create implementation plans (`--deep` for major refactors, `--tdd` for tests-first plans)
-- `/ck:cook` - Implement features with full workflow (`--tdd` for tests-first refactors)
+- `/ck:cook` - Implement features with full workflow (`--tdd` for tests-first refactors, `--parallel` for multi-agent execution)
 - `/ck:test` - Run comprehensive test suites
 - `/ck:ask` - Expert technical consultation
 - `/ck:bootstrap` - Initialize new projects end-to-end
@@ -95,14 +97,14 @@ Command behavior is implemented via skill directories:
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation generation and updates
 - `ck-plan/` - Planning workflows and validators
-- `code-review/` - Code review workflows
+- `ck-code-review/` - Code review workflows
 - `test/` - Testing and validation workflows
 
-### 3. Extensive Skills Library (47+ Skills)
+### 3. Extensive Skills Library (~90 Skills)
 
 **Organized by Domain** (`.claude/skills/`):
 
-**AI & Vision**: ai-artist, ai-multimodal, agent-browser
+**AI & Vision**: ai-artist, ai-multimodal, agent-browser, chrome-profile
 **Authentication**: better-auth
 **Backend & Databases**: backend-development, databases
 **Code Quality & Debugging**: code-review, debug, sequential-thinking
@@ -271,11 +273,11 @@ Command behavior is implemented via skill directories:
 - Context management system
 - Communication protocol (file-based reports)
 
-**2. Command System**
-- Command parser and router
-- Argument handling ($ARGUMENTS, $1, $2, etc.)
-- Command composition and nesting
-- Help and discovery system
+**2. Skill Routing System** (replaces the original Command System as of v2.17)
+- Frontmatter-driven skill registry (`name:`, `description:`, `user-invocable: true`)
+- Domain + workflow routing rules (`claude/rules/skill-domain-routing.md`, `skill-workflow-routing.md`)
+- Cross-reference, description, and routing-coverage CI gates
+- `metadata.deletions[]` to retire stale commands/skills on user upgrade
 
 **3. Workflow Engine**
 - Sequential execution support
@@ -465,20 +467,22 @@ Command behavior is implemented via skill directories:
 
 ## Future Roadmap
 
-### Phase 1: Foundation (Complete - v1.0-1.8)
+### Phase 1: Foundation (Complete - v1.0–v1.8)
 - ✅ Core agent framework
-- ✅ Slash command system
+- ✅ Slash command system (later replaced by skills in Phase 2)
 - ✅ Automated releases
-- ✅ Skills library
+- ✅ Skills library (initial)
 - ✅ Documentation system
 
-### Phase 2: Enhancement (Current)
-- 🔄 Additional skills (GCP, AWS, Azure)
-- 🔄 UI/UX improvements
-- 🔄 Performance optimization
-- 🔄 Enhanced error handling
+### Phase 2: Enhancement + Commands→Skills Migration (Complete - v2.x through v2.18)
+- ✅ Skills expansion (~90 shipped skills)
+- ✅ Commands→Skills migration (v2.17)
+- ✅ Skill CI gates: cross-ref, description, routing coverage (v2.18)
+- ✅ Windows parity + hook safety (v2.18.x)
+- ✅ Preview Dashboard
+- ✅ Cross-platform performance optimization
 
-### Phase 3: Advanced Features (Planned)
+### Phase 3: Advanced Features (Planned, no firm date)
 - 📋 Visual workflow builder
 - 📋 Custom agent creator UI
 - 📋 Team collaboration features

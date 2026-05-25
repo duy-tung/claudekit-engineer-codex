@@ -19,7 +19,7 @@
     },
     {
       "name": "xia",
-      "reason": "Maintainer-tier external repo study workflow. Documented in CLAUDE.md, not domain tree."
+      "reason": "Maintainer-tier external repo study workflow. Documented in claude/rules/CLAUDE.md, not domain tree."
     },
     {
       "name": "team",

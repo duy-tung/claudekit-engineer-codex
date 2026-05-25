@@ -1,8 +1,8 @@
 metadata:
   title: "Skills Catalog"
   description: "Auto-generated catalog of all available skills in ClaudeKit Engineer"
-  last_updated: '2026-05-07'
-  total_skills: 83
+  last_updated: '2026-05-25'
+  total_skills: 84
 categories:
   ai-ml: "AI & Machine Learning"
   frontend: "Frontend & Design"
@@ -185,7 +185,7 @@ skills:
   dev-tools:
   - name: "agent-browser"
     path: "agent-browser/SKILL.md"
-    description: "Browser and desktop automation through the agent-browser CLI. Use for long autonomous browsing, compact page snapshots, screenshots, form filling, login flows, scraping, exploratory QA, cloud browsers, and Electron app automation when a live browser or app must be operated by the agent."
+    description: "Automate browsers and apps with agent-browser. Use for testing, screenshots, forms, scraping, Browserbase/cloud browsers, and Electron when real Chrome cookies are not required."
     category: "dev-tools"
     has_scripts: false
     has_references: true
@@ -199,6 +199,13 @@ skills:
     has_references: true
     argument_hint: "[feature-or-module] [--both|--mcp|--cli] [--auto|--ask]"
     keywords: ["agentize", "mcp", "cli", "monorepo", "npm", "cloudflare", "docker", "agent-tool"]
+  - name: "chrome-profile"
+    path: "chrome-profile/SKILL.md"
+    description: "Target a real Google Chrome profile for browser automation through Chrome DevTools MCP or claude-in-chrome. Provides a chrome-profile CLI, profile discovery, bridge diagnostics, setup playbooks, and the URL-anchor workflow for selecting the correct profile tab."
+    category: "dev-tools"
+    has_scripts: true
+    has_references: true
+    keywords: ["chrome", "browser", "profile", "mcp", "devtools", "automation", "cookies"]
   - name: "docs-seeker"
     path: "docs-seeker/SKILL.md"
     description: "Search library/framework documentation via llms.txt (context7.com). Use for API docs, GitHub repository analysis, technical documentation lookup, latest library features."
@@ -473,13 +480,13 @@ skills:
     argument_hint: "[topic or problem]"
     keywords: ["ideation", "tradeoffs", "debate", "decisions"]
   - name: "code-review"
-    path: "code-review/SKILL.md"
-    description: "Review code quality with adversarial rigor. Supports input modes: pending changes, PR number, commit hash, codebase scan. Always-on red-team analysis finds security holes, false assumptions, and failure modes."
+    path: "ck-code-review/SKILL.md"
+    description: "Review code quality with evidence-based rigor. Supports input modes: pending changes, PR number, commit hash, and codebase scan. Focuses on bugs, regressions, maintainability, reliability, and verification gaps."
     category: "utilities"
     has_scripts: false
     has_references: true
     argument_hint: "[#PR | COMMIT | --pending | codebase [parallel]]"
-    keywords: ["review", "quality", "red-team", "security"]
+    keywords: ["review", "quality", "verification", "reliability"]
   - name: "coding-level"
     path: "coding-level/SKILL.md"
     description: "Set coding experience level for tailored output. Use for adjusting explanation depth, code complexity, and response format to user expertise."
@@ -674,11 +681,11 @@ skills:
     keywords: ["test", "unit", "integration", "e2e", "coverage"]
   - name: "watzup"
     path: "watzup/SKILL.md"
-    description: "Generate session hand-off summaries from recent changes — what shipped, what's in flight, what's next. Use at end-of-day, before context handoff to a teammate or new session, or to produce a quick progress-tracking report on any active project."
+    description: "Generate short handoff reports from Git branches, remote refs, worktrees, and unfinished plans. Use when the user asks what's in flight, wants progress/next steps, is in a fresh worktree or detached checkout, or needs end-of-session status."
     category: "utilities"
-    has_scripts: false
+    has_scripts: true
     has_references: false
-    keywords: ["session", "wrap-up", "changes", "review"]
+    keywords: ["session", "wrap-up", "changes", "review", "worktree", "branches", "plans"]
   other:
   - name: "show-off"
     path: "show-off/SKILL.md"

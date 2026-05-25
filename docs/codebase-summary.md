@@ -18,7 +18,7 @@ claudekit-engineer/
 │   ├── commands/         # Reserved compatibility directory (empty/minimal)
 │   ├── hooks/            # Git hooks and scripts
 │   ├── skills/           # Specialized skills library (20+ skills)
-│   └── workflows/        # Development workflow definitions
+│   └── rules/            # AI-facing rules and workflows
 ├── .github/             # GitHub Actions workflows
 │   └── workflows/       # CI/CD automation
 ├── docs/                # Project documentation
@@ -27,7 +27,6 @@ claudekit-engineer/
 ├── plans/               # Implementation plans and reports
 │   ├── reports/         # Agent-to-agent communication
 │   └── templates/       # Plan templates
-├── CLAUDE.md           # Project-specific Claude instructions
 ├── README.md           # Project overview
 ├── package.json        # Node.js dependencies
 └── repomix-output.xml  # Codebase compaction file
@@ -86,7 +85,7 @@ claudekit-engineer/
 - `bootstrap/` - Project initialization workflows
 - `docs/` - Documentation workflows
 - `ck-plan/` - Planning variants
-- `code-review/` - Code review workflows
+- `ck-code-review/` - Code review workflows
 - `test/` - Testing workflows
 
 ### 3. Skills Library (38 Skills)
@@ -102,7 +101,7 @@ claudekit-engineer/
   - 7 references, 2 Python utilities
 
 **Current Skills** (47+ Total):
-- ai-artist, ai-multimodal, agent-browser, backend-development, better-auth
+- ai-artist, ai-multimodal, agent-browser, chrome-profile, backend-development, better-auth
 - brainstorm, code-review, common, context-engineering
 - cook, copywriting, databases, debug, devops
 - docs-seeker, document-skills, find-skills, frontend-design, frontend-development
@@ -129,6 +128,10 @@ claudekit-engineer/
 3. **descriptive-name.cjs** - Naming conventions enforcement
 4. **simplify-gate.cjs** - Stateless prompt-time simplification gate
 
+**Opt-In Hooks:**
+
+- **workflow-artifact-gate.cjs** - Validates `ck:fix`/`ck:cook` review artifacts before finalize/commit/ship-like boundaries. It supports soft warnings for finalize/commit and hard blocks for ship/push/PR/deploy when enabled.
+
 **Generated Context Hooks Disabled by Default:**
 
 - `session-init.cjs`
@@ -142,10 +145,11 @@ claudekit-engineer/
 - `usage-quota-cache-refresh.cjs`
 
 **Hook Features:**
-- Fail-Safe: All hooks exit 0 (non-blocking) - graceful degradation
+- Crash Fail-Open: unexpected hook crashes exit 0 for graceful degradation
+- Policy Blocks: configured gates may intentionally return exit code 2
 - Performance: Optimized token consumption
 - Cross-Platform: Windows (PowerShell) & Unix (Bash) via Node.js dispatcher
-- Comprehensive Test Coverage: scout-block hook validated via Node.js test suite
+- Comprehensive Test Coverage: scout-block and workflow-artifact-gate validated via Node.js test suite
 
 ### 5. Workflows
 
@@ -177,7 +181,7 @@ claudekit-engineer/
 ### For Users
 - **README.md**: Project overview and quick start
 - **guide/SKILLS.md**: Comprehensive skills reference (7,073 tokens)
-- **CLAUDE.md**: Development instructions and workflows
+- **claude/rules/CLAUDE.md**: Development instructions and workflows installed by the CK CLI
 
 ### For Developers
 - **package.json**: Dependencies and scripts
@@ -186,7 +190,7 @@ claudekit-engineer/
 - **.gitignore**: Version control exclusions
 
 ### For Agents
-- **CLAUDE.md**: Primary agent instructions
+- **.claude/rules/CLAUDE.md**: Primary agent instructions
 - **.claude/rules/**: Development rules and protocols
 - **plans/templates/**: Implementation plan templates
 
@@ -328,7 +332,7 @@ Features: Automated releases, changelog generation
 
 ### Documentation
 - `README.md` - Main project docs
-- `CLAUDE.md` - Agent instructions
+- `.claude/rules/CLAUDE.md` - Agent instructions
 - `CHANGELOG.md` - Version history
 - `guide/SKILLS.md` - Skills reference
 
