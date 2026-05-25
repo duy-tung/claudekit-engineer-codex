@@ -1,3 +1,10 @@
+## [2.19.1](https://github.com/claudekit/claudekit-engineer/compare/v2.19.0...v2.19.1) (2026-05-25)
+
+
+### 🐞 Bug Fixes
+
+* **release:** gate production Discord notifications ([0137d1d](https://github.com/claudekit/claudekit-engineer/commit/0137d1d0526c49fb216ed24bd594a5d4de008f6c)), closes [#787](https://github.com/claudekit/claudekit-engineer/issues/787)
+
 ## [2.19.0](https://github.com/claudekit/claudekit-engineer/compare/v2.18.0...v2.19.0) (2026-05-13)
 
 
