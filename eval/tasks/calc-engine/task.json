@@ -1,0 +1,20 @@
+{
+  "id": "calc-engine",
+  "kind": "feature",
+  "prompt": "This package evaluates arithmetic expressions. tokenizer.py is implemented and working. Implement evaluate(expr) in evaluator.py so that ALL tests in test_evaluator.py pass. It must support +, -, *, / with correct precedence, parentheses, unary minus, and floats; raise ZeroDivisionError on division by zero; and raise ValueError on malformed input. Do not edit the test file or tokenizer.py. Run the tests to verify before finishing.",
+  "grade": {
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
+    "fail_to_pass": [
+      "test_evaluator.TestEvaluator.test_add",
+      "test_evaluator.TestEvaluator.test_precedence",
+      "test_evaluator.TestEvaluator.test_parens",
+      "test_evaluator.TestEvaluator.test_unary_minus",
+      "test_evaluator.TestEvaluator.test_float_div",
+      "test_evaluator.TestEvaluator.test_nested",
+      "test_evaluator.TestEvaluator.test_div_zero",
+      "test_evaluator.TestEvaluator.test_malformed"
+    ],
+    "pass_to_pass": [],
+    "timeout_sec": 90
+  }
+}

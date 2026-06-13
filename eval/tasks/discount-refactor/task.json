@@ -1,0 +1,16 @@
+{
+  "id": "discount-refactor",
+  "kind": "refactor",
+  "prompt": "pricing.py computes final_price(price, customer_type) with a long if/elif chain for 'regular' (0% off), 'member' (10%), 'vip' (20%), and raises ValueError for unknown types. Refactor the discount logic into a single data-driven mapping (no if/elif chain), AND add a new 'staff' tier at 50% off. Keep existing behavior (regular/member/vip and the ValueError for unknown types). Make all tests in test_pricing.py pass. Do not edit the test file.",
+  "grade": {
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
+    "fail_to_pass": ["test_pricing.TestPricing.test_staff"],
+    "pass_to_pass": [
+      "test_pricing.TestPricing.test_regular",
+      "test_pricing.TestPricing.test_member",
+      "test_pricing.TestPricing.test_vip",
+      "test_pricing.TestPricing.test_unknown"
+    ],
+    "timeout_sec": 60
+  }
+}

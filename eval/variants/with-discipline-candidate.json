@@ -1,0 +1,5 @@
+{
+  "label": "with-discipline-candidate",
+  "description": "Default Claude + ONLY the candidate harness-discipline prompt (eval/candidates/harness-discipline.md) appended. B side vs baseline. ${REPO_ROOT} resolved by run.py. The candidate is NOT shipped — this measures whether it should be.",
+  "claude_args": ["--append-system-prompt-file", "${REPO_ROOT}/eval/candidates/harness-discipline.md"]
+}

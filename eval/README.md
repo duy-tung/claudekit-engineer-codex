@@ -59,6 +59,26 @@ python3 eval/run.py --all --variant-a baseline --variant-b full-kit --runs 5
 
 Results stream to `results/eval-<ts>.ndjson` (git-ignored).
 
+## Measuring a candidate rule (eval-driven, before shipping)
+
+Test a behavioral rule BEFORE adding it to `claude/rules/`:
+
+1. Put the rule text in `candidates/<name>.md` (NOT shipped to users).
+2. Add a variant that appends it: `--append-system-prompt-file ${REPO_ROOT}/eval/candidates/<name>.md`.
+3. **Headroom probe** — characterise a task with the baseline alone:
+   ```bash
+   python3 eval/run.py --task <id> --variant-a baseline --runs 8
+   ```
+   Only tasks with `0 < solve_rate < 1` can reveal a rule's effect (ceiling/floor cannot).
+4. A/B on a task that has headroom:
+   ```bash
+   python3 eval/run.py --task <id> --variant-a baseline --variant-b with-<name> --runs 8
+   ```
+5. Ship the rule (move into `claude/rules/`) ONLY if the paired verdict is a real improvement.
+
+> `string-utils-multi` is a ceiling (base Claude solves it 8/8). `calc-engine` (multi-file
+> expression evaluator) and the harder tasks are headroom candidates — probe each first.
+
 ## Adding a task
 
 ```
