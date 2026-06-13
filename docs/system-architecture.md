@@ -75,7 +75,7 @@ Generated context hooks (`session-init`, `session-state`, `subagent-init`, `team
 
 ### 2. Agent Layer
 
-#### 2.1 Agent Types (14 Agents)
+#### 2.1 Agent Types (11 Agents)
 
 **Planning Agents**:
 - `planner` - Technical planning and architecture (Opus)
@@ -83,8 +83,6 @@ Generated context hooks (`session-init`, `session-state`, `subagent-init`, `team
 - `brainstormer` - Solution ideation
 
 **Implementation Agents**:
-- `fullstack-developer` - Full-stack implementation
-- `ui-ux-designer` - Design creation and UX analysis
 - `code-simplifier` - Code optimization and simplification
 
 **Quality Assurance Agents**:
@@ -277,20 +275,11 @@ Explore different approaches simultaneously
 ```
 
 **Skill Categories**:
-- **Authentication**: better-auth
-- **Cloud Platforms**: Cloudflare, Google Cloud
-- **Databases**: MongoDB, PostgreSQL
-- **Design**: Canvas design generation
 - **Debugging**: Systematic approaches
-- **Development**: Next.js, Turborepo
-- **Documentation**: Repomix, docs-seeker
+- **Documentation**: Repomix, docs
 - **Document Processing**: PDF, DOCX, PPTX, XLSX
-- **Infrastructure**: Docker
-- **Media**: FFmpeg, ImageMagick
 - **MCP**: Server building
 - **Problem Solving**: Meta-patterns, thinking frameworks
-- **UI Frameworks**: shadcn/ui, Tailwind CSS
-- **Ecommerce**: Shopify
 
 #### 5.2 Skill Invocation
 
@@ -422,8 +411,8 @@ is reported by field path only.
 
 **Available MCP Servers**:
 
-**docs-seeker** skill (Documentation):
-- Read latest docs for packages/plugins
+**docs** skill (Documentation):
+- Generate and update project documentation
 - Access up-to-date technical information
 
 **sequential-thinking** skill (Problem Solving):
@@ -431,26 +420,13 @@ is reported by field path only.
 - Break down complex problems
 - Reflective analysis
 
-**ai-multimodal** skill (Visual Analysis):
-- Describe images, videos, documents
-- UI/UX analysis from screenshots
-
-**ai-multimodal & imagemagick skills** (Generation & Processing):
-- Generate images, videos, and documents via ai-multimodal skills
-- Perform design asset creation and edits with imagemagick skill workflows
-
-**brain** (Advanced Reasoning):
-- Sequential thinking
-- Code analysis
-- Debugging assistance
-
 #### 6.3 Preview Dashboard System (COMPLETE - Phase 6)
 
 **Purpose**: Interactive web-based visualization of implementation plans and project progress
 
 **Architecture**:
 ```
-.claude/skills/markdown-novel-viewer/
+.claude/skills/preview/
 ├── scripts/
 │   ├── server.cjs              # HTTP server & request handler
 │   ├── lib/
@@ -714,10 +690,9 @@ plans/<plan-name>/reports/251026-from-tester-to-main-test-results-report.md
 ### Agent Skills Ecosystem
 
 **Sequential Thinking**: Problem decomposition
-**brain**: Advanced reasoning
-**docs-seeker**: Documentation access
-**ai-multimodal**: Visual understanding
-**ai-multimodal & imagemagick skills**: Content generation and processing
+**Research**: Research and analysis
+**Docs**: Documentation access
+**Context Engineering**: Context assembly and reasoning
 
 ## Data Flow Diagrams
 

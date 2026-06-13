@@ -24,7 +24,7 @@ Established core agent orchestration framework, slash command system, automated 
 - Multi-agent orchestration engine
 - Initial slash-command surface (plan, cook, test, ask, bootstrap, debug, fix:*) — since migrated to skills (Phase 2)
 - Semantic versioning & automated releases
-- Foundational skills library (auth, cloud, databases, design, etc.) — now grown to ~90 shipped skills
+- Foundational skills library (planning, research, debugging, review, etc.) — now a focused catalog of 43 shipped skills
 - Documentation system with repomix integration
 - Scout Block Hook for cross-platform performance optimization
 - Git workflows with conventional commits enforcement
@@ -182,7 +182,7 @@ Enterprise-grade features and deployment options.
 |-----------|--------|----------|----------|
 | Windows Statusline Support | ✅ Complete | 2025-11-11 | 100% |
 | Preview Dashboard (6 Phases) | ✅ Complete | 2025-12-11 | 100% |
-| Additional Skills Library Expansion | ✅ Complete | — | 100% (~90 skills shipped) |
+| Skills Library Expansion + Catalog Slimming | ✅ Complete | — | 100% (slimmed to a focused 43-skill catalog) |
 | Enhanced Error Handling | ✅ Complete | — | 100% (scout-first + hook safety gates) |
 
 ### Q1–Q2 2026 Milestones

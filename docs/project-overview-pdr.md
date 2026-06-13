@@ -100,28 +100,23 @@ Command behavior is implemented via skill directories:
 - `ck-code-review/` - Code review workflows
 - `test/` - Testing and validation workflows
 
-### 3. Extensive Skills Library (~90 Skills)
+### 3. Extensive Skills Library (43 Skills)
 
 **Organized by Domain** (`.claude/skills/`):
 
-**AI & Vision**: ai-artist, ai-multimodal, agent-browser, chrome-profile
-**Authentication**: better-auth
-**Backend & Databases**: backend-development, databases
-**Code Quality & Debugging**: code-review, debug, sequential-thinking
-**Content & Copywriting**: copywriting, brainstorm
-**Design & Frontend**: frontend-design, frontend-development, ui-styling, ui-ux-pro-max, web-design-guidelines
-**DevOps & Infrastructure**: devops, git
-**Documentation**: docs-seeker, repomix, markdown-novel-viewer, document-skills
-**Framework Integration**: web-frameworks, react-best-practices, shopify
-**Game Development**: threejs, shader
-**Media Processing**: media-processing (FFmpeg, ImageMagick)
+**Code Quality & Debugging**: ck-code-review, ck-debug, fix, coding-level, sequential-thinking
+**Content & Ideation**: brainstorm, ask
+**DevOps & Infrastructure**: git, worktree, ship
+**Documentation**: docs, repomix, document-skills, journal
+**Graph & Visualization**: tech-graph, ck-graphify, gkg
 **MCP Tools**: mcp-builder, use-mcp
-**Mobile Development**: mobile-development
-**Project Planning**: ck-plan, plans-kanban
-**Skill Development**: skill-creator
-**Testing & QA**: web-testing
-**Visualization**: mermaidjs-v11
-**Workflow Tools**: cook, research, scout, payment-integration
+**Planning & Prediction**: ck-plan, plans-kanban, ck-predict, ck-scenario
+**Project Management**: project-management, project-organization, team, retro
+**Research & Discovery**: research, ck-autoresearch, scout, find-skills, context-engineering
+**Security**: ck-security, security-scan
+**Skill Development**: skill-creator, agentize
+**Testing & QA**: test
+**Workflow Tools**: cook, ck-loop, fix, preview, watzup, xia, bootstrap, problem-solving
 
 ### 4. Automated Release Management
 
@@ -475,7 +470,7 @@ Command behavior is implemented via skill directories:
 - ✅ Documentation system
 
 ### Phase 2: Enhancement + Commands→Skills Migration (Complete - v2.x through v2.18)
-- ✅ Skills expansion (~90 shipped skills)
+- ✅ Skills expansion, later slimmed to a focused 43-skill catalog
 - ✅ Commands→Skills migration (v2.17)
 - ✅ Skill CI gates: cross-ref, description, routing coverage (v2.18)
 - ✅ Windows parity + hook safety (v2.18.x)

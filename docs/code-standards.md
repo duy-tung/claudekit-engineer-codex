@@ -74,9 +74,9 @@ project-root/
 - Main file always named `SKILL.md`
 - Supporting files in `references/` or `scripts/`
 - Examples:
-  - `better-auth/SKILL.md`
-  - `cloudflare-workers/SKILL.md`
-  - `mongodb/SKILL.md`
+  - `mcp-builder/SKILL.md`
+  - `skill-creator/SKILL.md`
+  - `research/SKILL.md`
 
 **Documentation** (`docs/`):
 - Format: `[document-purpose].md`

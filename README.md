@@ -53,6 +53,7 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 - **[Codebase Summary](./docs/codebase-summary.md)** - High-level overview of project structure, technologies, and components
 - **[Code Standards](./docs/code-standards.md)** - Coding standards, naming conventions, and best practices
 - **[System Architecture](./docs/system-architecture.md)** - Detailed architecture documentation, component interactions, and data flow
+- **[Skills Reference](./guide/SKILLS.md)** - Auto-generated catalog of all available skills
 
 ### 📖 Additional Resources
 - **[AI-facing Rules](./claude/rules/CLAUDE.md)** - Development instructions and workflows installed by the CK CLI

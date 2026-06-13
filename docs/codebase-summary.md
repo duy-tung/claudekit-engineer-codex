@@ -17,8 +17,6 @@ claudekit-engineer/
 │   ├── hooks/            # Git hooks and scripts
 │   ├── skills/           # Specialized skills library (43 skills)
 │   └── rules/            # AI-facing rules and workflows
-├── .github/             # GitHub Actions workflows
-│   └── workflows/       # CI/CD automation
 ├── docs/                # Project documentation
 │   └── research/        # Research reports directory
 ├── guide/               # User guides and references
@@ -38,24 +36,16 @@ claudekit-engineer/
 - **License**: MIT
 
 ### Development Tools
-- **Semantic Release**: Automated versioning and changelog
-- **Commitlint**: Conventional commit enforcement
-- **Husky**: Git hooks automation
+- **Node.js test runner**: `node --test` for the hook test suites
 - **Repomix**: Codebase compaction for AI consumption
-
-### CI/CD
-- **GitHub Actions**: Automated release workflow
-- **Semantic Versioning**: Automated version management
-- **Conventional Commits**: Structured commit messages
 
 ## Key Components
 
-### 1. Agent Orchestration System (14 Agents)
+### 1. Agent Orchestration System (11 Agents)
 
 **Claude Code Agents** (`.claude/agents/`):
 - `planner.md` - Technical planning and architecture (Opus model)
 - `researcher.md` - Research and analysis
-- `fullstack-developer.md` - Full-stack implementation
 - `code-reviewer.md` - Code quality assessment
 - `tester.md` - Testing and validation
 - `debugger.md` - Issue analysis and debugging
@@ -64,7 +54,6 @@ claudekit-engineer/
 - `journal-writer.md` - Development journaling
 - `brainstormer.md` - Solution ideation
 - `project-manager.md` - Project tracking
-- `ui-ux-designer.md` - UI/UX design
 - `code-simplifier.md` - Code optimization and simplification
 
 ### 2. Slash Commands System (Skill-Backed)
@@ -86,29 +75,19 @@ claudekit-engineer/
 - `ck-code-review/` - Code review workflows
 - `test/` - Testing workflows
 
-### 3. Skills Library (38 Skills)
+### 3. Skills Library (43 Skills)
 
-**Phase 1 Organized Groups** (Progressive Disclosure):
-- **DevOps** (`devops/`) - Cloudflare (5 skills), Docker, Google Cloud Platform
-  - 11 references, 2 Python utilities, 45 tests
-- **Databases** (`databases/`) - MongoDB, PostgreSQL
-  - 8 references, 3 Python utilities
-- **Web Frameworks** (`web-frameworks/`) - Next.js, Turborepo, RemixIcon
-  - 7 references, 2 Python utilities
-- **UI Styling** (`ui-styling/`) - shadcn/ui, Tailwind CSS, canvas-design
-  - 7 references, 2 Python utilities
-
-**Current Skills** (47+ Total):
-- ai-artist, ai-multimodal, agent-browser, chrome-profile, backend-development, better-auth
-- brainstorm, code-review, common, context-engineering
-- cook, copywriting, databases, debug, devops
-- docs-seeker, document-skills, find-skills, frontend-design, frontend-development
-- git, gkg, google-adk-python, markdown-novel-viewer, mcp-builder
-- media-processing, mermaidjs-v11, mobile-development, payment-integration
-- ck-plan, plans-kanban, problem-solving, react-best-practices, remotion
-- repomix, research, scout, sequential-thinking, shader
-- shopify, skill-creator, threejs, ui-styling
-- ui-ux-pro-max, web-design-guidelines, web-frameworks, web-testing
+**Current Skills** (43 Total):
+- agentize, ask, bootstrap, brainstorm, ck-autoresearch
+- ck-code-review, ck-debug, ck-graphify, ck-loop, ck-plan
+- ck-predict, ck-scenario, ck-security, coding-level, context-engineering
+- cook, docs, find-skills, fix, git
+- gkg, journal, mcp-builder, plans-kanban, preview
+- problem-solving, project-management, project-organization, repomix, research
+- retro, scout, security-scan, sequential-thinking, ship
+- skill-creator, team, tech-graph, test, use-mcp
+- watzup, worktree, xia
+- document-skills (office sub-skills: docx, pdf, pptx, xlsx)
 
 ### 4. Hook System
 
@@ -182,9 +161,7 @@ claudekit-engineer/
 - **claude/rules/CLAUDE.md**: Development instructions and workflows installed by the CK CLI
 
 ### For Developers
-- **package.json**: Dependencies and scripts
-- **.releaserc.json**: Semantic release configuration
-- **.commitlintrc.json**: Commit message linting rules
+- **package.json**: Scripts and metadata
 - **.gitignore**: Version control exclusions
 
 ### For Agents
@@ -280,17 +257,8 @@ Types:
 None (template project)
 
 ### Development Dependencies
-- **@commitlint/cli**: ^18.4.3
-- **@commitlint/config-conventional**: ^18.4.3
-- **@semantic-release/changelog**: ^6.0.3
-- **@semantic-release/commit-analyzer**: ^11.1.0
-- **@semantic-release/git**: ^10.0.1
-- **@semantic-release/github**: ^9.2.6
-- **@semantic-release/npm**: ^11.0.2
-- **@semantic-release/release-notes-generator**: ^12.1.0
-- **conventional-changelog-conventionalcommits**: ^7.0.2
-- **husky**: ^8.0.3
-- **semantic-release**: ^22.0.12
+None — the lean kit ships no npm dependencies. Hook tests run on the built-in
+Node.js test runner (`node --test`).
 
 ## File Statistics
 
@@ -298,10 +266,9 @@ None (template project)
 **Total Tokens**: 38,868 tokens
 **Total Characters**: 173,077 chars
 
-**Top 5 Files by Token Count**:
-1. `guide/SKILLS.md` - 7,073 tokens (18.2%)
-2. `CHANGELOG.md` - 4,836 tokens (12.4%)
-3. `README.md` - 3,261 tokens (8.4%)
+**Largest Files by Token Count**:
+1. `guide/SKILLS.md` - 7,073 tokens
+2. `README.md` - 3,261 tokens
 
 ## Integration Capabilities
 
@@ -309,22 +276,15 @@ None (template project)
 Script: `.claude/hooks/notifications/notify.cjs` + `providers/discord.cjs`
 Purpose: Send project updates to Discord channels
 
-### GitHub Actions
-Workflow: `.github/workflows/release.yml`
-Features: Automated releases, changelog generation
-
 ### Agent Skills
-- **brain**: Advanced reasoning
-- **docs-seeker**: Documentation reading
-- **ai-multimodal**: Visual understanding
-- **ai-multimodal & imagemagick skills**: Content generation and processing
+- **research**: Research and analysis
+- **docs**: Documentation workflows
+- **context-engineering**: Context assembly and reasoning
 
 ## Critical Files
 
 ### Configuration
 - `package.json` - Node.js config
-- `.releaserc.json` - Release config
-- `.commitlintrc.json` - Commit linting
 - `.gitignore` - Git exclusions
 - `.repomixignore` - Repomix exclusions
 
