@@ -1,0 +1,16 @@
+{
+  "id": "string-utils-multi",
+  "kind": "multi-step",
+  "prompt": "strutils.py has three functions. reverse_words is already implemented and must keep working. count_vowels and is_palindrome raise NotImplementedError — implement both so that ALL tests in test_strutils.py pass. Do not edit the test file, and do not break reverse_words. Verify by running the tests before you finish.",
+  "grade": {
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
+    "fail_to_pass": [
+      "test_strutils.TestStrUtils.test_count_vowels_basic",
+      "test_strutils.TestStrUtils.test_count_vowels_none",
+      "test_strutils.TestStrUtils.test_palindrome_true",
+      "test_strutils.TestStrUtils.test_palindrome_false"
+    ],
+    "pass_to_pass": ["test_strutils.TestStrUtils.test_reverse_words"],
+    "timeout_sec": 60
+  }
+}

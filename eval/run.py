@@ -131,8 +131,10 @@ def _invoke_claude(task: dict, variant: dict, workdir: Path,
         if os.environ.get("CK_EVAL_CLAUDE_ARGS") else list(DEFAULT_CLAUDE_ARGS)
     timeout = int(os.environ.get("CK_EVAL_TIMEOUT_SEC", "180"))
 
+    variant_args = [a.replace("${REPO_ROOT}", str(REPO_ROOT))
+                    for a in variant.get("claude_args", [])]
     cmd = (base + ["-p", task["prompt"], "--output-format", "json"]
-           + extra + list(variant.get("claude_args", []))
+           + extra + variant_args
            + ["--max-turns", str(max_turns)])
     if verbose:
         print(f"       $ {' '.join(shlex.quote(c) for c in cmd)}")

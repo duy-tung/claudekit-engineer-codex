@@ -1,0 +1,5 @@
+{
+  "label": "no-harness-rule",
+  "description": "Bare Claude Code, no kit and no harness-discipline rule. The A side for isolating the rule's effect.",
+  "claude_args": ["--bare"]
+}
