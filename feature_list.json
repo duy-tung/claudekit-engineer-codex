@@ -26,13 +26,6 @@
       "evidence": "eval/audit_harness.py; baseline 84 -> 100/100 after R3 + dogfood"
     },
     {
-      "id": "feat-004",
-      "name": "Harness-discipline rule + A/B (R2)",
-      "description": "Shipped rule (L08/L09) with isolated A/B variants; candidate pending real-CLI measurement.",
-      "status": "in-progress",
-      "dependencies": ["feat-001"]
-    },
-    {
       "id": "feat-005",
       "name": "Harness state/verification/lifecycle primitives (R3)",
       "description": "feature-list schema+template, session-handoff template, init.sh verify entrypoint.",

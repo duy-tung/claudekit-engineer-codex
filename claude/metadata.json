@@ -1,5 +1,6 @@
 {
   "deletions": [
+    "rules/harness-discipline.md",
     "hooks/node-hook-runner.sh",
     "hooks/skill-dedup.cjs",
     "hooks/__tests__/skill-dedup.test.cjs",

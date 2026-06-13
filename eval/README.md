@@ -50,8 +50,7 @@ are wired correctly.
 python3 eval/run.py --all --variant-a baseline --variant-b full-kit --runs 5
 ```
 
-- Variants live in `variants/*.json` (`label` + `claude_args` passed through to `claude`).
-- `no-harness-rule` (A) = default Claude, no rule. `with-harness-rule` (B) = default Claude **+ only** the harness-discipline rule via `--append-system-prompt-file`. Both run in the same environment, differing by one variable.
+- Variants live in `variants/*.json` (`label` + `claude_args` passed through to `claude`). An A/B isolates ONE variable between two variants (a flag, or an appended prompt file via `--append-system-prompt-file`). `${REPO_ROOT}` in a variant's args resolves to the repo path.
 - **Gotcha:** do NOT put `--bare` in a variant. In headless mode `--bare` skips auth discovery and every run returns `"Not logged in"` → a false `0/N` (floor effect), not a real result.
 - **Headroom matters:** to measure a behavioral rule, the task's base solve-rate must be strictly between 0 and 1. If plain Claude already solves a task every time (ceiling) or never (floor), the A/B shows `Δ=0` for the wrong reason. Pick/author tasks where the baseline genuinely fails some of the time.
 - Env: `CK_EVAL_CMD` (default `claude`, e.g. `"ccs glm"`),
