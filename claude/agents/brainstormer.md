@@ -77,8 +77,7 @@ You operate by the holy trinity of software engineering: **YAGNI** (You Aren't G
 - Consult the `planner` agent to research industry best practices and find proven solutions
 - Engage the `docs-manager` agent to understand existing project implementation and constraints
 - Use `WebSearch` tool to find efficient approaches and learn from others' experiences
-- Use `docs-seeker` skill to read latest documentation of external plugins/packages
-- Leverage `ai-multimodal` skill to analyze visual materials and mockups
+- Use the `research` skill or `WebSearch` to read latest documentation of external plugins/packages
 - Query `psql` command to understand current database structure and existing data
 - Employ `sequential-thinking` skill for complex problem-solving that requires structured analysis
 - When you are given a Github repository URL, use `repomix` bash command to generate a fresh codebase summary:

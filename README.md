@@ -53,7 +53,6 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 - **[Codebase Summary](./docs/codebase-summary.md)** - High-level overview of project structure, technologies, and components
 - **[Code Standards](./docs/code-standards.md)** - Coding standards, naming conventions, and best practices
 - **[System Architecture](./docs/system-architecture.md)** - Detailed architecture documentation, component interactions, and data flow
-- **[Skills Reference](./guide/SKILLS.md)** - Complete guide to all available skills
 
 ### 📖 Additional Resources
 - **[AI-facing Rules](./claude/rules/CLAUDE.md)** - Development instructions and workflows installed by the CK CLI
@@ -116,7 +115,6 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 ```
 ├── .claude/                 # Claude Code configuration
 │   ├── agents/             # Claude Code agents
-│   ├── command-archive/    # Archived legacy command definitions
 │   ├── hooks/              # Claude Code hooks
 │   │   ├── .logs/          # Structured hook diagnostics (hook-log.jsonl)
 │   │   └── notifications/  # Multi-provider notification system
@@ -331,93 +329,6 @@ Reusable templates for:
 - Refactoring strategies
 - Architecture decisions
 
-## Gemini Skills Configuration
-
-Multimodal capabilities (audio, video, image, vision, document/PDF processing) are now consolidated into a single skill that requires a Google Gemini API key:
-
-- **`ai-multimodal`** (`claude/skills/ai-multimodal/`) — analyze images/audio/video/PDFs via Gemini API, plus image/video/speech/music generation routing across Google (Imagen, Nano Banana, Veo), OpenRouter, and MiniMax.
-
-> Earlier versions of the engineer kit shipped per-modality skills (`gemini-audio`, `gemini-video-understanding`, `gemini-document-processing`, `gemini-image-gen`, `gemini-vision`). These were merged into `ai-multimodal` — those names no longer exist on disk.
-
-For image generation specifically, current Gemini/Imagen API models are paid-tier only. If you want an alternative routing path for image generation, `ai-multimodal` also supports `OPENROUTER_API_KEY` for OpenRouter-backed image models and `MINIMAX_API_KEY` for MiniMax.
-
-### API Key Setup
-
-The Gemini skills check for `GEMINI_API_KEY` in the following order (priority from highest to lowest):
-
-1. **Environment Variable** (Recommended for development)
-   ```bash
-   export GEMINI_API_KEY='your-api-key-here'
-   ```
-
-2. **Project Root `.env`** (Recommended for project-specific keys)
-   ```bash
-   # Create .env in project root
-   echo 'GEMINI_API_KEY=your-api-key-here' > .env
-   ```
-
-3. **`.claude/.env`** (For Claude-specific configuration)
-   ```bash
-   # Copy example and edit
-   cp .claude/.env.example .claude/.env
-   # Then edit .claude/.env and set your API key
-   ```
-
-4. **`.claude/skills/.env`** (For shared skills configuration)
-   ```bash
-   # Copy example and edit
-   cp .claude/skills/.env.example .claude/skills/.env
-   # Then edit .claude/skills/.env and set your API key
-   ```
-
-5. **Individual Skill Directory `.env`** (For skill-specific keys)
-   ```bash
-   # Example for ai-multimodal skill
-   cp .claude/skills/ai-multimodal/.env.example .claude/skills/ai-multimodal/.env
-   # Then edit and set your API key
-   ```
-
-### Getting Your API Key
-
-Get your free Gemini API key at: https://aistudio.google.com/apikey
-
-### Vertex AI Support
-
-To use Vertex AI instead of Google AI Studio:
-
-```bash
-# Enable Vertex AI
-export GEMINI_USE_VERTEX=true
-export VERTEX_PROJECT_ID=your-gcp-project-id
-export VERTEX_LOCATION=us-central1  # Optional, defaults to us-central1
-```
-
-Or in `.env` file:
-```
-GEMINI_USE_VERTEX=true
-VERTEX_PROJECT_ID=your-gcp-project-id
-VERTEX_LOCATION=us-central1
-```
-
-### Usage Examples
-
-```bash
-# Audio analysis
-claude "Analyze this audio file and summarize the key points: audio.mp3"
-
-# Video understanding
-claude "Describe what happens in this video: video.mp4"
-
-# Document processing
-claude "Extract all tables from this PDF: document.pdf"
-
-# Image generation
-claude "Generate an image of a serene mountain landscape"
-
-# Image analysis
-claude "What objects are in this image: photo.jpg"
-```
-
 ## Model Context Protocol (MCP)
 
 ✍️ Please read [my technical blog article about MCP here](https://faafospecialist.substack.com/p/claude-code-solution-to-use-mcp-servers).
@@ -470,39 +381,6 @@ Then add your MCP servers, below are some examples:
    }
 }
 ```
-
-### Chrome Profile Browser Workflow
-
-Use `ck:chrome-profile` when a task needs the user's actual Google Chrome profile. It opens URLs in the user's real Chrome profile, then the agent selects that tab through Chrome DevTools MCP or the `claude-in-chrome` bridge.
-
-Use it when browser automation needs real cookies, account state, workspaces, tenants, or a specific Chrome profile:
-
-```bash
-bash .claude/skills/chrome-profile/scripts/install.sh
-chrome-profile doctor
-chrome-profile setup
-chrome-profile work "https://github.com/your-org/your-repo/pulls"
-```
-
-If `doctor` reports no readable bridge, set up one of these:
-
-1. Install and sign in to `https://claude.ai/chrome`, then restart Claude Code.
-2. Or attach `chrome-devtools-mcp` to a Chrome remote-debugging endpoint:
-
-```json
-{
-   "mcpServers": {
-      "chrome-devtools": {
-         "command": "npx",
-         "args": ["-y", "chrome-devtools-mcp@latest", "--browserUrl", "http://127.0.0.1:9222"]
-      }
-   }
-}
-```
-
-Do not use MCP `new_page` for non-default profiles. Use `chrome-profile <key> <url>`, then select the page whose URL contains `cdp-profile=<key>`.
-
-For browser testing that does not require the user's real login state or cookies, use `ck:agent-browser`, `ck:web-testing`, or the project's native Playwright/Vitest/Cypress setup instead.
 
 ## Best Practices
 

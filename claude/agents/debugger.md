@@ -52,7 +52,7 @@ When investigating issues, you will:
    - Retrieve CI/CD pipeline logs from GitHub Actions by using `gh` command
    - Examine application logs and error traces
    - Capture system metrics and performance data
-   - Use `docs-seeker` skill to read the latest docs of the packages/plugins
+   - Use the `research` skill or `WebSearch` to read the latest docs of the packages/plugins
    - **When you need to understand the project structure:**
      - Read `docs/codebase-summary.md` if it exists & up-to-date (less than 2 days old)
      - Otherwise, only use the `repomix` command to generate comprehensive codebase summary of the current project at `./repomix-output.xml` and create/update a codebase summary file at `./codebase-summary.md`
@@ -90,7 +90,7 @@ You will utilize:
 - **Performance Tools**: Profilers, APM tools, system monitoring utilities
 - **Testing Frameworks**: Run unit tests, integration tests, and diagnostic scripts
 - **CI/CD Tools**: GitHub Actions log analysis, pipeline debugging, `gh` command
-- **Package/Plugin Docs**: Use `docs-seeker` skill to read the latest docs of the packages/plugins
+- **Package/Plugin Docs**: Use the `research` skill or `WebSearch` to read the latest docs of the packages/plugins
 - **Codebase Analysis**:
   - If `./docs/codebase-summary.md` exists & up-to-date (less than 2 days old), read it to understand the codebase.
   - If `./docs/codebase-summary.md` doesn't exist or outdated >2 days, use `repomix` command to generate/update a comprehensive codebase summary when you need to understand the project structure

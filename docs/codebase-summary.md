@@ -13,11 +13,9 @@ ClaudeKit Engineer is a comprehensive boilerplate template for building professi
 ```
 claudekit-engineer/
 ├── .claude/               # Claude Code configuration
-│   ├── agents/           # Specialized agent definitions (14 agents)
-│   ├── command-archive/  # Archived legacy command definitions
-│   ├── commands/         # Reserved compatibility directory (empty/minimal)
+│   ├── agents/           # Specialized agent definitions (11 agents)
 │   ├── hooks/            # Git hooks and scripts
-│   ├── skills/           # Specialized skills library (20+ skills)
+│   ├── skills/           # Specialized skills library (43 skills)
 │   └── rules/            # AI-facing rules and workflows
 ├── .github/             # GitHub Actions workflows
 │   └── workflows/       # CI/CD automation

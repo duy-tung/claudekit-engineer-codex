@@ -10,11 +10,8 @@
   - Use composition over inheritance for complex widgets
   - Extract utility functions into separate modules
   - Create dedicated service classes for business logic
-- When looking for docs, activate `docs-seeker` skill (`context7` reference) for exploring latest docs.
+- When looking for docs, use the `research` skill or web search for exploring latest docs.
 - Use `gh` bash command to interact with Github features if needed
-- Use `psql` bash command to query Postgres database for debugging if needed
-- Use `ai-multimodal` skill for describing details of images, videos, documents, etc. if needed
-- Use `ai-multimodal` skill and `imagemagick` skill for generating and editing images, videos, documents, etc. if needed
 - Use `sequential-thinking` and `debug` skills for sequential thinking, analyzing code, debugging, etc. if needed
 - **[IMPORTANT]** Follow the codebase structure and code standards in `./docs` during implementation.
 - **[IMPORTANT]** Do not just simulate the implementation or mocking them, always implement the real code.
@@ -49,5 +46,4 @@
 - Add `--html` to any generation flag for self-contained HTML output (opens in browser, no server needed)
 - **Plan context:** Active plan determined from `## Plan Context` in hook injection; visuals save to `{plan_dir}/visuals/`
 - If no active plan, fallback to `plans/visuals/` directory
-- For Mermaid diagrams, use `/mermaidjs-v11` skill for v11 syntax rules
 - See `primary-workflow.md` → Step 6 for workflow integration
