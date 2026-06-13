@@ -57,9 +57,6 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 
 ### 📖 Additional Resources
 - **[AI-facing Rules](./claude/rules/CLAUDE.md)** - Development instructions and workflows installed by the CK CLI
-- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and release notes
-- **[Windows Statusline Support](./docs/statusline-windows-support.md)** - Windows compatibility guide for Claude Code statusline
-- **[Statusline Architecture](./docs/statusline-architecture.md)** - Technical documentation for statusline implementation
 
 ## Quick Start
 
@@ -135,7 +132,7 @@ Additional provider support, including OpenCode, is handled by ClaudeKit CLI mig
 
 ## The AI Agent Team
 
-This boilerplate includes 17+ specialized AI agents that work together to deliver high-quality software. Agents coordinate through file-based communication, enabling sequential chaining and parallel execution patterns.
+This boilerplate includes 11 specialized AI agents that work together to deliver high-quality software. Agents coordinate through file-based communication, enabling sequential chaining and parallel execution patterns.
 
 ### 🎯 Core Development Agents
 
@@ -171,6 +168,12 @@ This boilerplate includes 17+ specialized AI agents that work together to delive
 - Investigates CI/CD pipeline issues
 - Provides root cause analysis
 
+#### **Code Simplifier Agent**
+- Refactors for clarity, consistency, and maintainability
+- Removes duplication and dead code
+- Preserves behavior while reducing complexity
+- Aligns code with surrounding conventions
+
 ### 📚 Documentation & Management Agents
 
 #### **Docs Manager Agent**
@@ -191,33 +194,13 @@ This boilerplate includes 17+ specialized AI agents that work together to delive
 - Manages task completion verification
 - Maintains project health metrics
 
-### 🎨 Design & Content Agents
-
-#### **UI/UX Designer Agent**
-- Creates design specifications and prototypes
-- Develops visual components
-- Ensures design system consistency
-- Performs user experience analysis
-
-#### **Copywriter Agent**
-- Creates marketing and technical content
-- Optimizes copy for conversion
-- Develops documentation narratives
-- Enhances content clarity
-
 ### 🔎 Specialized Agents
 
-#### **Scout Agent**
-- Performs parallel codebase exploration
-- Analyzes code patterns and structure
-- Identifies optimization opportunities
-- Maps component relationships
-
-#### **Database Admin Agent**
-- Manages database operations
-- Performs migrations and optimization
-- Ensures data integrity
-- Designs schema patterns
+#### **Brainstormer Agent**
+- Generates and pressure-tests solution ideas
+- Weighs trade-offs and feasibility with brutal honesty
+- Explores alternative architectures before implementation
+- Surfaces risks early in the design phase
 
 #### **Journal Writer Agent**
 - Documents development decisions

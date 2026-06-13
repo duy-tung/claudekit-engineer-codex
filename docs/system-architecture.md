@@ -551,7 +551,6 @@ User sees sorted/filtered plan grid
 
 **Version Control**:
 - `.git/` - Git repository
-- `CHANGELOG.md` - Version history
 - Git tags - Release versions
 
 #### 7.2 Data Flow

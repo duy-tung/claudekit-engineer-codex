@@ -81,7 +81,7 @@ Provide a production-ready template that:
 
 ### 2. Skill-Routed Entry Points (post-v2.17 migration)
 
-`/ck:*` entry points are now backed by user-invocable **skills** under `claude/skills/`, not by a separate command parser. Each skill ships frontmatter (`name:`, `description:`, `user-invocable: true`) and is validated by CI gates (`check-skill-cross-refs.js`, `check-skill-descriptions.js`, `check-skill-routing.js`).
+`/ck:*` entry points are now backed by user-invocable **skills** under `claude/skills/`, not by a separate command parser. Each skill ships frontmatter (`name:`, `description:`, `user-invocable: true`) and is validated locally by `claude/scripts/validate-skill-frontmatter.py` and `claude/scripts/validate-skill-crossrefs.py` (the kit ships no CI of its own).
 
 **Core Development Entry Points**:
 - `/ck:plan` - Research and create implementation plans (`--deep` for major refactors, `--tdd` for tests-first plans)

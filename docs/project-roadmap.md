@@ -385,16 +385,16 @@ Enterprise-grade features and deployment options.
 
 ### Version 2.18.1-beta.4 (Current — 2026-05-14)
 
-For per-release detail, see [`CHANGELOG.md`](../CHANGELOG.md). Headline themes since v2.2:
+Per-release history lives in git tags and commit messages (the standalone `CHANGELOG.md` was dropped in the lean refactor). Headline themes since v2.2:
 
 - **Commands → Skills migration** (v2.17): the `/ck:*` slash-command surface is now skill-routed; `metadata.deletions[]` cleans stale command files on user upgrade
-- **Skill CI gates** (v2.18): `check-skill-cross-refs.js`, `check-skill-descriptions.js`, `check-skill-routing.js` are blocking on every PR
+- **Lean refactor** (current fork): CI workflows, semantic-release, and the root `scripts/` JS linters were removed; skill integrity is now checked locally via `claude/scripts/validate-skill-frontmatter.py` and `validate-skill-crossrefs.py`
 - **Hook safety** (v2.18.x): Windows SessionStart crash-loop fixed; scout-first/no-side-effects gates enforced; generated-context hooks disabled by default
 - **Review harness** (next): `ck:fix`/`ck:cook` move from score-only approval to artifact-gated review with high-risk auto stops
-- **Skills library**: ~90 shipped skills, all carrying `user-invocable: true`
+- **Skills library**: 43 shipped skills (47 `SKILL.md` files incl. document sub-skills), all carrying `user-invocable: true`
 
 #### Current Metrics (approximate)
-- ~90 shipped skills under `claude/skills/`
+- 43 shipped skills under `claude/skills/` (47 `SKILL.md` files incl. document sub-skills)
 - Active hooks: 4 wired by default (~20 available in the kit, opt-in)
 - 5 MCP integrations (context7, memory, human-mcp, chrome-devtools, sequential-thinking)
 
@@ -494,11 +494,6 @@ For per-release detail, see [`CHANGELOG.md`](../CHANGELOG.md). Headline themes s
 - [Code Standards](./code-standards.md)
 - [System Architecture](./system-architecture.md)
 - [Codebase Summary](./codebase-summary.md)
-- [Release Process](./RELEASE.md)
-
-### Feature Documentation
-- [Windows Statusline Support Guide](./statusline-windows-support.md)
-- [Statusline Architecture](./statusline-architecture.md)
 
 ### External Resources
 - [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)
