@@ -522,8 +522,6 @@ User sees sorted/filtered plan grid
 #### 6.4 External Service Integration
 
 **GitHub**:
-- Actions (CI/CD automation)
-- Releases (semantic versioning)
 - Issues and PRs (project management)
 
 **Discord**:
@@ -543,7 +541,6 @@ User sees sorted/filtered plan grid
 - `.claude/` - Claude Code config
 - `.gitignore` - Git exclusions
 - `package.json` - Node.js config
-- `.releaserc.json` - Release config
 
 **Runtime Data**:
 - `plans/` - Implementation plans
@@ -677,15 +674,8 @@ plans/<plan-name>/reports/251026-from-tester-to-main-test-results-report.md
 - Grok Code
 
 **Development Tools**:
-- Semantic Release (versioning)
-- Commitlint (commit standards)
-- Husky (git hooks)
 - Repomix (codebase compaction)
-
-**CI/CD**:
-- GitHub Actions
-- Conventional Commits
-- Semantic Versioning
+- Node.js test runner (`node --test`) for hook tests
 
 ### Agent Skills Ecosystem
 
@@ -855,20 +845,14 @@ Developer Machine
 └── Node.js runtime
 ```
 
-### CI/CD Pipeline
+### Test Workflow
 
 ```
-GitHub Repository
-    ↓ Push to main
-GitHub Actions
+Local change
     ↓
-Run Tests
+node --test (hook test suites)
     ↓
-Semantic Release
-    ├─→ Version Bump
-    ├─→ Changelog Generation
-    ├─→ GitHub Release
-    └─→ (Optional) NPM Publish
+Manual review / commit
 ```
 
 ### Production Usage

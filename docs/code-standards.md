@@ -874,7 +874,6 @@ const expensiveCalculation = memoize((n) => {
 ### Automated Checks
 
 **Pre-Commit**:
-- Commitlint (conventional commits)
 - Secret scanning
 - File size validation
 
@@ -882,10 +881,6 @@ const expensiveCalculation = memoize((n) => {
 - Linting (ESLint, Prettier)
 - Unit tests
 - Type checking
-
-**CI/CD**:
-- All tests
-- Build verification
 - Coverage reports
 - Security scans
 

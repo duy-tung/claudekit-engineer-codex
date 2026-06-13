@@ -230,8 +230,7 @@ Enterprise-grade features and deployment options.
 ### Core Features (COMPLETE)
 - ✅ Multi-agent orchestration system
 - ✅ Skill-based routing (post-v2.17 migration replaces the original slash-command surface)
-- ✅ Comprehensive skills library (~90 shipped skills)
-- ✅ Automated release management (semantic-release on `main`, beta on `dev`)
+- ✅ Focused 43-skill catalog (lean, technology-agnostic SWE core)
 - ✅ Development workflow automation
 - ✅ Documentation system with repomix
 - ✅ Cross-platform performance optimization (scout-first gates, Windows hook safety)
@@ -270,8 +269,7 @@ Enterprise-grade features and deployment options.
 ### Technology Stack
 - **Runtime:** Node.js >= 18.0.0, Bash, PowerShell, Cross-platform hooks
 - **AI Platforms:** Anthropic Claude, OpenRouter, Google Gemini, Grok Code
-- **Development Tools:** Semantic Release, Commitlint, Husky, Repomix, Scout Block Hook
-- **CI/CD:** GitHub Actions
+- **Development Tools:** Repomix, Scout Block Hook, Node.js test runner (`node --test`)
 - **Languages:** JavaScript, Bash, PowerShell, Markdown
 
 ### Integration Points
@@ -291,7 +289,6 @@ Enterprise-grade features and deployment options.
 
 ### Operational
 - Requires API keys for AI platforms
-- GitHub Actions minutes for CI/CD
 - Internet connection for MCP tools
 - Storage for repomix output files
 
@@ -325,14 +322,9 @@ Enterprise-grade features and deployment options.
 
 ### Optional
 - Discord webhook for notifications
-- GitHub repository for CI/CD
-- NPM account for publishing
 - PowerShell 5.1+ (Windows statusline)
 
 ### Key External Tools
-- Semantic Release
-- Commitlint
-- Husky
 - Repomix
 - Scout Block Hook
 - Various MCP servers

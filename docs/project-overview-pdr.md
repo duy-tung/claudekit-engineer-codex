@@ -145,12 +145,6 @@ Command behavior is implemented via skill directories:
 - Test suite execution
 - Build verification
 
-**CI/CD**:
-- GitHub Actions integration
-- Automated releases on main branch
-- Test automation
-- Build validation
-
 ## Technical Requirements
 
 ### Functional Requirements
@@ -313,16 +307,9 @@ Command behavior is implemented via skill directories:
 - Grok Code (for git-manager)
 
 **Development Tools**:
-- Semantic Release
-- Commitlint
-- Husky (git hooks)
 - Repomix (codebase compaction)
 - Scout Block Hook (performance optimization)
-
-**CI/CD**:
-- GitHub Actions
-- Conventional Commits
-- Automated versioning
+- Node.js test runner (`node --test`) for hook tests
 
 ### Integration Points
 
@@ -423,7 +410,6 @@ Command behavior is implemented via skill directories:
 
 ### Operational Constraints
 - Requires API keys for AI platforms
-- GitHub Actions minutes for CI/CD
 - Internet connection for MCP tools
 - Storage for repomix output files
 
@@ -501,14 +487,8 @@ Command behavior is implemented via skill directories:
 
 ### Optional Dependencies
 - Discord webhook for notifications
-- GitHub repository for CI/CD
-- NPM account for publishing
 
 ### Integrations
-- GitHub Actions
-- Semantic Release
-- Commitlint
-- Husky
 - Repomix
 - Various MCP servers
 
