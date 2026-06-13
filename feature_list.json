@@ -1,0 +1,60 @@
+{
+  "$schema": "claude/schemas/feature-list.schema.json",
+  "features": [
+    {
+      "id": "feat-001",
+      "name": "Local-first eval harness (Tier 0/1)",
+      "description": "Execution-graded task runner (claude -p) + static-validator tier + A/B stats.",
+      "status": "done",
+      "dependencies": [],
+      "evidence": "eval/run.py; mock self-test 4/4 solved, mock-noop 0/4; Tier 0 2/2 pass"
+    },
+    {
+      "id": "feat-002",
+      "name": "Eval methodology research",
+      "description": "Cited report on evaluating Claude Code setups end-to-end.",
+      "status": "done",
+      "dependencies": [],
+      "evidence": "docs/research/eval-claude-code-setup.md"
+    },
+    {
+      "id": "feat-003",
+      "name": "Harness self-audit scorer (R1)",
+      "description": "Score the repo across the five harness subsystems.",
+      "status": "done",
+      "dependencies": [],
+      "evidence": "eval/audit_harness.py; baseline 84 -> 100/100 after R3 + dogfood"
+    },
+    {
+      "id": "feat-004",
+      "name": "Harness-discipline rule + A/B (R2)",
+      "description": "Shipped rule (L08/L09) with isolated A/B variants; candidate pending real-CLI measurement.",
+      "status": "in-progress",
+      "dependencies": ["feat-001"]
+    },
+    {
+      "id": "feat-005",
+      "name": "Harness state/verification/lifecycle primitives (R3)",
+      "description": "feature-list schema+template, session-handoff template, init.sh verify entrypoint.",
+      "status": "done",
+      "dependencies": ["feat-003"],
+      "evidence": "claude/templates/*, claude/schemas/feature-list.schema.json, init.sh; audit 84->96"
+    },
+    {
+      "id": "feat-006",
+      "name": "Eval coverage check (R4)",
+      "description": "Report eval task diversity/coverage and flag thin suites.",
+      "status": "done",
+      "dependencies": ["feat-001"],
+      "evidence": "eval/coverage.py + mean-empty-regression task; coverage 82/100 (4 tasks, 4 kinds)"
+    },
+    {
+      "id": "feat-007",
+      "name": "ck:harness skill (R5)",
+      "description": "Shipped skill to scaffold and audit a harness for any project.",
+      "status": "done",
+      "dependencies": ["feat-005"],
+      "evidence": "claude/skills/ck-harness; 48 skills valid; fresh scaffold audits 100/100; cataloged"
+    }
+  ]
+}
