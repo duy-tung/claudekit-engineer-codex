@@ -1,0 +1,16 @@
+{
+  "id": "implement-slugify",
+  "kind": "feature",
+  "prompt": "Implement the slugify(text) function in slugify.py so that all tests in test_slugify.py pass. It should lowercase the text, trim surrounding whitespace, replace any run of non-alphanumeric characters with a single hyphen, and strip leading/trailing hyphens. Do not edit the test file.",
+  "grade": {
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
+    "fail_to_pass": [
+      "test_slugify.TestSlugify.test_basic",
+      "test_slugify.TestSlugify.test_trim_and_collapse",
+      "test_slugify.TestSlugify.test_punctuation",
+      "test_slugify.TestSlugify.test_underscores_and_dashes"
+    ],
+    "pass_to_pass": [],
+    "timeout_sec": 60
+  }
+}

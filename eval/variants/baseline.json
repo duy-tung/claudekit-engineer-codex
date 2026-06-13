@@ -1,0 +1,5 @@
+{
+  "label": "baseline",
+  "description": "Clean Claude Code with no auto-discovered kit (hooks/skills/CLAUDE.md). Use as the A side to measure what the kit adds.",
+  "claude_args": ["--bare"]
+}

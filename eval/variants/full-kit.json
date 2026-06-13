@@ -1,0 +1,5 @@
+{
+  "label": "full-kit",
+  "description": "Claude Code with the project kit loaded (settings/hooks/skills from .claude). Use as the B side. Point --settings/--setting-sources at the kit state you want to A/B.",
+  "claude_args": ["--setting-sources", "user,project,local"]
+}
