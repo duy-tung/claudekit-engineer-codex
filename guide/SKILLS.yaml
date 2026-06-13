@@ -2,7 +2,7 @@ metadata:
   title: "Skills Catalog"
   description: "Auto-generated catalog of all available skills in ClaudeKit Engineer"
   last_updated: '2026-06-13'
-  total_skills: 47
+  total_skills: 48
 categories:
   dev-tools: "Development Tools"
   multimedia: "Multimedia & Processing"
@@ -54,6 +54,14 @@ skills:
     maturity: "beta"
     keywords: ["knowledge-graph", "code-analysis", "tree-sitter", "codebase-understanding", "ast"]
     related: ["ck:repomix", "ck:scout", "ck:gkg"]
+  - name: "harness"
+    path: "ck-harness/SKILL.md"
+    description: "Build, audit, and improve a Claude Code harness for any repo — AGENTS.md/CLAUDE.md instructions, machine-readable feature-list state, a fail-fast verification entrypoint, scope boundaries, and session handoff. Scores a project across five harness subsystems and scaffolds the missing primitives."
+    category: "dev-tools"
+    has_scripts: true
+    has_references: true
+    argument_hint: "[audit|create] [--target DIR] [--json]"
+    keywords: ["harness", "agent-readiness", "AGENTS.md", "feature-list", "verification", "scaffold", "audit"]
   - name: "mcp-builder"
     path: "mcp-builder/SKILL.md"
     description: "Build MCP servers for LLM-external service integration. Use for FastMCP (Python), MCP SDK (Node/TypeScript), tool design, API integration, resource providers."

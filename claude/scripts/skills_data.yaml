@@ -64,6 +64,14 @@
   maturity: "beta"
   keywords: ["knowledge-graph", "code-analysis", "tree-sitter", "codebase-understanding", "ast"]
   related: ["ck:repomix", "ck:scout", "ck:gkg"]
+- name: "ck-harness"
+  path: "ck-harness/SKILL.md"
+  description: "Build, audit, and improve a Claude Code harness for any repo — AGENTS.md/CLAUDE.md instructions, machine-readable feature-list state, a fail-fast verification entrypoint, scope boundaries, and session handoff. Scores a project across five harness subsystems and scaffolds the missing primitives."
+  category: "dev-tools"
+  has_scripts: true
+  has_references: true
+  argument_hint: "[audit|create] [--target DIR] [--json]"
+  keywords: ["harness", "agent-readiness", "AGENTS.md", "feature-list", "verification", "scaffold", "audit"]
 - name: "ck-loop"
   path: "ck-loop/SKILL.md"
   description: "Autonomous iterative optimization loop — run N iterations against a mechanical metric, learn from git history, auto-keep/discard changes. Use for improving measurable metrics (coverage, performance, bundle size, etc.) through repeated experimentation."

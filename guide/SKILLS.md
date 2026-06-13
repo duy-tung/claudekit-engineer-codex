@@ -4,7 +4,7 @@ Auto-generated catalog of all available skills in ClaudeKit Engineer.
 
 **Last Updated**: 2026-06-13
 
-**Total Skills**: 47
+**Total Skills**: 48
 
 ## Categories
 
@@ -48,6 +48,12 @@ Semantic code analysis with GitLab Knowledge Graph. Use for go-to-definition, fi
 Build queryable knowledge graphs from code, docs, papers, and images. Use for codebase understanding, architecture analysis, cross-file relationship discovery, token-efficient navigation.
 
 **Location**: `.claude/skills/ck-graphify/SKILL.md`
+
+### 📦 📚 `harness`
+
+Build, audit, and improve a Claude Code harness for any repo — AGENTS.md/CLAUDE.md instructions, machine-readable feature-list state, a fail-fast verification entrypoint, scope boundaries, and session handoff. Scores a project across five harness subsystems and scaffolds the missing primitives.
+
+**Location**: `.claude/skills/ck-harness/SKILL.md`
 
 ### 📦 `mcp-builder`
 

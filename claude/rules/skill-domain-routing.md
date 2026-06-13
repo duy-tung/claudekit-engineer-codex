@@ -12,6 +12,14 @@ User wants to...
 └── Build a queryable knowledge graph from code → /ck:graphify
 ```
 
+## Agent Harness (project agent-readiness)
+
+```
+User wants to...
+├── Scaffold harness files for a repo (AGENTS.md, feature-list, init.sh) → /ck:harness
+└── Audit / score a repo's agent-readiness and fix the weakest subsystem → /ck:harness
+```
+
 ## Security
 
 ```

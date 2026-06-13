@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Feature List",
+  "description": "Machine-readable state primitive for multi-step agent work. One entry per unit of work with explicit status, dependencies, and completion evidence.",
+  "type": "object",
+  "required": ["features"],
+  "additionalProperties": false,
+  "properties": {
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^feat-\\d+$", "description": "Unique id, e.g. feat-001."},
+          "name": {"type": "string", "description": "Concise feature title."},
+          "description": {"type": "string", "description": "What the feature does."},
+          "status": {"type": "string", "enum": ["not-started", "in-progress", "blocked", "done"]},
+          "dependencies": {
+            "type": "array",
+            "items": {"type": "string", "pattern": "^feat-\\d+$"},
+            "description": "Feature ids that must reach 'done' before this one starts."
+          },
+          "evidence": {"type": "string", "description": "Verification proof when status is 'done' (command + result)."}
+        }
+      }
+    }
+  }
+}
