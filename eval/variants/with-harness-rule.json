@@ -1,5 +1,5 @@
 {
   "label": "with-harness-rule",
-  "description": "Bare Claude Code PLUS only the harness-discipline rule appended. The B side: isolates the rule's effect vs no-harness-rule. ${REPO_ROOT} is resolved by run.py to an absolute path.",
-  "claude_args": ["--bare", "--append-system-prompt-file", "${REPO_ROOT}/claude/rules/harness-discipline.md"]
+  "description": "Default Claude PLUS only the harness-discipline rule appended. The B side: isolates the rule's effect vs no-harness-rule (same environment, one variable). ${REPO_ROOT} is resolved by run.py. NOTE: do not use --bare (it breaks auth in headless mode).",
+  "claude_args": ["--append-system-prompt-file", "${REPO_ROOT}/claude/rules/harness-discipline.md"]
 }

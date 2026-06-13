@@ -1,5 +1,5 @@
 {
   "label": "no-harness-rule",
-  "description": "Bare Claude Code, no kit and no harness-discipline rule. The A side for isolating the rule's effect.",
-  "claude_args": ["--bare"]
+  "description": "Default Claude (machine's normal setup) with NO harness-discipline rule. The A side. NOTE: do not use --bare — in headless mode it skips auth and returns 'Not logged in'.",
+  "claude_args": []
 }

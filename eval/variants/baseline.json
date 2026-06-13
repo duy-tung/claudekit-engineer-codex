@@ -1,5 +1,5 @@
 {
   "label": "baseline",
-  "description": "Clean Claude Code with no auto-discovered kit (hooks/skills/CLAUDE.md). Use as the A side to measure what the kit adds.",
-  "claude_args": ["--bare"]
+  "description": "Default Claude (machine's normal setup), no extra rule. A neutral A side. NOTE: do NOT use --bare for real runs — in headless mode it skips auth and returns 'Not logged in', producing a false 0/N (floor effect).",
+  "claude_args": []
 }
