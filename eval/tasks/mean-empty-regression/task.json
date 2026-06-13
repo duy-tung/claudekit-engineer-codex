@@ -1,0 +1,14 @@
+{
+  "id": "mean-empty-regression",
+  "kind": "regression",
+  "prompt": "math_ops.py has a bug: mean(xs) raises ZeroDivisionError on an empty list — it should return 0.0 for an empty list. Fix mean so all tests in test_math_ops.py pass, WITHOUT breaking total(xs) (which already works). Do not edit the test file.",
+  "grade": {
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
+    "fail_to_pass": ["test_math_ops.TestMathOps.test_mean_empty"],
+    "pass_to_pass": [
+      "test_math_ops.TestMathOps.test_total",
+      "test_math_ops.TestMathOps.test_mean_basic"
+    ],
+    "timeout_sec": 60
+  }
+}
