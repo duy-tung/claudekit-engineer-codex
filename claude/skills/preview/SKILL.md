@@ -129,7 +129,7 @@ Before generating, agent MUST read these references:
 
 Multi-section pages (`--explain`, `--diff`, `--plan-review`, `--recap`): also read `html-responsive-nav.md`.
 
-Use `/ck:mermaidjs-v11` skill for Mermaid syntax validation.
+Use Mermaid v11 syntax for diagrams.
 
 ### HTML-Only Modes
 
@@ -151,5 +151,5 @@ Output: project identity, architecture snapshot (Mermaid), recent activity, deci
 
 ### Style Strategy
 - Default: static anti-slop rules from `html-design-guidelines.md` (6 curated presets)
-- For `--slides`: consider invoking `/ck:ui-ux-pro-max` for richer style selection
+- For `--slides`: apply richer style selection (distinctive font/palette pairing)
 - Agent must vary aesthetics between consecutive HTML outputs (different font pair, palette)

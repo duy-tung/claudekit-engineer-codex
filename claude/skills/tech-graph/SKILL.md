@@ -5,8 +5,8 @@ description: >-
   flow, flowchart, sequence, agent/memory, or concept maps — across 7 visual
   styles. Use when user wants "generate diagram", "draw diagram", "visualize",
   "architecture diagram", "flowchart", or any system/flow they want illustrated.
-  Pairs with /ck:preview --diagram for visual self-review and /ck:mermaidjs-v11
-  for inline-doc diagrams; this skill is the publish-grade output mode.
+  Pairs with /ck:preview --diagram for visual self-review; this skill is the
+  publish-grade output mode.
 user-invocable: true
 when_to_use: "Invoke for publish-grade architecture or flow diagrams."
 category: dev-tools
