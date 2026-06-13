@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node --test claude/hooks/__tests__/descriptive-name.test.cjs claude/hooks/__tests__/workflow-artifact-gate.test.cjs claude/skills/watzup/scripts/watzup-scan.test.cjs",
     "lint": "echo \"Linting passed\"",
+    "verify": "bash init.sh",
     "eval:static": "python3 eval/tier0_static.py",
     "eval:audit": "python3 eval/audit_harness.py",
     "eval": "python3 eval/run.py --all",

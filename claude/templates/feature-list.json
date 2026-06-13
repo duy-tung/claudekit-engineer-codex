@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/feature-list.schema.json",
+  "features": [
+    {
+      "id": "feat-001",
+      "name": "Project scaffolding",
+      "description": "Base project structure, tooling, and a green test command.",
+      "status": "done",
+      "dependencies": [],
+      "evidence": "npm test -> 12 passing; build green (2026-06-13)"
+    },
+    {
+      "id": "feat-002",
+      "name": "Core capability",
+      "description": "First user-facing feature; depends on scaffolding.",
+      "status": "in-progress",
+      "dependencies": ["feat-001"]
+    },
+    {
+      "id": "feat-003",
+      "name": "Extension of core",
+      "description": "Builds on the core capability; do not start until feat-002 is done.",
+      "status": "not-started",
+      "dependencies": ["feat-002"]
+    }
+  ]
+}

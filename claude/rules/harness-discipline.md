@@ -24,3 +24,9 @@ Engineering discipline for reliable multi-step agent work. Applies to any task w
 
 - Before ending, update the status list, note unresolved risks and the next step, and make sure the repo runs from a standard entrypoint.
 - Use `/ck:watzup` to produce a session handoff when work spans multiple sessions.
+
+## Artifacts (templates the kit ships)
+
+- Feature list (machine-readable state): `.claude/templates/feature-list.json` — schema `.claude/schemas/feature-list.schema.json` (`id`, `name`, `description`, `status`, `dependencies`, `evidence`).
+- Session handoff: `.claude/templates/session-handoff.md`.
+- Verification entrypoint: `./init.sh` (or `npm run verify`) — runs the local quality gates fail-fast.
