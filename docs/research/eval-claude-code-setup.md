@@ -176,3 +176,17 @@ Tier 2 — LLM-judge  (TÙY CHỌN, chỉ cho non-functional)
 - ✅ Anthropic "Adding Error Bars to Evals" arXiv:2411.00640
 - ✅ Hamel Husain `hamel.dev/blog/posts/evals-faq` · Eugene Yan `eugeneyan.com/writing/llm-evaluators` · EvidentlyAI `evidentlyai.com/llm-guide`
 - ⚠️ arXiv 2510.27106, 2507.21504 (chưa fetch full) và các ID "26xx/2512/2601" (future-dated, unverified)
+
+---
+
+## Postscript — kết quả thực nghiệm khi CHẠY harness này trên kit (2026-06-13)
+
+Đã dựng harness (`eval/`) và thử A/B một rule "harness-discipline" (verify-before-done). Kết quả:
+
+- **Harness chạy đúng end-to-end** với `claude -p` thật: ~20–95s/run, 5–7 turns, sửa file, chấm bằng test thật.
+- **Chính eval bắt 2 lỗi đo:** (1) `--bare` khiến headless bỏ qua auth → "Not logged in" (floor giả); (2) task có test **trong fixture** ⇒ agent **hill-climb** chính bộ test đó ⇒ ceiling.
+- **4/4 task ceiling** — baseline solve 8/8 mọi lần: `string-utils-multi`, `calc-engine` (đa-file, recursive-descent), `discount-refactor`, và `roman-hidden` (**kiểu SWE-bench, giấu bộ test chấm**). Opus suy luận đúng + tự verify trên mọi task đủ nhỏ để dựng ở đây.
+- **Kết luận:** một rule hành vi tinh tế **không có headroom đo được trên micro-task**. Muốn đo loại rule này cần task **khó/dài/đa-file thật (quy mô SWE-bench)** nơi model base fail ở tỉ lệ thực — đầu tư lớn.
+- **Hệ quả chiến lược cho việc improve kit:** ưu tiên cải tiến có giá trị **hiển nhiên/cấu trúc** (capability, sửa thứ hỏng, discoverability — vd R3 primitives, R5 `ck:harness`) hơn là "nudge" hành vi tinh tế vốn không thể kiểm chứng rẻ. Dành A/B cho thay đổi đủ lớn để phát hiện, trên task khó, với n đủ + power analysis.
+- **Tài sản để lại:** eval harness (Tier 0/1 + audit + coverage + hidden-tests), bài học `--bare`/headroom/hill-climbing, và flow "đo candidate trước khi ship" (`eval/candidates/`).
+
