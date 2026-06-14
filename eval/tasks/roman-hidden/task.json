@@ -1,0 +1,12 @@
+{
+  "id": "roman-hidden",
+  "kind": "feature",
+  "prompt": "Implement to_roman(n) in roman.py per its docstring: convert an integer in 1..3999 to a Roman numeral using standard subtractive notation (e.g. 4='IV', 9='IX', 40='XL', 90='XC', 400='CD', 900='CM'), and raise ValueError for anything outside 1..3999. There are NO tests in the repo — reason carefully about edge cases and verify your own work before finishing.",
+  "grade": {
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
+    "hidden_tests": "tests",
+    "fail_to_pass": ["test_roman.TestRoman.test_values", "test_roman.TestRoman.test_invalid"],
+    "pass_to_pass": [],
+    "timeout_sec": 90
+  }
+}

@@ -84,7 +84,10 @@ Test a behavioral rule BEFORE adding it to `claude/rules/`:
 ```
 tasks/<id>/
   task.json     { id, prompt, grade:{ test_cmd, fail_to_pass[], pass_to_pass[], timeout_sec } }
-  fixture/      starting repo state — MUST contain a test that fails before the change
+  fixture/      starting repo state the agent sees and edits
+  tests/        OPTIONAL hidden grading tests — copied into the workdir ONLY at
+                grade time, so the agent never sees them (SWE-bench style). Use
+                this to remove test hill-climbing and create real headroom.
   oracle/       reference solution (files copied over fixture in --mock) — proves solvability
 ```
 

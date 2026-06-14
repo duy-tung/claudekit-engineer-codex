@@ -118,6 +118,18 @@ def run_trial(task: dict, variant: dict, mode: str, max_turns: int,
             metrics.update(_invoke_claude(task, variant, workdir, max_turns, verbose))
 
         metrics["agent_ms"] = int((time.time() - start) * 1000)
+
+        # Hidden tests (SWE-bench style): a task's tests/ dir is NOT in the
+        # fixture the agent sees — copy it in only now, at grade time, so the
+        # agent cannot hill-climb the grading tests.
+        hidden = task["_dir"] / "tests"
+        if hidden.is_dir():
+            for src in hidden.rglob("*"):
+                if src.is_file():
+                    dst = workdir / src.relative_to(hidden)
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(src, dst)
+
         grade_res = grader.grade(workdir, task["grade"])
 
     return {"solved": grade_res.solved, "grade_rc": grade_res.returncode,
