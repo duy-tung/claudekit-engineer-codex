@@ -56,6 +56,12 @@ python3 eval/run.py --all --variant-a baseline --variant-b full-kit --runs 5
 - Env: `CK_EVAL_CMD` (default `claude`, e.g. `"ccs glm"`),
   `CK_EVAL_CLAUDE_ARGS` (default `--permission-mode bypassPermissions`),
   `CK_EVAL_TIMEOUT_SEC` (default 180).
+- **Pin the model + effort** (so every A/B run uses the SAME model, e.g. Opus 4.8 / xhigh):
+  ```bash
+  export CK_EVAL_MODEL=claude-opus-4-8     # -> --model
+  export CK_EVAL_EFFORT=xhigh              # -> --effort
+  ```
+  The summary prints **`model(s) actually run`** (from the result JSON's `modelUsage`) — so it doesn't just set the model, it *records and proves* which model executed each run. If the printed model isn't what you pinned, the flag isn't taking effect (check `claude -p --help` for the exact flag names in your CLI version).
 
 Results stream to `results/eval-<ts>.ndjson` (git-ignored).
 

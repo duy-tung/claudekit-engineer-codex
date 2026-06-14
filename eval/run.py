@@ -22,7 +22,12 @@ Env:
   CK_EVAL_CMD           AI CLI to spawn (default "claude"; e.g. "ccs glm")
   CK_EVAL_CLAUDE_ARGS   extra args appended to the claude invocation
                         (default "--permission-mode bypassPermissions")
+  CK_EVAL_MODEL         pin the model, e.g. "claude-opus-4-8" -> --model <id>
+  CK_EVAL_EFFORT        pin reasoning effort, e.g. "xhigh" -> --effort <level>
   CK_EVAL_TIMEOUT_SEC   per-run agent timeout (default 180)
+
+The summary prints "model(s) actually run" (from the result JSON's modelUsage)
+so every run records — and proves — which model executed it.
 """
 from __future__ import annotations
 
@@ -145,8 +150,14 @@ def _invoke_claude(task: dict, variant: dict, workdir: Path,
 
     variant_args = [a.replace("${REPO_ROOT}", str(REPO_ROOT))
                     for a in variant.get("claude_args", [])]
+    # Pin model / reasoning effort for reproducible runs (recorded + verified below).
+    model_args = []
+    if os.environ.get("CK_EVAL_MODEL"):
+        model_args += ["--model", os.environ["CK_EVAL_MODEL"]]
+    if os.environ.get("CK_EVAL_EFFORT"):
+        model_args += ["--effort", os.environ["CK_EVAL_EFFORT"]]
     cmd = (base + ["-p", task["prompt"], "--output-format", "json"]
-           + extra + variant_args
+           + extra + model_args + variant_args
            + ["--max-turns", str(max_turns)])
     if verbose:
         print(f"       $ {' '.join(shlex.quote(c) for c in cmd)}")
@@ -162,12 +173,14 @@ def _invoke_claude(task: dict, variant: dict, workdir: Path,
 
     data = _extract_result_json(proc.stdout)
     usage = data.get("usage") or {}
+    model_usage = data.get("modelUsage") or data.get("model_usage") or {}
     return {
         "subtype": data.get("subtype") or ("ok" if proc.returncode == 0 else "error"),
         "num_turns": data.get("num_turns"),
         "cost_usd": data.get("total_cost_usd"),
         "input_tokens": usage.get("input_tokens"),
         "output_tokens": usage.get("output_tokens"),
+        "models": sorted(model_usage.keys()),  # which model(s) ACTUALLY ran
         "error": data.get("error") or (proc.stderr.strip()[:200] or None
                                        if proc.returncode != 0 else None),
     }
@@ -227,6 +240,8 @@ def _print_summary(results, records, variants, task_ids, runs, out_file) -> bool
               f"(mean turns={_fmt(_mean([r['num_turns'] for r in v_recs]))}, "
               f"cost=${_fmt(_mean([r['cost_usd'] for r in v_recs]))}, "
               f"agent_ms={_fmt(_mean([r['agent_ms'] for r in v_recs]))})")
+        models = sorted({m for r in v_recs for m in (r.get("models") or [])})
+        print(f"    model(s) actually run: {', '.join(models) if models else 'unknown (mock or no modelUsage)'}")
         for task_id in task_ids:
             s = per_task[task_id]
             print(f"    - {task_id}: {sum(s)}/{len(s)} "
